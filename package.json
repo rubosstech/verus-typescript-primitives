@@ -1,0 +1,11 @@
+{
+  "name": "verus-typescript-primitives",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "repository": "https://github.com/VerusCoin/verus-typescript-primitives.git",
+  "license": "MIT"
+}
