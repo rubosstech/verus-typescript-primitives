@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { ApiPrimitiveJson, RequestParams } from "../../ApiPrimitive";
 export declare class GetAddressBalanceRequest extends ApiRequest {
     addresses: {
         addresses: Array<string>;
@@ -9,7 +9,7 @@ export declare class GetAddressBalanceRequest extends ApiRequest {
         addresses: Array<string>;
         friendlynames?: boolean;
     });
-    getParams(): Array<ApiPrimitive>;
+    getParams(): RequestParams;
     static fromJson(object: ApiPrimitiveJson): GetAddressBalanceRequest;
     toJson(): ApiPrimitiveJson;
 }

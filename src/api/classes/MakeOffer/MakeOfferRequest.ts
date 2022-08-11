@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { MAKE_OFFER } from "../../../constants/cmds";
 import { OfferForMaking } from "../../../offers/OfferForMaking";
 
@@ -23,7 +23,7 @@ export class MakeOfferRequest extends ApiRequest {
     this.feeamount = feeamount;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     const params = [
       this.fromaddress,
       this.offer,

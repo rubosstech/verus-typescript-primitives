@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { SEND_RAW_TRANSACTION } from "../../../constants/cmds";
 
 export class SendRawTransactionRequest extends ApiRequest {
@@ -16,7 +16,7 @@ export class SendRawTransactionRequest extends ApiRequest {
     this.allowhighfees = allowhighfees;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     const params = [
       this.hexstring,
       this.allowhighfees

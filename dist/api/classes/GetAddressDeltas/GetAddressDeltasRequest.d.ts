@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { ApiPrimitiveJson, RequestParams } from "../../ApiPrimitive";
 interface Addresses {
     addresses: Array<string>;
     start?: number;
@@ -11,7 +11,7 @@ interface Addresses {
 export declare class GetAddressDeltasRequest extends ApiRequest {
     addresses: Addresses;
     constructor(chain: string, addresses: Addresses);
-    getParams(): Array<ApiPrimitive>;
+    getParams(): RequestParams;
     static fromJson(object: ApiPrimitiveJson): GetAddressDeltasRequest;
     toJson(): ApiPrimitiveJson;
 }

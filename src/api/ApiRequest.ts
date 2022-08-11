@@ -1,11 +1,11 @@
 import { ApiCommunication } from "./ApiCommunication";
-import { ApiPrimitive, ApiPrimitiveJson } from "./ApiPrimitive";
+import { ApiPrimitive, ApiPrimitiveJson, RequestParams } from "./ApiPrimitive";
 
 export abstract class ApiRequest implements ApiCommunication {
   chain: string;
   cmd: string;
 
-  abstract getParams(): Array<ApiPrimitive>;
+  abstract getParams(): RequestParams;
   abstract toJson(): ApiPrimitiveJson;
 
   constructor(chain: string, cmd: string) {
@@ -13,7 +13,7 @@ export abstract class ApiRequest implements ApiCommunication {
     this.cmd = cmd;
   }
 
-  prepare(): [string, string, Array<ApiPrimitive>] {
+  prepare(): [string, string, RequestParams] {
     return [this.chain, this.cmd, this.getParams()];
   }
 }

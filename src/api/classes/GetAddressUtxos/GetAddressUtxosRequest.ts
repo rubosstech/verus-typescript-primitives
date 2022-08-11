@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { GET_ADDRESS_UTXOS } from "../../../constants/cmds";
 
 interface Addresses {
@@ -16,7 +16,7 @@ export class GetAddressUtxosRequest extends ApiRequest {
     this.addresses = addresses;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     return [
       this.addresses as {
         addresses: Array<string>;

@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { ApiPrimitiveJson, RequestParams } from "../../ApiPrimitive";
 import { GET_ADDRESS_DELTAS } from "../../../constants/cmds";
 
 interface Addresses {
@@ -19,7 +19,7 @@ export class GetAddressDeltasRequest extends ApiRequest {
     this.addresses = addresses;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     return [
       this.addresses as {
         addresses: Array<string>;

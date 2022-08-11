@@ -1,10 +1,10 @@
 import { ApiCommunication } from "./ApiCommunication";
-import { ApiPrimitive, ApiPrimitiveJson } from "./ApiPrimitive";
+import { ApiPrimitiveJson, RequestParams } from "./ApiPrimitive";
 export declare abstract class ApiRequest implements ApiCommunication {
     chain: string;
     cmd: string;
-    abstract getParams(): Array<ApiPrimitive>;
+    abstract getParams(): RequestParams;
     abstract toJson(): ApiPrimitiveJson;
     constructor(chain: string, cmd: string);
-    prepare(): [string, string, Array<ApiPrimitive>];
+    prepare(): [string, string, RequestParams];
 }

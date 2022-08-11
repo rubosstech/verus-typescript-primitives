@@ -1,10 +1,10 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 export declare class SendRawTransactionRequest extends ApiRequest {
     hexstring: string;
     allowhighfees?: boolean;
     constructor(chain: string, hexstring: string, allowhighfees?: boolean);
-    getParams(): Array<ApiPrimitive>;
+    getParams(): RequestParams;
     static fromJson(object: ApiPrimitiveJson): SendRawTransactionRequest;
     toJson(): ApiPrimitiveJson;
 }

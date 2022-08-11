@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 interface Addresses {
     addresses: Array<string>;
     chaininfo?: boolean;
@@ -8,7 +8,7 @@ interface Addresses {
 export declare class GetAddressUtxosRequest extends ApiRequest {
     addresses: Addresses;
     constructor(chain: string, addresses: Addresses);
-    getParams(): Array<ApiPrimitive>;
+    getParams(): RequestParams;
     static fromJson(object: ApiPrimitiveJson): GetAddressUtxosRequest;
     toJson(): ApiPrimitiveJson;
 }

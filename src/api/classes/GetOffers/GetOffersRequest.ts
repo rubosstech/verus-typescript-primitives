@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { GET_OFFERS } from "../../../constants/cmds";
 
 export class GetOffersRequest extends ApiRequest {
@@ -19,7 +19,7 @@ export class GetOffersRequest extends ApiRequest {
     this.withtx = withtx;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     const params = [
       this.currencyorid,
       this.iscurrency == null ? false : this.iscurrency,

@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { GET_RAW_TRANSACTION } from "../../../constants/cmds";
 
 export class GetRawTransactionRequest extends ApiRequest {
@@ -12,7 +12,7 @@ export class GetRawTransactionRequest extends ApiRequest {
     this.verbose = verbose;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     const params = [this.txid, this.verbose];
 
     return params.filter((x) => x != null);

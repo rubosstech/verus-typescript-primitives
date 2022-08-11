@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { GET_INFO } from "../../../constants/cmds";
 
 export class GetInfoRequest extends ApiRequest {
@@ -7,7 +7,7 @@ export class GetInfoRequest extends ApiRequest {
     super(chain, GET_INFO);
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     return [];
   }
 

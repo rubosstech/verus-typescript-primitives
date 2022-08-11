@@ -7,3 +7,4 @@ export declare type ApiPrimitive = string | number | boolean | null | OfferForMa
 export declare type ApiPrimitiveJson = {
     [key: string]: ApiPrimitive | undefined;
 };
+export declare type RequestParams = Array<ApiPrimitive>;

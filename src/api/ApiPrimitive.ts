@@ -18,3 +18,5 @@ export type ApiPrimitive =
   | RawTransaction;
 
 export type ApiPrimitiveJson = { [key: string]: ApiPrimitive | undefined };
+
+export type RequestParams = Array<ApiPrimitive>

@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { GET_BLOCK } from "../../../constants/cmds";
 
 export class GetBlockRequest extends ApiRequest {
@@ -12,7 +12,7 @@ export class GetBlockRequest extends ApiRequest {
     this.verbosity = verbosity;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     const params = [
       this.hashOrHeight,
       this.verbosity,

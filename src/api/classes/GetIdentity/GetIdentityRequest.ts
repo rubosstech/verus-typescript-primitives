@@ -1,5 +1,5 @@
 import { ApiRequest } from "../../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { GET_IDENTITY } from "../../../constants/cmds";
 
 export class GetIdentityRequest extends ApiRequest {
@@ -22,7 +22,7 @@ export class GetIdentityRequest extends ApiRequest {
     this.txproofheight = txproofheight;
   }
 
-  getParams(): Array<ApiPrimitive> {
+  getParams(): RequestParams {
     const params = [
       this.nameOrAddress,
       this.height,
