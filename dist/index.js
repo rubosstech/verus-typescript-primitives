@@ -13,5 +13,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./api/classes/index"), exports);
 __exportStar(require("./api/ApiRequest"), exports);
 __exportStar(require("./api/ApiResponse"), exports);
+__exportStar(require("./api/ApiPrimitive"), exports);
 __exportStar(require("./vdxf/classes/index"), exports);
 __exportStar(require("./vdxf/index"), exports);
