@@ -1,4 +1,4 @@
-export { MakeOfferRequest } from './MakeOfferRequest';
-export { MakeOfferResponse } from './MakeOfferResponse';
-export { GetOffersRequest } from './GetOffersRequest';
-export { GetOffersResponse } from './GetOffersResponse';
+export { MakeOfferRequest } from './MakeOffer/MakeOfferRequest';
+export { MakeOfferResponse } from './MakeOffer/MakeOfferResponse';
+export { GetOffersRequest } from './GetOffers/GetOffersRequest';
+export { GetOffersResponse } from './GetOffers/GetOffersResponse';

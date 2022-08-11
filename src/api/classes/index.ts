@@ -1,5 +1,5 @@
-export { MakeOfferRequest } from './MakeOfferRequest'
-export { MakeOfferResponse } from './MakeOfferResponse'
+export { MakeOfferRequest } from './MakeOffer/MakeOfferRequest'
+export { MakeOfferResponse } from './MakeOffer/MakeOfferResponse'
 
-export { GetOffersRequest } from './GetOffersRequest'
-export { GetOffersResponse } from './GetOffersResponse'
+export { GetOffersRequest } from './GetOffers/GetOffersRequest'
+export { GetOffersResponse } from './GetOffers/GetOffersResponse'

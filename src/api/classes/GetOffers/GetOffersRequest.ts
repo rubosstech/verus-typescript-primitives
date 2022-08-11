@@ -1,6 +1,6 @@
-import { ApiRequest } from "../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../ApiPrimitive";
-import { GET_OFFERS } from "../../constants/cmds";
+import { ApiRequest } from "../../ApiRequest";
+import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { GET_OFFERS } from "../../../constants/cmds";
 
 export class GetOffersRequest extends ApiRequest {
   currencyorid: string;

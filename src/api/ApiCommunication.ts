@@ -1,5 +1,5 @@
-import { ApiPrimitiveJson } from "./ApiPrimitive";
+import { ApiPrimitive } from "./ApiPrimitive";
 
 export interface ApiCommunication {
-  toJson: () => ApiPrimitiveJson
+  toJson: () => ApiPrimitive
 }

@@ -1,14 +1,14 @@
 import { ApiCommunication } from "./ApiCommunication";
-import { ApiPrimitiveJson } from "./ApiPrimitive";
+import { ApiPrimitive } from "./ApiPrimitive";
 
 export class ApiResponse implements ApiCommunication {
-  result: ApiPrimitiveJson;
+  result: ApiPrimitive;
 
   constructor(result) {
     this.result = result;
   }
   
-  toJson(): ApiPrimitiveJson {
+  toJson(): ApiPrimitive {
     return this.result;
   }
 }

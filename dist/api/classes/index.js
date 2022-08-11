@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetOffersResponse = exports.GetOffersRequest = exports.MakeOfferResponse = exports.MakeOfferRequest = void 0;
-var MakeOfferRequest_1 = require("./MakeOfferRequest");
+var MakeOfferRequest_1 = require("./MakeOffer/MakeOfferRequest");
 Object.defineProperty(exports, "MakeOfferRequest", { enumerable: true, get: function () { return MakeOfferRequest_1.MakeOfferRequest; } });
-var MakeOfferResponse_1 = require("./MakeOfferResponse");
+var MakeOfferResponse_1 = require("./MakeOffer/MakeOfferResponse");
 Object.defineProperty(exports, "MakeOfferResponse", { enumerable: true, get: function () { return MakeOfferResponse_1.MakeOfferResponse; } });
-var GetOffersRequest_1 = require("./GetOffersRequest");
+var GetOffersRequest_1 = require("./GetOffers/GetOffersRequest");
 Object.defineProperty(exports, "GetOffersRequest", { enumerable: true, get: function () { return GetOffersRequest_1.GetOffersRequest; } });
-var GetOffersResponse_1 = require("./GetOffersResponse");
+var GetOffersResponse_1 = require("./GetOffers/GetOffersResponse");
 Object.defineProperty(exports, "GetOffersResponse", { enumerable: true, get: function () { return GetOffersResponse_1.GetOffersResponse; } });

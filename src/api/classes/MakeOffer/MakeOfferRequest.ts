@@ -1,7 +1,7 @@
-import { ApiRequest } from "../ApiRequest";
-import { ApiPrimitive, ApiPrimitiveJson } from "../ApiPrimitive";
-import { MAKE_OFFER } from "../../constants/cmds";
-import { OfferForMaking } from "../../offers/OfferForMaking";
+import { ApiRequest } from "../../ApiRequest";
+import { ApiPrimitive, ApiPrimitiveJson } from "../../ApiPrimitive";
+import { MAKE_OFFER } from "../../../constants/cmds";
+import { OfferForMaking } from "../../../offers/OfferForMaking";
 
 export class MakeOfferRequest extends ApiRequest {
   fromaddress: string;
