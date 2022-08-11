@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetAddressBalanceResponse = void 0;
+exports.GetAddressDeltasResponse = void 0;
 const ApiResponse_1 = require("../../ApiResponse");
-class GetAddressBalanceResponse extends ApiResponse_1.ApiResponse {
+class GetAddressDeltasResponse extends ApiResponse_1.ApiResponse {
 }
-exports.GetAddressBalanceResponse = GetAddressBalanceResponse;
+exports.GetAddressDeltasResponse = GetAddressDeltasResponse;

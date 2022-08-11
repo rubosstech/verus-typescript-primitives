@@ -1,6 +1,6 @@
 import { ApiResponse } from "../../ApiResponse";
 
-export class GetAddressBalanceResponse extends ApiResponse {
+export class GetAddressDeltasResponse extends ApiResponse {
   result: Array<{
     satoshis: number;
     txid: string;
