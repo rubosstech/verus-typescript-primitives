@@ -18,6 +18,10 @@ import { MakeOfferRequest } from './MakeOffer/MakeOfferRequest'
 import { MakeOfferResponse } from './MakeOffer/MakeOfferResponse'
 import { SendRawTransactionRequest } from './SendRawTransaction/SendRawTransactionRequest'
 import { SendRawTransactionResponse } from './SendRawTransaction/SendRawTransactionResponse'
+import { SignMessageRequest } from './SignMessage/SignMessageRequest'
+import { SignMessageResponse } from './SignMessage/SignMessageResponse'
+import { VerifyMessageRequest } from './VerifyMessage/VerifyMessageRequest'
+import { VerifyMessageResponse } from './VerifyMessage/VerifyMessageResponse'
 
 export {
   GetAddressBalanceRequest,
@@ -39,7 +43,11 @@ export {
   SendRawTransactionRequest,
   SendRawTransactionResponse,
   GetInfoRequest,
-  GetInfoResponse
+  GetInfoResponse,
+  VerifyMessageRequest,
+  VerifyMessageResponse,
+  SignMessageRequest,
+  SignMessageResponse
 }
 
 export type RpcRequest =
@@ -52,7 +60,9 @@ export type RpcRequest =
   | typeof GetInfoRequest
   | typeof GetIdentityRequest
   | typeof SendRawTransactionRequest
-  | typeof GetRawTransactionRequest;
+  | typeof GetRawTransactionRequest
+  | typeof VerifyMessageRequest
+  | typeof SignMessageRequest;
 
 export type RpcResponse =
   | typeof MakeOfferResponse
@@ -64,4 +74,6 @@ export type RpcResponse =
   | typeof GetInfoResponse
   | typeof GetIdentityResponse
   | typeof SendRawTransactionResponse
-  | typeof GetRawTransactionResponse;
+  | typeof GetRawTransactionResponse
+  | typeof VerifyMessageResponse
+  | typeof SignMessageResponse;
