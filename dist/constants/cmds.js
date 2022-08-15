@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VERIFY_MESSAGE = exports.SIGN_MESSAGE = exports.GET_ADDRESS_UTXOS = exports.SEND_RAW_TRANSACTION = exports.GET_ADDRESS_DELTAS = exports.GET_RAW_TRANSACTION = exports.GET_BLOCK = exports.GET_INFO = exports.GET_ADDRESS_BALANCE = exports.GET_IDENTITY = exports.GET_OFFERS = exports.MAKE_OFFER = void 0;
+exports.VERIFY_MESSAGE = exports.SIGN_MESSAGE = exports.GET_ADDRESS_UTXOS = exports.SEND_RAW_TRANSACTION = exports.GET_ADDRESS_DELTAS = exports.GET_RAW_TRANSACTION = exports.GET_BLOCK = exports.GET_INFO = exports.GET_ADDRESS_BALANCE = exports.GET_CURRENCY = exports.GET_IDENTITY = exports.GET_OFFERS = exports.MAKE_OFFER = void 0;
 exports.MAKE_OFFER = 'makeoffer';
 exports.GET_OFFERS = 'getoffers';
 exports.GET_IDENTITY = 'getidentity';
+exports.GET_CURRENCY = 'getcurrency';
 exports.GET_ADDRESS_BALANCE = 'getaddressbalance';
 exports.GET_INFO = 'getinfo';
 exports.GET_BLOCK = 'getblock';

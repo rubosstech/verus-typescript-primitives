@@ -8,6 +8,8 @@ import { GetBlockRequest } from './GetBlock/GetBlockRequest'
 import { GetBlockResponse } from './GetBlock/GetBlockResponse'
 import { GetIdentityRequest } from './GetIdentity/GetIdentityRequest'
 import { GetIdentityResponse } from './GetIdentity/GetIdentityResponse'
+import { GetCurrencyRequest } from './GetCurrency/GetCurrencyRequest'
+import { GetCurrencyResponse } from './GetCurrency/GetCurrencyResponse'
 import { GetInfoRequest } from './GetInfo/GetInfoRequest'
 import { GetInfoResponse } from './GetInfo/GetInfoResponse'
 import { GetOffersRequest } from './GetOffers/GetOffersRequest'
@@ -34,6 +36,8 @@ export {
   GetBlockResponse,
   GetIdentityRequest,
   GetIdentityResponse,
+  GetCurrencyRequest,
+  GetCurrencyResponse,
   GetOffersRequest,
   GetOffersResponse,
   GetRawTransactionRequest,
@@ -59,6 +63,7 @@ export type RpcRequest =
   | typeof GetBlockRequest
   | typeof GetInfoRequest
   | typeof GetIdentityRequest
+  | typeof GetCurrencyRequest
   | typeof SendRawTransactionRequest
   | typeof GetRawTransactionRequest
   | typeof VerifyMessageRequest
@@ -73,6 +78,7 @@ export type RpcResponse =
   | typeof GetBlockResponse
   | typeof GetInfoResponse
   | typeof GetIdentityResponse
+  | typeof GetCurrencyResponse
   | typeof SendRawTransactionResponse
   | typeof GetRawTransactionResponse
   | typeof VerifyMessageResponse
