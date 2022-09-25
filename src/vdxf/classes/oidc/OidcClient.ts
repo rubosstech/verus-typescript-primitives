@@ -1,11 +1,11 @@
-import { LOGIN_CONSENT_CLIENT_VDXF_KEY, VDXFObject } from "../";
+import { LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY, VDXFObject } from "../../";
 
 export interface RedirectUri {
   type: string;
   uri: string;
 }
 
-export interface ClientInterface {
+export interface OidcClientInterface {
   client_id: string;
   name?: string;
   redirect_uris?: Array<RedirectUri>;
@@ -28,7 +28,7 @@ export interface ClientInterface {
   updated_at?: string;
 }
 
-export class Client extends VDXFObject {
+export class OidcClient extends VDXFObject {
   client_id: string;
   name?: string;
   redirect_uris?: Array<RedirectUri>;
@@ -50,8 +50,8 @@ export class Client extends VDXFObject {
   created_at: string;
   updated_at?: string;
 
-  constructor(client: ClientInterface) {
-    super(LOGIN_CONSENT_CLIENT_VDXF_KEY.vdxfid)
+  constructor(client: OidcClientInterface) {
+    super(LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY.vdxfid)
 
     this.client_id = client.client_id;
     this.name = client.name;

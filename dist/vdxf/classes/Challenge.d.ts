@@ -1,92 +1,67 @@
-import { Client, ClientInterface } from "./Client";
 import { VDXFObject } from "../";
-export interface ChallengeInterface {
-    uuid: string;
-    requested_scope?: Array<string> | null;
-    requested_access_token_audience?: Array<string> | null;
-    skip?: boolean;
-    subject?: string;
-    oidc_context?: {
-        acr_values: Array<string>;
-        display: string;
-        id_token_hint_claims: {
-            [key: string]: any;
-        };
-        login_hint: string;
-        ui_locales: Array<string>;
-    } | {};
-    request_url?: string;
-    login_challenge?: string;
-    login_session_id?: string;
-    acr?: string;
-    session_id?: string;
-    client: ClientInterface;
+export declare class RedirectUri extends VDXFObject {
+    uri: string;
+    constructor(uri: string, vdxfkey: string);
+    stringable(): {
+        uri: string;
+        vdxfkey: string;
+    };
 }
-export declare class Challenge extends VDXFObject {
-    uuid: string;
-    client: Client;
-    requested_scope?: Array<string> | null;
-    requested_access_token_audience?: Array<string> | null;
-    skip?: boolean;
-    subject?: string;
-    oidc_context?: {
-        acr_values: Array<string>;
-        display: string;
-        id_token_hint_claims: {
-            [key: string]: any;
-        };
-        login_hint: string;
-        ui_locales: Array<string>;
-    } | {};
-    request_url?: string;
-    login_challenge?: string;
-    login_session_id?: string;
-    acr?: string;
+export declare class Subject extends VDXFObject {
+    data: string;
+    constructor(data: string, vdxfkey: string);
+    stringable(): {
+        data: string;
+        vdxfkey: string;
+    };
+}
+export interface ChallengeInterface {
+    challenge_id: string;
+    requested_access?: Array<string> | null;
+    requested_access_audience?: Array<string> | null;
+    subject?: Array<Subject>;
+    alt_auth_factors?: Array<string> | null;
     session_id?: string;
+    attestations?: null;
+    redirect_uris?: Array<RedirectUri>;
+    created_at?: string;
+    salt: string;
+    context: {
+        [key: string]: any;
+    };
+}
+export declare class Challenge extends VDXFObject implements ChallengeInterface {
+    challenge_id: string;
+    requested_access?: Array<string> | null;
+    requested_access_audience?: Array<string> | null;
+    subject?: Array<Subject>;
+    alt_auth_factors?: Array<string> | null;
+    session_id?: string;
+    attestations?: null;
+    redirect_uris?: Array<RedirectUri>;
+    created_at?: string;
+    salt: string;
+    context: {
+        [key: string]: any;
+    };
     constructor(challenge: ChallengeInterface);
     stringable(): {
         vdxfkey: string;
-        uuid: string;
-        client: {
-            vdxfkey: string;
-            client_id: string;
-            name: string;
-            redirect_uris: import("./Client").RedirectUri[];
-            grant_types: string[];
-            response_types: string[];
-            scope: string;
-            audience: string[];
-            owner: string;
-            policy_uri: string;
-            allowed_cors_origins: string[];
-            tos_uri: string;
-            client_uri: string;
-            logo_uri: string;
-            contacts: string[];
-            client_secret_expires_at: number;
-            subject_type: string;
-            token_endpoint_auth_method: string;
-            userinfo_signed_response_alg: string;
-            created_at: string;
-            updated_at: string;
-        };
-        requested_scope: string[];
-        requested_access_token_audience: string[];
-        skip: boolean;
-        subject: string;
-        oidc_context: {} | {
-            acr_values: string[];
-            display: string;
-            id_token_hint_claims: {
-                [key: string]: any;
-            };
-            login_hint: string;
-            ui_locales: string[];
-        };
-        request_url: string;
-        login_challenge: string;
-        login_session_id: string;
-        acr: string;
+        challenge_id: string;
+        requested_access: string[];
+        requested_access_audience: string[];
+        subject: Subject[];
+        alt_auth_factors: string[];
         session_id: string;
+        attestations: null;
+        redirect_uris: {
+            uri: string;
+            vdxfkey: string;
+        }[];
+        created_at: string;
+        salt: string;
+        context: {
+            [key: string]: any;
+        };
     };
 }
