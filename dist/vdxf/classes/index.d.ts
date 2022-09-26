@@ -1,5 +1,11 @@
-export { Decision as LoginConsentDecision } from './Decision';
 export { Challenge as LoginConsentChallenge } from './Challenge';
-export { Client as LoginConsentClient } from './Client';
+export { Decision as LoginConsentDecision } from './Decision';
 export { Request as LoginConsentRequest } from './Request';
 export { Response as LoginConsentResponse } from './Response';
+export { ChallengeInterface as LoginConsentChallengeInterface } from './Challenge';
+export { DecisionInterface as LoginConsentDecisionInterface } from './Decision';
+export { RequestInterface as LoginConsentRequestInterface } from './Request';
+export { ResponseInterface as LoginConsentResponseInterface } from './Response';
+export { OidcClient as OidcLoginConsentClient } from './oidc/OidcClient';
+export { OidcChallenge as OidcLoginConsentChallenge } from './oidc/OidcChallenge';
+export { OidcDecision as OidcLoginConsentDecision } from './oidc/OidcDecision';
