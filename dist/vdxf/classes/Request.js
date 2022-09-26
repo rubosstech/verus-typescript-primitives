@@ -9,7 +9,9 @@ class Request extends __1.VDXFObject {
         super(__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid);
         this.system_id = request.system_id;
         this.signing_id = request.signing_id;
-        this.signature = new __1.VerusIDSignature(request.signature, keys_1.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
+        this.signature = request.signature
+            ? new __1.VerusIDSignature(request.signature, keys_1.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY)
+            : undefined;
         this.challenge = new Challenge_1.Challenge(request.challenge);
     }
     getSignedData() {
@@ -20,7 +22,7 @@ class Request extends __1.VDXFObject {
             vdxfkey: this.vdxfkey,
             system_id: this.system_id,
             signing_id: this.signing_id,
-            signature: this.signature.stringable(),
+            signature: this.signature ? this.signature.stringable() : this.signature,
             challenge: this.challenge.stringable(),
         };
     }

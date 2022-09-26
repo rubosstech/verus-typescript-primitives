@@ -3,13 +3,13 @@ import { Challenge, ChallengeInterface } from "./Challenge";
 export interface RequestInterface {
     system_id: string;
     signing_id: string;
-    signature: VerusIDSignatureInterface;
+    signature?: VerusIDSignatureInterface;
     challenge: ChallengeInterface;
 }
 export declare class Request extends VDXFObject {
     system_id: string;
     signing_id: string;
-    signature: VerusIDSignature;
+    signature?: VerusIDSignature;
     challenge: Challenge;
     constructor(request: RequestInterface);
     getSignedData(): string;

@@ -5,14 +5,14 @@ import { Challenge, ChallengeInterface } from "./Challenge";
 export interface RequestInterface {
   system_id: string;
   signing_id: string;
-  signature: VerusIDSignatureInterface;
+  signature?: VerusIDSignatureInterface;
   challenge: ChallengeInterface;
 }
 
 export class Request extends VDXFObject {
   system_id: string;
   signing_id: string;
-  signature: VerusIDSignature;
+  signature?: VerusIDSignature;
   challenge: Challenge;
 
   constructor(request: RequestInterface) {
@@ -20,7 +20,12 @@ export class Request extends VDXFObject {
 
     this.system_id = request.system_id;
     this.signing_id = request.signing_id;
-    this.signature = new VerusIDSignature(request.signature, LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
+    this.signature = request.signature
+      ? new VerusIDSignature(
+          request.signature,
+          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+        )
+      : undefined;
     this.challenge = new Challenge(request.challenge);
   }
 
@@ -33,7 +38,7 @@ export class Request extends VDXFObject {
       vdxfkey: this.vdxfkey,
       system_id: this.system_id,
       signing_id: this.signing_id,
-      signature: this.signature.stringable(),
+      signature: this.signature ? this.signature.stringable() : this.signature,
       challenge: this.challenge.stringable(),
     };
   }
