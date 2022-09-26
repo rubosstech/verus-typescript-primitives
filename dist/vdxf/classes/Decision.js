@@ -20,7 +20,7 @@ class Decision extends __1.VDXFObject {
             subject: this.request.challenge.subject ? JSON.stringify(this.request.challenge.subject) : undefined,
             context: this.context,
             request: new OidcRequest_1.OidcRequest({
-                chain_id: this.request.chain_id,
+                chain_id: this.request.system_id,
                 signing_id: this.request.signing_id,
                 signature: this.request.signature,
                 challenge: new OidcChallenge_1.OidcChallenge({

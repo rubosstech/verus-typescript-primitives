@@ -1,13 +1,13 @@
 import { Decision, DecisionInterface } from "./Decision";
 import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
 interface ResponseInterface {
-    chain_id: string;
+    system_id: string;
     signing_id: string;
     signature?: VerusIDSignatureInterface;
     decision: DecisionInterface;
 }
 export declare class Response extends VDXFObject {
-    chain_id: string;
+    system_id: string;
     signing_id: string;
     signature?: VerusIDSignature;
     decision: Decision;
@@ -15,7 +15,7 @@ export declare class Response extends VDXFObject {
     getSignedData(): string;
     stringable(): {
         vdxfkey: string;
-        chain_id: string;
+        system_id: string;
         signature: VerusIDSignature;
         signing_id: string;
         decision: {
@@ -27,7 +27,7 @@ export declare class Response extends VDXFObject {
             created_at: string;
             request: {
                 vdxfkey: string;
-                chain_id: string;
+                system_id: string;
                 signing_id: string;
                 signature: {
                     vdxfkey: string;

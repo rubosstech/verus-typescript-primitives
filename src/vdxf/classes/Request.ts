@@ -3,14 +3,14 @@ import { LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY } from "../keys";
 import { Challenge, ChallengeInterface } from "./Challenge";
 
 export interface RequestInterface {
-  chain_id: string;
+  system_id: string;
   signing_id: string;
   signature: VerusIDSignatureInterface;
   challenge: ChallengeInterface;
 }
 
 export class Request extends VDXFObject {
-  chain_id: string;
+  system_id: string;
   signing_id: string;
   signature: VerusIDSignature;
   challenge: Challenge;
@@ -18,7 +18,7 @@ export class Request extends VDXFObject {
   constructor(request: RequestInterface) {
     super(LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid);
 
-    this.chain_id = request.chain_id;
+    this.system_id = request.system_id;
     this.signing_id = request.signing_id;
     this.signature = new VerusIDSignature(request.signature, LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
     this.challenge = new Challenge(request.challenge);
@@ -31,7 +31,7 @@ export class Request extends VDXFObject {
   stringable() {
     return {
       vdxfkey: this.vdxfkey,
-      chain_id: this.chain_id,
+      system_id: this.system_id,
       signing_id: this.signing_id,
       signature: this.signature.stringable(),
       challenge: this.challenge.stringable(),

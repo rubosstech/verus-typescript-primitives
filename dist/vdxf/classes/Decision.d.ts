@@ -27,7 +27,7 @@ export declare class Decision extends VDXFObject {
         created_at: string;
         request: {
             vdxfkey: string;
-            chain_id: string;
+            system_id: string;
             signing_id: string;
             signature: {
                 vdxfkey: string;

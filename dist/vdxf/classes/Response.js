@@ -7,7 +7,7 @@ const keys_1 = require("../keys");
 class Response extends __1.VDXFObject {
     constructor(response) {
         super(__1.LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid);
-        this.chain_id = response.chain_id;
+        this.system_id = response.system_id;
         this.signing_id = response.signing_id;
         this.decision = new Decision_1.Decision(response.decision);
         if (response.signature) {
@@ -20,7 +20,7 @@ class Response extends __1.VDXFObject {
     stringable() {
         return {
             vdxfkey: this.vdxfkey,
-            chain_id: this.chain_id,
+            system_id: this.system_id,
             signature: this.signature,
             signing_id: this.signing_id,
             decision: this.decision.stringable()

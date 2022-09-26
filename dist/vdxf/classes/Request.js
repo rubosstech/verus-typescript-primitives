@@ -7,7 +7,7 @@ const Challenge_1 = require("./Challenge");
 class Request extends __1.VDXFObject {
     constructor(request) {
         super(__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid);
-        this.chain_id = request.chain_id;
+        this.system_id = request.system_id;
         this.signing_id = request.signing_id;
         this.signature = new __1.VerusIDSignature(request.signature, keys_1.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
         this.challenge = new Challenge_1.Challenge(request.challenge);
@@ -18,7 +18,7 @@ class Request extends __1.VDXFObject {
     stringable() {
         return {
             vdxfkey: this.vdxfkey,
-            chain_id: this.chain_id,
+            system_id: this.system_id,
             signing_id: this.signing_id,
             signature: this.signature.stringable(),
             challenge: this.challenge.stringable(),

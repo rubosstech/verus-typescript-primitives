@@ -1,13 +1,13 @@
 import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
 import { Challenge, ChallengeInterface } from "./Challenge";
 export interface RequestInterface {
-    chain_id: string;
+    system_id: string;
     signing_id: string;
     signature: VerusIDSignatureInterface;
     challenge: ChallengeInterface;
 }
 export declare class Request extends VDXFObject {
-    chain_id: string;
+    system_id: string;
     signing_id: string;
     signature: VerusIDSignature;
     challenge: Challenge;
@@ -15,7 +15,7 @@ export declare class Request extends VDXFObject {
     getSignedData(): string;
     stringable(): {
         vdxfkey: string;
-        chain_id: string;
+        system_id: string;
         signing_id: string;
         signature: {
             vdxfkey: string;
