@@ -2,7 +2,7 @@ import { Decision, DecisionInterface } from "./Decision";
 import { LOGIN_CONSENT_RESPONSE_VDXF_KEY, VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
 import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY } from "../keys";
 
-interface ResponseInterface {
+export interface ResponseInterface {
   system_id: string;
   signing_id: string;
   signature?: VerusIDSignatureInterface;

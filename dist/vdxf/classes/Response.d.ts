@@ -1,6 +1,6 @@
 import { Decision, DecisionInterface } from "./Decision";
 import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
-interface ResponseInterface {
+export interface ResponseInterface {
     system_id: string;
     signing_id: string;
     signature?: VerusIDSignatureInterface;
@@ -56,4 +56,3 @@ export declare class Response extends VDXFObject {
         };
     };
 }
-export {};
