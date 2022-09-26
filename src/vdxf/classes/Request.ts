@@ -1,6 +1,13 @@
-import { LOGIN_CONSENT_REQUEST_VDXF_KEY, VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
+import {
+  LOGIN_CONSENT_REQUEST_VDXF_KEY,
+  WALLET_VDXF_KEY,
+  VDXFObject,
+  VerusIDSignature,
+  VerusIDSignatureInterface,
+} from "../";
 import { LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY } from "../keys";
 import { Challenge, ChallengeInterface } from "./Challenge";
+import base64url from 'base64url';
 
 export interface RequestInterface {
   system_id: string;
@@ -41,5 +48,20 @@ export class Request extends VDXFObject {
       signature: this.signature ? this.signature.stringable() : this.signature,
       challenge: this.challenge.stringable(),
     };
+  }
+
+  toWalletDeeplinkUri(): string {
+    return `${WALLET_VDXF_KEY.vdxfid.toLowerCase()}://x-callback-url/${
+      LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid
+    }/?${LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=${base64url(
+      JSON.stringify(this.stringable())
+    )}`;
+  }
+
+  static fromWalletDeeplinkUri(uri: string): Request {
+    const split = uri.split(`${LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=`);
+    const stringable = JSON.parse(base64url.decode(split[1]));
+
+    return new Request(stringable)
   }
 }

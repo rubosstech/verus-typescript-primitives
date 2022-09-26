@@ -41,4 +41,6 @@ export declare class Request extends VDXFObject {
             };
         };
     };
+    toWalletDeeplinkUri(): string;
+    static fromWalletDeeplinkUri(uri: string): Request;
 }
