@@ -60,13 +60,13 @@ export interface ChallengeInterface {
   redirect_uris?: Array<RedirectUri>;
 
   // String of unix representation of date string
-  created_at?: string;
+  created_at: string;
 
   // Random hash string
-  salt: string;
+  salt?: string;
 
   // Context
-  context: { [key: string]: any };
+  context?: { [key: string]: any };
 }
 
 export class Challenge extends VDXFObject implements ChallengeInterface {
@@ -78,9 +78,9 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
   session_id?: string;
   attestations?: null;
   redirect_uris?: Array<RedirectUri>;
-  created_at?: string;
-  salt: string;
-  context: { [key: string]: any };
+  created_at: string;
+  salt?: string;
+  context?: { [key: string]: any };
 
   constructor(challenge: ChallengeInterface) {
     super(LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid)

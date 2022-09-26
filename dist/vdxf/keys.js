@@ -26,12 +26,12 @@ exports.LOGIN_CONSENT_REQUEST_VDXF_KEY = {
     },
 };
 exports.LOGIN_CONSENT_OIDC_REQUEST_VDXF_KEY = {
-    "vdxfid": "i5XKaak5R68S1oW55dDDu7XEkRZpRTFts6",
-    "hash160result": "e19a485ca8bce6540ace5f40e415a4a7d29a7716",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::system.identity.authentication.loginconsent.oidcrequest"
-    }
+    vdxfid: "i5XKaak5R68S1oW55dDDu7XEkRZpRTFts6",
+    hash160result: "e19a485ca8bce6540ace5f40e415a4a7d29a7716",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::system.identity.authentication.loginconsent.oidcrequest",
+    },
 };
 exports.LOGIN_CONSENT_RESPONSE_VDXF_KEY = {
     vdxfid: "iJQaibDkoUxwGoE2YhZtVVZyhKxZs1G7uU",
@@ -66,12 +66,12 @@ exports.LOGIN_CONSENT_DECISION_VDXF_KEY = {
     },
 };
 exports.LOGIN_CONSENT_OIDC_DECISION_VDXF_KEY = {
-    "vdxfid": "i49KeF2Ucd2NukXTbP2ArHX2JUtfqZRC63",
-    "hash160result": "890efbba846eac07b3220d197cfe9f2269615607",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::system.identity.authentication.loginconsent.response.oidcdecision"
-    }
+    vdxfid: "i49KeF2Ucd2NukXTbP2ArHX2JUtfqZRC63",
+    hash160result: "890efbba846eac07b3220d197cfe9f2269615607",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::system.identity.authentication.loginconsent.response.oidcdecision",
+    },
 };
 exports.LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY = {
     vdxfid: "iGo5omf7RubucEU6nM6THM6bhPgq1SjSqS",
@@ -90,18 +90,18 @@ exports.WALLET_VDXF_KEY = {
     },
 };
 exports.LOGIN_CONSENT_REDIRECT_VDXF_KEY = {
-    "vdxfid": "iAPmsGJkkpMN1sCTF59fscV7jD8tv1whnk",
-    "hash160result": "8109473c99bc48562253bf2ddba2f6bf8cd9e24b",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::system.identity.authentication.loginconsent.redirect"
-    }
+    vdxfid: "iAPmsGJkkpMN1sCTF59fscV7jD8tv1whnk",
+    hash160result: "8109473c99bc48562253bf2ddba2f6bf8cd9e24b",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::system.identity.authentication.loginconsent.redirect",
+    },
 };
 exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = {
-    "vdxfid": "iACPLH19SXKHoRJboWoxZHZRHz791Zii41",
-    "hash160result": "87b84b3dbfd7948f9156bb8bb81e2ebfab76bb49",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::system.identity.authentication.loginconsent.webhook"
-    }
+    vdxfid: "iACPLH19SXKHoRJboWoxZHZRHz791Zii41",
+    hash160result: "87b84b3dbfd7948f9156bb8bb81e2ebfab76bb49",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::system.identity.authentication.loginconsent.webhook",
+    },
 };

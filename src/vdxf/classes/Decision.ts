@@ -13,7 +13,7 @@ export interface DecisionInterface {
   request: RequestInterface;
 
   // String of unix representation of date string
-  created_at?: string;
+  created_at: string;
 
   // General context
   context?: { [key: string]: any };

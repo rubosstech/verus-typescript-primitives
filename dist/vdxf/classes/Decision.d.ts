@@ -4,7 +4,7 @@ import { Request, RequestInterface } from "./Request";
 export interface DecisionInterface {
     decision_id: string;
     request: RequestInterface;
-    created_at?: string;
+    created_at: string;
     context?: {
         [key: string]: any;
     };

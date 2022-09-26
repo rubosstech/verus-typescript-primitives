@@ -24,9 +24,9 @@ export interface ChallengeInterface {
     session_id?: string;
     attestations?: null;
     redirect_uris?: Array<RedirectUri>;
-    created_at?: string;
-    salt: string;
-    context: {
+    created_at: string;
+    salt?: string;
+    context?: {
         [key: string]: any;
     };
 }
@@ -39,9 +39,9 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     session_id?: string;
     attestations?: null;
     redirect_uris?: Array<RedirectUri>;
-    created_at?: string;
-    salt: string;
-    context: {
+    created_at: string;
+    salt?: string;
+    context?: {
         [key: string]: any;
     };
     constructor(challenge: ChallengeInterface);
