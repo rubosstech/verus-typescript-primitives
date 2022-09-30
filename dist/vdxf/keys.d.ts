@@ -19,3 +19,5 @@ export declare const LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY: VDXFKeyInterface;
 export declare const WALLET_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_REDIRECT_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
+export declare const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface;
+export declare const LOGIN_CONSENT_CONTEXT_ID_PROCUREMENT_SUBJECT_VDXF_KEY: VDXFKeyInterface;

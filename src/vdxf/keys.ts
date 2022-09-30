@@ -124,3 +124,22 @@ export const LOGIN_CONSENT_WEBHOOK_VDXF_KEY: VDXFKeyInterface = {
     name: "vrsc::system.identity.authentication.loginconsent.webhook",
   },
 };
+
+export const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface = {
+  vdxfid: "i4deKhDW1MBW6zYaTiwjd7pzzfkHB6Jj8c",
+  hash160result: "054b0e981f24c456f7e2b63be85f9f5bf29eb10c",
+  qualifiedname: {
+    namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    name: "vrsc::system.identity.authentication.loginconsent.context",
+  },
+};
+
+export const LOGIN_CONSENT_CONTEXT_ID_PROCUREMENT_SUBJECT_VDXF_KEY: VDXFKeyInterface =
+  {
+    vdxfid: "iQpWgEa7JbB8cnGq8cf5ouXvsmT3E8dNq5",
+    hash160result: "ed810ebcd23480e1effb114acb06dd91675422ea",
+    qualifiedname: {
+      namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      name: "vrsc::system.identity.authentication.loginconsent.subject.procureverusid.webhook",
+    },
+  };

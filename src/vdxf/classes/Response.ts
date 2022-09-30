@@ -1,6 +1,10 @@
 import { Decision, DecisionInterface } from "./Decision";
 import { LOGIN_CONSENT_RESPONSE_VDXF_KEY, VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
 import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY } from "../keys";
+import { Hash160 } from "./Hash160";
+import bufferutils from "../../utils/bufferutils";
+import { HASH160_BYTE_LENGTH, I_ADDR_VERSION } from "../../constants/vdxf";
+import { toBase58Check } from "../../utils/address";
 
 export interface ResponseInterface {
   system_id: string;
@@ -15,9 +19,15 @@ export class Response extends VDXFObject {
   signature?: VerusIDSignature;
   decision: Decision;
 
-  constructor(response: ResponseInterface) {
-    super(LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid)
-    
+  constructor(
+    response: ResponseInterface = {
+      system_id: "",
+      signing_id: "",
+      decision: new Decision(),
+    }
+  ) {
+    super(LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid);
+
     this.system_id = response.system_id;
     this.signing_id = response.signing_id;
     this.decision = new Decision(response.decision);
@@ -31,7 +41,78 @@ export class Response extends VDXFObject {
   }
 
   getSignedData() {
-    return this.decision.toString()
+    return this.decision.toString();
+  }
+
+  dataByteLength(): number {
+    let length = 0;
+    const _system_id = Hash160.fromAddress(this.system_id);
+    const _signing_id = Hash160.fromAddress(this.signing_id);
+    const _signature = this.signature
+      ? this.signature
+      : new VerusIDSignature(
+          { signature: "" },
+          LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY
+        );
+
+    length += _system_id.byteLength();
+    length += _signing_id.byteLength();
+    length += _signature.byteLength();
+    length += this.decision.byteLength();
+
+    return length;
+  }
+
+  toDataBuffer(): Buffer {
+    const writer = new bufferutils.BufferWriter(
+      Buffer.alloc(this.dataByteLength())
+    );
+    const _system_id = Hash160.fromAddress(this.system_id);
+    const _signing_id = Hash160.fromAddress(this.signing_id);
+    const _signature = this.signature
+      ? this.signature
+      : new VerusIDSignature(
+          { signature: "" },
+          LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY
+        );
+
+    writer.writeSlice(_system_id.toBuffer());
+
+    writer.writeSlice(_signing_id.toBuffer());
+
+    writer.writeSlice(_signature.toBuffer());
+
+    writer.writeSlice(this.decision.toBuffer());
+
+    return writer.buffer;
+  }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+    const reader = new bufferutils.BufferReader(buffer, offset);
+    const reqLength = reader.readVarInt();
+
+    if (reqLength == 0) {
+      throw new Error("Cannot create request from empty buffer");
+    } else {
+      this.system_id = toBase58Check(
+        reader.readSlice(HASH160_BYTE_LENGTH),
+        I_ADDR_VERSION
+      );
+      this.signing_id = toBase58Check(
+        reader.readSlice(HASH160_BYTE_LENGTH),
+        I_ADDR_VERSION
+      );
+
+      const _sig = new VerusIDSignature();
+      reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
+      this.signature = _sig;
+
+      const _decision = new Decision();
+      reader.offset = _decision.fromBuffer(reader.buffer, reader.offset);
+      this.decision = _decision;
+    }
+
+    return reader.offset;
   }
 
   stringable() {
@@ -40,7 +121,7 @@ export class Response extends VDXFObject {
       system_id: this.system_id,
       signature: this.signature,
       signing_id: this.signing_id,
-      decision: this.decision.stringable()
-    }
+      decision: this.decision.stringable(),
+    };
   }
 }

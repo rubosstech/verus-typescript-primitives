@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_REDIRECT_VDXF_KEY = exports.WALLET_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = void 0;
+exports.LOGIN_CONSENT_CONTEXT_ID_PROCUREMENT_SUBJECT_VDXF_KEY = exports.LOGIN_CONSENT_CONTEXT_VDXF_KEY = exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_REDIRECT_VDXF_KEY = exports.WALLET_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = void 0;
 exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = {
     vdxfid: "iBFueEbXnSbohqiHNwwmz8Jb7LJtx2PGFu",
     hash160result: "28657ae163daff6bcb81034044699a4170235e55",
@@ -103,5 +103,21 @@ exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = {
     qualifiedname: {
         namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
         name: "vrsc::system.identity.authentication.loginconsent.webhook",
+    },
+};
+exports.LOGIN_CONSENT_CONTEXT_VDXF_KEY = {
+    vdxfid: "i4deKhDW1MBW6zYaTiwjd7pzzfkHB6Jj8c",
+    hash160result: "054b0e981f24c456f7e2b63be85f9f5bf29eb10c",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::system.identity.authentication.loginconsent.context",
+    },
+};
+exports.LOGIN_CONSENT_CONTEXT_ID_PROCUREMENT_SUBJECT_VDXF_KEY = {
+    vdxfid: "iQpWgEa7JbB8cnGq8cf5ouXvsmT3E8dNq5",
+    hash160result: "ed810ebcd23480e1effb114acb06dd91675422ea",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::system.identity.authentication.loginconsent.subject.procureverusid.webhook",
     },
 };

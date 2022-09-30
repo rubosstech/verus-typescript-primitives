@@ -16,3 +16,6 @@ __exportStar(require("./api/ApiResponse"), exports);
 __exportStar(require("./api/ApiPrimitive"), exports);
 __exportStar(require("./vdxf/classes/index"), exports);
 __exportStar(require("./vdxf/index"), exports);
+__exportStar(require("./utils/address"), exports);
+__exportStar(require("./utils/bufferutils"), exports);
+__exportStar(require("./utils/varuint"), exports);

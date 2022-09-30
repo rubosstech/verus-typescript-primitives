@@ -1,7 +1,13 @@
+/// <reference types="node" />
 import { VDXFObject } from "../";
+import { Context } from "./Context";
+import { Hash160 } from "./Hash160";
 export declare class RedirectUri extends VDXFObject {
     uri: string;
-    constructor(uri: string, vdxfkey: string);
+    constructor(uri?: string, vdxfkey?: string);
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
     stringable(): {
         uri: string;
         vdxfkey: string;
@@ -9,7 +15,10 @@ export declare class RedirectUri extends VDXFObject {
 }
 export declare class Subject extends VDXFObject {
     data: string;
-    constructor(data: string, vdxfkey: string);
+    constructor(data?: string, vdxfkey?: string);
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
     stringable(): {
         data: string;
         vdxfkey: string;
@@ -17,51 +26,48 @@ export declare class Subject extends VDXFObject {
 }
 export interface ChallengeInterface {
     challenge_id: string;
-    requested_access?: Array<string> | null;
-    requested_access_audience?: Array<string> | null;
+    requested_access?: Array<Hash160> | null;
+    requested_access_audience?: Array<any> | null;
     subject?: Array<Subject>;
-    alt_auth_factors?: Array<string> | null;
+    alt_auth_factors?: Array<any> | null;
     session_id?: string;
-    attestations?: null;
+    attestations?: Array<any>;
     redirect_uris?: Array<RedirectUri>;
-    created_at: string;
+    created_at: number;
     salt?: string;
-    context?: {
-        [key: string]: any;
-    };
+    context?: Context;
 }
 export declare class Challenge extends VDXFObject implements ChallengeInterface {
     challenge_id: string;
-    requested_access?: Array<string> | null;
-    requested_access_audience?: Array<string> | null;
+    requested_access?: Array<Hash160> | null;
+    requested_access_audience?: Array<any> | null;
     subject?: Array<Subject>;
-    alt_auth_factors?: Array<string> | null;
+    alt_auth_factors?: Array<any> | null;
     session_id?: string;
-    attestations?: null;
+    attestations?: Array<any>;
     redirect_uris?: Array<RedirectUri>;
-    created_at: string;
+    created_at: number;
     salt?: string;
-    context?: {
-        [key: string]: any;
-    };
-    constructor(challenge: ChallengeInterface);
+    context?: Context;
+    constructor(challenge?: ChallengeInterface);
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
     stringable(): {
         vdxfkey: string;
         challenge_id: string;
-        requested_access: string[];
-        requested_access_audience: string[];
+        requested_access: Hash160[];
+        requested_access_audience: any[];
         subject: Subject[];
-        alt_auth_factors: string[];
+        alt_auth_factors: any[];
         session_id: string;
-        attestations: null;
+        attestations: any[];
         redirect_uris: {
             uri: string;
             vdxfkey: string;
         }[];
-        created_at: string;
+        created_at: number;
         salt: string;
-        context: {
-            [key: string]: any;
-        };
+        context: Context;
     };
 }

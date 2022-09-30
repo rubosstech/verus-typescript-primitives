@@ -1,5 +1,7 @@
+/// <reference types="node" />
 import { Decision, DecisionInterface } from "./Decision";
 import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
+import { Hash160 } from "./Hash160";
 export interface ResponseInterface {
     system_id: string;
     signing_id: string;
@@ -11,8 +13,11 @@ export declare class Response extends VDXFObject {
     signing_id: string;
     signature?: VerusIDSignature;
     decision: Decision;
-    constructor(response: ResponseInterface);
+    constructor(response?: ResponseInterface);
     getSignedData(): string;
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
     stringable(): {
         vdxfkey: string;
         system_id: string;
@@ -21,10 +26,8 @@ export declare class Response extends VDXFObject {
         decision: {
             vdxfkey: string;
             decision_id: string;
-            context: {
-                [key: string]: any;
-            };
-            created_at: string;
+            context: import("./Context").Context;
+            created_at: number;
             request: {
                 vdxfkey: string;
                 system_id: string;
@@ -36,21 +39,19 @@ export declare class Response extends VDXFObject {
                 challenge: {
                     vdxfkey: string;
                     challenge_id: string;
-                    requested_access: string[];
-                    requested_access_audience: string[];
+                    requested_access: Hash160[];
+                    requested_access_audience: any[];
                     subject: import("./Challenge").Subject[];
-                    alt_auth_factors: string[];
+                    alt_auth_factors: any[];
                     session_id: string;
-                    attestations: null;
+                    attestations: any[];
                     redirect_uris: {
                         uri: string;
                         vdxfkey: string;
                     }[];
-                    created_at: string;
+                    created_at: number;
                     salt: string;
-                    context: {
-                        [key: string]: any;
-                    };
+                    context: import("./Context").Context;
                 };
             };
         };
