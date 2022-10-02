@@ -6,7 +6,7 @@ export declare class Context extends VDXFObject {
     };
     constructor(kv?: {
         [key: string]: string;
-    });
+    }, vdxfid?: string);
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;

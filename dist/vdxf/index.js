@@ -10,7 +10,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VerusIDSignature = exports.VDXFObject = void 0;
+exports.VerusIDSignature = exports.Utf8DataVdxfObject = exports.VDXFObject = void 0;
 const vdxf_1 = require("../constants/vdxf");
 const address_1 = require("../utils/address");
 const bufferutils_1 = require("../utils/bufferutils");
@@ -70,6 +70,30 @@ class VDXFObject {
     }
 }
 exports.VDXFObject = VDXFObject;
+class Utf8DataVdxfObject extends VDXFObject {
+    constructor(data = "", vdxfkey = "") {
+        super(vdxfkey);
+        this.data = data;
+    }
+    dataByteLength() {
+        return this.toDataBuffer().length;
+    }
+    toDataBuffer() {
+        return Buffer.from(this.data, 'utf-8');
+    }
+    fromDataBuffer(buffer, offset) {
+        const reader = new bufferutils_1.default.BufferReader(buffer, offset);
+        this.data = reader.readVarSlice().toString('utf-8');
+        return reader.offset;
+    }
+    stringable() {
+        return {
+            data: this.data,
+            vdxfkey: this.vdxfkey
+        };
+    }
+}
+exports.Utf8DataVdxfObject = Utf8DataVdxfObject;
 class VerusIDSignature extends VDXFObject {
     constructor(sig = { signature: "" }, vdxfkey = keys_1.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY) {
         super(vdxfkey.vdxfid);

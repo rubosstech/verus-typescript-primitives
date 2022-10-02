@@ -1,0 +1,55 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProvisioningRequest = void 0;
+const __1 = require("../../");
+const vdxf_1 = require("../../../constants/vdxf");
+const Request_1 = require("../Request");
+const ProvisioningChallenge_1 = require("./ProvisioningChallenge");
+class ProvisioningRequest extends Request_1.Request {
+    constructor(request = {
+        signing_address: "",
+        challenge: new ProvisioningChallenge_1.ProvisioningChallenge(),
+    }) {
+        super({
+            system_id: null,
+            signing_id: null,
+            challenge: request.challenge,
+            signature: request.signature
+        }, __1.LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY.vdxfid);
+        this.challenge = new ProvisioningChallenge_1.ProvisioningChallenge(request.challenge);
+        this.signing_address = request.signing_address;
+    }
+    stringable() {
+        return {
+            vdxfkey: this.vdxfkey,
+            system_id: null,
+            signing_address: this.signing_address,
+            signing_id: null,
+            signature: this.signature ? this.signature.stringable() : this.signature,
+            challenge: this.challenge.stringable(),
+        };
+    }
+    dataByteLength() {
+        const length = this._dataByteLength(false, this.signing_address);
+        return length;
+    }
+    toDataBuffer() {
+        const buffer = this._toDataBuffer(false, this.signing_address);
+        return buffer;
+    }
+    fromDataBuffer(buffer, offset) {
+        let _offset = this._fromDataBuffer(buffer, offset, vdxf_1.R_ADDR_VERSION, false, false);
+        this.challenge = new ProvisioningChallenge_1.ProvisioningChallenge();
+        _offset = this.challenge.fromBuffer(buffer, _offset);
+        this.signing_address = this.signing_id;
+        this.signing_id = null;
+        return _offset;
+    }
+    toWalletDeeplinkUri() {
+        throw new Error("Cannot create deeplink from provisioning request");
+    }
+    static fromWalletDeeplinkUri(uri) {
+        throw new Error("Cannot create provisioning request from deeplink");
+    }
+}
+exports.ProvisioningRequest = ProvisioningRequest;

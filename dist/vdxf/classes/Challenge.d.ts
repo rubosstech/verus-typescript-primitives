@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { VDXFObject } from "../";
+import { Utf8DataVdxfObject, VDXFObject } from "../";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
 export declare class RedirectUri extends VDXFObject {
@@ -13,16 +13,7 @@ export declare class RedirectUri extends VDXFObject {
         vdxfkey: string;
     };
 }
-export declare class Subject extends VDXFObject {
-    data: string;
-    constructor(data?: string, vdxfkey?: string);
-    dataByteLength(): number;
-    toDataBuffer(): Buffer;
-    fromDataBuffer(buffer: Buffer, offset?: number): number;
-    stringable(): {
-        data: string;
-        vdxfkey: string;
-    };
+export declare class Subject extends Utf8DataVdxfObject {
 }
 export interface ChallengeInterface {
     challenge_id: string;
@@ -49,7 +40,7 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     created_at: number;
     salt?: string;
     context?: Context;
-    constructor(challenge?: ChallengeInterface);
+    constructor(challenge?: ChallengeInterface, vdxfid?: string);
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;

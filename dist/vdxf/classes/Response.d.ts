@@ -13,11 +13,11 @@ export declare class Response extends VDXFObject {
     signing_id: string;
     signature?: VerusIDSignature;
     decision: Decision;
-    constructor(response?: ResponseInterface);
-    getSignedData(): string;
+    constructor(response?: ResponseInterface, vdxfid?: string);
+    getSignedHash(): string;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
-    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    fromDataBuffer(buffer: Buffer, offset?: number, readDecision?: boolean): number;
     stringable(): {
         vdxfkey: string;
         system_id: string;
@@ -26,7 +26,12 @@ export declare class Response extends VDXFObject {
         decision: {
             vdxfkey: string;
             decision_id: string;
-            context: import("./Context").Context;
+            context: {
+                kv: {
+                    [key: string]: string;
+                };
+                vdxfkey: string;
+            };
             created_at: number;
             request: {
                 vdxfkey: string;

@@ -8,6 +8,7 @@ export interface DecisionInterface {
     decision_id: string;
     request: RequestInterface;
     created_at: number;
+    salt?: string;
     context?: Context;
     attestations?: Array<any>;
 }
@@ -17,15 +18,21 @@ export declare class Decision extends VDXFObject {
     request: Request;
     created_at: number;
     attestations: Array<any>;
-    constructor(decision?: DecisionInterface);
+    salt?: string;
+    constructor(decision?: DecisionInterface, vdfxid?: string);
     toOidcDecision(): OidcDecision;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
-    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    fromDataBuffer(buffer: Buffer, offset?: number, readRequest?: boolean): number;
     stringable(): {
         vdxfkey: string;
         decision_id: string;
-        context: Context;
+        context: {
+            kv: {
+                [key: string]: string;
+            };
+            vdxfkey: string;
+        };
         created_at: number;
         request: {
             vdxfkey: string;

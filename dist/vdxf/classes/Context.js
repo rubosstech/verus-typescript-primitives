@@ -7,8 +7,8 @@ const address_1 = require("../../utils/address");
 const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
 class Context extends __1.VDXFObject {
-    constructor(kv = {}) {
-        super(__1.LOGIN_CONSENT_CONTEXT_VDXF_KEY.vdxfid);
+    constructor(kv = {}, vdxfid = __1.LOGIN_CONSENT_CONTEXT_VDXF_KEY.vdxfid) {
+        super(vdxfid);
         this.kv = kv;
     }
     dataByteLength() {
@@ -17,9 +17,11 @@ class Context extends __1.VDXFObject {
         length += varuint_1.default.encodingLength(keys.length);
         for (const key of keys) {
             const value = this.kv[key];
-            const valueBuf = Buffer.from(value, 'utf-8');
-            length += (0, address_1.fromBase58Check)(key).hash.length;
-            length += valueBuf.length + varuint_1.default.encodingLength(valueBuf.length);
+            if (value != null) {
+                const valueBuf = Buffer.from(value, "utf-8");
+                length += (0, address_1.fromBase58Check)(key).hash.length;
+                length += valueBuf.length + varuint_1.default.encodingLength(valueBuf.length);
+            }
         }
         return length;
     }
@@ -30,7 +32,7 @@ class Context extends __1.VDXFObject {
         writer.writeVarInt(keys.length);
         for (const key of Object.keys(this.kv)) {
             const value = this.kv[key];
-            const valueBuf = Buffer.from(value, 'utf-8');
+            const valueBuf = Buffer.from(value, "utf-8");
             writer.writeSlice((0, address_1.fromBase58Check)(key).hash);
             writer.writeVarSlice(valueBuf);
         }
@@ -54,7 +56,7 @@ class Context extends __1.VDXFObject {
     stringable() {
         return {
             kv: this.kv,
-            vdxfkey: this.vdxfkey
+            vdxfkey: this.vdxfkey,
         };
     }
 }

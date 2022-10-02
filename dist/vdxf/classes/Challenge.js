@@ -31,33 +31,12 @@ class RedirectUri extends __1.VDXFObject {
     }
 }
 exports.RedirectUri = RedirectUri;
-class Subject extends __1.VDXFObject {
-    constructor(data = "", vdxfkey = "") {
-        super(vdxfkey);
-        this.data = data;
-    }
-    dataByteLength() {
-        return this.toDataBuffer().length;
-    }
-    toDataBuffer() {
-        return Buffer.from(this.data, 'utf-8');
-    }
-    fromDataBuffer(buffer, offset) {
-        const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        this.data = reader.readVarSlice().toString('utf-8');
-        return reader.offset;
-    }
-    stringable() {
-        return {
-            data: this.data,
-            vdxfkey: this.vdxfkey
-        };
-    }
+class Subject extends __1.Utf8DataVdxfObject {
 }
 exports.Subject = Subject;
 class Challenge extends __1.VDXFObject {
-    constructor(challenge = { challenge_id: "", created_at: 0 }) {
-        super(__1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid);
+    constructor(challenge = { challenge_id: "", created_at: 0 }, vdxfid = __1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
+        super(vdxfid);
         this.challenge_id = challenge.challenge_id;
         this.requested_access = challenge.requested_access;
         this.requested_access_audience = challenge.requested_access_audience;

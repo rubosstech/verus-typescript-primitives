@@ -93,6 +93,39 @@ export class VDXFObject implements VDXFObjectInterface {
   }
 }
 
+export class Utf8DataVdxfObject extends VDXFObject {
+  data: string;
+
+  constructor(data: string = "", vdxfkey: string = "") {
+    super(vdxfkey);
+
+    this.data = data
+  }
+
+  dataByteLength(): number {
+    return this.toDataBuffer().length;
+  }
+
+  toDataBuffer(): Buffer {
+    return Buffer.from(this.data, 'utf-8')
+  }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+    const reader = new bufferutils.BufferReader(buffer, offset);
+
+    this.data = reader.readVarSlice().toString('utf-8')
+
+    return reader.offset
+  }
+
+  stringable() {
+    return {
+      data: this.data,
+      vdxfkey: this.vdxfkey
+    };
+  }
+}
+
 export class VerusIDSignature extends VDXFObject {
   signature: string;
 

@@ -24,9 +24,10 @@ export class Response extends VDXFObject {
       system_id: "",
       signing_id: "",
       decision: new Decision(),
-    }
+    },
+    vdxfid: string = LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid
   ) {
-    super(LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid);
+    super(vdxfid);
 
     this.system_id = response.system_id;
     this.signing_id = response.signing_id;
@@ -40,7 +41,7 @@ export class Response extends VDXFObject {
     }
   }
 
-  getSignedData() {
+  getSignedHash() {
     return this.decision.toString();
   }
 
@@ -87,7 +88,11 @@ export class Response extends VDXFObject {
     return writer.buffer;
   }
 
-  fromDataBuffer(buffer: Buffer, offset?: number): number {
+  fromDataBuffer(
+    buffer: Buffer,
+    offset?: number,
+    readDecision: boolean = true
+  ): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
     const reqLength = reader.readVarInt();
 
@@ -98,6 +103,7 @@ export class Response extends VDXFObject {
         reader.readSlice(HASH160_BYTE_LENGTH),
         I_ADDR_VERSION
       );
+
       this.signing_id = toBase58Check(
         reader.readSlice(HASH160_BYTE_LENGTH),
         I_ADDR_VERSION
@@ -107,9 +113,11 @@ export class Response extends VDXFObject {
       reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
       this.signature = _sig;
 
-      const _decision = new Decision();
-      reader.offset = _decision.fromBuffer(reader.buffer, reader.offset);
-      this.decision = _decision;
+      if (readDecision) {
+        const _decision = new Decision();
+        reader.offset = _decision.fromBuffer(reader.buffer, reader.offset);
+        this.decision = _decision;
+      }
     }
 
     return reader.offset;

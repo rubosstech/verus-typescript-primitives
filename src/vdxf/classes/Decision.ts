@@ -20,6 +20,9 @@ export interface DecisionInterface {
   // String of unix representation of date string
   created_at: number;
 
+  // Random hash string
+  salt?: string;
+
   // General context
   context?: Context;
 
@@ -33,21 +36,24 @@ export class Decision extends VDXFObject {
   request: Request;
   created_at: number;
   attestations: Array<any>;
+  salt?: string;
 
   constructor(
     decision: DecisionInterface = {
       decision_id: "",
       request: new Request(),
       created_at: 0,
-    }
+    },
+    vdfxid: string = LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid
   ) {
-    super(LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid);
+    super(vdfxid);
 
     this.decision_id = decision.decision_id;
     this.request = new Request(decision.request);
     this.context = decision.context;
     this.created_at = decision.created_at;
     this.attestations = decision.attestations;
+    this.salt = decision.salt;
   }
 
   toOidcDecision(): OidcDecision {
@@ -92,6 +98,9 @@ export class Decision extends VDXFObject {
     let length = 0;
 
     const _challenge_id = Hash160.fromAddress(this.decision_id, true);
+    const _salt = this.salt
+      ? Hash160.fromAddress(this.salt, true)
+      : Hash160.getEmpty();
     const _request = this.request ? this.request : new Request();
     const _context = this.context ? this.context : new Context();
     const _attestations = [];
@@ -99,6 +108,8 @@ export class Decision extends VDXFObject {
     length += _challenge_id.byteLength();
 
     length += 8; // created_at
+
+    length += _salt.byteLength();
 
     length += _request.byteLength();
 
@@ -115,6 +126,9 @@ export class Decision extends VDXFObject {
 
     const _decision_id = Hash160.fromAddress(this.decision_id, true);
     const _created_at = this.created_at;
+    const _salt = this.salt
+      ? Hash160.fromAddress(this.salt, true)
+      : Hash160.getEmpty();
     const _request = this.request ? this.request : new Request();
     const _context = this.context ? this.context : new Context();
     const _attestations = [];
@@ -123,16 +137,22 @@ export class Decision extends VDXFObject {
 
     writer.writeUInt64(_created_at);
 
+    writer.writeSlice(_salt.toBuffer());
+
     writer.writeArray(_attestations.map((x) => x.toBuffer()));
 
-    writer.writeSlice(_request.toBuffer());
-
     writer.writeSlice(_context.toBuffer());
+
+    writer.writeSlice(_request.toBuffer());
 
     return writer.buffer;
   }
 
-  fromDataBuffer(buffer: Buffer, offset?: number): number {
+  fromDataBuffer(
+    buffer: Buffer,
+    offset?: number,
+    readRequest: boolean = true
+  ): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
     const decisionLength = reader.readVarInt();
 
@@ -149,17 +169,23 @@ export class Decision extends VDXFObject {
 
       this.created_at = reader.readUInt64();
 
+      const _salt = new Hash160();
+      reader.offset = _salt.fromBuffer(reader.buffer, true, reader.offset);
+      this.salt = _salt.toAddress();
+
       this.attestations = reader.readArray(HASH160_BYTE_LENGTH).map(() => {
         throw new Error("Attestations currently unsupported");
       });
 
-      const _request = new Request();
-      reader.offset = _request.fromBuffer(reader.buffer, reader.offset);
-      this.request = _request;
-
       const _context = new Context();
       reader.offset = _context.fromBuffer(reader.buffer, reader.offset);
       this.context = _context;
+
+      if (readRequest) {
+        const _request = new Request();
+        reader.offset = _request.fromBuffer(reader.buffer, reader.offset);
+        this.request = _request;
+      }
     }
 
     return reader.offset;
@@ -169,7 +195,7 @@ export class Decision extends VDXFObject {
     return {
       vdxfkey: this.vdxfkey,
       decision_id: this.decision_id,
-      context: this.context,
+      context: this.context.stringable(),
       created_at: this.created_at,
       request: this.request.stringable(),
     };

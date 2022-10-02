@@ -13,8 +13,8 @@ class Response extends __1.VDXFObject {
         system_id: "",
         signing_id: "",
         decision: new Decision_1.Decision(),
-    }) {
-        super(__1.LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid);
+    }, vdxfid = __1.LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid) {
+        super(vdxfid);
         this.system_id = response.system_id;
         this.signing_id = response.signing_id;
         this.decision = new Decision_1.Decision(response.decision);
@@ -22,7 +22,7 @@ class Response extends __1.VDXFObject {
             this.signature = new __1.VerusIDSignature(response.signature, keys_1.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY);
         }
     }
-    getSignedData() {
+    getSignedHash() {
         return this.decision.toString();
     }
     dataByteLength() {
@@ -51,7 +51,7 @@ class Response extends __1.VDXFObject {
         writer.writeSlice(this.decision.toBuffer());
         return writer.buffer;
     }
-    fromDataBuffer(buffer, offset) {
+    fromDataBuffer(buffer, offset, readDecision = true) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         const reqLength = reader.readVarInt();
         if (reqLength == 0) {
@@ -63,9 +63,11 @@ class Response extends __1.VDXFObject {
             const _sig = new __1.VerusIDSignature();
             reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
             this.signature = _sig;
-            const _decision = new Decision_1.Decision();
-            reader.offset = _decision.fromBuffer(reader.buffer, reader.offset);
-            this.decision = _decision;
+            if (readDecision) {
+                const _decision = new Decision_1.Decision();
+                reader.offset = _decision.fromBuffer(reader.buffer, reader.offset);
+                this.decision = _decision;
+            }
         }
         return reader.offset;
     }

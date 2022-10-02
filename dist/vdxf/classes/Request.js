@@ -13,8 +13,8 @@ class Request extends __1.VDXFObject {
         system_id: "",
         signing_id: "",
         challenge: new Challenge_1.Challenge(),
-    }) {
-        super(__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid);
+    }, vdxfid = __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
+        super(vdxfid);
         this.system_id = request.system_id;
         this.signing_id = request.signing_id;
         this.signature = request.signature
@@ -22,7 +22,7 @@ class Request extends __1.VDXFObject {
             : undefined;
         this.challenge = new Challenge_1.Challenge(request.challenge);
     }
-    getSignedData() {
+    getSignedHash() {
         return this.challenge.toString();
     }
     stringable() {
@@ -34,49 +34,66 @@ class Request extends __1.VDXFObject {
             challenge: this.challenge.stringable(),
         };
     }
-    dataByteLength() {
+    _dataByteLength(includeSystemId = true, signer = this.signing_id) {
         let length = 0;
-        const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
-        const _signing_id = Hash160_1.Hash160.fromAddress(this.signing_id);
+        const _signing_id = Hash160_1.Hash160.fromAddress(signer);
         const _signature = this.signature
             ? this.signature
             : new __1.VerusIDSignature({ signature: "" }, keys_1.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
-        length += _system_id.byteLength();
+        if (includeSystemId) {
+            const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
+            length += _system_id.byteLength();
+        }
         length += _signing_id.byteLength();
         length += _signature.byteLength();
         length += this.challenge.byteLength();
         return length;
     }
-    toDataBuffer() {
+    _toDataBuffer(includeSystemId = true, signer = this.signing_id) {
         const writer = new bufferutils_1.default.BufferWriter(Buffer.alloc(this.dataByteLength()));
-        const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
-        const _signing_id = Hash160_1.Hash160.fromAddress(this.signing_id);
+        const _signing_id = Hash160_1.Hash160.fromAddress(signer);
         const _signature = this.signature
             ? this.signature
             : new __1.VerusIDSignature({ signature: "" }, keys_1.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
-        writer.writeSlice(_system_id.toBuffer());
+        if (includeSystemId) {
+            const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
+            writer.writeSlice(_system_id.toBuffer());
+        }
         writer.writeSlice(_signing_id.toBuffer());
         writer.writeSlice(_signature.toBuffer());
         writer.writeSlice(this.challenge.toBuffer());
         return writer.buffer;
     }
-    fromDataBuffer(buffer, offset) {
+    dataByteLength() {
+        return this._dataByteLength();
+    }
+    toDataBuffer() {
+        return this._toDataBuffer();
+    }
+    _fromDataBuffer(buffer, offset, version = vdxf_1.I_ADDR_VERSION, includeSystemId = true, readChallenge = true) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         const reqLength = reader.readVarInt();
         if (reqLength == 0) {
             throw new Error("Cannot create request from empty buffer");
         }
         else {
-            this.system_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
-            this.signing_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
+            if (includeSystemId) {
+                this.system_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
+            }
+            this.signing_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), version);
             const _sig = new __1.VerusIDSignature();
             reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
             this.signature = _sig;
-            const _challenge = new Challenge_1.Challenge();
-            reader.offset = _challenge.fromBuffer(reader.buffer, reader.offset);
-            this.challenge = _challenge;
+            if (readChallenge) {
+                const _challenge = new Challenge_1.Challenge();
+                reader.offset = _challenge.fromBuffer(reader.buffer, reader.offset);
+                this.challenge = _challenge;
+            }
         }
         return reader.offset;
+    }
+    fromDataBuffer(buffer, offset) {
+        return this._fromDataBuffer(buffer, offset);
     }
     toWalletDeeplinkUri() {
         return `${__1.WALLET_VDXF_KEY.vdxfid.toLowerCase()}://x-callback-url/${__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}/?${__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=${this.toString()}`;
@@ -84,7 +101,7 @@ class Request extends __1.VDXFObject {
     static fromWalletDeeplinkUri(uri) {
         const split = uri.split(`${__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=`);
         const req = new Request();
-        req.fromBuffer(Buffer.from(split[1], 'base64url'));
+        req.fromBuffer(Buffer.from(split[1], "base64url"));
         return req;
     }
 }

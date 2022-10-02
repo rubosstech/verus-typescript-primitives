@@ -31,6 +31,17 @@ export declare class VDXFObject implements VDXFObjectInterface {
     byteLength(): number;
     toBuffer(): Buffer;
 }
+export declare class Utf8DataVdxfObject extends VDXFObject {
+    data: string;
+    constructor(data?: string, vdxfkey?: string);
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    stringable(): {
+        data: string;
+        vdxfkey: string;
+    };
+}
 export declare class VerusIDSignature extends VDXFObject {
     signature: string;
     constructor(sig?: VerusIDSignatureInterface, vdxfkey?: VDXFKeyInterface);

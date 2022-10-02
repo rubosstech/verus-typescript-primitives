@@ -1,4 +1,4 @@
-import { LOGIN_CONSENT_CHALLENGE_VDXF_KEY, VDXFObject } from "../";
+import { LOGIN_CONSENT_CHALLENGE_VDXF_KEY, Utf8DataVdxfObject, VDXFObject } from "../";
 import { HASH160_BYTE_LENGTH } from "../../constants/vdxf";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
@@ -38,38 +38,7 @@ export class RedirectUri extends VDXFObject {
   }
 }
 
-export class Subject extends VDXFObject {
-  data: string;
-
-  constructor(data: string = "", vdxfkey: string = "") {
-    super(vdxfkey);
-
-    this.data = data
-  }
-
-  dataByteLength(): number {
-    return this.toDataBuffer().length;
-  }
-
-  toDataBuffer(): Buffer {
-    return Buffer.from(this.data, 'utf-8')
-  }
-
-  fromDataBuffer(buffer: Buffer, offset?: number): number {
-    const reader = new bufferutils.BufferReader(buffer, offset);
-
-    this.data = reader.readVarSlice().toString('utf-8')
-
-    return reader.offset
-  }
-
-  stringable() {
-    return {
-      data: this.data,
-      vdxfkey: this.vdxfkey
-    };
-  }
-}
+export class Subject extends Utf8DataVdxfObject {}
 
 export interface ChallengeInterface {
   // Challenge specific VDXF key
@@ -120,9 +89,10 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
   context?: Context;
 
   constructor(
-    challenge: ChallengeInterface = { challenge_id: "", created_at: 0 }
+    challenge: ChallengeInterface = { challenge_id: "", created_at: 0 },
+    vdxfid: string = LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid
   ) {
-    super(LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid);
+    super(vdxfid);
 
     this.challenge_id = challenge.challenge_id;
     this.requested_access = challenge.requested_access;
