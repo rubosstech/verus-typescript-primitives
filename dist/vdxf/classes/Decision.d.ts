@@ -1,30 +1,39 @@
+/// <reference types="node" />
 import { VDXFObject } from "..";
+import { Context } from "./Context";
+import { Hash160 } from "./Hash160";
 import { OidcDecision } from "./oidc/OidcDecision";
 import { Request, RequestInterface } from "./Request";
 export interface DecisionInterface {
     decision_id: string;
     request: RequestInterface;
-    created_at: string;
-    context?: {
-        [key: string]: any;
-    };
+    created_at: number;
+    salt?: string;
+    context?: Context;
+    attestations?: Array<any>;
 }
 export declare class Decision extends VDXFObject {
     decision_id: string;
-    context?: {
-        [key: string]: any;
-    };
+    context?: Context;
     request: Request;
-    created_at: string;
-    constructor(decision: DecisionInterface);
+    created_at: number;
+    attestations: Array<any>;
+    salt?: string;
+    constructor(decision?: DecisionInterface, vdfxid?: string);
     toOidcDecision(): OidcDecision;
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number, readRequest?: boolean): number;
     stringable(): {
         vdxfkey: string;
         decision_id: string;
         context: {
-            [key: string]: any;
+            kv: {
+                [key: string]: string;
+            };
+            vdxfkey: string;
         };
-        created_at: string;
+        created_at: number;
         request: {
             vdxfkey: string;
             system_id: string;
@@ -36,21 +45,19 @@ export declare class Decision extends VDXFObject {
             challenge: {
                 vdxfkey: string;
                 challenge_id: string;
-                requested_access: string[];
-                requested_access_audience: string[];
+                requested_access: Hash160[];
+                requested_access_audience: any[];
                 subject: import("./Challenge").Subject[];
-                alt_auth_factors: string[];
+                alt_auth_factors: any[];
                 session_id: string;
-                attestations: null;
+                attestations: any[];
                 redirect_uris: {
                     uri: string;
                     vdxfkey: string;
                 }[];
-                created_at: string;
+                created_at: number;
                 salt: string;
-                context: {
-                    [key: string]: any;
-                };
+                context: Context;
             };
         };
     };

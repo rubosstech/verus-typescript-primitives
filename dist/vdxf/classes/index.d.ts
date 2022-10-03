@@ -6,6 +6,10 @@ export { ChallengeInterface as LoginConsentChallengeInterface } from './Challeng
 export { DecisionInterface as LoginConsentDecisionInterface } from './Decision';
 export { RequestInterface as LoginConsentRequestInterface } from './Request';
 export { ResponseInterface as LoginConsentResponseInterface } from './Response';
+export { ProvisioningRequest as LoginConsentProvisioningRequest } from './provisioning/ProvisioningRequest';
+export { ProvisioningChallenge as LoginConsentProvisioningChallenge } from './provisioning/ProvisioningChallenge';
+export { ProvisioningResponse as LoginConsentProvisioningResponse } from './provisioning/ProvisioningResponse';
+export { ProvisioningDecision as LoginConsentProvisioningDecision } from './provisioning/ProvisioningDecision';
 export { OidcClient as OidcLoginConsentClient } from './oidc/OidcClient';
 export { OidcChallenge as OidcLoginConsentChallenge } from './oidc/OidcChallenge';
 export { OidcDecision as OidcLoginConsentDecision } from './oidc/OidcDecision';
