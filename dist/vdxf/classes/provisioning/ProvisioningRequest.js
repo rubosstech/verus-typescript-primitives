@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProvisioningRequest = void 0;
+const createHash = require("create-hash");
 const __1 = require("../../");
 const vdxf_1 = require("../../../constants/vdxf");
+const address_1 = require("../../../utils/address");
 const Request_1 = require("../Request");
 const ProvisioningChallenge_1 = require("./ProvisioningChallenge");
 class ProvisioningRequest extends Request_1.Request {
@@ -14,7 +16,7 @@ class ProvisioningRequest extends Request_1.Request {
             system_id: null,
             signing_id: null,
             challenge: request.challenge,
-            signature: request.signature
+            signature: request.signature,
         }, __1.LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY.vdxfid);
         this.challenge = new ProvisioningChallenge_1.ProvisioningChallenge(request.challenge);
         this.signing_address = request.signing_address;
@@ -28,6 +30,13 @@ class ProvisioningRequest extends Request_1.Request {
             signature: this.signature ? this.signature.stringable() : this.signature,
             challenge: this.challenge.stringable(),
         };
+    }
+    getHash() {
+        return createHash("sha256")
+            .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
+            .update((0, address_1.fromBase58Check)(this.signing_address).hash)
+            .update(this.toBuffer())
+            .digest();
     }
     dataByteLength() {
         const length = this._dataByteLength(false, this.signing_address);

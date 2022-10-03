@@ -8,6 +8,7 @@ const Hash160_1 = require("./Hash160");
 const bufferutils_1 = require("../../utils/bufferutils");
 const vdxf_1 = require("../../constants/vdxf");
 const address_1 = require("../../utils/address");
+const createHash = require("create-hash");
 class Response extends __1.VDXFObject {
     constructor(response = {
         system_id: "",
@@ -22,8 +23,16 @@ class Response extends __1.VDXFObject {
             this.signature = new __1.VerusIDSignature(response.signature, keys_1.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY);
         }
     }
-    getSignedHash() {
-        return this.decision.toString();
+    getHash(signedBlockheight) {
+        var heightBufferWriter = new bufferutils_1.default.BufferWriter(Buffer.allocUnsafe(4));
+        heightBufferWriter.writeUInt32(signedBlockheight);
+        return createHash("sha256")
+            .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
+            .update((0, address_1.fromBase58Check)(this.system_id).hash)
+            .update(heightBufferWriter.buffer)
+            .update((0, address_1.fromBase58Check)(this.signing_id).hash)
+            .update(this.toBuffer())
+            .digest();
     }
     dataByteLength() {
         let length = 0;

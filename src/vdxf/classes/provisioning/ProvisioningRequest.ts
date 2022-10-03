@@ -1,8 +1,11 @@
+import createHash = require("create-hash");
 import {
   VerusIDSignatureInterface,
   LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY
 } from "../../";
-import { R_ADDR_VERSION } from "../../../constants/vdxf";
+import { R_ADDR_VERSION, VERUS_DATA_SIGNATURE_PREFIX } from "../../../constants/vdxf";
+import { fromBase58Check } from "../../../utils/address";
+import bufferutils from "../../../utils/bufferutils";
 import { Request } from "../Request";
 import { ProvisioningChallenge, ProvisioningChallengeInterface } from "./ProvisioningChallenge";
 
@@ -27,12 +30,12 @@ export class ProvisioningRequest extends Request {
         system_id: null,
         signing_id: null,
         challenge: request.challenge,
-        signature: request.signature
+        signature: request.signature,
       },
       LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY.vdxfid
     );
 
-    this.challenge = new ProvisioningChallenge(request.challenge)
+    this.challenge = new ProvisioningChallenge(request.challenge);
     this.signing_address = request.signing_address;
   }
 
@@ -45,6 +48,14 @@ export class ProvisioningRequest extends Request {
       signature: this.signature ? this.signature.stringable() : this.signature,
       challenge: this.challenge.stringable(),
     };
+  }
+
+  getHash() {
+    return createHash("sha256")
+      .update(VERUS_DATA_SIGNATURE_PREFIX)
+      .update(fromBase58Check(this.signing_address).hash)
+      .update(this.toBuffer())
+      .digest();
   }
 
   dataByteLength(): number {
@@ -60,12 +71,18 @@ export class ProvisioningRequest extends Request {
   }
 
   fromDataBuffer(buffer: Buffer, offset?: number): number {
-    let _offset = this._fromDataBuffer(buffer, offset, R_ADDR_VERSION, false, false)
+    let _offset = this._fromDataBuffer(
+      buffer,
+      offset,
+      R_ADDR_VERSION,
+      false,
+      false
+    );
 
-    this.challenge = new ProvisioningChallenge()
-    _offset = this.challenge.fromBuffer(buffer, _offset)
-    this.signing_address = this.signing_id
-    this.signing_id = null
+    this.challenge = new ProvisioningChallenge();
+    _offset = this.challenge.fromBuffer(buffer, _offset);
+    this.signing_address = this.signing_id;
+    this.signing_id = null;
 
     return _offset;
   }

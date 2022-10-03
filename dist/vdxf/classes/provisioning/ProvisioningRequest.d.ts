@@ -38,6 +38,7 @@ export declare class ProvisioningRequest extends Request {
             context: import("../Context").Context;
         };
     };
+    getHash(): Buffer;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;

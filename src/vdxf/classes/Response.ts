@@ -3,8 +3,9 @@ import { LOGIN_CONSENT_RESPONSE_VDXF_KEY, VDXFObject, VerusIDSignature, VerusIDS
 import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY } from "../keys";
 import { Hash160 } from "./Hash160";
 import bufferutils from "../../utils/bufferutils";
-import { HASH160_BYTE_LENGTH, I_ADDR_VERSION } from "../../constants/vdxf";
-import { toBase58Check } from "../../utils/address";
+import { HASH160_BYTE_LENGTH, I_ADDR_VERSION, VERUS_DATA_SIGNATURE_PREFIX } from "../../constants/vdxf";
+import { fromBase58Check, toBase58Check } from "../../utils/address";
+import createHash = require("create-hash");
 
 export interface ResponseInterface {
   system_id: string;
@@ -41,8 +42,17 @@ export class Response extends VDXFObject {
     }
   }
 
-  getSignedHash() {
-    return this.decision.toString();
+  getHash(signedBlockheight: number) {
+    var heightBufferWriter = new bufferutils.BufferWriter(Buffer.allocUnsafe(4));
+    heightBufferWriter.writeUInt32(signedBlockheight);
+
+    return createHash("sha256")
+      .update(VERUS_DATA_SIGNATURE_PREFIX)
+      .update(fromBase58Check(this.system_id).hash)
+      .update(heightBufferWriter.buffer)
+      .update(fromBase58Check(this.signing_id).hash)
+      .update(this.toBuffer())
+      .digest();
   }
 
   dataByteLength(): number {

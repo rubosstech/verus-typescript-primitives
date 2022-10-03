@@ -8,6 +8,7 @@ const Hash160_1 = require("./Hash160");
 const bufferutils_1 = require("../../utils/bufferutils");
 const vdxf_1 = require("../../constants/vdxf");
 const address_1 = require("../../utils/address");
+const createHash = require("create-hash");
 class Request extends __1.VDXFObject {
     constructor(request = {
         system_id: "",
@@ -22,8 +23,16 @@ class Request extends __1.VDXFObject {
             : undefined;
         this.challenge = new Challenge_1.Challenge(request.challenge);
     }
-    getSignedHash() {
-        return this.challenge.toString();
+    getHash(signedBlockheight) {
+        var heightBufferWriter = new bufferutils_1.default.BufferWriter(Buffer.allocUnsafe(4));
+        heightBufferWriter.writeUInt32(signedBlockheight);
+        return createHash("sha256")
+            .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
+            .update((0, address_1.fromBase58Check)(this.system_id).hash)
+            .update(heightBufferWriter.buffer)
+            .update((0, address_1.fromBase58Check)(this.signing_id).hash)
+            .update(this.toBuffer())
+            .digest();
     }
     stringable() {
         return {
