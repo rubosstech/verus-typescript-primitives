@@ -23,7 +23,7 @@ export declare class ProvisioningRequest extends Request {
         challenge: {
             vdxfkey: string;
             challenge_id: string;
-            requested_access: import("../Hash160").Hash160[];
+            requested_access: import("..").Hash160[];
             requested_access_audience: any[];
             subject: import("../Challenge").Subject[];
             alt_auth_factors: any[];

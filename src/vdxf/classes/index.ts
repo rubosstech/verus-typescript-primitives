@@ -19,3 +19,5 @@ export { ProvisioningDecisionInterface as LoginConsentProvisioningDecisionInterf
 export { OidcClient as OidcLoginConsentClient } from "./oidc/OidcClient";
 export { OidcChallenge as OidcLoginConsentChallenge } from "./oidc/OidcChallenge";
 export { OidcDecision as OidcLoginConsentDecision } from "./oidc/OidcDecision";
+
+export { Hash160 } from './Hash160'
