@@ -17,7 +17,7 @@ export declare class Response extends VDXFObject {
     getHash(signedBlockheight: number): Buffer;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
-    fromDataBuffer(buffer: Buffer, offset?: number, readDecision?: boolean): number;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
     stringable(): {
         vdxfkey: string;
         system_id: string;
