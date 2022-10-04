@@ -25,7 +25,7 @@ export declare class ProvisioningRequest extends Request {
             challenge_id: string;
             requested_access: import("..").Hash160[];
             requested_access_audience: any[];
-            subject: import("../Challenge").Subject[];
+            subject: import("..").Subject[];
             alt_auth_factors: any[];
             session_id: string;
             attestations: any[];
@@ -35,7 +35,7 @@ export declare class ProvisioningRequest extends Request {
             }[];
             created_at: number;
             salt: string;
-            context: import("../Context").Context;
+            context: import("..").Context;
         };
     };
     getHash(): Buffer;
