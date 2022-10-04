@@ -39,15 +39,15 @@ class ProvisioningRequest extends Request_1.Request {
             .digest();
     }
     dataByteLength() {
-        const length = this._dataByteLength(false, this.signing_address);
+        const length = this._dataByteLength(this.signing_address);
         return length;
     }
     toDataBuffer() {
-        const buffer = this._toDataBuffer(false, this.signing_address);
+        const buffer = this._toDataBuffer(this.signing_address);
         return buffer;
     }
     fromDataBuffer(buffer, offset) {
-        let _offset = this._fromDataBuffer(buffer, offset, vdxf_1.R_ADDR_VERSION, false, false);
+        let _offset = this._fromDataBuffer(buffer, offset);
         this.challenge = new ProvisioningChallenge_1.ProvisioningChallenge();
         _offset = this.challenge.fromBuffer(buffer, _offset);
         this.signing_address = this.signing_id;

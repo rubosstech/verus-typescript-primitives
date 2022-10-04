@@ -43,13 +43,13 @@ class Request extends __1.VDXFObject {
             challenge: this.challenge.stringable(),
         };
     }
-    _dataByteLength(includeSystemId = true, signer = this.signing_id) {
+    _dataByteLength(signer = this.signing_id) {
         let length = 0;
         const _signing_id = Hash160_1.Hash160.fromAddress(signer);
         const _signature = this.signature
             ? this.signature
             : new __1.VerusIDSignature({ signature: "" }, keys_1.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
-        if (includeSystemId) {
+        if (this.vdxfkey === __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
             const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
             length += _system_id.byteLength();
         }
@@ -58,13 +58,13 @@ class Request extends __1.VDXFObject {
         length += this.challenge.byteLength();
         return length;
     }
-    _toDataBuffer(includeSystemId = true, signer = this.signing_id) {
+    _toDataBuffer(signer = this.signing_id) {
         const writer = new bufferutils_1.default.BufferWriter(Buffer.alloc(this.dataByteLength()));
         const _signing_id = Hash160_1.Hash160.fromAddress(signer);
         const _signature = this.signature
             ? this.signature
             : new __1.VerusIDSignature({ signature: "" }, keys_1.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY);
-        if (includeSystemId) {
+        if (this.vdxfkey === __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
             const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
             writer.writeSlice(_system_id.toBuffer());
         }
@@ -79,21 +79,23 @@ class Request extends __1.VDXFObject {
     toDataBuffer() {
         return this._toDataBuffer();
     }
-    _fromDataBuffer(buffer, offset, version = vdxf_1.I_ADDR_VERSION, includeSystemId = true, readChallenge = true) {
+    _fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         const reqLength = reader.readVarInt();
         if (reqLength == 0) {
             throw new Error("Cannot create request from empty buffer");
         }
         else {
-            if (includeSystemId) {
+            if (this.vdxfkey === __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
                 this.system_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
             }
-            this.signing_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), version);
+            this.signing_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), this.vdxfkey === __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid
+                ? vdxf_1.I_ADDR_VERSION
+                : vdxf_1.R_ADDR_VERSION);
             const _sig = new __1.VerusIDSignature();
             reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
             this.signature = _sig;
-            if (readChallenge) {
+            if (this.vdxfkey === __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
                 const _challenge = new Challenge_1.Challenge();
                 reader.offset = _challenge.fromBuffer(reader.buffer, reader.offset);
                 this.challenge = _challenge;

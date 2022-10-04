@@ -60,7 +60,7 @@ class Response extends __1.VDXFObject {
         writer.writeSlice(this.decision.toBuffer());
         return writer.buffer;
     }
-    fromDataBuffer(buffer, offset, readDecision = true) {
+    fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         const reqLength = reader.readVarInt();
         if (reqLength == 0) {
@@ -72,7 +72,7 @@ class Response extends __1.VDXFObject {
             const _sig = new __1.VerusIDSignature();
             reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
             this.signature = _sig;
-            if (readDecision) {
+            if (this.vdxfkey === __1.LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid) {
                 const _decision = new Decision_1.Decision();
                 reader.offset = _decision.fromBuffer(reader.buffer, reader.offset);
                 this.decision = _decision;

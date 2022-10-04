@@ -31,7 +31,7 @@ export class ProvisioningResponse extends Response {
   }
 
   fromDataBuffer(buffer: Buffer, offset?: number): number {
-    let _offset = super.fromDataBuffer(buffer, offset, false);
+    let _offset = super.fromDataBuffer(buffer, offset);
 
     this.decision = new ProvisioningDecision();
     _offset = this.decision.fromBuffer(buffer, _offset);

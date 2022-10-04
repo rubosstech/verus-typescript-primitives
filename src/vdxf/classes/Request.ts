@@ -9,7 +9,7 @@ import { LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY } from "../keys";
 import { Challenge, ChallengeInterface } from "./Challenge";
 import { Hash160 } from "./Hash160";
 import bufferutils from "../../utils/bufferutils";
-import { HASH160_BYTE_LENGTH, I_ADDR_VERSION, VERUS_DATA_SIGNATURE_PREFIX } from "../../constants/vdxf";
+import { HASH160_BYTE_LENGTH, I_ADDR_VERSION, R_ADDR_VERSION, VERUS_DATA_SIGNATURE_PREFIX } from "../../constants/vdxf";
 import { fromBase58Check, toBase58Check } from "../../utils/address";
 import createHash = require("create-hash");
 
@@ -72,7 +72,6 @@ export class Request extends VDXFObject {
   }
 
   protected _dataByteLength(
-    includeSystemId: boolean = true,
     signer: string = this.signing_id
   ): number {
     let length = 0;
@@ -84,7 +83,7 @@ export class Request extends VDXFObject {
           LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
         );
 
-    if (includeSystemId) {
+    if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
       const _system_id = Hash160.fromAddress(this.system_id);
       length += _system_id.byteLength();
     }
@@ -97,7 +96,6 @@ export class Request extends VDXFObject {
   }
 
   protected _toDataBuffer(
-    includeSystemId: boolean = true,
     signer: string = this.signing_id
   ): Buffer {
     const writer = new bufferutils.BufferWriter(
@@ -111,7 +109,7 @@ export class Request extends VDXFObject {
           LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
         );
 
-    if (includeSystemId) {
+    if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
       const _system_id = Hash160.fromAddress(this.system_id);
       writer.writeSlice(_system_id.toBuffer());
     }
@@ -135,10 +133,7 @@ export class Request extends VDXFObject {
 
   protected _fromDataBuffer(
     buffer: Buffer,
-    offset?: number,
-    version: number = I_ADDR_VERSION,
-    includeSystemId: boolean = true,
-    readChallenge: boolean = true
+    offset?: number
   ): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
     const reqLength = reader.readVarInt();
@@ -146,7 +141,7 @@ export class Request extends VDXFObject {
     if (reqLength == 0) {
       throw new Error("Cannot create request from empty buffer");
     } else {
-      if (includeSystemId) {
+      if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
         this.system_id = toBase58Check(
           reader.readSlice(HASH160_BYTE_LENGTH),
           I_ADDR_VERSION
@@ -155,14 +150,16 @@ export class Request extends VDXFObject {
 
       this.signing_id = toBase58Check(
         reader.readSlice(HASH160_BYTE_LENGTH),
-        version
+        this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid
+          ? I_ADDR_VERSION
+          : R_ADDR_VERSION
       );
 
       const _sig = new VerusIDSignature();
       reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
       this.signature = _sig;
 
-      if (readChallenge) {
+      if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
         const _challenge = new Challenge();
         reader.offset = _challenge.fromBuffer(reader.buffer, reader.offset);
         this.challenge = _challenge;

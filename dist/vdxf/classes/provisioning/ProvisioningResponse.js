@@ -19,7 +19,7 @@ class ProvisioningResponse extends Response_1.Response {
         this.decision = new ProvisioningDecision_1.ProvisioningDecision(response.decision);
     }
     fromDataBuffer(buffer, offset) {
-        let _offset = super.fromDataBuffer(buffer, offset, false);
+        let _offset = super.fromDataBuffer(buffer, offset);
         this.decision = new ProvisioningDecision_1.ProvisioningDecision();
         _offset = this.decision.fromBuffer(buffer, _offset);
         return _offset;

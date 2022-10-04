@@ -42,11 +42,11 @@ export declare class Request extends VDXFObject {
             context: import("./Context").Context;
         };
     };
-    protected _dataByteLength(includeSystemId?: boolean, signer?: string): number;
-    protected _toDataBuffer(includeSystemId?: boolean, signer?: string): Buffer;
+    protected _dataByteLength(signer?: string): number;
+    protected _toDataBuffer(signer?: string): Buffer;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
-    protected _fromDataBuffer(buffer: Buffer, offset?: number, version?: number, includeSystemId?: boolean, readChallenge?: boolean): number;
+    protected _fromDataBuffer(buffer: Buffer, offset?: number): number;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
     toWalletDeeplinkUri(): string;
     static fromWalletDeeplinkUri(uri: string): Request;

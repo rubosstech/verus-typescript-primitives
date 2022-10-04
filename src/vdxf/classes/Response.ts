@@ -1,6 +1,6 @@
 import { Decision, DecisionInterface } from "./Decision";
 import { LOGIN_CONSENT_RESPONSE_VDXF_KEY, VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
-import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY } from "../keys";
+import { LOGIN_CONSENT_PROVISIONING_RESPONSE_VDXF_KEY, LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY } from "../keys";
 import { Hash160 } from "./Hash160";
 import bufferutils from "../../utils/bufferutils";
 import { HASH160_BYTE_LENGTH, I_ADDR_VERSION, VERUS_DATA_SIGNATURE_PREFIX } from "../../constants/vdxf";
@@ -100,8 +100,7 @@ export class Response extends VDXFObject {
 
   fromDataBuffer(
     buffer: Buffer,
-    offset?: number,
-    readDecision: boolean = true
+    offset?: number
   ): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
     const reqLength = reader.readVarInt();
@@ -123,7 +122,7 @@ export class Response extends VDXFObject {
       reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
       this.signature = _sig;
 
-      if (readDecision) {
+      if (this.vdxfkey === LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid) {
         const _decision = new Decision();
         reader.offset = _decision.fromBuffer(reader.buffer, reader.offset);
         this.decision = _decision;

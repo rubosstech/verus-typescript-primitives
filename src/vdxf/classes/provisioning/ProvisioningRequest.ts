@@ -59,13 +59,13 @@ export class ProvisioningRequest extends Request {
   }
 
   dataByteLength(): number {
-    const length = this._dataByteLength(false, this.signing_address);
+    const length = this._dataByteLength(this.signing_address);
 
     return length;
   }
 
   toDataBuffer(): Buffer {
-    const buffer = this._toDataBuffer(false, this.signing_address);
+    const buffer = this._toDataBuffer(this.signing_address);
 
     return buffer;
   }
@@ -73,10 +73,7 @@ export class ProvisioningRequest extends Request {
   fromDataBuffer(buffer: Buffer, offset?: number): number {
     let _offset = this._fromDataBuffer(
       buffer,
-      offset,
-      R_ADDR_VERSION,
-      false,
-      false
+      offset
     );
 
     this.challenge = new ProvisioningChallenge();
