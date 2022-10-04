@@ -21,3 +21,5 @@ export { OidcChallenge as OidcLoginConsentChallenge } from "./oidc/OidcChallenge
 export { OidcDecision as OidcLoginConsentDecision } from "./oidc/OidcDecision";
 
 export { Hash160 } from './Hash160'
+export { RedirectUri, Subject } from './Challenge'
+export { Context } from './Context'

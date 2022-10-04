@@ -57,7 +57,7 @@ export declare class ProvisioningDecision extends Decision implements Provisioni
                 challenge_id: string;
                 requested_access: Hash160[];
                 requested_access_audience: any[];
-                subject: import("../Challenge").Subject[];
+                subject: import("..").Subject[];
                 alt_auth_factors: any[];
                 session_id: string;
                 attestations: any[];
