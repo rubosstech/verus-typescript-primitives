@@ -70,8 +70,8 @@ describe('Serializes and deserializes signature objects properly', () => {
     expect(_res.toBuffer().toString('hex')).toBe(resbuf.toString('hex'));
     expect(_req.toBuffer().toString('hex')).toBe(reqbuf.toString('hex'));
 
-    expect(_res.getHash(10000).toString('hex')).toBe(res.getHash(10000).toString('hex'))
-    expect(_req.getHash(10000).toString('hex')).toBe(req.getHash(10000).toString('hex'))
+    expect(_res.getDecisionHash(10000).toString('hex')).toBe(res.getDecisionHash(10000).toString('hex'))
+    expect(_req.getChallengeHash(10000).toString('hex')).toBe(req.getChallengeHash(10000).toString('hex'))
 
     const uri = _req.toWalletDeeplinkUri()
 
@@ -130,7 +130,7 @@ describe('Serializes and deserializes signature objects properly', () => {
     expect(_res.toBuffer().toString('hex')).toBe(resbuf.toString('hex'));
     expect(_req.toBuffer().toString('hex')).toBe(reqbuf.toString('hex'));
 
-    expect(_res.getHash(10000).toString('hex')).toBe(res.getHash(10000).toString('hex'))
-    expect(_req.getHash().toString('hex')).toBe(req.getHash().toString('hex'))
+    expect(_res.getDecisionHash(10000).toString('hex')).toBe(res.getDecisionHash(10000).toString('hex'))
+    expect(_req.getChallengeHash().toString('hex')).toBe(req.getChallengeHash().toString('hex'))
   });
 });

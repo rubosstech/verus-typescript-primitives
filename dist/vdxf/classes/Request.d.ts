@@ -15,7 +15,7 @@ export declare class Request extends VDXFObject {
     signature?: VerusIDSignature;
     challenge: Challenge;
     constructor(request?: RequestInterface, vdxfid?: string);
-    getHash(signedBlockheight: number): Buffer;
+    getChallengeHash(signedBlockheight: number): Buffer;
     stringable(): {
         vdxfkey: string;
         system_id: string;

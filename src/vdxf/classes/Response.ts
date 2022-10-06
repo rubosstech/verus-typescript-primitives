@@ -42,7 +42,7 @@ export class Response extends VDXFObject {
     }
   }
 
-  getHash(signedBlockheight: number) {
+  getDecisionHash(signedBlockheight: number) {
     var heightBufferWriter = new bufferutils.BufferWriter(Buffer.allocUnsafe(4));
     heightBufferWriter.writeUInt32(signedBlockheight);
 
@@ -51,7 +51,7 @@ export class Response extends VDXFObject {
       .update(fromBase58Check(this.system_id).hash)
       .update(heightBufferWriter.buffer)
       .update(fromBase58Check(this.signing_id).hash)
-      .update(this.toBuffer())
+      .update(this.decision.toBuffer())
       .digest();
   }
 
