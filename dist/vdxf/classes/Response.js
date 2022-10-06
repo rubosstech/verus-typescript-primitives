@@ -23,7 +23,7 @@ class Response extends __1.VDXFObject {
             this.signature = new __1.VerusIDSignature(response.signature, keys_1.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY);
         }
     }
-    getHash(signedBlockheight) {
+    getDecisionHash(signedBlockheight) {
         var heightBufferWriter = new bufferutils_1.default.BufferWriter(Buffer.allocUnsafe(4));
         heightBufferWriter.writeUInt32(signedBlockheight);
         return createHash("sha256")
@@ -31,7 +31,7 @@ class Response extends __1.VDXFObject {
             .update((0, address_1.fromBase58Check)(this.system_id).hash)
             .update(heightBufferWriter.buffer)
             .update((0, address_1.fromBase58Check)(this.signing_id).hash)
-            .update(this.toBuffer())
+            .update(this.decision.toBuffer())
             .digest();
     }
     dataByteLength() {

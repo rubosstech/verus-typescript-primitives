@@ -48,7 +48,7 @@ export class Request extends VDXFObject {
     this.challenge = new Challenge(request.challenge);
   }
 
-  getHash(signedBlockheight: number) {
+  getChallengeHash(signedBlockheight: number) {
     var heightBufferWriter = new bufferutils.BufferWriter(Buffer.allocUnsafe(4));
     heightBufferWriter.writeUInt32(signedBlockheight);
 
@@ -57,7 +57,7 @@ export class Request extends VDXFObject {
       .update(fromBase58Check(this.system_id).hash)
       .update(heightBufferWriter.buffer)
       .update(fromBase58Check(this.signing_id).hash)
-      .update(this.toBuffer())
+      .update(this.challenge.toBuffer())
       .digest();
   }
 

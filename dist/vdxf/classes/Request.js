@@ -23,7 +23,7 @@ class Request extends __1.VDXFObject {
             : undefined;
         this.challenge = new Challenge_1.Challenge(request.challenge);
     }
-    getHash(signedBlockheight) {
+    getChallengeHash(signedBlockheight) {
         var heightBufferWriter = new bufferutils_1.default.BufferWriter(Buffer.allocUnsafe(4));
         heightBufferWriter.writeUInt32(signedBlockheight);
         return createHash("sha256")
@@ -31,7 +31,7 @@ class Request extends __1.VDXFObject {
             .update((0, address_1.fromBase58Check)(this.system_id).hash)
             .update(heightBufferWriter.buffer)
             .update((0, address_1.fromBase58Check)(this.signing_id).hash)
-            .update(this.toBuffer())
+            .update(this.challenge.toBuffer())
             .digest();
     }
     stringable() {

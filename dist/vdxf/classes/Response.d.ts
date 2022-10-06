@@ -14,7 +14,7 @@ export declare class Response extends VDXFObject {
     signature?: VerusIDSignature;
     decision: Decision;
     constructor(response?: ResponseInterface, vdxfid?: string);
-    getHash(signedBlockheight: number): Buffer;
+    getDecisionHash(signedBlockheight: number): Buffer;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
