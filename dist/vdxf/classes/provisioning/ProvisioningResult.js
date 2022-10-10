@@ -85,6 +85,7 @@ class ProvisioningResult extends __1.VDXFObject {
     }
     toJson() {
         return {
+            vdxfkey: this.vdxfkey,
             state: this.state,
             error_key: this.error_key,
             error_desc: this.error_desc,
