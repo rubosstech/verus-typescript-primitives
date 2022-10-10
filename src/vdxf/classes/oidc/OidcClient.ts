@@ -75,7 +75,7 @@ export class OidcClient extends VDXFObject {
     this.updated_at = client.updated_at;
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       client_id: this.client_id,

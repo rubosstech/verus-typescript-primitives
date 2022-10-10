@@ -29,7 +29,7 @@ export class RedirectUri extends VDXFObject {
     return reader.offset
   }
 
-  stringable() {
+  toJson() {
     return {
       uri: this.uri,
       vdxfkey: this.vdxfkey
@@ -328,7 +328,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
     return reader.offset;
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       challenge_id: this.challenge_id,
@@ -339,7 +339,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       session_id: this.session_id,
       attestations: this.attestations,
       redirect_uris: this.redirect_uris
-        ? this.redirect_uris.map((x) => x.stringable())
+        ? this.redirect_uris.map((x) => x.toJson())
         : this.redirect_uris,
       created_at: this.created_at,
       salt: this.salt,

@@ -36,15 +36,15 @@ class ProvisioningDecision extends Decision_1.Decision {
         writer.writeSlice(resultBuf);
         return writer.buffer;
     }
-    stringable() {
+    toJson() {
         return {
             vdxfkey: this.vdxfkey,
             decision_id: this.decision_id,
             created_at: this.created_at,
             salt: this.salt,
-            result: this.result ? this.result.stringable() : null,
-            request: this.request.stringable(),
-            context: this.context ? this.context.stringable() : null,
+            result: this.result ? this.result.toJson() : null,
+            request: this.request.toJson(),
+            context: this.context ? this.context.toJson() : null,
         };
     }
     fromDataBuffer(buffer, offset) {

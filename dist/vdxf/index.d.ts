@@ -5,7 +5,7 @@ export * from './scopes';
 export interface VDXFObjectInterface {
     vdxfkey: string;
     toString: () => string;
-    stringable: () => {
+    toJson: () => {
         [key: string]: any;
     };
     toBuffer: () => Buffer;
@@ -22,7 +22,7 @@ export declare class VDXFObject implements VDXFObjectInterface {
     vdxfkey: string;
     version: number;
     constructor(key?: string);
-    stringable(): {};
+    toJson(): {};
     toString(): string;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
@@ -37,7 +37,7 @@ export declare class Utf8DataVdxfObject extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    stringable(): {
+    toJson(): {
         data: string;
         vdxfkey: string;
     };
@@ -48,7 +48,7 @@ export declare class VerusIDSignature extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         signature: string;
     };

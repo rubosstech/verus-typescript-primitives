@@ -20,11 +20,11 @@ class OidcChallenge extends __1.VDXFObject {
         this.session_id = challenge.session_id;
         this.client = new OidcClient_1.OidcClient(challenge.client);
     }
-    stringable() {
+    toJson() {
         return {
             vdxfkey: this.vdxfkey,
             uuid: this.uuid,
-            client: this.client.stringable(),
+            client: this.client.toJson(),
             requested_scope: this.requested_scope,
             requested_access_token_audience: this.requested_access_token_audience,
             skip: this.skip,

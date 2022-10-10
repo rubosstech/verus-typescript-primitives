@@ -79,7 +79,7 @@ export class Hash160 {
     return reader.offset;
   }
 
-  stringable() {
+  toJson() {
     return {
       hash: this.hash,
       version: this.version,

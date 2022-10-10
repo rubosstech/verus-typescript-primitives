@@ -10,7 +10,7 @@ export declare class Hash160 {
     byteLength(): number;
     toBuffer(): Buffer;
     fromBuffer(buffer: Buffer, varlength?: boolean, offset?: number): number;
-    stringable(): {
+    toJson(): {
         hash: Buffer;
         version: number;
     };

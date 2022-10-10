@@ -7,7 +7,7 @@ export declare class RedirectUri extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    stringable(): {
+    toJson(): {
         uri: string;
         vdxfkey: string;
     };
@@ -54,7 +54,7 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         challenge_id: string;
         requested_access: RequestedPermission[];

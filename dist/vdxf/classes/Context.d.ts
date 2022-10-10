@@ -10,7 +10,7 @@ export declare class Context extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    stringable(): {
+    toJson(): {
         kv: {
             [key: string]: string;
         };

@@ -18,7 +18,7 @@ export declare class ProvisioningDecision extends Decision implements Provisioni
     constructor(decision?: ProvisioningDecisionInterface);
     dataByteLength(): number;
     toDataBuffer(): Buffer;
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         decision_id: string;
         created_at: number;

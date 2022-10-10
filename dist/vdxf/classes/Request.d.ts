@@ -14,7 +14,7 @@ export declare class Request extends VDXFObject {
     challenge: Challenge;
     constructor(request?: RequestInterface, vdxfkey?: string);
     getChallengeHash(signedBlockheight: number): Buffer;
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         system_id: string;
         signing_id: string;

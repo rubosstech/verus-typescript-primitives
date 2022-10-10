@@ -17,7 +17,7 @@ export declare class Response extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         system_id: string;
         signature: VerusIDSignature;

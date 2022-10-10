@@ -19,7 +19,7 @@ class OidcDecision extends __1.VDXFObject {
         this.status_code = decision.status_code;
         this.request = new OidcRequest_1.OidcRequest(decision.request);
     }
-    stringable() {
+    toJson() {
         return {
             vdxfkey: this.vdxfkey,
             subject: this.subject,
@@ -33,7 +33,7 @@ class OidcDecision extends __1.VDXFObject {
             error_hint: this.error_hint,
             error_debug: this.error_debug,
             status_code: this.status_code,
-            request: this.request.stringable(),
+            request: this.request.toJson(),
         };
     }
 }

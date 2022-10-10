@@ -13,7 +13,7 @@ export declare class OidcRequest extends VDXFObject {
     challenge: OidcChallenge;
     constructor(request: OidcRequestInterface);
     getSignedData(): string;
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         chain_id: string;
         signing_id: string;

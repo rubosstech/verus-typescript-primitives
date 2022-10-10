@@ -47,7 +47,7 @@ export declare class OidcClient extends VDXFObject {
     created_at: string;
     updated_at?: string;
     constructor(client: OidcClientInterface);
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         client_id: string;
         name: string;

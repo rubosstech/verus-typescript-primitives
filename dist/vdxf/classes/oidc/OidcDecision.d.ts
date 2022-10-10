@@ -32,7 +32,7 @@ export declare class OidcDecision extends VDXFObject {
     status_code?: number;
     request: OidcRequest;
     constructor(decision: OidcDecisionInterface);
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         subject: string;
         remember: boolean;

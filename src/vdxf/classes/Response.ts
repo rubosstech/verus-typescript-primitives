@@ -132,13 +132,13 @@ export class Response extends VDXFObject {
     return reader.offset;
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       system_id: this.system_id,
       signature: this.signature,
       signing_id: this.signing_id,
-      decision: this.decision.stringable(),
+      decision: this.decision.toJson(),
     };
   }
 }

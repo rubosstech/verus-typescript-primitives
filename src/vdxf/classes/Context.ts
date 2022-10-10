@@ -75,7 +75,7 @@ export class Context extends VDXFObject {
     }
   }
 
-  stringable() {
+  toJson() {
     return {
       kv: this.kv,
       vdxfkey: this.vdxfkey,

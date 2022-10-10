@@ -19,4 +19,5 @@ export declare class ProvisioningResult extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
+    toJson(): {};
 }
