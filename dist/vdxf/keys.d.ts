@@ -20,7 +20,7 @@ export declare const WALLET_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_REDIRECT_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface;
-export declare const LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_VDXF_KEY: VDXFKeyInterface;
+export declare const LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_PROVISIONING_DECISION_VDXF_KEY: VDXFKeyInterface;

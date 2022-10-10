@@ -14,7 +14,6 @@ class ProvisioningResult extends __1.VDXFObject {
         this.error_key = result.error_key;
         this.identity_address = result.identity_address;
         this.info_uri = result.info_uri;
-        this.reservation_txid = result.reservation_txid;
         this.provisioning_txid = result.provisioning_txid;
     }
     dataByteLength() {
@@ -31,10 +30,6 @@ class ProvisioningResult extends __1.VDXFObject {
             : Hash160_1.Hash160.getEmpty().byteLength();
         const infoUriBuf = this.info_uri == null ? Buffer.alloc(0) : Buffer.from(this.info_uri, "utf-8");
         const infoUriLength = infoUriBuf.length + varuint_1.default.encodingLength(infoUriBuf.length);
-        const reservationTxidBuf = this.reservation_txid == null
-            ? Buffer.alloc(0)
-            : Buffer.from(this.reservation_txid, "hex");
-        const reservationTxidLength = reservationTxidBuf.length + varuint_1.default.encodingLength(reservationTxidBuf.length);
         const provisioningTxidBuf = this.provisioning_txid == null
             ? Buffer.alloc(0)
             : Buffer.from(this.provisioning_txid, "hex");
@@ -44,7 +39,6 @@ class ProvisioningResult extends __1.VDXFObject {
             errorDescLength +
             idAddrLength +
             infoUriLength +
-            reservationTxidLength +
             provisioningTxidLength);
     }
     toDataBuffer() {
@@ -58,9 +52,6 @@ class ProvisioningResult extends __1.VDXFObject {
             ? Hash160_1.Hash160.fromAddress(this.identity_address, true).toBuffer()
             : Hash160_1.Hash160.getEmpty().toBuffer());
         writer.writeVarSlice(this.info_uri == null ? Buffer.alloc(0) : Buffer.from(this.info_uri, "utf-8"));
-        writer.writeVarSlice(this.reservation_txid == null
-            ? Buffer.alloc(0)
-            : (0, bufferutils_1.reverseBuffer)(Buffer.from(this.reservation_txid, "hex")));
         writer.writeVarSlice(this.provisioning_txid == null
             ? Buffer.alloc(0)
             : (0, bufferutils_1.reverseBuffer)(Buffer.from(this.provisioning_txid, "hex")));
@@ -84,11 +75,6 @@ class ProvisioningResult extends __1.VDXFObject {
             reader.offset = _identity_address.fromBuffer(reader.buffer, true, reader.offset);
             this.identity_address = _identity_address.toAddress();
             this.info_uri = reader.readVarSlice().toString('utf8');
-            const reservationTxidSlice = reader.readVarSlice();
-            const reservationTxidBuf = Buffer.alloc(reservationTxidSlice.length);
-            const reservationTxidWriter = new bufferutils_1.default.BufferWriter(reservationTxidBuf);
-            reservationTxidWriter.writeSlice(reservationTxidSlice);
-            this.reservation_txid = (0, bufferutils_1.reverseBuffer)(reservationTxidWriter.buffer).toString('hex');
             const provisioningTxidSlice = reader.readVarSlice();
             const provisioningTxidBuf = Buffer.alloc(provisioningTxidSlice.length);
             const provisioningTxidWriter = new bufferutils_1.default.BufferWriter(provisioningTxidBuf);

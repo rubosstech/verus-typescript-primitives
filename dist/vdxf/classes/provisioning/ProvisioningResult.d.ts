@@ -6,7 +6,6 @@ export interface ProvisioningResultInterface {
     error_desc?: string;
     identity_address?: string;
     info_uri?: string;
-    reservation_txid?: string;
     provisioning_txid?: string;
 }
 export declare class ProvisioningResult extends VDXFObject {
@@ -15,7 +14,6 @@ export declare class ProvisioningResult extends VDXFObject {
     error_desc?: string;
     identity_address?: string;
     info_uri?: string;
-    reservation_txid?: string;
     provisioning_txid?: string;
     constructor(result?: ProvisioningResultInterface);
     dataByteLength(): number;
