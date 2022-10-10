@@ -1,20 +1,18 @@
 /// <reference types="node" />
 import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
 import { Challenge, ChallengeInterface } from "./Challenge";
-import { Hash160 } from "./Hash160";
 export interface RequestInterface {
     system_id: string;
     signing_id: string;
     signature?: VerusIDSignatureInterface;
     challenge: ChallengeInterface;
-    vdxfkey?: string;
 }
 export declare class Request extends VDXFObject {
     system_id: string;
     signing_id: string;
     signature?: VerusIDSignature;
     challenge: Challenge;
-    constructor(request?: RequestInterface, vdxfid?: string);
+    constructor(request?: RequestInterface, vdxfkey?: string);
     getChallengeHash(signedBlockheight: number): Buffer;
     stringable(): {
         vdxfkey: string;
@@ -27,12 +25,12 @@ export declare class Request extends VDXFObject {
         challenge: {
             vdxfkey: string;
             challenge_id: string;
-            requested_access: Hash160[];
-            requested_access_audience: any[];
+            requested_access: import("./Challenge").RequestedPermission[];
+            requested_access_audience: import("./Challenge").RequestedPermission[];
             subject: import("./Challenge").Subject[];
-            alt_auth_factors: any[];
+            alt_auth_factors: import("./Challenge").AltAuthFactor[];
             session_id: string;
-            attestations: any[];
+            attestations: import("./Challenge").Attestation[];
             redirect_uris: {
                 uri: string;
                 vdxfkey: string;
@@ -40,6 +38,7 @@ export declare class Request extends VDXFObject {
             created_at: number;
             salt: string;
             context: import("./Context").Context;
+            skip: boolean;
         };
     };
     protected _dataByteLength(signer?: string): number;

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { VDXFObject } from "..";
+import { Attestation } from "./Challenge";
 import { Context } from "./Context";
-import { Hash160 } from "./Hash160";
 import { OidcDecision } from "./oidc/OidcDecision";
 import { Request, RequestInterface } from "./Request";
 export interface DecisionInterface {
@@ -9,17 +9,19 @@ export interface DecisionInterface {
     request: RequestInterface;
     created_at: number;
     salt?: string;
+    skipped?: boolean;
     context?: Context;
-    attestations?: Array<any>;
+    attestations?: Array<Attestation>;
 }
 export declare class Decision extends VDXFObject {
     decision_id: string;
     context?: Context;
     request: Request;
     created_at: number;
+    skipped?: boolean;
     attestations: Array<any>;
     salt?: string;
-    constructor(decision?: DecisionInterface, vdfxid?: string);
+    constructor(decision?: DecisionInterface, vdxfkey?: string);
     toOidcDecision(): OidcDecision;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
@@ -45,12 +47,12 @@ export declare class Decision extends VDXFObject {
             challenge: {
                 vdxfkey: string;
                 challenge_id: string;
-                requested_access: Hash160[];
-                requested_access_audience: any[];
+                requested_access: import("./Challenge").RequestedPermission[];
+                requested_access_audience: import("./Challenge").RequestedPermission[];
                 subject: import("./Challenge").Subject[];
-                alt_auth_factors: any[];
+                alt_auth_factors: import("./Challenge").AltAuthFactor[];
                 session_id: string;
-                attestations: any[];
+                attestations: Attestation[];
                 redirect_uris: {
                     uri: string;
                     vdxfkey: string;
@@ -58,6 +60,7 @@ export declare class Decision extends VDXFObject {
                 created_at: number;
                 salt: string;
                 context: Context;
+                skip: boolean;
             };
         };
     };

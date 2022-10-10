@@ -14,8 +14,8 @@ class Response extends __1.VDXFObject {
         system_id: "",
         signing_id: "",
         decision: new Decision_1.Decision(),
-    }, vdxfid = __1.LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid) {
-        super(vdxfid);
+    }, vdxfkey = __1.LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid) {
+        super(vdxfkey);
         this.system_id = response.system_id;
         this.signing_id = response.signing_id;
         this.decision = new Decision_1.Decision(response.decision);

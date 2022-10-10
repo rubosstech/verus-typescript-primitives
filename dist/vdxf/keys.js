@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LOGIN_CONSENT_PROVISIONING_INFOTEXT_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_ERROR_DESC_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_NAME_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_VDXF_KEY = exports.LOGIN_CONSENT_CONTEXT_VDXF_KEY = exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_REDIRECT_VDXF_KEY = exports.WALLET_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = void 0;
+exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_TRANSFER_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_CREATION_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_RESERVATION_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_NAMETAKEN = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_FAILED = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_COMPLETE = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGREQUIREDINFO = exports.LOGIN_CONSENT_PROVISIONING_INFOTEXT_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_ERROR_DESC_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_NAME_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_VDXF_KEY = exports.LOGIN_CONSENT_CONTEXT_VDXF_KEY = exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_REDIRECT_VDXF_KEY = exports.WALLET_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CLIENT_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_OIDC_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = void 0;
 exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = {
     vdxfid: "iBFueEbXnSbohqiHNwwmz8Jb7LJtx2PGFu",
     hash160result: "28657ae163daff6bcb81034044699a4170235e55",
@@ -191,5 +191,77 @@ exports.LOGIN_CONSENT_PROVISIONING_INFOTEXT_VDXF_KEY = {
     qualifiedname: {
         namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
         name: "vrsc::system.identity.authentication.loginconsent.provisionverusid.infotext",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGREQUIREDINFO = {
+    "vdxfid": "iLdNndynBEZzbMexFakLKpAgZdkYPVnLkF",
+    "hash160result": "24057ff4af0c8b771811230a02f2fd5143aa26bc",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identity.authentication.loginconsent.provisionverusid.result.state.pendingrequiredinformation"
+    }
+};
+exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL = {
+    vdxfid: "iD8ghRtroVKJKbknKMH77hDeSUpxk7d6bY",
+    hash160result: "1f58d59392f89f48f71fcddf116ee20322acf069",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.result.state.pendingapproval",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_COMPLETE = {
+    vdxfid: "iSoWuQoEouj5obCBNrThAizDfEsNti1ZLw",
+    hash160result: "fc0b90d5db87ea52805eab1b93a006fbdd5ae2ff",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.result.state.complete",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_FAILED = {
+    vdxfid: "iQFXtyMtiP4WUnQN3TbkTN57FDCA7kvJ5u",
+    hash160result: "3a0ab68d37f1a32f1ec293cc785f9d2efd9ee5e3",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.result.state.failed",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_NAMETAKEN = {
+    vdxfid: "i6R7zpzFZ4dEaXxshWn1QhJMpKPgKCrpVN",
+    hash160result: "ddfa8f5840b0378fb1bb1104a50ae2b70f914320",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.errorkey.nametaken",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN = {
+    vdxfid: "iAYHYTXnTT1oBHEsndNkTepevfgkc1jwwQ",
+    hash160result: "e3a4905f695c5aef57384e29339c8dd616f37e4d",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.errorkey.unknown",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_RESERVATION_FAILED = {
+    vdxfid: "iFutXEh8ZV2nJMssbeEmAJ4TbpUC6r1auP",
+    hash160result: "17cbe00fc2df8ad87b2d9306cfa6e3fc3b836d88",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.errorkey.reservationfailed",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_CREATION_FAILED = {
+    vdxfid: "iSHjwZjpoZf1rVffzXrjQCqjBThadXbaxj",
+    hash160result: "e44227e5d2b6d8ff3ce4fddf282149bd4ac240fa",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.errorkey.creationfailed",
+    },
+};
+exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_TRANSFER_FAILED = {
+    vdxfid: "iMRSgkUWKCwRnBhZoRwYmV67MNBifcE5eA",
+    hash160result: "9faa8295a6db52d2e2bdc5eab0ff6b21ba0dddc4",
+    qualifiedname: {
+        namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        name: "vrsc::identity.authentication.loginconsent.provisionverusid.errorkey.transferfailed",
     },
 };

@@ -1,11 +1,10 @@
-import { LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_VDXF_KEY, LOGIN_CONSENT_REDIRECT_VDXF_KEY } from "../../vdxf";
+import { IDENTITY_VIEW, LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_VDXF_KEY, LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN, LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL, LOGIN_CONSENT_REDIRECT_VDXF_KEY } from "../../vdxf";
 import { LoginConsentRequest, LoginConsentResponse } from "../../vdxf/classes";
-import { RedirectUri, Subject } from "../../vdxf/classes/Challenge";
+import { RedirectUri, RequestedPermission, Subject } from "../../vdxf/classes/Challenge";
 import { Context } from "../../vdxf/classes/Context";
-import { Hash160 } from "../../vdxf/classes/Hash160";
-import { ProvisioningResult } from "../../vdxf/classes/provisioning/ProvisioningDecision";
 import { ProvisioningRequest } from "../../vdxf/classes/provisioning/ProvisioningRequest";
 import { ProvisioningResponse } from "../../vdxf/classes/provisioning/ProvisioningResponse";
+import { ProvisioningResult } from "../../vdxf/classes/provisioning/ProvisioningResult";
 
 describe('Serializes and deserializes signature objects properly', () => {
   test('loginconsentrequest/response', async () => {
@@ -18,9 +17,7 @@ describe('Serializes and deserializes signature objects properly', () => {
       },
       challenge: {
         challenge_id: "iKNufKJdLX3Xg8qFru9AuLBvivAEJ88PW4",
-        requested_access: [
-          Hash160.fromAddress("i7TBEho8TUPg4ESPmGRiiDMGF55QJM37Xk"),
-        ],
+        requested_access: [new RequestedPermission(IDENTITY_VIEW.vdxfid)],
         subject: [
           new Subject(
             "https://127.0.0.1/",
@@ -110,12 +107,15 @@ describe('Serializes and deserializes signature objects properly', () => {
         }),
         request: req,
         created_at: 1664392484,
-        error_key: "iBTMBHzDbsW3QG1MLBoYtmo6c1xuzn6xxb",
-        error_desc: "Test error!?!",
         result: new ProvisioningResult({
-          ["i4KyLCxWZXeSkw15dF95CUKytEK3HU7em9"]: "test",
+          state: LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL.vdxfid,
+          error_key: LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN.vdxfid,
+          error_desc: "Testing an error",
+          identity_address: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+          info_uri: "127.0.0.1",
+          reservation_txid: "0fe1e1a3fc57e25fe4da21066d7b82353f31929b2460232880fa166a153e26d5",
+          provisioning_txid: "402e437df5aea8dc7af42f3072a43ef0e9e27edfbd2072c08aeea8e07024ee40"
         }),
-        info_text: "Test info!!"
       }
     })
 

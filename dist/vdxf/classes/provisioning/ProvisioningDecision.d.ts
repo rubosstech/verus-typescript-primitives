@@ -2,28 +2,17 @@
 import { Decision } from "../Decision";
 import { Context } from "../Context";
 import { ProvisioningRequest } from "./ProvisioningRequest";
-import { Hash160 } from "../Hash160";
-export declare class ProvisioningResult extends Context {
-    constructor(kv?: {
-        [key: string]: string;
-    });
-}
+import { ProvisioningResult } from "./ProvisioningResult";
 export interface ProvisioningDecisionInterface {
     decision_id: string;
     created_at: number;
     salt?: string;
-    error_key?: string;
-    error_desc?: string;
     result?: ProvisioningResult;
-    info_text?: string;
     request: ProvisioningRequest;
     context?: Context;
 }
 export declare class ProvisioningDecision extends Decision implements ProvisioningDecisionInterface {
-    error_key?: string;
-    error_desc?: string;
     result?: ProvisioningResult;
-    info_text?: string;
     salt?: string;
     request: ProvisioningRequest;
     constructor(decision?: ProvisioningDecisionInterface);
@@ -34,15 +23,7 @@ export declare class ProvisioningDecision extends Decision implements Provisioni
         decision_id: string;
         created_at: number;
         salt: string;
-        error_key: string;
-        error_desc: string;
-        result: {
-            kv: {
-                [key: string]: string;
-            };
-            vdxfkey: string;
-        };
-        info_text: string;
+        result: {};
         request: {
             vdxfkey: string;
             system_id: any;
@@ -55,12 +36,12 @@ export declare class ProvisioningDecision extends Decision implements Provisioni
             challenge: {
                 vdxfkey: string;
                 challenge_id: string;
-                requested_access: Hash160[];
-                requested_access_audience: any[];
+                requested_access: import("../Challenge").RequestedPermission[];
+                requested_access_audience: import("../Challenge").RequestedPermission[];
                 subject: import("..").Subject[];
-                alt_auth_factors: any[];
+                alt_auth_factors: import("../Challenge").AltAuthFactor[];
                 session_id: string;
-                attestations: any[];
+                attestations: import("../Challenge").Attestation[];
                 redirect_uris: {
                     uri: string;
                     vdxfkey: string;
@@ -68,6 +49,7 @@ export declare class ProvisioningDecision extends Decision implements Provisioni
                 created_at: number;
                 salt: string;
                 context: Context;
+                skip: boolean;
             };
         };
         context: {

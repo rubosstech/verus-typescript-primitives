@@ -1,7 +1,7 @@
 import { LOGIN_CONSENT_DECISION_VDXF_KEY, VDXFObject } from "..";
-import { HASH160_BYTE_LENGTH } from "../../constants/vdxf";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
+import { Attestation } from "./Challenge";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
 import { OidcChallenge } from "./oidc/OidcChallenge";
@@ -14,7 +14,7 @@ export interface DecisionInterface {
   // Decision specific VDXF key
   decision_id: string;
 
-  // Request that is 
+  // Request that is signed
   request: RequestInterface;
 
   // String of unix representation of date string
@@ -23,11 +23,14 @@ export interface DecisionInterface {
   // Random hash string
   salt?: string;
 
+  // Indicator of whether or not request was signed without user prompt
+  skipped?: boolean;
+
   // General context
   context?: Context;
 
   // List of signatures, IDs and trust score objects
-  attestations?: Array<any>;
+  attestations?: Array<Attestation>;
 }
 
 export class Decision extends VDXFObject {
@@ -35,6 +38,7 @@ export class Decision extends VDXFObject {
   context?: Context;
   request: Request;
   created_at: number;
+  skipped?: boolean;
   attestations: Array<any>;
   salt?: string;
 
@@ -44,9 +48,9 @@ export class Decision extends VDXFObject {
       request: new Request(),
       created_at: 0,
     },
-    vdfxid: string = LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid
+    vdxfkey: string = LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid
   ) {
-    super(vdfxid);
+    super(vdxfkey);
 
     this.decision_id = decision.decision_id;
     this.request = new Request(decision.request);
@@ -54,6 +58,7 @@ export class Decision extends VDXFObject {
     this.created_at = decision.created_at;
     this.attestations = decision.attestations;
     this.salt = decision.salt;
+    this.skipped = decision.skipped ? true : false;
   }
 
   toOidcDecision(): OidcDecision {
@@ -69,10 +74,9 @@ export class Decision extends VDXFObject {
         challenge: new OidcChallenge({
           uuid: this.request.challenge.challenge_id,
           requested_scope: this.request.challenge.requested_access.map((x) =>
-            x.toAddress()
+            x.toString()
           ),
-          requested_access_token_audience:
-            this.request.challenge.requested_access_audience,
+          requested_access_token_audience: [],
           subject: this.request.challenge.subject
             ? JSON.stringify(this.request.challenge.subject)
             : undefined,
@@ -111,9 +115,13 @@ export class Decision extends VDXFObject {
 
     length += _salt.byteLength();
 
-    length += _request.byteLength();
+    if (this.vdxfkey === LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) { 
+      length += 1; // skipped
 
-    length += varuint.encodingLength(_attestations.length);
+      length += varuint.encodingLength(_attestations.length);
+    }
+
+    length += _request.byteLength();
 
     length += _context.byteLength();
 
@@ -139,7 +147,11 @@ export class Decision extends VDXFObject {
 
     writer.writeSlice(_salt.toBuffer());
 
-    writer.writeArray(_attestations.map((x) => x.toBuffer()));
+    if (this.vdxfkey === LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
+      writer.writeUInt8(this.skipped ? 1 : 0);
+
+      writer.writeArray(_attestations.map((x) => x.toBuffer()));
+    }
 
     writer.writeSlice(_context.toBuffer());
 
@@ -173,9 +185,16 @@ export class Decision extends VDXFObject {
       reader.offset = _salt.fromBuffer(reader.buffer, true, reader.offset);
       this.salt = _salt.toAddress();
 
-      this.attestations = reader.readArray(HASH160_BYTE_LENGTH).map(() => {
-        throw new Error("Attestations currently unsupported");
-      });
+      if (this.vdxfkey === LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
+        this.skipped = reader.readUInt8() === 1 ? true : false;
+
+        this.attestations = [];
+        const attestationsLength = reader.readVarInt();
+  
+        if (attestationsLength > 0) {
+          throw new Error("Attestations currently unsupported");
+        }  
+      }
 
       const _context = new Context();
       reader.offset = _context.fromBuffer(reader.buffer, reader.offset);

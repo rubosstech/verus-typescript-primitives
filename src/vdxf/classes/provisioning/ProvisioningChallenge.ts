@@ -59,8 +59,8 @@ export class ProvisioningChallenge extends Challenge {
   }
 
   fromDataBuffer(buffer: Buffer, offset?: number): number {
-    const challenge = new Challenge()
-    let _offset = challenge.fromDataBuffer(buffer, offset)
+    const challenge = new Challenge(undefined, LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY.vdxfid)
+    let _offset = challenge.fromDataBuffer(buffer, offset);
     const reader = new bufferutils.BufferReader(buffer, _offset)
 
     this.name = reader.readVarSlice().toString('utf-8')
