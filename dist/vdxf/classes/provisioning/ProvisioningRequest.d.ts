@@ -23,12 +23,12 @@ export declare class ProvisioningRequest extends Request {
         challenge: {
             vdxfkey: string;
             challenge_id: string;
-            requested_access: import("..").Hash160[];
-            requested_access_audience: any[];
+            requested_access: import("../Challenge").RequestedPermission[];
+            requested_access_audience: import("../Challenge").RequestedPermission[];
             subject: import("..").Subject[];
-            alt_auth_factors: any[];
+            alt_auth_factors: import("../Challenge").AltAuthFactor[];
             session_id: string;
-            attestations: any[];
+            attestations: import("../Challenge").Attestation[];
             redirect_uris: {
                 uri: string;
                 vdxfkey: string;
@@ -36,6 +36,7 @@ export declare class ProvisioningRequest extends Request {
             created_at: number;
             salt: string;
             context: import("..").Context;
+            skip: boolean;
         };
     };
     getChallengeHash(): Buffer;

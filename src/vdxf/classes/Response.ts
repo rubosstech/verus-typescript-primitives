@@ -26,9 +26,9 @@ export class Response extends VDXFObject {
       signing_id: "",
       decision: new Decision(),
     },
-    vdxfid: string = LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid
+    vdxfkey: string = LOGIN_CONSENT_RESPONSE_VDXF_KEY.vdxfid
   ) {
-    super(vdxfid);
+    super(vdxfkey);
 
     this.system_id = response.system_id;
     this.signing_id = response.signing_id;

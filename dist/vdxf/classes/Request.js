@@ -14,8 +14,8 @@ class Request extends __1.VDXFObject {
         system_id: "",
         signing_id: "",
         challenge: new Challenge_1.Challenge(),
-    }, vdxfid = __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
-        super(vdxfid);
+    }, vdxfkey = __1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
+        super(vdxfkey);
         this.system_id = request.system_id;
         this.signing_id = request.signing_id;
         this.signature = request.signature

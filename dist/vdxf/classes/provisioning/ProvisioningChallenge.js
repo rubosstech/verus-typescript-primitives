@@ -29,7 +29,7 @@ class ProvisioningChallenge extends Challenge_1.Challenge {
         return writer.buffer;
     }
     fromDataBuffer(buffer, offset) {
-        const challenge = new Challenge_1.Challenge();
+        const challenge = new Challenge_1.Challenge(undefined, keys_1.LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY.vdxfid);
         let _offset = challenge.fromDataBuffer(buffer, offset);
         const reader = new bufferutils_1.default.BufferReader(buffer, _offset);
         this.name = reader.readVarSlice().toString('utf-8');

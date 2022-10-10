@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Decision = void 0;
 const __1 = require("..");
-const vdxf_1 = require("../../constants/vdxf");
 const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
 const Context_1 = require("./Context");
@@ -17,14 +16,15 @@ class Decision extends __1.VDXFObject {
         decision_id: "",
         request: new Request_1.Request(),
         created_at: 0,
-    }, vdfxid = __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
-        super(vdfxid);
+    }, vdxfkey = __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
+        super(vdxfkey);
         this.decision_id = decision.decision_id;
         this.request = new Request_1.Request(decision.request);
         this.context = decision.context;
         this.created_at = decision.created_at;
         this.attestations = decision.attestations;
         this.salt = decision.salt;
+        this.skipped = decision.skipped ? true : false;
     }
     toOidcDecision() {
         return new OidcDecision_1.OidcDecision({
@@ -38,8 +38,8 @@ class Decision extends __1.VDXFObject {
                 signature: this.request.signature,
                 challenge: new OidcChallenge_1.OidcChallenge({
                     uuid: this.request.challenge.challenge_id,
-                    requested_scope: this.request.challenge.requested_access.map((x) => x.toAddress()),
-                    requested_access_token_audience: this.request.challenge.requested_access_audience,
+                    requested_scope: this.request.challenge.requested_access.map((x) => x.toString()),
+                    requested_access_token_audience: [],
                     subject: this.request.challenge.subject
                         ? JSON.stringify(this.request.challenge.subject)
                         : undefined,
@@ -72,8 +72,11 @@ class Decision extends __1.VDXFObject {
         length += _challenge_id.byteLength();
         length += 8; // created_at
         length += _salt.byteLength();
+        if (this.vdxfkey === __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
+            length += 1; // skipped
+            length += varuint_1.default.encodingLength(_attestations.length);
+        }
         length += _request.byteLength();
-        length += varuint_1.default.encodingLength(_attestations.length);
         length += _context.byteLength();
         return length;
     }
@@ -91,7 +94,10 @@ class Decision extends __1.VDXFObject {
         writer.writeSlice(_decision_id.toBuffer());
         writer.writeUInt64(_created_at);
         writer.writeSlice(_salt.toBuffer());
-        writer.writeArray(_attestations.map((x) => x.toBuffer()));
+        if (this.vdxfkey === __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
+            writer.writeUInt8(this.skipped ? 1 : 0);
+            writer.writeArray(_attestations.map((x) => x.toBuffer()));
+        }
         writer.writeSlice(_context.toBuffer());
         writer.writeSlice(_request.toBuffer());
         return writer.buffer;
@@ -110,9 +116,14 @@ class Decision extends __1.VDXFObject {
             const _salt = new Hash160_1.Hash160();
             reader.offset = _salt.fromBuffer(reader.buffer, true, reader.offset);
             this.salt = _salt.toAddress();
-            this.attestations = reader.readArray(vdxf_1.HASH160_BYTE_LENGTH).map(() => {
-                throw new Error("Attestations currently unsupported");
-            });
+            if (this.vdxfkey === __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
+                this.skipped = reader.readUInt8() === 1 ? true : false;
+                this.attestations = [];
+                const attestationsLength = reader.readVarInt();
+                if (attestationsLength > 0) {
+                    throw new Error("Attestations currently unsupported");
+                }
+            }
             const _context = new Context_1.Context();
             reader.offset = _context.fromBuffer(reader.buffer, reader.offset);
             this.context = _context;

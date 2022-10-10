@@ -1,7 +1,6 @@
 /// <reference types="node" />
 import { Decision, DecisionInterface } from "./Decision";
 import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../";
-import { Hash160 } from "./Hash160";
 export interface ResponseInterface {
     system_id: string;
     signing_id: string;
@@ -13,7 +12,7 @@ export declare class Response extends VDXFObject {
     signing_id: string;
     signature?: VerusIDSignature;
     decision: Decision;
-    constructor(response?: ResponseInterface, vdxfid?: string);
+    constructor(response?: ResponseInterface, vdxfkey?: string);
     getDecisionHash(signedBlockheight: number): Buffer;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
@@ -44,12 +43,12 @@ export declare class Response extends VDXFObject {
                 challenge: {
                     vdxfkey: string;
                     challenge_id: string;
-                    requested_access: Hash160[];
-                    requested_access_audience: any[];
+                    requested_access: import("./Challenge").RequestedPermission[];
+                    requested_access_audience: import("./Challenge").RequestedPermission[];
                     subject: import("./Challenge").Subject[];
-                    alt_auth_factors: any[];
+                    alt_auth_factors: import("./Challenge").AltAuthFactor[];
                     session_id: string;
-                    attestations: any[];
+                    attestations: import("./Challenge").Attestation[];
                     redirect_uris: {
                         uri: string;
                         vdxfkey: string;
@@ -57,6 +56,7 @@ export declare class Response extends VDXFObject {
                     created_at: number;
                     salt: string;
                     context: import("./Context").Context;
+                    skip: boolean;
                 };
             };
         };

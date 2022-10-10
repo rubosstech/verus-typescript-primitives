@@ -18,7 +18,6 @@ export interface RequestInterface {
   signing_id: string;
   signature?: VerusIDSignatureInterface;
   challenge: ChallengeInterface;
-  vdxfkey?: string;
 }
 
 export class Request extends VDXFObject {
@@ -33,9 +32,9 @@ export class Request extends VDXFObject {
       signing_id: "",
       challenge: new Challenge(),
     },
-    vdxfid: string = LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid
+    vdxfkey: string = LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid
   ) {
-    super(vdxfid);
+    super(vdxfkey);
 
     this.system_id = request.system_id;
     this.signing_id = request.signing_id;

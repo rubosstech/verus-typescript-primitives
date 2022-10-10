@@ -7,8 +7,8 @@ const address_1 = require("../../utils/address");
 const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
 class Context extends __1.VDXFObject {
-    constructor(kv = {}, vdxfid = __1.LOGIN_CONSENT_CONTEXT_VDXF_KEY.vdxfid) {
-        super(vdxfid);
+    constructor(kv = {}, vdxfkey = __1.LOGIN_CONSENT_CONTEXT_VDXF_KEY.vdxfid) {
+        super(vdxfkey);
         this.kv = kv;
     }
     dataByteLength() {

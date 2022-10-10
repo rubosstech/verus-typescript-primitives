@@ -9,9 +9,9 @@ export class Context extends VDXFObject {
 
   constructor(
     kv: { [key: string]: string } = {},
-    vdxfid: string = LOGIN_CONSENT_CONTEXT_VDXF_KEY.vdxfid
+    vdxfkey: string = LOGIN_CONSENT_CONTEXT_VDXF_KEY.vdxfid
   ) {
-    super(vdxfid);
+    super(vdxfkey);
 
     this.kv = kv;
   }
