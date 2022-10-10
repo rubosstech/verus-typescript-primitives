@@ -23,7 +23,7 @@ class VDXFObject {
         this.vdxfkey = key;
         this.version = vdxf_1.DEFAULT_VERSION;
     }
-    stringable() {
+    toJson() {
         return {};
     }
     toString() {
@@ -86,7 +86,7 @@ class Utf8DataVdxfObject extends VDXFObject {
         this.data = reader.readVarSlice().toString('utf-8');
         return reader.offset;
     }
-    stringable() {
+    toJson() {
         return {
             data: this.data,
             vdxfkey: this.vdxfkey
@@ -110,7 +110,7 @@ class VerusIDSignature extends VDXFObject {
         this.signature = reader.readVarSlice().toString("base64");
         return reader.offset;
     }
-    stringable() {
+    toJson() {
         return {
             vdxfkey: this.vdxfkey,
             signature: this.signature,

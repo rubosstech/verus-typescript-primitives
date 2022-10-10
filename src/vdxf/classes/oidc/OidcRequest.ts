@@ -28,13 +28,13 @@ export class OidcRequest extends VDXFObject {
     return this.challenge.toString();
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       chain_id: this.chain_id,
       signing_id: this.signing_id,
-      signature: this.signature.stringable(),
-      challenge: this.challenge.stringable(),
+      signature: this.signature.toJson(),
+      challenge: this.challenge.toJson(),
     };
   }
 }

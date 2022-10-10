@@ -44,7 +44,7 @@ export declare class OidcChallenge extends VDXFObject {
     acr?: string;
     session_id?: string;
     constructor(challenge: OidcChallengeInterface);
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         uuid: string;
         client: {

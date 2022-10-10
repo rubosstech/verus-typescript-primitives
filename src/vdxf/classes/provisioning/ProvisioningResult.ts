@@ -158,4 +158,15 @@ export class ProvisioningResult extends VDXFObject {
 
     return reader.offset;
   }
+
+  toJson(): {} {
+    return {
+      state: this.state,
+      error_key: this.error_key,
+      error_desc: this.error_desc,
+      identity_address: this.identity_address,
+      info_uri: this.info_uri,
+      provisioning_txid: this.provisioning_txid
+    }
+  }
 }

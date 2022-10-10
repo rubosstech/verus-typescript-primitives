@@ -59,7 +59,7 @@ class Hash160 {
         this.varlength = varlength;
         return reader.offset;
     }
-    stringable() {
+    toJson() {
         return {
             hash: this.hash,
             version: this.version,

@@ -39,14 +39,14 @@ export class ProvisioningRequest extends Request {
     this.signing_address = request.signing_address;
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       system_id: null,
       signing_address: this.signing_address,
       signing_id: null,
-      signature: this.signature ? this.signature.stringable() : this.signature,
-      challenge: this.challenge.stringable(),
+      signature: this.signature ? this.signature.toJson() : this.signature,
+      challenge: this.challenge.toJson(),
     };
   }
 

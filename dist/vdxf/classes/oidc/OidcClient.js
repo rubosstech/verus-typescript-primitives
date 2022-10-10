@@ -26,7 +26,7 @@ class OidcClient extends __1.VDXFObject {
         this.created_at = client.created_at;
         this.updated_at = client.updated_at;
     }
-    stringable() {
+    toJson() {
         return {
             vdxfkey: this.vdxfkey,
             client_id: this.client_id,

@@ -11,7 +11,7 @@ export declare class ProvisioningRequest extends Request {
     signing_address?: string;
     challenge: ProvisioningChallenge;
     constructor(request?: ProvisioningRequestInterface);
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         system_id: any;
         signing_address: string;

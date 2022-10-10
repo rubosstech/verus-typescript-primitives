@@ -22,7 +22,7 @@ class RedirectUri extends __1.VDXFObject {
         this.uri = reader.readVarSlice().toString('utf-8');
         return reader.offset;
     }
-    stringable() {
+    toJson() {
         return {
             uri: this.uri,
             vdxfkey: this.vdxfkey
@@ -202,7 +202,7 @@ class Challenge extends __1.VDXFObject {
         }
         return reader.offset;
     }
-    stringable() {
+    toJson() {
         return {
             vdxfkey: this.vdxfkey,
             challenge_id: this.challenge_id,
@@ -213,7 +213,7 @@ class Challenge extends __1.VDXFObject {
             session_id: this.session_id,
             attestations: this.attestations,
             redirect_uris: this.redirect_uris
-                ? this.redirect_uris.map((x) => x.stringable())
+                ? this.redirect_uris.map((x) => x.toJson())
                 : this.redirect_uris,
             created_at: this.created_at,
             salt: this.salt,

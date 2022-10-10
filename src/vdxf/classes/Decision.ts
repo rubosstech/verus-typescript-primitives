@@ -66,7 +66,7 @@ export class Decision extends VDXFObject {
       subject: this.request.challenge.subject
         ? JSON.stringify(this.request.challenge.subject)
         : undefined,
-      context: this.context.stringable().kv,
+      context: this.context.toJson().kv,
       request: new OidcRequest({
         chain_id: this.request.system_id,
         signing_id: this.request.signing_id,
@@ -210,13 +210,13 @@ export class Decision extends VDXFObject {
     return reader.offset;
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       decision_id: this.decision_id,
-      context: this.context.stringable(),
+      context: this.context.toJson(),
       created_at: this.created_at,
-      request: this.request.stringable(),
+      request: this.request.toJson(),
     };
   }
 }

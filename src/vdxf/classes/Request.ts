@@ -60,13 +60,13 @@ export class Request extends VDXFObject {
       .digest();
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       system_id: this.system_id,
       signing_id: this.signing_id,
-      signature: this.signature ? this.signature.stringable() : this.signature,
-      challenge: this.challenge.stringable(),
+      signature: this.signature ? this.signature.toJson() : this.signature,
+      challenge: this.challenge.toJson(),
     };
   }
 

@@ -53,7 +53,7 @@ class Context extends __1.VDXFObject {
             return reader.offset;
         }
     }
-    stringable() {
+    toJson() {
         return {
             kv: this.kv,
             vdxfkey: this.vdxfkey,

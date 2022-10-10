@@ -47,7 +47,7 @@ export class OidcDecision extends VDXFObject {
     this.request = new OidcRequest(decision.request);
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       subject: this.subject,
@@ -61,7 +61,7 @@ export class OidcDecision extends VDXFObject {
       error_hint: this.error_hint,
       error_debug: this.error_debug,
       status_code: this.status_code,
-      request: this.request.stringable(),
+      request: this.request.toJson(),
     };
   }
 }

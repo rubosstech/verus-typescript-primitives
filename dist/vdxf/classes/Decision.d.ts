@@ -26,7 +26,7 @@ export declare class Decision extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number, readRequest?: boolean): number;
-    stringable(): {
+    toJson(): {
         vdxfkey: string;
         decision_id: string;
         context: {

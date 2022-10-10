@@ -63,11 +63,11 @@ export class OidcChallenge extends VDXFObject {
     this.client = new OidcClient(challenge.client);
   }
 
-  stringable() {
+  toJson() {
     return {
       vdxfkey: this.vdxfkey,
       uuid: this.uuid,
-      client: this.client.stringable(),
+      client: this.client.toJson(),
       requested_scope: this.requested_scope,
       requested_access_token_audience: this.requested_access_token_audience,
       skip: this.skip,
