@@ -16,10 +16,6 @@ export { ProvisioningChallengeInterface as LoginConsentProvisioningChallengeInte
 export { ProvisioningResponseInterface as LoginConsentProvisioningResponseInterface } from "./provisioning/ProvisioningResponse";
 export { ProvisioningDecisionInterface as LoginConsentProvisioningDecisionInterface } from "./provisioning/ProvisioningDecision";
 
-export { OidcClient as OidcLoginConsentClient } from "./oidc/OidcClient";
-export { OidcChallenge as OidcLoginConsentChallenge } from "./oidc/OidcChallenge";
-export { OidcDecision as OidcLoginConsentDecision } from "./oidc/OidcDecision";
-
 export { Hash160 } from './Hash160'
 export { RedirectUri, Subject } from './Challenge'
 export { Context } from './Context'

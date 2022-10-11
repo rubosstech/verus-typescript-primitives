@@ -1,8 +1,7 @@
 import { VDXFObject } from "../..";
 import bufferutils, { reverseBuffer } from "../../../utils/bufferutils";
 import varuint from "../../../utils/varuint";
-import { LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY, LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY } from "../../keys";
-import { Challenge } from "../Challenge";
+import { LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY } from "../../keys";
 import { Hash160 } from "../Hash160";
 
 export interface ProvisioningResultInterface {
@@ -18,6 +17,15 @@ export interface ProvisioningResultInterface {
   // Identity address provisioned (if applicable)
   identity_address?: string;
 
+  // System ID that the ID was created on
+  system_id?: string;
+
+  // Fully qualified name of created ID
+  fully_qualified_name?: string;
+
+  // Parent of created ID
+  parent?: string;
+
   // Uri used to fetch more info about result (if applicable)
   info_uri?: string;
 
@@ -32,6 +40,9 @@ export class ProvisioningResult extends VDXFObject {
   identity_address?: string;
   info_uri?: string;
   provisioning_txid?: string;
+  system_id?: string;
+  fully_qualified_name?: string;
+  parent?: string;
 
   constructor(
     result: ProvisioningResultInterface = { state: "" }
@@ -44,6 +55,9 @@ export class ProvisioningResult extends VDXFObject {
     this.identity_address = result.identity_address
     this.info_uri = result.info_uri
     this.provisioning_txid = result.provisioning_txid
+    this.system_id = result.system_id
+    this.fully_qualified_name = result.fully_qualified_name
+    this.parent = result.parent
   }
 
   dataByteLength(): number {
@@ -63,6 +77,20 @@ export class ProvisioningResult extends VDXFObject {
     const idAddrLength = this.identity_address
       ? Hash160.fromAddress(this.identity_address, true).byteLength()
       : Hash160.getEmpty().byteLength();
+  
+    const systemIdLength = this.system_id
+      ? Hash160.fromAddress(this.system_id, true).byteLength()
+      : Hash160.getEmpty().byteLength();
+
+    const nameBuf =
+      this.fully_qualified_name == null
+        ? Buffer.alloc(0)
+        : Buffer.from(this.fully_qualified_name, "utf-8");
+    const nameLength = nameBuf.length + varuint.encodingLength(nameBuf.length);
+
+    const parentLength = this.parent
+      ? Hash160.fromAddress(this.parent, true).byteLength()
+      : Hash160.getEmpty().byteLength();
 
     const infoUriBuf = this.info_uri == null ? Buffer.alloc(0) : Buffer.from(this.info_uri, "utf-8");
     const infoUriLength =
@@ -79,6 +107,9 @@ export class ProvisioningResult extends VDXFObject {
       errorKeyLength +
       errorDescLength +
       idAddrLength +
+      systemIdLength +
+      nameLength +
+      parentLength +
       infoUriLength +
       provisioningTxidLength
     );
@@ -100,6 +131,20 @@ export class ProvisioningResult extends VDXFObject {
     writer.writeSlice(
       this.identity_address
         ? Hash160.fromAddress(this.identity_address, true).toBuffer()
+        : Hash160.getEmpty().toBuffer()
+    );
+
+    writer.writeSlice(
+      this.system_id
+        ? Hash160.fromAddress(this.system_id, true).toBuffer()
+        : Hash160.getEmpty().toBuffer()
+    );
+
+    writer.writeVarSlice(this.fully_qualified_name == null ? Buffer.alloc(0) : Buffer.from(this.fully_qualified_name, "utf-8"));
+
+    writer.writeSlice(
+      this.parent
+        ? Hash160.fromAddress(this.parent, true).toBuffer()
         : Hash160.getEmpty().toBuffer()
     );
 
@@ -147,6 +192,24 @@ export class ProvisioningResult extends VDXFObject {
       );
       this.identity_address = _identity_address.toAddress();
 
+      const _system_id = new Hash160();
+      reader.offset = _system_id.fromBuffer(
+        reader.buffer,
+        true,
+        reader.offset
+      );
+      this.system_id = _system_id.toAddress();
+
+      this.fully_qualified_name = reader.readVarSlice().toString('utf8')
+
+      const _parent = new Hash160();
+      reader.offset = _parent.fromBuffer(
+        reader.buffer,
+        true,
+        reader.offset
+      );
+      this.parent = _parent.toAddress();
+
       this.info_uri = reader.readVarSlice().toString('utf8')
 
       const provisioningTxidSlice = reader.readVarSlice()
@@ -167,7 +230,9 @@ export class ProvisioningResult extends VDXFObject {
       error_desc: this.error_desc,
       identity_address: this.identity_address,
       info_uri: this.info_uri,
-      provisioning_txid: this.provisioning_txid
+      provisioning_txid: this.provisioning_txid,
+      system_id: this.system_id,
+      fully_qualified_name: this.fully_qualified_name
     }
   }
 }

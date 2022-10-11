@@ -89,7 +89,9 @@ describe('Serializes and deserializes signature objects properly', () => {
         context: new Context({
           ["i4KyLCxWZXeSkw15dF95CUKytEK3HU7em9"]: "test",
         }),
-        name: "😊"
+        name: "😊",
+        system_id: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        parent: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV"
       },
     });
 
@@ -113,7 +115,10 @@ describe('Serializes and deserializes signature objects properly', () => {
           error_desc: "Testing an error",
           identity_address: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
           info_uri: "127.0.0.1",
-          provisioning_txid: "402e437df5aea8dc7af42f3072a43ef0e9e27edfbd2072c08aeea8e07024ee40"
+          provisioning_txid: "402e437df5aea8dc7af42f3072a43ef0e9e27edfbd2072c08aeea8e07024ee40",
+          system_id: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+          fully_qualified_name: "😊.vrsc",
+          parent: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV"
         }),
       }
     })

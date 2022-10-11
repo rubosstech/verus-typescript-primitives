@@ -5,6 +5,9 @@ export interface ProvisioningResultInterface {
     error_key?: string;
     error_desc?: string;
     identity_address?: string;
+    system_id?: string;
+    fully_qualified_name?: string;
+    parent?: string;
     info_uri?: string;
     provisioning_txid?: string;
 }
@@ -15,6 +18,9 @@ export declare class ProvisioningResult extends VDXFObject {
     identity_address?: string;
     info_uri?: string;
     provisioning_txid?: string;
+    system_id?: string;
+    fully_qualified_name?: string;
+    parent?: string;
     constructor(result?: ProvisioningResultInterface);
     dataByteLength(): number;
     toDataBuffer(): Buffer;

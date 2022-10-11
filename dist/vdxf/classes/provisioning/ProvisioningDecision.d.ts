@@ -36,20 +36,20 @@ export declare class ProvisioningDecision extends Decision implements Provisioni
             challenge: {
                 vdxfkey: string;
                 challenge_id: string;
-                requested_access: import("../Challenge").RequestedPermission[];
-                requested_access_audience: import("../Challenge").RequestedPermission[];
-                subject: import("..").Subject[];
-                alt_auth_factors: import("../Challenge").AltAuthFactor[];
-                session_id: string;
-                attestations: import("../Challenge").Attestation[];
-                redirect_uris: {
-                    uri: string;
-                    vdxfkey: string;
-                }[];
                 created_at: number;
                 salt: string;
+                name: string;
+                system_id: string;
+                parent: string;
                 context: Context;
-                skip: boolean;
+                requested_access: any;
+                requested_access_audience: any;
+                subject: any;
+                alt_auth_factors: any;
+                session_id: any;
+                attestations: any;
+                skip: any;
+                redirect_uris: any;
             };
         };
         context: {

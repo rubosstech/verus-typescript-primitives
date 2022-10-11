@@ -2,7 +2,6 @@
 import { VDXFObject } from "..";
 import { Attestation } from "./Challenge";
 import { Context } from "./Context";
-import { OidcDecision } from "./oidc/OidcDecision";
 import { Request, RequestInterface } from "./Request";
 export interface DecisionInterface {
     decision_id: string;
@@ -22,7 +21,6 @@ export declare class Decision extends VDXFObject {
     attestations: Array<any>;
     salt?: string;
     constructor(decision?: DecisionInterface, vdxfkey?: string);
-    toOidcDecision(): OidcDecision;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number, readRequest?: boolean): number;
