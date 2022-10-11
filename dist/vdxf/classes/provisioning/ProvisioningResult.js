@@ -15,6 +15,9 @@ class ProvisioningResult extends __1.VDXFObject {
         this.identity_address = result.identity_address;
         this.info_uri = result.info_uri;
         this.provisioning_txid = result.provisioning_txid;
+        this.system_id = result.system_id;
+        this.fully_qualified_name = result.fully_qualified_name;
+        this.parent = result.parent;
     }
     dataByteLength() {
         const stateLength = Hash160_1.Hash160.fromAddress(this.state).byteLength();
@@ -28,6 +31,16 @@ class ProvisioningResult extends __1.VDXFObject {
         const idAddrLength = this.identity_address
             ? Hash160_1.Hash160.fromAddress(this.identity_address, true).byteLength()
             : Hash160_1.Hash160.getEmpty().byteLength();
+        const systemIdLength = this.system_id
+            ? Hash160_1.Hash160.fromAddress(this.system_id, true).byteLength()
+            : Hash160_1.Hash160.getEmpty().byteLength();
+        const nameBuf = this.fully_qualified_name == null
+            ? Buffer.alloc(0)
+            : Buffer.from(this.fully_qualified_name, "utf-8");
+        const nameLength = nameBuf.length + varuint_1.default.encodingLength(nameBuf.length);
+        const parentLength = this.parent
+            ? Hash160_1.Hash160.fromAddress(this.parent, true).byteLength()
+            : Hash160_1.Hash160.getEmpty().byteLength();
         const infoUriBuf = this.info_uri == null ? Buffer.alloc(0) : Buffer.from(this.info_uri, "utf-8");
         const infoUriLength = infoUriBuf.length + varuint_1.default.encodingLength(infoUriBuf.length);
         const provisioningTxidBuf = this.provisioning_txid == null
@@ -38,6 +51,9 @@ class ProvisioningResult extends __1.VDXFObject {
             errorKeyLength +
             errorDescLength +
             idAddrLength +
+            systemIdLength +
+            nameLength +
+            parentLength +
             infoUriLength +
             provisioningTxidLength);
     }
@@ -50,6 +66,13 @@ class ProvisioningResult extends __1.VDXFObject {
         writer.writeVarSlice(this.error_desc == null ? Buffer.alloc(0) : Buffer.from(this.error_desc, "utf-8"));
         writer.writeSlice(this.identity_address
             ? Hash160_1.Hash160.fromAddress(this.identity_address, true).toBuffer()
+            : Hash160_1.Hash160.getEmpty().toBuffer());
+        writer.writeSlice(this.system_id
+            ? Hash160_1.Hash160.fromAddress(this.system_id, true).toBuffer()
+            : Hash160_1.Hash160.getEmpty().toBuffer());
+        writer.writeVarSlice(this.fully_qualified_name == null ? Buffer.alloc(0) : Buffer.from(this.fully_qualified_name, "utf-8"));
+        writer.writeSlice(this.parent
+            ? Hash160_1.Hash160.fromAddress(this.parent, true).toBuffer()
             : Hash160_1.Hash160.getEmpty().toBuffer());
         writer.writeVarSlice(this.info_uri == null ? Buffer.alloc(0) : Buffer.from(this.info_uri, "utf-8"));
         writer.writeVarSlice(this.provisioning_txid == null
@@ -74,6 +97,13 @@ class ProvisioningResult extends __1.VDXFObject {
             const _identity_address = new Hash160_1.Hash160();
             reader.offset = _identity_address.fromBuffer(reader.buffer, true, reader.offset);
             this.identity_address = _identity_address.toAddress();
+            const _system_id = new Hash160_1.Hash160();
+            reader.offset = _system_id.fromBuffer(reader.buffer, true, reader.offset);
+            this.system_id = _system_id.toAddress();
+            this.fully_qualified_name = reader.readVarSlice().toString('utf8');
+            const _parent = new Hash160_1.Hash160();
+            reader.offset = _parent.fromBuffer(reader.buffer, true, reader.offset);
+            this.parent = _parent.toAddress();
             this.info_uri = reader.readVarSlice().toString('utf8');
             const provisioningTxidSlice = reader.readVarSlice();
             const provisioningTxidBuf = Buffer.alloc(provisioningTxidSlice.length);
@@ -91,7 +121,9 @@ class ProvisioningResult extends __1.VDXFObject {
             error_desc: this.error_desc,
             identity_address: this.identity_address,
             info_uri: this.info_uri,
-            provisioning_txid: this.provisioning_txid
+            provisioning_txid: this.provisioning_txid,
+            system_id: this.system_id,
+            fully_qualified_name: this.fully_qualified_name
         };
     }
 }

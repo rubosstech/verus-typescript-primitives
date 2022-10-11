@@ -4,10 +4,6 @@ import varuint from "../../utils/varuint";
 import { Attestation } from "./Challenge";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
-import { OidcChallenge } from "./oidc/OidcChallenge";
-import { OidcClient } from "./oidc/OidcClient";
-import { OidcDecision } from "./oidc/OidcDecision";
-import { OidcRequest } from "./oidc/OidcRequest";
 import { Request, RequestInterface } from "./Request";
 
 export interface DecisionInterface {
@@ -59,43 +55,6 @@ export class Decision extends VDXFObject {
     this.attestations = decision.attestations;
     this.salt = decision.salt;
     this.skipped = decision.skipped ? true : false;
-  }
-
-  toOidcDecision(): OidcDecision {
-    return new OidcDecision({
-      subject: this.request.challenge.subject
-        ? JSON.stringify(this.request.challenge.subject)
-        : undefined,
-      context: this.context.toJson().kv,
-      request: new OidcRequest({
-        chain_id: this.request.system_id,
-        signing_id: this.request.signing_id,
-        signature: this.request.signature,
-        challenge: new OidcChallenge({
-          uuid: this.request.challenge.challenge_id,
-          requested_scope: this.request.challenge.requested_access.map((x) =>
-            x.toString()
-          ),
-          requested_access_token_audience: [],
-          subject: this.request.challenge.subject
-            ? JSON.stringify(this.request.challenge.subject)
-            : undefined,
-          session_id: this.request.challenge.session_id,
-          client: new OidcClient({
-            client_id: this.request.challenge.challenge_id,
-            redirect_uris: this.request.challenge.redirect_uris
-              ? this.request.challenge.redirect_uris.map((x) => {
-                  return {
-                    type: x.vdxfkey,
-                    uri: x.uri,
-                  };
-                })
-              : undefined,
-            created_at: this.request.challenge.created_at.toString(),
-          }),
-        }),
-      }),
-    });
   }
 
   dataByteLength(): number {

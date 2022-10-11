@@ -6,10 +6,6 @@ const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
 const Context_1 = require("./Context");
 const Hash160_1 = require("./Hash160");
-const OidcChallenge_1 = require("./oidc/OidcChallenge");
-const OidcClient_1 = require("./oidc/OidcClient");
-const OidcDecision_1 = require("./oidc/OidcDecision");
-const OidcRequest_1 = require("./oidc/OidcRequest");
 const Request_1 = require("./Request");
 class Decision extends __1.VDXFObject {
     constructor(decision = {
@@ -25,40 +21,6 @@ class Decision extends __1.VDXFObject {
         this.attestations = decision.attestations;
         this.salt = decision.salt;
         this.skipped = decision.skipped ? true : false;
-    }
-    toOidcDecision() {
-        return new OidcDecision_1.OidcDecision({
-            subject: this.request.challenge.subject
-                ? JSON.stringify(this.request.challenge.subject)
-                : undefined,
-            context: this.context.toJson().kv,
-            request: new OidcRequest_1.OidcRequest({
-                chain_id: this.request.system_id,
-                signing_id: this.request.signing_id,
-                signature: this.request.signature,
-                challenge: new OidcChallenge_1.OidcChallenge({
-                    uuid: this.request.challenge.challenge_id,
-                    requested_scope: this.request.challenge.requested_access.map((x) => x.toString()),
-                    requested_access_token_audience: [],
-                    subject: this.request.challenge.subject
-                        ? JSON.stringify(this.request.challenge.subject)
-                        : undefined,
-                    session_id: this.request.challenge.session_id,
-                    client: new OidcClient_1.OidcClient({
-                        client_id: this.request.challenge.challenge_id,
-                        redirect_uris: this.request.challenge.redirect_uris
-                            ? this.request.challenge.redirect_uris.map((x) => {
-                                return {
-                                    type: x.vdxfkey,
-                                    uri: x.uri,
-                                };
-                            })
-                            : undefined,
-                        created_at: this.request.challenge.created_at.toString(),
-                    }),
-                }),
-            }),
-        });
     }
     dataByteLength() {
         let length = 0;
