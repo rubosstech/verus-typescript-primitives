@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Context = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
+exports.Context = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
 var Challenge_1 = require("./Challenge");
 Object.defineProperty(exports, "LoginConsentChallenge", { enumerable: true, get: function () { return Challenge_1.Challenge; } });
 var Decision_1 = require("./Decision");
@@ -17,6 +17,8 @@ var ProvisioningResponse_1 = require("./provisioning/ProvisioningResponse");
 Object.defineProperty(exports, "LoginConsentProvisioningResponse", { enumerable: true, get: function () { return ProvisioningResponse_1.ProvisioningResponse; } });
 var ProvisioningDecision_1 = require("./provisioning/ProvisioningDecision");
 Object.defineProperty(exports, "LoginConsentProvisioningDecision", { enumerable: true, get: function () { return ProvisioningDecision_1.ProvisioningDecision; } });
+var ProvisioningResult_1 = require("./provisioning/ProvisioningResult");
+Object.defineProperty(exports, "LoginConsentProvisioningResult", { enumerable: true, get: function () { return ProvisioningResult_1.ProvisioningResult; } });
 var Hash160_1 = require("./Hash160");
 Object.defineProperty(exports, "Hash160", { enumerable: true, get: function () { return Hash160_1.Hash160; } });
 var Challenge_2 = require("./Challenge");

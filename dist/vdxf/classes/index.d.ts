@@ -10,6 +10,7 @@ export { ProvisioningRequest as LoginConsentProvisioningRequest } from "./provis
 export { ProvisioningChallenge as LoginConsentProvisioningChallenge } from "./provisioning/ProvisioningChallenge";
 export { ProvisioningResponse as LoginConsentProvisioningResponse } from "./provisioning/ProvisioningResponse";
 export { ProvisioningDecision as LoginConsentProvisioningDecision } from "./provisioning/ProvisioningDecision";
+export { ProvisioningResult as LoginConsentProvisioningResult } from "./provisioning/ProvisioningResult";
 export { ProvisioningRequestInterface as LoginConsentProvisioningRequestInterface } from "./provisioning/ProvisioningRequest";
 export { ProvisioningChallengeInterface as LoginConsentProvisioningChallengeInterface } from "./provisioning/ProvisioningChallenge";
 export { ProvisioningResponseInterface as LoginConsentProvisioningResponseInterface } from "./provisioning/ProvisioningResponse";
