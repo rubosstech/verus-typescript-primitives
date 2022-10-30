@@ -1,6 +1,6 @@
 import { ApiResponse } from "../../ApiResponse";
 
-export class GetAddressDeltasResponse extends ApiResponse {
+export class GetAddressMempoolResponse extends ApiResponse {
   result: Array<{
     satoshis: number;
     txid: string;
@@ -8,8 +8,8 @@ export class GetAddressDeltasResponse extends ApiResponse {
     blockindex: number;
     height: number;
     address: string;
-    currencyvalues?: { [key: string]: number },
-    currencynames?: { [key: string]: string },
+    currencyvalues?: { [key: string]: number };
+    currencynames?: { [key: string]: string };
     sent?: {
       outputs: Array<{
         addresses: string | Array<string>;

@@ -1,5 +1,5 @@
 import { ApiResponse } from "../../ApiResponse";
-export declare class GetAddressDeltasResponse extends ApiResponse {
+export declare class GetAddressMempoolResponse extends ApiResponse {
     result: Array<{
         satoshis: number;
         txid: string;

@@ -7,6 +7,7 @@ export declare const GET_INFO = "getinfo";
 export declare const GET_BLOCK = "getblock";
 export declare const GET_RAW_TRANSACTION = "getrawtransaction";
 export declare const GET_ADDRESS_DELTAS = "getaddressdeltas";
+export declare const GET_ADDRESS_MEMPOOL = "getaddressmempool";
 export declare const SEND_RAW_TRANSACTION = "sendrawtransaction";
 export declare const GET_ADDRESS_UTXOS = "getaddressutxos";
 export declare const SIGN_MESSAGE = "signmessage";

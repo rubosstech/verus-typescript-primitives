@@ -24,12 +24,16 @@ import { SignMessageRequest } from './SignMessage/SignMessageRequest'
 import { SignMessageResponse } from './SignMessage/SignMessageResponse'
 import { VerifyMessageRequest } from './VerifyMessage/VerifyMessageRequest'
 import { VerifyMessageResponse } from './VerifyMessage/VerifyMessageResponse'
+import { GetAddressMempoolResponse } from './GetAddressMempool/GetAddressMempoolResponse'
+import { GetAddressMempoolRequest } from './GetAddressMempool/GetAddressMempoolRequest'
 
 export {
   GetAddressBalanceRequest,
   GetAddressBalanceResponse,
   GetAddressDeltasRequest,
   GetAddressDeltasResponse,
+  GetAddressMempoolRequest,
+  GetAddressMempoolResponse,
   GetAddressUtxosRequest,
   GetAddressUtxosResponse,
   GetBlockRequest,
@@ -59,6 +63,7 @@ export type RpcRequest =
   | typeof GetOffersRequest
   | typeof GetAddressBalanceRequest
   | typeof GetAddressDeltasRequest
+  | typeof GetAddressMempoolRequest
   | typeof GetAddressUtxosRequest
   | typeof GetBlockRequest
   | typeof GetInfoRequest
@@ -74,6 +79,7 @@ export type RpcResponse =
   | typeof GetOffersResponse
   | typeof GetAddressBalanceResponse
   | typeof GetAddressDeltasResponse
+  | typeof GetAddressMempoolResponse
   | typeof GetAddressUtxosResponse
   | typeof GetBlockResponse
   | typeof GetInfoResponse

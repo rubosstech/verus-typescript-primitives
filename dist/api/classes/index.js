@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignMessageResponse = exports.SignMessageRequest = exports.VerifyMessageResponse = exports.VerifyMessageRequest = exports.GetInfoResponse = exports.GetInfoRequest = exports.SendRawTransactionResponse = exports.SendRawTransactionRequest = exports.MakeOfferResponse = exports.MakeOfferRequest = exports.GetRawTransactionResponse = exports.GetRawTransactionRequest = exports.GetOffersResponse = exports.GetOffersRequest = exports.GetCurrencyResponse = exports.GetCurrencyRequest = exports.GetIdentityResponse = exports.GetIdentityRequest = exports.GetBlockResponse = exports.GetBlockRequest = exports.GetAddressUtxosResponse = exports.GetAddressUtxosRequest = exports.GetAddressDeltasResponse = exports.GetAddressDeltasRequest = exports.GetAddressBalanceResponse = exports.GetAddressBalanceRequest = void 0;
+exports.SignMessageResponse = exports.SignMessageRequest = exports.VerifyMessageResponse = exports.VerifyMessageRequest = exports.GetInfoResponse = exports.GetInfoRequest = exports.SendRawTransactionResponse = exports.SendRawTransactionRequest = exports.MakeOfferResponse = exports.MakeOfferRequest = exports.GetRawTransactionResponse = exports.GetRawTransactionRequest = exports.GetOffersResponse = exports.GetOffersRequest = exports.GetCurrencyResponse = exports.GetCurrencyRequest = exports.GetIdentityResponse = exports.GetIdentityRequest = exports.GetBlockResponse = exports.GetBlockRequest = exports.GetAddressUtxosResponse = exports.GetAddressUtxosRequest = exports.GetAddressMempoolResponse = exports.GetAddressMempoolRequest = exports.GetAddressDeltasResponse = exports.GetAddressDeltasRequest = exports.GetAddressBalanceResponse = exports.GetAddressBalanceRequest = void 0;
 const GetAddressBalanceRequest_1 = require("./GetAddressBalance/GetAddressBalanceRequest");
 Object.defineProperty(exports, "GetAddressBalanceRequest", { enumerable: true, get: function () { return GetAddressBalanceRequest_1.GetAddressBalanceRequest; } });
 const GetAddressBalanceResponse_1 = require("./GetAddressBalance/GetAddressBalanceResponse");
@@ -53,3 +53,7 @@ const VerifyMessageRequest_1 = require("./VerifyMessage/VerifyMessageRequest");
 Object.defineProperty(exports, "VerifyMessageRequest", { enumerable: true, get: function () { return VerifyMessageRequest_1.VerifyMessageRequest; } });
 const VerifyMessageResponse_1 = require("./VerifyMessage/VerifyMessageResponse");
 Object.defineProperty(exports, "VerifyMessageResponse", { enumerable: true, get: function () { return VerifyMessageResponse_1.VerifyMessageResponse; } });
+const GetAddressMempoolResponse_1 = require("./GetAddressMempool/GetAddressMempoolResponse");
+Object.defineProperty(exports, "GetAddressMempoolResponse", { enumerable: true, get: function () { return GetAddressMempoolResponse_1.GetAddressMempoolResponse; } });
+const GetAddressMempoolRequest_1 = require("./GetAddressMempool/GetAddressMempoolRequest");
+Object.defineProperty(exports, "GetAddressMempoolRequest", { enumerable: true, get: function () { return GetAddressMempoolRequest_1.GetAddressMempoolRequest; } });
