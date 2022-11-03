@@ -31,7 +31,7 @@ class Response extends __1.VDXFObject {
             .update((0, address_1.fromBase58Check)(this.system_id).hash)
             .update(heightBufferWriter.buffer)
             .update((0, address_1.fromBase58Check)(this.signing_id).hash)
-            .update(this.decision.toBuffer())
+            .update(createHash("sha256").update(this.decision.toBuffer()).digest())
             .digest();
     }
     dataByteLength() {
