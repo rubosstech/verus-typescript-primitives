@@ -56,7 +56,7 @@ export class Request extends VDXFObject {
       .update(fromBase58Check(this.system_id).hash)
       .update(heightBufferWriter.buffer)
       .update(fromBase58Check(this.signing_id).hash)
-      .update(this.challenge.toBuffer())
+      .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
       .digest();
   }
 
