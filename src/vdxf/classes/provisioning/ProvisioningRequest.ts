@@ -54,7 +54,7 @@ export class ProvisioningRequest extends Request {
     return createHash("sha256")
       .update(VERUS_DATA_SIGNATURE_PREFIX)
       .update(fromBase58Check(this.signing_address).hash)
-      .update(this.challenge.toBuffer())
+      .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
       .digest();
   }
 

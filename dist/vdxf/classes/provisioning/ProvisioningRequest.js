@@ -35,7 +35,7 @@ class ProvisioningRequest extends Request_1.Request {
         return createHash("sha256")
             .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
             .update((0, address_1.fromBase58Check)(this.signing_address).hash)
-            .update(this.challenge.toBuffer())
+            .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
             .digest();
     }
     dataByteLength() {
