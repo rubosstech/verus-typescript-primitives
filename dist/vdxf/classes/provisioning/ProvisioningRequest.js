@@ -4,7 +4,6 @@ exports.ProvisioningRequest = void 0;
 const createHash = require("create-hash");
 const __1 = require("../../");
 const vdxf_1 = require("../../../constants/vdxf");
-const address_1 = require("../../../utils/address");
 const Request_1 = require("../Request");
 const ProvisioningChallenge_1 = require("./ProvisioningChallenge");
 class ProvisioningRequest extends Request_1.Request {
@@ -34,7 +33,6 @@ class ProvisioningRequest extends Request_1.Request {
     getChallengeHash() {
         return createHash("sha256")
             .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
-            .update((0, address_1.fromBase58Check)(this.signing_address).hash)
             .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
             .digest();
     }
