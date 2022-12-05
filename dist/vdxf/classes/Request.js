@@ -23,16 +23,27 @@ class Request extends __1.VDXFObject {
             : undefined;
         this.challenge = new Challenge_1.Challenge(request.challenge);
     }
-    getChallengeHash(signedBlockheight) {
+    getChallengeHash(signedBlockheight, signatureVersion = 2) {
         var heightBufferWriter = new bufferutils_1.default.BufferWriter(Buffer.allocUnsafe(4));
         heightBufferWriter.writeUInt32(signedBlockheight);
-        return createHash("sha256")
-            .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
-            .update((0, address_1.fromBase58Check)(this.system_id).hash)
-            .update(heightBufferWriter.buffer)
-            .update((0, address_1.fromBase58Check)(this.signing_id).hash)
-            .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
-            .digest();
+        if (signatureVersion === 1) {
+            return createHash("sha256")
+                .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
+                .update((0, address_1.fromBase58Check)(this.system_id).hash)
+                .update(heightBufferWriter.buffer)
+                .update((0, address_1.fromBase58Check)(this.signing_id).hash)
+                .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+                .digest();
+        }
+        else {
+            return createHash("sha256")
+                .update((0, address_1.fromBase58Check)(this.system_id).hash)
+                .update(heightBufferWriter.buffer)
+                .update((0, address_1.fromBase58Check)(this.signing_id).hash)
+                .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
+                .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+                .digest();
+        }
     }
     toJson() {
         return {

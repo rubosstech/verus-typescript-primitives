@@ -13,7 +13,7 @@ export declare class Response extends VDXFObject {
     signature?: VerusIDSignature;
     decision: Decision;
     constructor(response?: ResponseInterface, vdxfkey?: string);
-    getDecisionHash(signedBlockheight: number): Buffer;
+    getDecisionHash(signedBlockheight: number, signatureVersion?: number): Buffer;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;

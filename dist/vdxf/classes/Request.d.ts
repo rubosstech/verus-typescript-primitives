@@ -13,7 +13,7 @@ export declare class Request extends VDXFObject {
     signature?: VerusIDSignature;
     challenge: Challenge;
     constructor(request?: RequestInterface, vdxfkey?: string);
-    getChallengeHash(signedBlockheight: number): Buffer;
+    getChallengeHash(signedBlockheight: number, signatureVersion?: number): Buffer;
     toJson(): {
         vdxfkey: string;
         system_id: string;

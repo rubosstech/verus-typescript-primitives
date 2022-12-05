@@ -47,17 +47,29 @@ export class Request extends VDXFObject {
     this.challenge = new Challenge(request.challenge);
   }
 
-  getChallengeHash(signedBlockheight: number) {
-    var heightBufferWriter = new bufferutils.BufferWriter(Buffer.allocUnsafe(4));
+  getChallengeHash(signedBlockheight: number, signatureVersion: number = 2) {
+    var heightBufferWriter = new bufferutils.BufferWriter(
+      Buffer.allocUnsafe(4)
+    );
     heightBufferWriter.writeUInt32(signedBlockheight);
 
-    return createHash("sha256")
-      .update(VERUS_DATA_SIGNATURE_PREFIX)
-      .update(fromBase58Check(this.system_id).hash)
-      .update(heightBufferWriter.buffer)
-      .update(fromBase58Check(this.signing_id).hash)
-      .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
-      .digest();
+    if (signatureVersion === 1) {
+      return createHash("sha256")
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(fromBase58Check(this.system_id).hash)
+        .update(heightBufferWriter.buffer)
+        .update(fromBase58Check(this.signing_id).hash)
+        .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+        .digest();
+    } else {
+      return createHash("sha256")
+        .update(fromBase58Check(this.system_id).hash)
+        .update(heightBufferWriter.buffer)
+        .update(fromBase58Check(this.signing_id).hash)
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+        .digest();
+    }
   }
 
   toJson() {
@@ -70,9 +82,7 @@ export class Request extends VDXFObject {
     };
   }
 
-  protected _dataByteLength(
-    signer: string = this.signing_id
-  ): number {
+  protected _dataByteLength(signer: string = this.signing_id): number {
     let length = 0;
     const _signing_id = Hash160.fromAddress(signer);
     const _signature = this.signature
@@ -94,9 +104,7 @@ export class Request extends VDXFObject {
     return length;
   }
 
-  protected _toDataBuffer(
-    signer: string = this.signing_id
-  ): Buffer {
+  protected _toDataBuffer(signer: string = this.signing_id): Buffer {
     const writer = new bufferutils.BufferWriter(
       Buffer.alloc(this.dataByteLength())
     );
@@ -130,10 +138,7 @@ export class Request extends VDXFObject {
     return this._toDataBuffer();
   }
 
-  protected _fromDataBuffer(
-    buffer: Buffer,
-    offset?: number
-  ): number {
+  protected _fromDataBuffer(buffer: Buffer, offset?: number): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
     const reqLength = reader.readVarInt();
 
