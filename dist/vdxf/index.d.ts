@@ -30,6 +30,7 @@ export declare class VDXFObject implements VDXFObjectInterface {
     fromBuffer(buffer: Buffer, offset?: number): number;
     byteLength(): number;
     toBuffer(): Buffer;
+    toSha256(): Buffer;
 }
 export declare class Utf8DataVdxfObject extends VDXFObject {
     data: string;

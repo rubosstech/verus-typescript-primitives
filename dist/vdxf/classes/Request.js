@@ -32,7 +32,7 @@ class Request extends __1.VDXFObject {
                 .update((0, address_1.fromBase58Check)(this.system_id).hash)
                 .update(heightBufferWriter.buffer)
                 .update((0, address_1.fromBase58Check)(this.signing_id).hash)
-                .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+                .update(this.challenge.toSha256())
                 .digest();
         }
         else {
@@ -41,7 +41,7 @@ class Request extends __1.VDXFObject {
                 .update(heightBufferWriter.buffer)
                 .update((0, address_1.fromBase58Check)(this.signing_id).hash)
                 .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
-                .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+                .update(this.challenge.toSha256())
                 .digest();
         }
     }

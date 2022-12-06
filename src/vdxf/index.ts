@@ -1,3 +1,4 @@
+import createHash = require("create-hash");
 import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constants/vdxf';
 import { fromBase58Check, toBase58Check } from '../utils/address';
 import bufferutils from '../utils/bufferutils';
@@ -90,6 +91,10 @@ export class VDXFObject implements VDXFObjectInterface {
     }
 
     return writer.buffer;
+  }
+
+  toSha256() {
+    return createHash("sha256").update(this.toBuffer()).digest();
   }
 }
 

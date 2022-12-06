@@ -59,7 +59,7 @@ export class Request extends VDXFObject {
         .update(fromBase58Check(this.system_id).hash)
         .update(heightBufferWriter.buffer)
         .update(fromBase58Check(this.signing_id).hash)
-        .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+        .update(this.challenge.toSha256())
         .digest();
     } else {
       return createHash("sha256")
@@ -67,7 +67,7 @@ export class Request extends VDXFObject {
         .update(heightBufferWriter.buffer)
         .update(fromBase58Check(this.signing_id).hash)
         .update(VERUS_DATA_SIGNATURE_PREFIX)
-        .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+        .update(this.challenge.toSha256())
         .digest();
     }
   }

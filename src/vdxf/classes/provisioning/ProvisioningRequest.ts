@@ -53,7 +53,7 @@ export class ProvisioningRequest extends Request {
   getChallengeHash() {
     return createHash("sha256")
       .update(VERUS_DATA_SIGNATURE_PREFIX)
-      .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+      .update(this.challenge.toSha256())
       .digest();
   }
 

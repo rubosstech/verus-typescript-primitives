@@ -15,6 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VerusIDSignature = exports.Utf8DataVdxfObject = exports.VDXFObject = void 0;
+const createHash = require("create-hash");
 const vdxf_1 = require("../constants/vdxf");
 const address_1 = require("../utils/address");
 const bufferutils_1 = require("../utils/bufferutils");
@@ -71,6 +72,9 @@ class VDXFObject {
             writer.writeVarSlice(this.toDataBuffer());
         }
         return writer.buffer;
+    }
+    toSha256() {
+        return createHash("sha256").update(this.toBuffer()).digest();
     }
 }
 exports.VDXFObject = VDXFObject;
