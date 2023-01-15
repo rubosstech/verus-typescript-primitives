@@ -9,6 +9,7 @@ const bufferutils_1 = require("../../utils/bufferutils");
 const vdxf_1 = require("../../constants/vdxf");
 const address_1 = require("../../utils/address");
 const createHash = require("create-hash");
+const base64url_1 = require("base64url");
 class Request extends __1.VDXFObject {
     constructor(request = {
         system_id: "",
@@ -118,12 +119,14 @@ class Request extends __1.VDXFObject {
         return this._fromDataBuffer(buffer, offset);
     }
     toWalletDeeplinkUri() {
+        if (this.signature == null)
+            throw new Error("Request must be signed before it can be used as a deep link");
         return `${__1.WALLET_VDXF_KEY.vdxfid.toLowerCase()}://x-callback-url/${__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}/?${__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=${this.toString()}`;
     }
     static fromWalletDeeplinkUri(uri) {
         const split = uri.split(`${__1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=`);
         const req = new Request();
-        req.fromBuffer(Buffer.from(split[1], "base64url"));
+        req.fromBuffer(base64url_1.default.toBuffer(split[1]));
         return req;
     }
 }

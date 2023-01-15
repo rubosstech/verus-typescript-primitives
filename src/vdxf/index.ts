@@ -1,3 +1,4 @@
+import base64url from "base64url";
 import createHash = require("create-hash");
 import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constants/vdxf';
 import { fromBase58Check, toBase58Check } from '../utils/address';
@@ -37,7 +38,7 @@ export class VDXFObject implements VDXFObjectInterface {
   }
 
   toString() {
-    return this.toBuffer().toString('base64url')
+    return base64url.encode(this.toBuffer())
   }
 
   dataByteLength() {

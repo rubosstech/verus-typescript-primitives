@@ -15,6 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VerusIDSignature = exports.Utf8DataVdxfObject = exports.VDXFObject = void 0;
+const base64url_1 = require("base64url");
 const createHash = require("create-hash");
 const vdxf_1 = require("../constants/vdxf");
 const address_1 = require("../utils/address");
@@ -32,7 +33,7 @@ class VDXFObject {
         return {};
     }
     toString() {
-        return this.toBuffer().toString('base64url');
+        return base64url_1.default.encode(this.toBuffer());
     }
     dataByteLength() {
         return 0;

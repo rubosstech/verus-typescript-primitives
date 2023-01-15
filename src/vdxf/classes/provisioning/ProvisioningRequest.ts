@@ -84,6 +84,8 @@ export class ProvisioningRequest extends Request {
   }
 
   toWalletDeeplinkUri(): string {
+    if (this.signature == null) throw new Error("Request must be signed before it can be used as a deep link")
+    
     throw new Error("Cannot create deeplink from provisioning request");
   }
 
