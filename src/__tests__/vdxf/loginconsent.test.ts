@@ -1,4 +1,4 @@
-import { IDENTITY_VIEW, LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY, LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN, LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL, LOGIN_CONSENT_REDIRECT_VDXF_KEY } from "../../vdxf";
+import { IDENTITY_VIEW, LOGIN_CONSENT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY, LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN, LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL, LOGIN_CONSENT_REDIRECT_VDXF_KEY } from "../../vdxf";
 import { LoginConsentRequest, LoginConsentResponse } from "../../vdxf/classes";
 import { RedirectUri, RequestedPermission, Subject } from "../../vdxf/classes/Challenge";
 import { Context } from "../../vdxf/classes/Context";
@@ -21,7 +21,7 @@ describe('Serializes and deserializes signature objects properly', () => {
         subject: [
           new Subject(
             "https://127.0.0.1/",
-            LOGIN_CONSENT_CONTEXT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY.vdxfid
+            LOGIN_CONSENT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY.vdxfid
           ),
         ],
         session_id: "iRQZGW36o3RcVR1xyVT1qWdAKdxp3wUyrh",
