@@ -15,22 +15,68 @@ class RedirectUri extends __1.VDXFObject {
         return this.toDataBuffer().length;
     }
     toDataBuffer() {
-        return Buffer.from(this.uri, 'utf-8');
+        return Buffer.from(this.uri, "utf-8");
     }
     fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        this.uri = reader.readVarSlice().toString('utf-8');
+        this.uri = reader.readVarSlice().toString("utf-8");
         return reader.offset;
     }
     toJson() {
         return {
             uri: this.uri,
-            vdxfkey: this.vdxfkey
+            vdxfkey: this.vdxfkey,
         };
     }
 }
 exports.RedirectUri = RedirectUri;
-class Subject extends __1.Utf8DataVdxfObject {
+class Subject extends __1.VDXFObject {
+    constructor(data = "", vdxfkey = "") {
+        super(vdxfkey);
+        this.BASE58_SUBJECTS = {
+            [__1.ID_ADDRESS_VDXF_KEY.vdxfid]: true,
+            [__1.ID_PARENT_VDXF_KEY.vdxfid]: true,
+            [__1.ID_SYSTEMID_VDXF_KEY.vdxfid]: true,
+        };
+        if (this.BASE58_SUBJECTS[vdxfkey])
+            this.data = Hash160_1.Hash160.fromAddress(data, false);
+        else
+            this.data = data;
+    }
+    isBase58() {
+        return this.BASE58_SUBJECTS[this.vdxfkey];
+    }
+    dataByteLength() {
+        return this.toDataBuffer().length;
+    }
+    toDataBuffer() {
+        return this.isBase58()
+            ? this.data.toBuffer()
+            : Buffer.from(this.data, "utf-8");
+    }
+    fromDataBuffer(buffer, offset) {
+        const reader = new bufferutils_1.default.BufferReader(buffer, offset);
+        if (this.isBase58()) {
+            const _data = new Hash160_1.Hash160();
+            // varlength is set to true here because vdxf objects always have a 
+            // variable length data field. This has160 object was not creted with
+            // varlength true, but this is a shortcut instead of writing readVarSlice 
+            // and then fromBuffer. 
+            reader.offset = _data.fromBuffer(reader.buffer, true, reader.offset);
+            _data.varlength = false;
+            this.data = _data;
+        }
+        else {
+            this.data = reader.readVarSlice().toString('utf-8');
+        }
+        return reader.offset;
+    }
+    toJson() {
+        return {
+            data: this.isBase58() ? this.data.toAddress() : this.data,
+            vdxfkey: this.vdxfkey,
+        };
+    }
 }
 exports.Subject = Subject;
 class RequestedPermission extends __1.Utf8DataVdxfObject {
@@ -218,7 +264,7 @@ class Challenge extends __1.VDXFObject {
             created_at: this.created_at,
             salt: this.salt,
             context: this.context,
-            skip: this.skip
+            skip: this.skip,
         };
     }
 }

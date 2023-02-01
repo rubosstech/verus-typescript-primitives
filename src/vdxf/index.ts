@@ -4,6 +4,7 @@ import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constan
 import { fromBase58Check, toBase58Check } from '../utils/address';
 import bufferutils from '../utils/bufferutils';
 import varuint from '../utils/varuint';
+import { Hash160 } from "./classes/Hash160";
 import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY, VDXFKeyInterface } from './keys';
 export * from './keys'
 export * from './scopes'

@@ -1,4 +1,11 @@
-import { LOGIN_CONSENT_CHALLENGE_VDXF_KEY, Utf8DataVdxfObject, VDXFObject } from "../";
+import {
+  LOGIN_CONSENT_CHALLENGE_VDXF_KEY,
+  ID_ADDRESS_VDXF_KEY,
+  ID_PARENT_VDXF_KEY,
+  ID_SYSTEMID_VDXF_KEY,
+  Utf8DataVdxfObject,
+  VDXFObject,
+} from "../";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
 import { Context } from "./Context";
@@ -10,7 +17,7 @@ export class RedirectUri extends VDXFObject {
   constructor(uri: string = "", vdxfkey: string = "") {
     super(vdxfkey);
 
-    this.uri = uri
+    this.uri = uri;
   }
 
   dataByteLength(): number {
@@ -18,30 +25,87 @@ export class RedirectUri extends VDXFObject {
   }
 
   toDataBuffer(): Buffer {
-    return Buffer.from(this.uri, 'utf-8')
+    return Buffer.from(this.uri, "utf-8");
   }
 
   fromDataBuffer(buffer: Buffer, offset?: number): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
 
-    this.uri = reader.readVarSlice().toString('utf-8')
+    this.uri = reader.readVarSlice().toString("utf-8");
 
-    return reader.offset
+    return reader.offset;
   }
 
   toJson() {
     return {
       uri: this.uri,
-      vdxfkey: this.vdxfkey
+      vdxfkey: this.vdxfkey,
     };
   }
 }
 
-export class Subject extends Utf8DataVdxfObject {}
+export class Subject extends VDXFObject {
+  data: Hash160 | string;
+
+  readonly BASE58_SUBJECTS = {
+    [ID_ADDRESS_VDXF_KEY.vdxfid]: true,
+    [ID_PARENT_VDXF_KEY.vdxfid]: true,
+    [ID_SYSTEMID_VDXF_KEY.vdxfid]: true,
+  };
+
+  constructor(data: string = "", vdxfkey: string = "") {
+    super(vdxfkey);
+
+    if (this.BASE58_SUBJECTS[vdxfkey]) this.data = Hash160.fromAddress(data, false);
+    else this.data = data;
+  }
+
+  isBase58(): boolean {
+    return this.BASE58_SUBJECTS[this.vdxfkey];
+  }
+
+  dataByteLength(): number {
+    return this.toDataBuffer().length;
+  }
+
+  toDataBuffer(): Buffer {
+    return this.isBase58()
+      ? (this.data as Hash160).toBuffer()
+      : Buffer.from(this.data as string, "utf-8");
+  }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+    const reader = new bufferutils.BufferReader(buffer, offset);
+
+    if (this.isBase58()) {
+      const _data = new Hash160();
+
+      // varlength is set to true here because vdxf objects always have a 
+      // variable length data field. This has160 object was not creted with
+      // varlength true, but this is a shortcut instead of writing readVarSlice 
+      // and then fromBuffer. 
+      reader.offset = _data.fromBuffer(reader.buffer, true, reader.offset);
+      _data.varlength = false;
+
+      this.data = _data;
+    } else {
+      this.data = reader.readVarSlice().toString('utf-8')
+    }
+    
+    return reader.offset
+  }
+
+  toJson() {
+    return {
+      data: this.isBase58() ? (this.data as Hash160).toAddress() : this.data,
+      vdxfkey: this.vdxfkey,
+    };
+  }
+}
 
 export class RequestedPermission extends Utf8DataVdxfObject {
   constructor(vdxfkey: string = "") {
-    super("", vdxfkey)
+    super("", vdxfkey);
   }
 }
 
@@ -79,7 +143,7 @@ export interface ChallengeInterface {
   // String of unix representation of date string
   created_at: number;
 
-  // Boolean denoting whether or not to attempt to skip over UI based on 
+  // Boolean denoting whether or not to attempt to skip over UI based on
   // the user's decision to remember their login (will still be verified by the wallet)
   skip?: boolean;
 
@@ -163,16 +227,19 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
         (sum, current) => sum + current.byteLength(),
         0
       );
-  
+
       length += varuint.encodingLength(_requested_access_audience.length);
-  
+
       length += varuint.encodingLength(_subject.length);
-      length += _subject.reduce((sum, current) => sum + current.byteLength(), 0);
-  
+      length += _subject.reduce(
+        (sum, current) => sum + current.byteLength(),
+        0
+      );
+
       length += varuint.encodingLength(_alt_auth_factors.length);
-  
+
       length += varuint.encodingLength(_attestations.length);
-  
+
       length += varuint.encodingLength(_redirect_uris.length);
       length += _redirect_uris.reduce(
         (sum, current) => sum + current.byteLength(),
@@ -219,15 +286,15 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       writer.writeSlice(_session_id.toBuffer());
 
       writer.writeArray(_requested_access.map((x) => x.toBuffer()));
-  
+
       writer.writeArray(_requested_access_audience.map((x) => x.toBuffer()));
-  
+
       writer.writeArray(_subject.map((x) => x.toBuffer()));
-  
+
       writer.writeArray(_alt_auth_factors.map((x) => x.toBuffer()));
-  
+
       writer.writeArray(_attestations.map((x) => x.toBuffer()));
-  
+
       writer.writeArray(_redirect_uris.map((x) => x.toBuffer()));
     }
 
@@ -259,7 +326,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
 
       if (this.vdxfkey === LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
         this.skip = reader.readUInt8() === 1 ? true : false;
-        
+
         const _session_id = new Hash160();
         reader.offset = _session_id.fromBuffer(
           reader.buffer,
@@ -344,7 +411,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       created_at: this.created_at,
       salt: this.salt,
       context: this.context,
-      skip: this.skip
+      skip: this.skip,
     };
   }
 }

@@ -1,4 +1,5 @@
-import { IDENTITY_VIEW, LOGIN_CONSENT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY, LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN, LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL, LOGIN_CONSENT_REDIRECT_VDXF_KEY } from "../../vdxf";
+import { Hash160 } from "../../vdxf/classes/Hash160";
+import { IDENTITY_VIEW, ID_ADDRESS_VDXF_KEY, ID_PARENT_VDXF_KEY, ID_SYSTEMID_VDXF_KEY, LOGIN_CONSENT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY, LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN, LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL, LOGIN_CONSENT_REDIRECT_VDXF_KEY } from "../../vdxf";
 import { LoginConsentRequest, LoginConsentResponse } from "../../vdxf/classes";
 import { RedirectUri, RequestedPermission, Subject } from "../../vdxf/classes/Challenge";
 import { Context } from "../../vdxf/classes/Context";
@@ -22,6 +23,18 @@ describe('Serializes and deserializes signature objects properly', () => {
           new Subject(
             "https://127.0.0.1/",
             LOGIN_CONSENT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY.vdxfid
+          ),
+          new Subject(
+            "iB5PRXMHLYcNtM8dfLB6KwfJrHU2mKDYuU",
+            ID_ADDRESS_VDXF_KEY.vdxfid
+          ),
+          new Subject(
+            "iB5PRXMHLYcNtM8dfLB6KwfJrHU2mKDYuU",
+            ID_SYSTEMID_VDXF_KEY.vdxfid
+          ),
+          new Subject(
+            "iB5PRXMHLYcNtM8dfLB6KwfJrHU2mKDYuU",
+            ID_PARENT_VDXF_KEY.vdxfid
           ),
         ],
         session_id: "iRQZGW36o3RcVR1xyVT1qWdAKdxp3wUyrh",
@@ -63,6 +76,21 @@ describe('Serializes and deserializes signature objects properly', () => {
     const resbuf = res.toBuffer()
     const _res = new LoginConsentResponse()
     _res.fromBuffer(resbuf)
+
+    expect(new Subject(
+      "iB5PRXMHLYcNtM8dfLB6KwfJrHU2mKDYuU",
+      ID_ADDRESS_VDXF_KEY.vdxfid
+    ).data).toBeInstanceOf(Hash160)
+  
+    expect(new Subject(
+      "iB5PRXMHLYcNtM8dfLB6KwfJrHU2mKDYuU",
+      ID_SYSTEMID_VDXF_KEY.vdxfid
+    ).data).toBeInstanceOf(Hash160)
+
+    expect(new Subject(
+      "iB5PRXMHLYcNtM8dfLB6KwfJrHU2mKDYuU",
+      ID_PARENT_VDXF_KEY.vdxfid
+    ).data).toBeInstanceOf(Hash160)
 
     expect(_res.toBuffer().toString('hex')).toBe(resbuf.toString('hex'));
     expect(_req.toBuffer().toString('hex')).toBe(reqbuf.toString('hex'));

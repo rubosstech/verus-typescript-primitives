@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { Utf8DataVdxfObject, VDXFObject } from "../";
 import { Context } from "./Context";
+import { Hash160 } from "./Hash160";
 export declare class RedirectUri extends VDXFObject {
     uri: string;
     constructor(uri?: string, vdxfkey?: string);
@@ -12,7 +13,20 @@ export declare class RedirectUri extends VDXFObject {
         vdxfkey: string;
     };
 }
-export declare class Subject extends Utf8DataVdxfObject {
+export declare class Subject extends VDXFObject {
+    data: Hash160 | string;
+    readonly BASE58_SUBJECTS: {
+        [x: string]: boolean;
+    };
+    constructor(data?: string, vdxfkey?: string);
+    isBase58(): boolean;
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    toJson(): {
+        data: string | Hash160;
+        vdxfkey: string;
+    };
 }
 export declare class RequestedPermission extends Utf8DataVdxfObject {
     constructor(vdxfkey?: string);
