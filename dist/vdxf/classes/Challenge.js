@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Challenge = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.Subject = exports.RedirectUri = void 0;
+exports.Challenge = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = void 0;
 const __1 = require("../");
 const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
@@ -30,55 +30,26 @@ class RedirectUri extends __1.VDXFObject {
     }
 }
 exports.RedirectUri = RedirectUri;
-class Subject extends __1.VDXFObject {
+class Subject extends __1.Utf8OrBase58Object {
     constructor(data = "", vdxfkey = "") {
-        super(vdxfkey);
-        this.BASE58_SUBJECTS = {
-            [__1.ID_ADDRESS_VDXF_KEY.vdxfid]: true,
-            [__1.ID_PARENT_VDXF_KEY.vdxfid]: true,
-            [__1.ID_SYSTEMID_VDXF_KEY.vdxfid]: true,
-        };
-        if (this.BASE58_SUBJECTS[vdxfkey])
-            this.data = Hash160_1.Hash160.fromAddress(data, false);
-        else
-            this.data = data;
-    }
-    isBase58() {
-        return this.BASE58_SUBJECTS[this.vdxfkey];
-    }
-    dataByteLength() {
-        return this.toDataBuffer().length;
-    }
-    toDataBuffer() {
-        return this.isBase58()
-            ? this.data.toBuffer()
-            : Buffer.from(this.data, "utf-8");
-    }
-    fromDataBuffer(buffer, offset) {
-        const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        if (this.isBase58()) {
-            const _data = new Hash160_1.Hash160();
-            // varlength is set to true here because vdxf objects always have a 
-            // variable length data field. This has160 object was not creted with
-            // varlength true, but this is a shortcut instead of writing readVarSlice 
-            // and then fromBuffer. 
-            reader.offset = _data.fromBuffer(reader.buffer, true, reader.offset);
-            _data.varlength = false;
-            this.data = _data;
-        }
-        else {
-            this.data = reader.readVarSlice().toString('utf-8');
-        }
-        return reader.offset;
-    }
-    toJson() {
-        return {
-            data: this.isBase58() ? this.data.toAddress() : this.data,
-            vdxfkey: this.vdxfkey,
-        };
+        super(data, vdxfkey, [
+            __1.ID_ADDRESS_VDXF_KEY.vdxfid,
+            __1.ID_PARENT_VDXF_KEY.vdxfid,
+            __1.ID_SYSTEMID_VDXF_KEY.vdxfid,
+        ]);
     }
 }
 exports.Subject = Subject;
+class ProvisioningInfo extends __1.Utf8OrBase58Object {
+    constructor(data = "", vdxfkey = "") {
+        super(data, vdxfkey, [
+            __1.ID_ADDRESS_VDXF_KEY.vdxfid,
+            __1.ID_PARENT_VDXF_KEY.vdxfid,
+            __1.ID_SYSTEMID_VDXF_KEY.vdxfid,
+        ]);
+    }
+}
+exports.ProvisioningInfo = ProvisioningInfo;
 class RequestedPermission extends __1.Utf8DataVdxfObject {
     constructor(vdxfkey = "") {
         super("", vdxfkey);
@@ -100,7 +71,12 @@ class Challenge extends __1.VDXFObject {
         this.challenge_id = challenge.challenge_id;
         this.requested_access = challenge.requested_access;
         this.requested_access_audience = challenge.requested_access_audience;
-        this.subject = challenge.subject;
+        this.subject = challenge.subject
+            ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
+            : challenge.subject;
+        this.provisioning_info = challenge.provisioning_info
+            ? challenge.provisioning_info.map((x) => new ProvisioningInfo(x.data, x.vdxfkey))
+            : challenge.provisioning_info;
         this.alt_auth_factors = challenge.alt_auth_factors;
         this.session_id = challenge.session_id;
         this.attestations = challenge.attestations;
@@ -109,7 +85,9 @@ class Challenge extends __1.VDXFObject {
             : challenge.redirect_uris;
         this.created_at = challenge.created_at;
         this.salt = challenge.salt;
-        this.context = challenge.context;
+        this.context = challenge.context
+            ? new Context_1.Context(challenge.context.kv)
+            : challenge.context;
         this.skip = challenge.skip ? true : false;
     }
     dataByteLength() {
@@ -127,6 +105,7 @@ class Challenge extends __1.VDXFObject {
             : [];
         const _requested_access_audience = [];
         const _subject = this.subject ? this.subject : [];
+        const _provisioning_info = this.provisioning_info ? this.provisioning_info : [];
         const _alt_auth_factors = [];
         const _attestations = [];
         const _redirect_uris = this.redirect_uris ? this.redirect_uris : [];
@@ -142,6 +121,8 @@ class Challenge extends __1.VDXFObject {
             length += varuint_1.default.encodingLength(_requested_access_audience.length);
             length += varuint_1.default.encodingLength(_subject.length);
             length += _subject.reduce((sum, current) => sum + current.byteLength(), 0);
+            length += varuint_1.default.encodingLength(_provisioning_info.length);
+            length += _provisioning_info.reduce((sum, current) => sum + current.byteLength(), 0);
             length += varuint_1.default.encodingLength(_alt_auth_factors.length);
             length += varuint_1.default.encodingLength(_attestations.length);
             length += varuint_1.default.encodingLength(_redirect_uris.length);
@@ -166,6 +147,7 @@ class Challenge extends __1.VDXFObject {
             : [];
         const _requested_access_audience = [];
         const _subject = this.subject ? this.subject : [];
+        const _provisioning_info = this.provisioning_info ? this.provisioning_info : [];
         const _alt_auth_factors = [];
         const _attestations = [];
         const _redirect_uris = this.redirect_uris ? this.redirect_uris : [];
@@ -179,6 +161,7 @@ class Challenge extends __1.VDXFObject {
             writer.writeArray(_requested_access.map((x) => x.toBuffer()));
             writer.writeArray(_requested_access_audience.map((x) => x.toBuffer()));
             writer.writeArray(_subject.map((x) => x.toBuffer()));
+            writer.writeArray(_provisioning_info.map((x) => x.toBuffer()));
             writer.writeArray(_alt_auth_factors.map((x) => x.toBuffer()));
             writer.writeArray(_attestations.map((x) => x.toBuffer()));
             writer.writeArray(_redirect_uris.map((x) => x.toBuffer()));
@@ -224,6 +207,13 @@ class Challenge extends __1.VDXFObject {
                     reader.offset = _subject.fromBuffer(reader.buffer, reader.offset);
                     this.subject.push(_subject);
                 }
+                this.provisioning_info = [];
+                const provisioningInfoLength = reader.readVarInt();
+                for (let i = 0; i < provisioningInfoLength; i++) {
+                    const _provisioning_info = new ProvisioningInfo();
+                    reader.offset = _provisioning_info.fromBuffer(reader.buffer, reader.offset);
+                    this.provisioning_info.push(_provisioning_info);
+                }
                 this.alt_auth_factors = [];
                 const altAuthFactorLength = reader.readVarInt();
                 if (altAuthFactorLength > 0) {
@@ -255,6 +245,7 @@ class Challenge extends __1.VDXFObject {
             requested_access: this.requested_access,
             requested_access_audience: this.requested_access_audience,
             subject: this.subject,
+            provisioning_info: this.provisioning_info,
             alt_auth_factors: this.alt_auth_factors,
             session_id: this.session_id,
             attestations: this.attestations,

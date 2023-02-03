@@ -97,7 +97,7 @@ export const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface = {
   },
 };
 
-export const LOGIN_CONSENT_ID_PROVISIONING_SUBJECT_WEBHOOK_VDXF_KEY: VDXFKeyInterface =
+export const LOGIN_CONSENT_ID_PROVISIONING_WEBHOOK_VDXF_KEY: VDXFKeyInterface =
   {
     vdxfid: "iMiXw4BuL4iESPqz6fvJ4rHbDg1SvVKLnc",
     hash160result: "7b051db57821563ec22544182eb0f4c5308118c8",
@@ -185,6 +185,24 @@ export const LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY: VDXFKeyInterface = {
   qualifiedname: {
     namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
     name: "vrsc::identity.provisioning.result",
+  },
+};
+
+export const IDENTITY_NAME_COMMITMENT_TXID: VDXFKeyInterface = {
+  vdxfid: "iEJTmGeALUU3ABtVNi8dZwFJk4FqP9N1Et",
+  hash160result: "2007222f775f209fccd9d5f16bb2bf6b4529c276",
+  qualifiedname: {
+    namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    name: "vrsc::identity.txid.namecommitment",
+  },
+};
+
+export const IDENTITY_REGISTRATION_TXID: VDXFKeyInterface = {
+  vdxfid: "iA8weZfoUatpDo7kAMgLjByeNP6G9sbWqG",
+  hash160result: "11892abb92a82b94925113361653962a71c61449",
+  qualifiedname: {
+    namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    name: "vrsc::identity.txid.identityregistration",
   },
 };
 

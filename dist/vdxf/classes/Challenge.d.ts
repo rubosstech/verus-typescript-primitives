@@ -1,7 +1,6 @@
 /// <reference types="node" />
-import { Utf8DataVdxfObject, VDXFObject } from "../";
+import { Utf8DataVdxfObject, VDXFObject, Utf8OrBase58Object } from "../";
 import { Context } from "./Context";
-import { Hash160 } from "./Hash160";
 export declare class RedirectUri extends VDXFObject {
     uri: string;
     constructor(uri?: string, vdxfkey?: string);
@@ -13,20 +12,11 @@ export declare class RedirectUri extends VDXFObject {
         vdxfkey: string;
     };
 }
-export declare class Subject extends VDXFObject {
-    data: Hash160 | string;
-    readonly BASE58_SUBJECTS: {
-        [x: string]: boolean;
-    };
+export declare class Subject extends Utf8OrBase58Object {
     constructor(data?: string, vdxfkey?: string);
-    isBase58(): boolean;
-    dataByteLength(): number;
-    toDataBuffer(): Buffer;
-    fromDataBuffer(buffer: Buffer, offset?: number): number;
-    toJson(): {
-        data: string | Hash160;
-        vdxfkey: string;
-    };
+}
+export declare class ProvisioningInfo extends Utf8OrBase58Object {
+    constructor(data?: string, vdxfkey?: string);
 }
 export declare class RequestedPermission extends Utf8DataVdxfObject {
     constructor(vdxfkey?: string);
@@ -42,6 +32,7 @@ export interface ChallengeInterface {
     requested_access?: Array<RequestedPermission> | null;
     requested_access_audience?: Array<Audience> | null;
     subject?: Array<Subject>;
+    provisioning_info?: Array<ProvisioningInfo>;
     alt_auth_factors?: Array<AltAuthFactor> | null;
     session_id?: string;
     attestations?: Array<Attestation>;
@@ -56,6 +47,7 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     requested_access?: Array<RequestedPermission> | null;
     requested_access_audience?: Array<RequestedPermission> | null;
     subject?: Array<Subject>;
+    provisioning_info?: Array<ProvisioningInfo>;
     alt_auth_factors?: Array<AltAuthFactor> | null;
     session_id?: string;
     attestations?: Array<Attestation>;
@@ -74,6 +66,7 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
         requested_access: RequestedPermission[];
         requested_access_audience: RequestedPermission[];
         subject: Subject[];
+        provisioning_info: ProvisioningInfo[];
         alt_auth_factors: AltAuthFactor[];
         session_id: string;
         attestations: Attestation[];

@@ -5,6 +5,7 @@ import {
   ID_SYSTEMID_VDXF_KEY,
   Utf8DataVdxfObject,
   VDXFObject,
+  Utf8OrBase58Object,
 } from "../";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
@@ -44,62 +45,23 @@ export class RedirectUri extends VDXFObject {
   }
 }
 
-export class Subject extends VDXFObject {
-  data: Hash160 | string;
-
-  readonly BASE58_SUBJECTS = {
-    [ID_ADDRESS_VDXF_KEY.vdxfid]: true,
-    [ID_PARENT_VDXF_KEY.vdxfid]: true,
-    [ID_SYSTEMID_VDXF_KEY.vdxfid]: true,
-  };
-
+export class Subject extends Utf8OrBase58Object {
   constructor(data: string = "", vdxfkey: string = "") {
-    super(vdxfkey);
-
-    if (this.BASE58_SUBJECTS[vdxfkey]) this.data = Hash160.fromAddress(data, false);
-    else this.data = data;
+    super(data, vdxfkey, [
+      ID_ADDRESS_VDXF_KEY.vdxfid,
+      ID_PARENT_VDXF_KEY.vdxfid,
+      ID_SYSTEMID_VDXF_KEY.vdxfid,
+    ]);
   }
+}
 
-  isBase58(): boolean {
-    return this.BASE58_SUBJECTS[this.vdxfkey];
-  }
-
-  dataByteLength(): number {
-    return this.toDataBuffer().length;
-  }
-
-  toDataBuffer(): Buffer {
-    return this.isBase58()
-      ? (this.data as Hash160).toBuffer()
-      : Buffer.from(this.data as string, "utf-8");
-  }
-
-  fromDataBuffer(buffer: Buffer, offset?: number): number {
-    const reader = new bufferutils.BufferReader(buffer, offset);
-
-    if (this.isBase58()) {
-      const _data = new Hash160();
-
-      // varlength is set to true here because vdxf objects always have a 
-      // variable length data field. This has160 object was not creted with
-      // varlength true, but this is a shortcut instead of writing readVarSlice 
-      // and then fromBuffer. 
-      reader.offset = _data.fromBuffer(reader.buffer, true, reader.offset);
-      _data.varlength = false;
-
-      this.data = _data;
-    } else {
-      this.data = reader.readVarSlice().toString('utf-8')
-    }
-    
-    return reader.offset
-  }
-
-  toJson() {
-    return {
-      data: this.isBase58() ? (this.data as Hash160).toAddress() : this.data,
-      vdxfkey: this.vdxfkey,
-    };
+export class ProvisioningInfo extends Utf8OrBase58Object {
+  constructor(data: string = "", vdxfkey: string = "") {
+    super(data, vdxfkey, [
+      ID_ADDRESS_VDXF_KEY.vdxfid,
+      ID_PARENT_VDXF_KEY.vdxfid,
+      ID_SYSTEMID_VDXF_KEY.vdxfid,
+    ]);
   }
 }
 
@@ -127,6 +89,11 @@ export interface ChallengeInterface {
 
   // Information about the ID you have to log in with, array of VDXF objects
   subject?: Array<Subject>;
+
+  // Information about the provisioning endpoint and ID possibilities, can contain 
+  // a webhook, and info regarding what ID will be provisioned to the user if they make a 
+  // provisioning request.
+  provisioning_info?: Array<ProvisioningInfo>
 
   // Array of alternate authentication factors required
   alt_auth_factors?: Array<AltAuthFactor> | null;
@@ -159,6 +126,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
   requested_access?: Array<RequestedPermission> | null;
   requested_access_audience?: Array<RequestedPermission> | null;
   subject?: Array<Subject>;
+  provisioning_info?: Array<ProvisioningInfo>;
   alt_auth_factors?: Array<AltAuthFactor> | null;
   session_id?: string;
   attestations?: Array<Attestation>;
@@ -177,7 +145,12 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
     this.challenge_id = challenge.challenge_id;
     this.requested_access = challenge.requested_access;
     this.requested_access_audience = challenge.requested_access_audience;
-    this.subject = challenge.subject;
+    this.subject = challenge.subject
+      ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
+      : challenge.subject;
+    this.provisioning_info = challenge.provisioning_info
+      ? challenge.provisioning_info.map((x) => new ProvisioningInfo(x.data, x.vdxfkey))
+      : challenge.provisioning_info;
     this.alt_auth_factors = challenge.alt_auth_factors;
     this.session_id = challenge.session_id;
     this.attestations = challenge.attestations;
@@ -186,7 +159,9 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       : challenge.redirect_uris;
     this.created_at = challenge.created_at;
     this.salt = challenge.salt;
-    this.context = challenge.context;
+    this.context = challenge.context
+      ? new Context(challenge.context.kv)
+      : challenge.context;
     this.skip = challenge.skip ? true : false;
   }
 
@@ -206,6 +181,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       : [];
     const _requested_access_audience = [];
     const _subject = this.subject ? this.subject : [];
+    const _provisioning_info = this.provisioning_info ? this.provisioning_info : [];
     const _alt_auth_factors = [];
     const _attestations = [];
     const _redirect_uris = this.redirect_uris ? this.redirect_uris : [];
@@ -232,6 +208,12 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
 
       length += varuint.encodingLength(_subject.length);
       length += _subject.reduce(
+        (sum, current) => sum + current.byteLength(),
+        0
+      );
+
+      length += varuint.encodingLength(_provisioning_info.length);
+      length += _provisioning_info.reduce(
         (sum, current) => sum + current.byteLength(),
         0
       );
@@ -269,6 +251,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       : [];
     const _requested_access_audience = [];
     const _subject = this.subject ? this.subject : [];
+    const _provisioning_info = this.provisioning_info ? this.provisioning_info : [];
     const _alt_auth_factors = [];
     const _attestations = [];
     const _redirect_uris = this.redirect_uris ? this.redirect_uris : [];
@@ -290,6 +273,8 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       writer.writeArray(_requested_access_audience.map((x) => x.toBuffer()));
 
       writer.writeArray(_subject.map((x) => x.toBuffer()));
+
+      writer.writeArray(_provisioning_info.map((x) => x.toBuffer()));
 
       writer.writeArray(_alt_auth_factors.map((x) => x.toBuffer()));
 
@@ -360,6 +345,15 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
           this.subject.push(_subject);
         }
 
+        this.provisioning_info = [];
+        const provisioningInfoLength = reader.readVarInt();
+
+        for (let i = 0; i < provisioningInfoLength; i++) {
+          const _provisioning_info = new ProvisioningInfo();
+          reader.offset = _provisioning_info.fromBuffer(reader.buffer, reader.offset);
+          this.provisioning_info.push(_provisioning_info);
+        }
+
         this.alt_auth_factors = [];
         const altAuthFactorLength = reader.readVarInt();
 
@@ -402,6 +396,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       requested_access: this.requested_access,
       requested_access_audience: this.requested_access_audience,
       subject: this.subject,
+      provisioning_info: this.provisioning_info,
       alt_auth_factors: this.alt_auth_factors,
       session_id: this.session_id,
       attestations: this.attestations,

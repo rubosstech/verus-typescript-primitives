@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { VDXFObject } from "../..";
+import { HexDataVdxfObject, VDXFObject } from "../..";
 export interface ProvisioningResultInterface {
     state: string;
     error_key?: string;
@@ -9,7 +9,11 @@ export interface ProvisioningResultInterface {
     fully_qualified_name?: string;
     parent?: string;
     info_uri?: string;
-    provisioning_txid?: string;
+    provisioning_txids?: Array<ProvisioningTxid>;
+}
+export declare class ProvisioningTxid extends HexDataVdxfObject {
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
 }
 export declare class ProvisioningResult extends VDXFObject {
     state: string;
@@ -17,7 +21,7 @@ export declare class ProvisioningResult extends VDXFObject {
     error_desc?: string;
     identity_address?: string;
     info_uri?: string;
-    provisioning_txid?: string;
+    provisioning_txids?: Array<ProvisioningTxid>;
     system_id?: string;
     fully_qualified_name?: string;
     parent?: string;

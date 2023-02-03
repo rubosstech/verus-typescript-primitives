@@ -1,4 +1,4 @@
-import { VDXFObject } from "../..";
+import { HexDataVdxfObject, VDXFObject } from "../..";
 import bufferutils, { reverseBuffer } from "../../../utils/bufferutils";
 import varuint from "../../../utils/varuint";
 import { LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY } from "../../keys";
@@ -30,7 +30,25 @@ export interface ProvisioningResultInterface {
   info_uri?: string;
 
   // Txid of ID creation or ID transfer (if applicable)
-  provisioning_txid?: string;
+  provisioning_txids?: Array<ProvisioningTxid>;
+}
+
+export class ProvisioningTxid extends HexDataVdxfObject {
+  toDataBuffer(): Buffer {
+    return reverseBuffer(super.toDataBuffer())
+  }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+    const reader = new bufferutils.BufferReader(buffer, offset);
+
+    const provisioningTxidSlice = reader.readVarSlice()
+    const provisioningTxidBuf = Buffer.alloc(provisioningTxidSlice.length)
+    const provisioningTxidWriter = new bufferutils.BufferWriter(provisioningTxidBuf)
+    provisioningTxidWriter.writeSlice(provisioningTxidSlice)
+    this.data = reverseBuffer(provisioningTxidWriter.buffer).toString('hex')
+
+    return reader.offset;
+  }
 }
 
 export class ProvisioningResult extends VDXFObject {
@@ -39,7 +57,7 @@ export class ProvisioningResult extends VDXFObject {
   error_desc?: string;
   identity_address?: string;
   info_uri?: string;
-  provisioning_txid?: string;
+  provisioning_txids?: Array<ProvisioningTxid>;
   system_id?: string;
   fully_qualified_name?: string;
   parent?: string;
@@ -54,7 +72,9 @@ export class ProvisioningResult extends VDXFObject {
     this.error_key = result.error_key
     this.identity_address = result.identity_address
     this.info_uri = result.info_uri
-    this.provisioning_txid = result.provisioning_txid
+    this.provisioning_txids = result.provisioning_txids
+      ? result.provisioning_txids.map((x) => new ProvisioningTxid(x.data, x.vdxfkey))
+      : result.provisioning_txids;
     this.system_id = result.system_id
     this.fully_qualified_name = result.fully_qualified_name
     this.parent = result.parent
@@ -96,13 +116,9 @@ export class ProvisioningResult extends VDXFObject {
     const infoUriLength =
       infoUriBuf.length + varuint.encodingLength(infoUriBuf.length);
 
-    const provisioningTxidBuf =
-      this.provisioning_txid == null
-        ? Buffer.alloc(0)
-        : Buffer.from(this.provisioning_txid, "hex");
-    const provisioningTxidLength = provisioningTxidBuf.length + varuint.encodingLength(provisioningTxidBuf.length);
+    const _provisioning_txids = this.provisioning_txids ? this.provisioning_txids : [];
 
-    return (
+    let length = (
       stateLength +
       errorKeyLength +
       errorDescLength +
@@ -110,9 +126,16 @@ export class ProvisioningResult extends VDXFObject {
       systemIdLength +
       nameLength +
       parentLength +
-      infoUriLength +
-      provisioningTxidLength
+      infoUriLength
     );
+
+    length += varuint.encodingLength(_provisioning_txids.length);
+    length += _provisioning_txids.reduce(
+      (sum, current) => sum + current.byteLength(),
+      0
+    );
+
+    return length
   }
 
   toDataBuffer(): Buffer {
@@ -150,11 +173,9 @@ export class ProvisioningResult extends VDXFObject {
 
     writer.writeVarSlice(this.info_uri == null ? Buffer.alloc(0) : Buffer.from(this.info_uri, "utf-8"));
 
-    writer.writeVarSlice(
-      this.provisioning_txid == null
-        ? Buffer.alloc(0)
-        : reverseBuffer(Buffer.from(this.provisioning_txid, "hex"))
-    );
+    const _provisioning_txids = this.provisioning_txids ? this.provisioning_txids : [];
+
+    writer.writeArray(_provisioning_txids.map((x) => x.toBuffer()));
 
     return writer.buffer
   }
@@ -212,11 +233,14 @@ export class ProvisioningResult extends VDXFObject {
 
       this.info_uri = reader.readVarSlice().toString('utf8')
 
-      const provisioningTxidSlice = reader.readVarSlice()
-      const provisioningTxidBuf = Buffer.alloc(provisioningTxidSlice.length)
-      const provisioningTxidWriter = new bufferutils.BufferWriter(provisioningTxidBuf)
-      provisioningTxidWriter.writeSlice(provisioningTxidSlice)
-      this.provisioning_txid = reverseBuffer(provisioningTxidWriter.buffer).toString('hex')
+      this.provisioning_txids = [];
+      const provisioningTxidLength = reader.readVarInt();
+
+      for (let i = 0; i < provisioningTxidLength; i++) {
+        const _provisioning_txid = new ProvisioningTxid();
+        reader.offset = _provisioning_txid.fromBuffer(reader.buffer, reader.offset);
+        this.provisioning_txids.push(_provisioning_txid);
+      }
     }
 
     return reader.offset;
@@ -230,7 +254,7 @@ export class ProvisioningResult extends VDXFObject {
       error_desc: this.error_desc,
       identity_address: this.identity_address,
       info_uri: this.info_uri,
-      provisioning_txid: this.provisioning_txid,
+      provisioning_txids: this.provisioning_txids,
       system_id: this.system_id,
       fully_qualified_name: this.fully_qualified_name
     }

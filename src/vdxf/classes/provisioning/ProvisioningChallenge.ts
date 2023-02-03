@@ -133,6 +133,7 @@ export class ProvisioningChallenge extends Challenge {
       requested_access: undefined,
       requested_access_audience: undefined,
       subject: undefined,
+      provisioning_info: undefined,
       alt_auth_factors: undefined,
       session_id: undefined,
       attestations: undefined,

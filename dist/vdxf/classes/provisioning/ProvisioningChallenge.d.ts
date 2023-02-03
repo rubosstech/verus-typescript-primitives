@@ -30,6 +30,7 @@ export declare class ProvisioningChallenge extends Challenge {
         requested_access: any;
         requested_access_audience: any;
         subject: any;
+        provisioning_info: any;
         alt_auth_factors: any;
         session_id: any;
         attestations: any;

@@ -48,6 +48,7 @@ export declare class Decision extends VDXFObject {
                 requested_access: import("./Challenge").RequestedPermission[];
                 requested_access_audience: import("./Challenge").RequestedPermission[];
                 subject: import("./Challenge").Subject[];
+                provisioning_info: import("./Challenge").ProvisioningInfo[];
                 alt_auth_factors: import("./Challenge").AltAuthFactor[];
                 session_id: string;
                 attestations: Attestation[];
