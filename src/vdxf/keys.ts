@@ -206,6 +206,15 @@ export const IDENTITY_REGISTRATION_TXID: VDXFKeyInterface = {
   },
 };
 
+export const IDENTITY_UPDATE_TXID: VDXFKeyInterface = {
+  vdxfid: "iHhzJVTGkzCgwCuLRsFMZ81t3XLxUNGs2D",
+  hash160result: "ca480a573642c36f18fb90e2bdabb87207991d9c",
+  qualifiedname: {
+    namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    name: "vrsc::identity.txid.updateidentity",
+  },
+};
+
 export const LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGREQUIREDINFO: VDXFKeyInterface =
   {
     vdxfid: "iKPocacGnQePtXEfcqBadmmrQA35pbLPhT",
