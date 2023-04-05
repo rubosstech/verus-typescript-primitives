@@ -33,7 +33,7 @@ class ProvisioningRequest extends Request_1.Request {
     getChallengeHash() {
         return createHash("sha256")
             .update(vdxf_1.VERUS_DATA_SIGNATURE_PREFIX)
-            .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
+            .update(this.challenge.toSha256())
             .digest();
     }
     dataByteLength() {
@@ -53,6 +53,8 @@ class ProvisioningRequest extends Request_1.Request {
         return _offset;
     }
     toWalletDeeplinkUri() {
+        if (this.signature == null)
+            throw new Error("Request must be signed before it can be used as a deep link");
         throw new Error("Cannot create deeplink from provisioning request");
     }
     static fromWalletDeeplinkUri(uri) {

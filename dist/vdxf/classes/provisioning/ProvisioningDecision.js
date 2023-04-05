@@ -19,7 +19,10 @@ class ProvisioningDecision extends Decision_1.Decision {
             context: decision.context,
             request: decision.request,
         }, __1.LOGIN_CONSENT_PROVISIONING_DECISION_VDXF_KEY.vdxfid);
-        this.result = decision.result;
+        this.result =
+            decision.result != null
+                ? new ProvisioningResult_1.ProvisioningResult(decision.result)
+                : decision.result;
         this.request = new ProvisioningRequest_1.ProvisioningRequest(decision.request);
     }
     dataByteLength() {

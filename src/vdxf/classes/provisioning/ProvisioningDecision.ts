@@ -53,7 +53,10 @@ export class ProvisioningDecision
       LOGIN_CONSENT_PROVISIONING_DECISION_VDXF_KEY.vdxfid
     );
 
-    this.result = decision.result;
+    this.result =
+      decision.result != null
+        ? new ProvisioningResult(decision.result)
+        : decision.result;
 
     this.request = new ProvisioningRequest(decision.request)
   }

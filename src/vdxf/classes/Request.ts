@@ -12,6 +12,7 @@ import bufferutils from "../../utils/bufferutils";
 import { HASH160_BYTE_LENGTH, I_ADDR_VERSION, R_ADDR_VERSION, VERUS_DATA_SIGNATURE_PREFIX } from "../../constants/vdxf";
 import { fromBase58Check, toBase58Check } from "../../utils/address";
 import createHash = require("create-hash");
+import base64url from "base64url";
 
 export interface RequestInterface {
   system_id: string;
@@ -47,17 +48,29 @@ export class Request extends VDXFObject {
     this.challenge = new Challenge(request.challenge);
   }
 
-  getChallengeHash(signedBlockheight: number) {
-    var heightBufferWriter = new bufferutils.BufferWriter(Buffer.allocUnsafe(4));
+  getChallengeHash(signedBlockheight: number, signatureVersion: number = 2) {
+    var heightBufferWriter = new bufferutils.BufferWriter(
+      Buffer.allocUnsafe(4)
+    );
     heightBufferWriter.writeUInt32(signedBlockheight);
 
-    return createHash("sha256")
-      .update(VERUS_DATA_SIGNATURE_PREFIX)
-      .update(fromBase58Check(this.system_id).hash)
-      .update(heightBufferWriter.buffer)
-      .update(fromBase58Check(this.signing_id).hash)
-      .update(createHash("sha256").update(this.challenge.toBuffer()).digest())
-      .digest();
+    if (signatureVersion === 1) {
+      return createHash("sha256")
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(fromBase58Check(this.system_id).hash)
+        .update(heightBufferWriter.buffer)
+        .update(fromBase58Check(this.signing_id).hash)
+        .update(this.challenge.toSha256())
+        .digest();
+    } else {
+      return createHash("sha256")
+        .update(fromBase58Check(this.system_id).hash)
+        .update(heightBufferWriter.buffer)
+        .update(fromBase58Check(this.signing_id).hash)
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(this.challenge.toSha256())
+        .digest();
+    }
   }
 
   toJson() {
@@ -70,9 +83,7 @@ export class Request extends VDXFObject {
     };
   }
 
-  protected _dataByteLength(
-    signer: string = this.signing_id
-  ): number {
+  protected _dataByteLength(signer: string = this.signing_id): number {
     let length = 0;
     const _signing_id = Hash160.fromAddress(signer);
     const _signature = this.signature
@@ -94,9 +105,7 @@ export class Request extends VDXFObject {
     return length;
   }
 
-  protected _toDataBuffer(
-    signer: string = this.signing_id
-  ): Buffer {
+  protected _toDataBuffer(signer: string = this.signing_id): Buffer {
     const writer = new bufferutils.BufferWriter(
       Buffer.alloc(this.dataByteLength())
     );
@@ -130,10 +139,7 @@ export class Request extends VDXFObject {
     return this._toDataBuffer();
   }
 
-  protected _fromDataBuffer(
-    buffer: Buffer,
-    offset?: number
-  ): number {
+  protected _fromDataBuffer(buffer: Buffer, offset?: number): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
     const reqLength = reader.readVarInt();
 
@@ -173,6 +179,8 @@ export class Request extends VDXFObject {
   }
 
   toWalletDeeplinkUri(): string {
+    if (this.signature == null) throw new Error("Request must be signed before it can be used as a deep link")
+
     return `${WALLET_VDXF_KEY.vdxfid.toLowerCase()}://x-callback-url/${
       LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid
     }/?${LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=${this.toString()}`;
@@ -181,7 +189,7 @@ export class Request extends VDXFObject {
   static fromWalletDeeplinkUri(uri: string): Request {
     const split = uri.split(`${LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=`);
     const req = new Request();
-    req.fromBuffer(Buffer.from(split[1], "base64url"));
+    req.fromBuffer(base64url.toBuffer(split[1]));
 
     return req;
   }

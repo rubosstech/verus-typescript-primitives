@@ -30,10 +30,33 @@ export declare class VDXFObject implements VDXFObjectInterface {
     fromBuffer(buffer: Buffer, offset?: number): number;
     byteLength(): number;
     toBuffer(): Buffer;
+    toSha256(): Buffer;
 }
-export declare class Utf8DataVdxfObject extends VDXFObject {
+export declare class BufferDataVdxfObject extends VDXFObject {
     data: string;
+    encoding: BufferEncoding;
+    constructor(data?: string, vdxfkey?: string, encoding?: BufferEncoding);
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    toJson(): {
+        data: string;
+        vdxfkey: string;
+    };
+}
+export declare class Utf8DataVdxfObject extends BufferDataVdxfObject {
     constructor(data?: string, vdxfkey?: string);
+}
+export declare class HexDataVdxfObject extends BufferDataVdxfObject {
+    constructor(data?: string, vdxfkey?: string);
+}
+export declare class Utf8OrBase58Object extends VDXFObject {
+    data: string;
+    base58Keys: {
+        [key: string]: boolean;
+    };
+    constructor(data?: string, vdxfkey?: string, base58Keys?: Array<string>);
+    isBase58(): boolean;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;

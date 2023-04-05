@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Context = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
+exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
 var Challenge_1 = require("./Challenge");
 Object.defineProperty(exports, "LoginConsentChallenge", { enumerable: true, get: function () { return Challenge_1.Challenge; } });
 var Decision_1 = require("./Decision");
@@ -24,9 +24,12 @@ Object.defineProperty(exports, "Hash160", { enumerable: true, get: function () {
 var Challenge_2 = require("./Challenge");
 Object.defineProperty(exports, "RedirectUri", { enumerable: true, get: function () { return Challenge_2.RedirectUri; } });
 Object.defineProperty(exports, "Subject", { enumerable: true, get: function () { return Challenge_2.Subject; } });
+Object.defineProperty(exports, "ProvisioningInfo", { enumerable: true, get: function () { return Challenge_2.ProvisioningInfo; } });
 Object.defineProperty(exports, "RequestedPermission", { enumerable: true, get: function () { return Challenge_2.RequestedPermission; } });
 Object.defineProperty(exports, "Audience", { enumerable: true, get: function () { return Challenge_2.Audience; } });
 Object.defineProperty(exports, "AltAuthFactor", { enumerable: true, get: function () { return Challenge_2.AltAuthFactor; } });
 Object.defineProperty(exports, "Attestation", { enumerable: true, get: function () { return Challenge_2.Attestation; } });
+var ProvisioningResult_2 = require("./provisioning/ProvisioningResult");
+Object.defineProperty(exports, "ProvisioningTxid", { enumerable: true, get: function () { return ProvisioningResult_2.ProvisioningTxid; } });
 var Context_1 = require("./Context");
 Object.defineProperty(exports, "Context", { enumerable: true, get: function () { return Context_1.Context; } });

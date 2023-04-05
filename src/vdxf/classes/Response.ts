@@ -42,17 +42,29 @@ export class Response extends VDXFObject {
     }
   }
 
-  getDecisionHash(signedBlockheight: number) {
-    var heightBufferWriter = new bufferutils.BufferWriter(Buffer.allocUnsafe(4));
+  getDecisionHash(signedBlockheight: number, signatureVersion: number = 2) {
+    var heightBufferWriter = new bufferutils.BufferWriter(
+      Buffer.allocUnsafe(4)
+    );
     heightBufferWriter.writeUInt32(signedBlockheight);
 
-    return createHash("sha256")
-      .update(VERUS_DATA_SIGNATURE_PREFIX)
-      .update(fromBase58Check(this.system_id).hash)
-      .update(heightBufferWriter.buffer)
-      .update(fromBase58Check(this.signing_id).hash)
-      .update(createHash("sha256").update(this.decision.toBuffer()).digest())
-      .digest();
+    if (signatureVersion === 1) {
+      return createHash("sha256")
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(fromBase58Check(this.system_id).hash)
+        .update(heightBufferWriter.buffer)
+        .update(fromBase58Check(this.signing_id).hash)
+        .update(this.decision.toSha256())
+        .digest();
+    } else {
+      return createHash("sha256")
+        .update(fromBase58Check(this.system_id).hash)
+        .update(heightBufferWriter.buffer)
+        .update(fromBase58Check(this.signing_id).hash)
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(this.decision.toSha256())
+        .digest();
+    }
   }
 
   dataByteLength(): number {
