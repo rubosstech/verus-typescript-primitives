@@ -253,7 +253,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
     const _subject = this.subject ? this.subject : [];
     const _provisioning_info = this.provisioning_info ? this.provisioning_info : [];
     const _alt_auth_factors = [];
-    const _attestations = this.attestations;
+    const _attestations = this.attestations ? this.attestations : [];
     const _redirect_uris = this.redirect_uris ? this.redirect_uris : [];
     const _context = this.context ? this.context : new Context({});
 
