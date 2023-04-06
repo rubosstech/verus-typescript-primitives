@@ -107,7 +107,7 @@ class Challenge extends __1.VDXFObject {
         const _subject = this.subject ? this.subject : [];
         const _provisioning_info = this.provisioning_info ? this.provisioning_info : [];
         const _alt_auth_factors = [];
-        const _attestations = [];
+        const _attestations = this.attestations;
         const _redirect_uris = this.redirect_uris ? this.redirect_uris : [];
         const _context = this.context ? this.context : new Context_1.Context({});
         length += _challenge_id.byteLength();
@@ -149,7 +149,7 @@ class Challenge extends __1.VDXFObject {
         const _subject = this.subject ? this.subject : [];
         const _provisioning_info = this.provisioning_info ? this.provisioning_info : [];
         const _alt_auth_factors = [];
-        const _attestations = [];
+        const _attestations = this.attestations;
         const _redirect_uris = this.redirect_uris ? this.redirect_uris : [];
         const _context = this.context ? this.context : new Context_1.Context({});
         writer.writeSlice(_challenge_id.toBuffer());
@@ -221,8 +221,10 @@ class Challenge extends __1.VDXFObject {
                 }
                 this.attestations = [];
                 const attestationsLength = reader.readVarInt();
-                if (attestationsLength > 0) {
-                    throw new Error("Attestations currently unsupported");
+                for (let i = 0; i < attestationsLength; i++) {
+                    const _att = new Attestation();
+                    reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
+                    this.attestations.push(_att);
                 }
                 this.redirect_uris = [];
                 const urisLength = reader.readVarInt();
