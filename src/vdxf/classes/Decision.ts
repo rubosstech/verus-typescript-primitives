@@ -43,6 +43,7 @@ export class Decision extends VDXFObject {
       decision_id: "",
       request: new Request(),
       created_at: 0,
+      attestations: [],
     },
     vdxfkey: string = LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid
   ) {

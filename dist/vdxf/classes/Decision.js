@@ -13,6 +13,7 @@ class Decision extends __1.VDXFObject {
         decision_id: "",
         request: new Request_1.Request(),
         created_at: 0,
+        attestations: [],
     }, vdxfkey = __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
         super(vdxfkey);
         this.decision_id = decision.decision_id;
