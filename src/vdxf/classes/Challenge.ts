@@ -75,7 +75,11 @@ export class Audience extends Utf8DataVdxfObject {}
 
 export class AltAuthFactor extends Utf8DataVdxfObject {}
 
-export class Attestation extends Utf8DataVdxfObject {}
+export class Attestation extends Utf8DataVdxfObject {
+  constructor(vdxfkey: string = "") {
+    super("", vdxfkey);
+  }
+}
 
 export interface ChallengeInterface {
   // Challenge specific VDXF key
@@ -221,6 +225,10 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       length += varuint.encodingLength(_alt_auth_factors.length);
 
       length += varuint.encodingLength(_attestations.length);
+      length += _attestations.reduce(
+        (sum, current) => sum + current.byteLength(),
+        0
+      );
 
       length += varuint.encodingLength(_redirect_uris.length);
       length += _redirect_uris.reduce(

@@ -63,6 +63,9 @@ class AltAuthFactor extends __1.Utf8DataVdxfObject {
 }
 exports.AltAuthFactor = AltAuthFactor;
 class Attestation extends __1.Utf8DataVdxfObject {
+    constructor(vdxfkey = "") {
+        super("", vdxfkey);
+    }
 }
 exports.Attestation = Attestation;
 class Challenge extends __1.VDXFObject {
@@ -125,6 +128,7 @@ class Challenge extends __1.VDXFObject {
             length += _provisioning_info.reduce((sum, current) => sum + current.byteLength(), 0);
             length += varuint_1.default.encodingLength(_alt_auth_factors.length);
             length += varuint_1.default.encodingLength(_attestations.length);
+            length += _attestations.reduce((sum, current) => sum + current.byteLength(), 0);
             length += varuint_1.default.encodingLength(_redirect_uris.length);
             length += _redirect_uris.reduce((sum, current) => sum + current.byteLength(), 0);
         }

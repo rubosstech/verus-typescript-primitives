@@ -26,6 +26,7 @@ export declare class Audience extends Utf8DataVdxfObject {
 export declare class AltAuthFactor extends Utf8DataVdxfObject {
 }
 export declare class Attestation extends Utf8DataVdxfObject {
+    constructor(vdxfkey?: string);
 }
 export interface ChallengeInterface {
     challenge_id: string;
