@@ -43,7 +43,6 @@ export class Decision extends VDXFObject {
       decision_id: "",
       request: new Request(),
       created_at: 0,
-      attestations: [],
     },
     vdxfkey: string = LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid
   ) {
@@ -53,7 +52,7 @@ export class Decision extends VDXFObject {
     this.request = new Request(decision.request);
     this.context = decision.context;
     this.created_at = decision.created_at;
-    this.attestations = decision.attestations;
+    this.attestations = decision.attestations ? decision.attestations.map((x) => new Attestation(x.data, x.vdxfkey)) : decision.attestations;
     this.salt = decision.salt;
     this.skipped = decision.skipped ? true : false;
   }

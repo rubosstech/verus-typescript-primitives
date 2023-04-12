@@ -13,14 +13,13 @@ class Decision extends __1.VDXFObject {
         decision_id: "",
         request: new Request_1.Request(),
         created_at: 0,
-        attestations: [],
     }, vdxfkey = __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
         super(vdxfkey);
         this.decision_id = decision.decision_id;
         this.request = new Request_1.Request(decision.request);
         this.context = decision.context;
         this.created_at = decision.created_at;
-        this.attestations = decision.attestations;
+        this.attestations = decision.attestations ? decision.attestations.map((x) => new Challenge_1.Attestation(x.data, x.vdxfkey)) : decision.attestations;
         this.salt = decision.salt;
         this.skipped = decision.skipped ? true : false;
     }

@@ -19,14 +19,14 @@ export declare class ProvisioningInfo extends Utf8OrBase58Object {
     constructor(data?: string, vdxfkey?: string);
 }
 export declare class RequestedPermission extends Utf8DataVdxfObject {
-    constructor(vdxfkey?: string);
+    constructor(data?: string, vdxfkey?: string);
 }
 export declare class Audience extends Utf8DataVdxfObject {
 }
 export declare class AltAuthFactor extends Utf8DataVdxfObject {
 }
 export declare class Attestation extends Utf8DataVdxfObject {
-    constructor(vdxfkey?: string);
+    constructor(data?: string, vdxfkey?: string);
 }
 export interface ChallengeInterface {
     challenge_id: string;

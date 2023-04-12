@@ -51,8 +51,8 @@ class ProvisioningInfo extends __1.Utf8OrBase58Object {
 }
 exports.ProvisioningInfo = ProvisioningInfo;
 class RequestedPermission extends __1.Utf8DataVdxfObject {
-    constructor(vdxfkey = "") {
-        super("", vdxfkey);
+    constructor(data = "", vdxfkey = "") {
+        super(data, vdxfkey);
     }
 }
 exports.RequestedPermission = RequestedPermission;
@@ -63,8 +63,8 @@ class AltAuthFactor extends __1.Utf8DataVdxfObject {
 }
 exports.AltAuthFactor = AltAuthFactor;
 class Attestation extends __1.Utf8DataVdxfObject {
-    constructor(vdxfkey = "") {
-        super("", vdxfkey);
+    constructor(data = "", vdxfkey = "") {
+        super(data, vdxfkey);
     }
 }
 exports.Attestation = Attestation;
@@ -72,7 +72,7 @@ class Challenge extends __1.VDXFObject {
     constructor(challenge = { challenge_id: "", created_at: 0 }, vdxfkey = __1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
         super(vdxfkey);
         this.challenge_id = challenge.challenge_id;
-        this.requested_access = challenge.requested_access;
+        this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.data, x.vdxfkey)) : challenge.requested_access;
         this.requested_access_audience = challenge.requested_access_audience;
         this.subject = challenge.subject
             ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
@@ -82,7 +82,7 @@ class Challenge extends __1.VDXFObject {
             : challenge.provisioning_info;
         this.alt_auth_factors = challenge.alt_auth_factors;
         this.session_id = challenge.session_id;
-        this.attestations = challenge.attestations;
+        this.attestations = challenge.attestations ? challenge.attestations.map((x) => new Attestation(x.data, x.vdxfkey)) : challenge.attestations;
         this.redirect_uris = challenge.redirect_uris
             ? challenge.redirect_uris.map((x) => new RedirectUri(x.uri, x.vdxfkey))
             : challenge.redirect_uris;
