@@ -49,7 +49,7 @@ export class VDXFObject implements VDXFObjectInterface {
   toDataBuffer() {
     return Buffer.alloc(0);
   }
-  
+
   fromDataBuffer(buffer: Buffer, offset: number = 0) {
     return offset
   }
@@ -88,7 +88,7 @@ export class VDXFObject implements VDXFObjectInterface {
     writer.writeSlice(key.hash);
     writer.writeVarInt(this.version);
 
-    if (dataLength) {      
+    if (dataLength) {
       writer.writeVarSlice(this.toDataBuffer());
     }
 
@@ -155,7 +155,7 @@ export class Utf8OrBase58Object extends VDXFObject {
   data: string;
 
   // VDXF keys that would cause this object to be base58 instead of utf8
-  base58Keys: {[key: string]: boolean} = {};
+  base58Keys: { [key: string]: boolean } = {};
 
   constructor(data: string = "", vdxfkey: string = "", base58Keys: Array<string> = []) {
     super(vdxfkey);
@@ -198,7 +198,7 @@ export class Utf8OrBase58Object extends VDXFObject {
     } else {
       this.data = reader.readVarSlice().toString('utf-8')
     }
-    
+
     return reader.offset
   }
 
@@ -244,3 +244,4 @@ export class VerusIDSignature extends VDXFObject {
     };
   }
 }
+

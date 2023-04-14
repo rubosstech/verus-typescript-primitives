@@ -18,9 +18,6 @@ export declare class Subject extends Utf8OrBase58Object {
 export declare class ProvisioningInfo extends Utf8OrBase58Object {
     constructor(data?: string, vdxfkey?: string);
 }
-export declare class RequestedPermission extends Utf8DataVdxfObject {
-    constructor(data?: string, vdxfkey?: string);
-}
 export declare class Audience extends Utf8DataVdxfObject {
 }
 export declare class AltAuthFactor extends Utf8DataVdxfObject {
@@ -46,7 +43,7 @@ export interface ChallengeInterface {
 export declare class Challenge extends VDXFObject implements ChallengeInterface {
     challenge_id: string;
     requested_access?: Array<RequestedPermission> | null;
-    requested_access_audience?: Array<RequestedPermission> | null;
+    requested_access_audience?: Array<Audience> | null;
     subject?: Array<Subject>;
     provisioning_info?: Array<ProvisioningInfo>;
     alt_auth_factors?: Array<AltAuthFactor> | null;
@@ -65,7 +62,7 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
         vdxfkey: string;
         challenge_id: string;
         requested_access: RequestedPermission[];
-        requested_access_audience: RequestedPermission[];
+        requested_access_audience: Audience[];
         subject: Subject[];
         provisioning_info: ProvisioningInfo[];
         alt_auth_factors: AltAuthFactor[];
@@ -80,4 +77,25 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
         context: Context;
         skip: boolean;
     };
+}
+export declare class AttestationRequest extends VDXFObject {
+    acceptedattestors?: Array<String>;
+    attestationkeys?: Array<String>;
+    attestorfilters?: Array<String>;
+    constructor(vdxfkey: string, data: any);
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    toJson(): {
+        vdxfkey: string;
+        acceptedattestors: String[];
+        attestationkeys: String[];
+        attestorfilters: String[];
+    };
+}
+export declare class BasicPermission extends Utf8DataVdxfObject {
+    constructor(data?: string, vdxfkey?: string);
+}
+export declare class RequestedPermission extends VDXFObject {
+    constructor(vdxfkey?: string, data?: any);
 }

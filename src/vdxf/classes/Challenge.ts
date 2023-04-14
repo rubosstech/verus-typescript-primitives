@@ -6,12 +6,16 @@ import {
   Utf8DataVdxfObject,
   VDXFObject,
   Utf8OrBase58Object,
+  IDENTITY_DATA_REQUEST,
+  IDENTITY_VIEW,
+  IDENTITY_AGREEMENT,
 } from "../";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
-
+import { fromBase58Check, toBase58Check } from '../../utils/address';
+import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../../constants/vdxf';
 export class RedirectUri extends VDXFObject {
   uri: string;
 
@@ -62,12 +66,6 @@ export class ProvisioningInfo extends Utf8OrBase58Object {
       ID_PARENT_VDXF_KEY.vdxfid,
       ID_SYSTEMID_VDXF_KEY.vdxfid,
     ]);
-  }
-}
-
-export class RequestedPermission extends Utf8DataVdxfObject {
-  constructor(data: string = "", vdxfkey: string = "") {
-    super(data, vdxfkey);
   }
 }
 
@@ -128,7 +126,7 @@ export interface ChallengeInterface {
 export class Challenge extends VDXFObject implements ChallengeInterface {
   challenge_id: string;
   requested_access?: Array<RequestedPermission> | null;
-  requested_access_audience?: Array<RequestedPermission> | null;
+  requested_access_audience?: Array<Audience> | null;
   subject?: Array<Subject>;
   provisioning_info?: Array<ProvisioningInfo>;
   alt_auth_factors?: Array<AltAuthFactor> | null;
@@ -147,7 +145,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
     super(vdxfkey);
 
     this.challenge_id = challenge.challenge_id;
-    this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.data, x.vdxfkey)) : challenge.requested_access;
+    this.requested_access = challenge.requested_access;
     this.requested_access_audience = challenge.requested_access_audience;
     this.subject = challenge.subject
       ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
@@ -418,5 +416,104 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       context: this.context,
       skip: this.skip,
     };
+  }
+}
+
+export class AttestationRequest extends VDXFObject {
+  acceptedattestors?: Array<String>;
+  attestationkeys?: Array<String>;
+  attestorfilters?: Array<String>;
+
+  constructor( vdxfkey: string = "", data: any
+    ) {
+    super(vdxfkey);
+    for (let key in data) {
+        this[key] = data[key];
+     }
+    
+  }
+
+  dataByteLength(): number {
+
+    let length = 0;
+
+        for (const item of Object.getOwnPropertyNames(this)) {
+          if ((item !== "version") && (item !== "vdxfkey")) {
+          length += varuint.encodingLength(this[item].length);
+          if (this[item].length > 0) {
+          length += this[item].reduce(
+            (sum, current) => sum + fromBase58Check(current).hash.byteLength,
+            0
+          );
+          }
+        }
+        
+    }
+    return length;
+  }
+
+  toDataBuffer(): Buffer {
+
+    const writer = new bufferutils.BufferWriter(Buffer.alloc(this.dataByteLength()))
+    for (const item of Object.getOwnPropertyNames(this)) {
+      if ((item !== "version") && (item !== "vdxfkey")) {
+      writer.writeArray(this[item].map((x) => fromBase58Check(x).hash));
+      }
+    }
+    return writer.buffer;
+  }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+
+    const reader = new bufferutils.BufferReader(buffer, offset);
+
+    for (const item of Object.getOwnPropertyNames(this)) {
+      if ((item !== "version") && (item !== "vdxfkey")) {
+      const arrayLength = reader.readVarInt();
+      for (let i = 0; i < arrayLength; i++) {
+        this[item].push(toBase58Check(reader.readSlice(HASH160_BYTE_LENGTH), I_ADDR_VERSION))
+      }
+
+      if (offset < buffer.length - 1) {
+        reader.offset = this.fromDataBuffer(reader.buffer, reader.offset)
+      }
+    }
+  }
+    return reader.offset;
+  }
+
+  toJson() {
+
+    return {
+      vdxfkey: this.vdxfkey,
+      acceptedattestors: this.acceptedattestors,
+      attestationkeys: this.attestationkeys,
+      attestorfilters: this.attestorfilters,
+    } 
+  }
+}
+
+export class BasicPermission extends Utf8DataVdxfObject {
+
+
+  constructor(data: string = "", vdxfkey: string = "") {
+    super(data, vdxfkey);
+  }
+}
+
+
+export class RequestedPermission extends VDXFObject {
+  constructor(vdxfkey: string = "", data: any = "") {
+    super(vdxfkey);
+    switch (vdxfkey) {
+      case IDENTITY_DATA_REQUEST.vdxfid:
+        return new AttestationRequest(vdxfkey, data);
+      case IDENTITY_VIEW.vdxfid:
+        return new BasicPermission(vdxfkey);
+      case IDENTITY_AGREEMENT.vdxfid:
+          return new BasicPermission(vdxfkey);
+      default:
+        throw new Error(`Invalid type: ${vdxfkey}`);
+    }
   }
 }
