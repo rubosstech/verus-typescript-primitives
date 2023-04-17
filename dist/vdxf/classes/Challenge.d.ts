@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { Utf8DataVdxfObject, VDXFObject, Utf8OrBase58Object } from "../";
 import { Context } from "./Context";
+import { Hash160 } from "./Hash160";
 export declare class RedirectUri extends VDXFObject {
     uri: string;
     constructor(uri?: string, vdxfkey?: string);
@@ -79,23 +80,27 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     };
 }
 export declare class AttestationRequest extends VDXFObject {
-    acceptedattestors?: Array<String>;
-    attestationkeys?: Array<String>;
-    attestorfilters?: Array<String>;
-    constructor(vdxfkey: string, data: any);
+    data: {
+        accepted_attestors?: Array<Hash160>;
+        attestation_keys?: Array<Hash160>;
+        attestor_filters?: Array<Hash160>;
+    };
+    private readonly classMembers;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
     toJson(): {
         vdxfkey: string;
-        acceptedattestors: String[];
-        attestationkeys: String[];
-        attestorfilters: String[];
+        data: {
+            accepted_attestors: string[];
+            attestation_keys: string[];
+            attestor_filters: string[];
+        };
     };
 }
-export declare class BasicPermission extends Utf8DataVdxfObject {
-    constructor(data?: string, vdxfkey?: string);
-}
 export declare class RequestedPermission extends VDXFObject {
-    constructor(vdxfkey?: string, data?: any);
+    data: object;
+    private classMembers;
+    constructor(data?: object, vdxfkey?: string);
+    private addPrototypes;
 }

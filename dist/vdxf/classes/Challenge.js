@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestedPermission = exports.BasicPermission = exports.AttestationRequest = exports.Challenge = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = void 0;
+exports.RequestedPermission = exports.AttestationRequest = exports.Challenge = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = void 0;
 const __1 = require("../");
 const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
@@ -68,7 +68,7 @@ class Challenge extends __1.VDXFObject {
     constructor(challenge = { challenge_id: "", created_at: 0 }, vdxfkey = __1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
         super(vdxfkey);
         this.challenge_id = challenge.challenge_id;
-        this.requested_access = challenge.requested_access;
+        this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.data, x.vdxfkey)) : challenge.requested_access;
         this.requested_access_audience = challenge.requested_access_audience;
         this.subject = challenge.subject
             ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
@@ -191,7 +191,8 @@ class Challenge extends __1.VDXFObject {
                 this.requested_access = [];
                 const requestedAccessLength = reader.readVarInt();
                 for (let i = 0; i < requestedAccessLength; i++) {
-                    const _perm = new RequestedPermission();
+                    const _vdxfkey = (0, address_1.toBase58Check)(reader.buffer.slice(reader.offset, reader.offset + vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
+                    const _perm = new RequestedPermission({}, _vdxfkey);
                     reader.offset = _perm.fromBuffer(reader.buffer, reader.offset);
                     this.requested_access.push(_perm);
                 }
@@ -263,43 +264,33 @@ class Challenge extends __1.VDXFObject {
 }
 exports.Challenge = Challenge;
 class AttestationRequest extends __1.VDXFObject {
-    constructor(vdxfkey = "", data) {
-        super(vdxfkey);
-        for (let key in data) {
-            this[key] = data[key];
-        }
-    }
     dataByteLength() {
         let length = 0;
-        for (const item of Object.getOwnPropertyNames(this)) {
-            if ((item !== "version") && (item !== "vdxfkey")) {
-                length += varuint_1.default.encodingLength(this[item].length);
-                if (this[item].length > 0) {
-                    length += this[item].reduce((sum, current) => sum + (0, address_1.fromBase58Check)(current).hash.byteLength, 0);
-                }
+        for (const item of this.classMembers) {
+            length += varuint_1.default.encodingLength(this.data[item].length);
+            if (this.data[item].length > 0) {
+                length += this.data[item].reduce((sum, current) => sum + current.byteLength(), 0);
             }
         }
         return length;
     }
     toDataBuffer() {
         const writer = new bufferutils_1.default.BufferWriter(Buffer.alloc(this.dataByteLength()));
-        for (const item of Object.getOwnPropertyNames(this)) {
-            if ((item !== "version") && (item !== "vdxfkey")) {
-                writer.writeArray(this[item].map((x) => (0, address_1.fromBase58Check)(x).hash));
-            }
+        for (const item of this.classMembers) {
+            writer.writeArray(this.data[item].map((x) => x.toBuffer()));
         }
         return writer.buffer;
     }
     fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        for (const item of Object.getOwnPropertyNames(this)) {
-            if ((item !== "version") && (item !== "vdxfkey")) {
+        const datalength = reader.readVarInt();
+        if (datalength > 0) {
+            for (const item of this.classMembers) {
                 const arrayLength = reader.readVarInt();
                 for (let i = 0; i < arrayLength; i++) {
-                    this[item].push((0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION));
-                }
-                if (offset < buffer.length - 1) {
-                    reader.offset = this.fromDataBuffer(reader.buffer, reader.offset);
+                    const member = new Hash160_1.Hash160();
+                    reader.offset = member.fromBuffer(reader.buffer, false, reader.offset);
+                    this.data[item].push(member.hash);
                 }
             }
         }
@@ -308,31 +299,41 @@ class AttestationRequest extends __1.VDXFObject {
     toJson() {
         return {
             vdxfkey: this.vdxfkey,
-            acceptedattestors: this.acceptedattestors,
-            attestationkeys: this.attestationkeys,
-            attestorfilters: this.attestorfilters,
+            data: {
+                accepted_attestors: this.data.accepted_attestors ? this.data.accepted_attestors.map((x) => x.toAddress()) : [],
+                attestation_keys: this.data.attestation_keys ? this.data.attestation_keys.map((x) => x.toAddress()) : [],
+                attestor_filters: this.data.attestor_filters ? this.data.attestor_filters.map((x) => x.toAddress()) : []
+            }
         };
     }
 }
 exports.AttestationRequest = AttestationRequest;
-class BasicPermission extends __1.Utf8DataVdxfObject {
-    constructor(data = "", vdxfkey = "") {
-        super(data, vdxfkey);
-    }
-}
-exports.BasicPermission = BasicPermission;
 class RequestedPermission extends __1.VDXFObject {
-    constructor(vdxfkey = "", data = "") {
+    constructor(data = {}, vdxfkey = "") {
         super(vdxfkey);
-        switch (vdxfkey) {
+        this.data = data;
+        this.addPrototypes(data);
+    }
+    addPrototypes(dataIn) {
+        const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
+        switch (this.vdxfkey) {
             case __1.IDENTITY_DATA_REQUEST.vdxfid:
-                return new AttestationRequest(vdxfkey, data);
+                prototypes.forEach(name => {
+                    Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(AttestationRequest.prototype, name));
+                });
+                this.classMembers = ['accepted_attestors', 'attestation_keys', 'attestor_filters'];
+                for (let key of this.classMembers) {
+                    this.data[key] = dataIn[key]
+                        ? dataIn[key].map((x) => Hash160_1.Hash160.fromAddress(x))
+                        : [];
+                }
+                break;
             case __1.IDENTITY_VIEW.vdxfid:
-                return new BasicPermission(vdxfkey);
+                break;
             case __1.IDENTITY_AGREEMENT.vdxfid:
-                return new BasicPermission(vdxfkey);
+                break;
             default:
-                throw new Error(`Invalid type: ${vdxfkey}`);
+                break;
         }
     }
 }
