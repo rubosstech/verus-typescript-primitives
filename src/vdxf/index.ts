@@ -51,7 +51,7 @@ export class VDXFObject implements VDXFObjectInterface {
   }
 
   fromDataBuffer(buffer: Buffer, offset: number = 0) {
-    return offset
+    return offset + 1
   }
 
   fromBuffer(buffer: Buffer, offset: number = 0) {
@@ -88,9 +88,9 @@ export class VDXFObject implements VDXFObjectInterface {
     writer.writeSlice(key.hash);
     writer.writeVarInt(this.version);
 
-    if (dataLength) {
-      writer.writeVarSlice(this.toDataBuffer());
-    }
+    
+    writer.writeVarSlice(this.toDataBuffer());
+    
 
     return writer.buffer;
   }

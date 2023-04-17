@@ -16,6 +16,7 @@ import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
 import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../../constants/vdxf';
+import { BufferDataVdxfObject } from '../index'
 export class RedirectUri extends VDXFObject {
   uri: string;
 
@@ -334,7 +335,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
           const _vdxfkey = toBase58Check(reader.buffer.slice(reader.offset, 
                                                              reader.offset + HASH160_BYTE_LENGTH), 
                                                              I_ADDR_VERSION);
-          const _perm = new RequestedPermission({}, _vdxfkey);
+          const _perm = new RequestedPermission("", _vdxfkey);
           reader.offset = _perm.fromBuffer(reader.buffer, reader.offset);
           this.requested_access.push(_perm);
         }
@@ -423,107 +424,114 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
   }
 }
 
+export interface AttestationRequestInterfaceDataInterface {
+  accepted_attestors: Array<Hash160>,
+  attestation_keys: Array<Hash160>,
+  attestor_filters: Array<Hash160>
+}
 export class AttestationRequest extends VDXFObject {
-  data: {
-    accepted_attestors?: Array<Hash160>,
-    attestation_keys?: Array<Hash160>,
-    attestor_filters?: Array<Hash160>
-  }
-
-  private readonly classMembers: string[];
+  data: AttestationRequestInterfaceDataInterface;
 
   dataByteLength(): number {
 
     let length = 0;
-    for (const item of this.classMembers) {
-      length += varuint.encodingLength(this.data[item].length);
-      if (this.data[item].length > 0) {
-        length += this.data[item].reduce(
-          (sum, current) => sum + current.byteLength(),
-          0
-        );
-      }
-    }
+    length += varuint.encodingLength(this.data.accepted_attestors?.length ?? 0);
+    length += this.data.accepted_attestors?.reduce((sum, current) => sum + current.byteLength(), 0) ?? 0;
+    length += varuint.encodingLength(this.data.attestation_keys?.length ?? 0);
+    length += this.data.attestation_keys?.reduce((sum, current) => sum + current.byteLength(), 0) ?? 0;
+    length += varuint.encodingLength(this.data.attestor_filters?.length ?? 0);
+    length += this.data.attestor_filters?.reduce((sum, current) => sum + current.byteLength(), 0) ?? 0;
+   
     return length;
   }
 
   toDataBuffer(): Buffer {
 
     const writer = new bufferutils.BufferWriter(Buffer.alloc(this.dataByteLength()))
-    for (const item of this.classMembers) {
-      writer.writeArray(this.data[item].map((x) => x.toBuffer()));
-    }
+
+    writer.writeArray(this.data.accepted_attestors.map((x) => x.toBuffer()));
+    writer.writeArray(this.data.attestation_keys.map((x) => x.toBuffer()));
+    writer.writeArray(this.data.attestor_filters.map((x) => x.toBuffer()));
+
     return writer.buffer;
   }
 
   fromDataBuffer(buffer: Buffer, offset?: number): number {
 
     const reader = new bufferutils.BufferReader(buffer, offset);
-    const datalength = reader.readVarInt();
-    if (datalength > 0) {
-      for (const item of this.classMembers) {
-        const arrayLength = reader.readVarInt();
-        for (let i = 0; i < arrayLength; i++) {
-          const member = new Hash160();
-          reader.offset = member.fromBuffer(reader.buffer, false, reader.offset)
-          this.data[item].push(member.hash);
-        }
+    reader.readVarInt(); //skip data length
+
+    function readHash160Array(arr: Hash160[]): void {
+      const length = reader.readVarInt();
+      for (let i = 0; i < length; i++) {
+        const member = new Hash160();
+        reader.offset = member.fromBuffer(reader.buffer, false, reader.offset);
+        arr.push(member);
       }
+      if (length === 0) arr.push(new Hash160());
     }
+
+    readHash160Array(this.data.accepted_attestors);
+    readHash160Array(this.data.attestation_keys);
+    readHash160Array(this.data.attestor_filters);
     return reader.offset;
   }
 
   toJson() {
-
+    const { accepted_attestors, attestation_keys, attestor_filters } = this.data;
     return {
       vdxfkey: this.vdxfkey,
       data: {
-        accepted_attestors: this.data.accepted_attestors ? this.data.accepted_attestors.map((x) => x.toAddress()) : [],
-        attestation_keys: this.data.attestation_keys ? this.data.attestation_keys.map((x) => x.toAddress()) : [],
-        attestor_filters: this.data.attestor_filters ? this.data.attestor_filters.map((x) => x.toAddress()) : []
+        accepted_attestors: accepted_attestors?.map(x => x.toAddress()) || [],
+        attestation_keys: attestation_keys?.map(x => x.toAddress()) || [],
+        attestor_filters: attestor_filters?.map(x => x.toAddress()) || []
       }
-    }
+    };
   }
 
 }
 
 export class RequestedPermission extends VDXFObject {
-  data: object;
-  private classMembers: string[];
-
-  constructor(data: object = {}, vdxfkey: string = "") {
+  data: string | AttestationRequestInterfaceDataInterface ;
+  encoding: BufferEncoding = "hex";
+  constructor(data: string | AttestationRequestInterfaceDataInterface , vdxfkey: string = "") {
     super(vdxfkey);
-    this.data = data;
     this.addPrototypes(data);
   }
 
-  private addPrototypes(dataIn: any): void {
+  private addPrototypes(data: string | AttestationRequestInterfaceDataInterface ): void {
     const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
 
     switch (this.vdxfkey) {
       case IDENTITY_DATA_REQUEST.vdxfid:
+        var temp:  AttestationRequestInterfaceDataInterface;
+        
+        if (typeof data === 'object') {
+          this.data = {
+            accepted_attestors: (data.accepted_attestors || []).map((x) => typeof x === 'string' ? Hash160.fromAddress(x) : x),
+            attestation_keys: (data.attestation_keys || []).map((x) => typeof x === 'string' ? Hash160.fromAddress(x) : x),
+            attestor_filters: (data.attestor_filters || []).map((x) => typeof x === 'string' ? Hash160.fromAddress(x) : x)
+          }
+        }
+        else {
+          this.data = {
+            accepted_attestors: [],
+            attestation_keys: [],
+            attestor_filters: []
+          }
+        }
         prototypes.forEach(name => {
           Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(AttestationRequest.prototype, name));
         });
-        this.classMembers = ['accepted_attestors', 'attestation_keys', 'attestor_filters'];
-        for (let key of this.classMembers) {
-          this.data[key] = dataIn[key]
-            ? dataIn[key].map((x) => Hash160.fromAddress(x))
-            : [];
-        }
         break;
       case IDENTITY_VIEW.vdxfid:
         break;
       case IDENTITY_AGREEMENT.vdxfid:
+        this.data = data;
+        this.encoding = "utf-8";
         prototypes.forEach(name => {
-          Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(Utf8DataVdxfObject.prototype, name));
+          Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(BufferDataVdxfObject.prototype, name));
         });
-        this.classMembers = ['title', 'description'];
-        for (let key of this.classMembers) {
-          this.data[key] = dataIn[key]
-            ? dataIn[key]
-            : "";
-        }
         break;
       default:
         break;

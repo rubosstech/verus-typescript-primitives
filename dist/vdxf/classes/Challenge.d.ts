@@ -79,13 +79,13 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
         skip: boolean;
     };
 }
+export interface AttestationRequestInterfaceDataInterface {
+    accepted_attestors: Array<Hash160>;
+    attestation_keys: Array<Hash160>;
+    attestor_filters: Array<Hash160>;
+}
 export declare class AttestationRequest extends VDXFObject {
-    data: {
-        accepted_attestors?: Array<Hash160>;
-        attestation_keys?: Array<Hash160>;
-        attestor_filters?: Array<Hash160>;
-    };
-    private readonly classMembers;
+    data: AttestationRequestInterfaceDataInterface;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
@@ -99,8 +99,8 @@ export declare class AttestationRequest extends VDXFObject {
     };
 }
 export declare class RequestedPermission extends VDXFObject {
-    data: object;
-    private classMembers;
-    constructor(data?: object, vdxfkey?: string);
+    data: string | AttestationRequestInterfaceDataInterface;
+    encoding: BufferEncoding;
+    constructor(data: string | AttestationRequestInterfaceDataInterface, vdxfkey?: string);
     private addPrototypes;
 }

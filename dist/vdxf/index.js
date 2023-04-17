@@ -43,7 +43,7 @@ class VDXFObject {
         return Buffer.alloc(0);
     }
     fromDataBuffer(buffer, offset = 0) {
-        return offset;
+        return offset + 1;
     }
     fromBuffer(buffer, offset = 0) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
@@ -70,9 +70,7 @@ class VDXFObject {
         const writer = new bufferutils_1.default.BufferWriter(buffer);
         writer.writeSlice(key.hash);
         writer.writeVarInt(this.version);
-        if (dataLength) {
-            writer.writeVarSlice(this.toDataBuffer());
-        }
+        writer.writeVarSlice(this.toDataBuffer());
         return writer.buffer;
     }
     toSha256() {
