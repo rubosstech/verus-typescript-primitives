@@ -103,4 +103,5 @@ export declare class RequestedPermission extends VDXFObject {
     encoding: BufferEncoding;
     constructor(data: string | AttestationRequestInterfaceDataInterface, vdxfkey?: string);
     private addPrototypes;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
 }

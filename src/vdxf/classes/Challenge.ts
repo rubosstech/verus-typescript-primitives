@@ -496,7 +496,7 @@ export class RequestedPermission extends VDXFObject {
   encoding: BufferEncoding = "hex";
   constructor(data: string | AttestationRequestInterfaceDataInterface , vdxfkey: string = "") {
     super(vdxfkey);
-    this.addPrototypes(data);
+    if (vdxfkey) this.addPrototypes(data);
   }
 
   private addPrototypes(data: string | AttestationRequestInterfaceDataInterface ): void {
@@ -525,6 +525,9 @@ export class RequestedPermission extends VDXFObject {
         });
         break;
       case IDENTITY_VIEW.vdxfid:
+        prototypes.forEach(name => {
+          Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(VDXFObject.prototype, name));
+        });
         break;
       case IDENTITY_AGREEMENT.vdxfid:
         this.data = data;
@@ -537,4 +540,11 @@ export class RequestedPermission extends VDXFObject {
         break;
     }
   }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+    this.addPrototypes("");
+    return this.fromDataBuffer(buffer, offset)
+
+  }
+
 }

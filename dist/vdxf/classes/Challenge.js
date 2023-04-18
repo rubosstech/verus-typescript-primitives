@@ -318,7 +318,8 @@ class RequestedPermission extends __1.VDXFObject {
     constructor(data, vdxfkey = "") {
         super(vdxfkey);
         this.encoding = "hex";
-        this.addPrototypes(data);
+        if (vdxfkey)
+            this.addPrototypes(data);
     }
     addPrototypes(data) {
         const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
@@ -344,6 +345,9 @@ class RequestedPermission extends __1.VDXFObject {
                 });
                 break;
             case __1.IDENTITY_VIEW.vdxfid:
+                prototypes.forEach(name => {
+                    Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(__1.VDXFObject.prototype, name));
+                });
                 break;
             case __1.IDENTITY_AGREEMENT.vdxfid:
                 this.data = data;
@@ -355,6 +359,10 @@ class RequestedPermission extends __1.VDXFObject {
             default:
                 break;
         }
+    }
+    fromDataBuffer(buffer, offset) {
+        this.addPrototypes("");
+        return this.fromDataBuffer(buffer, offset);
     }
 }
 exports.RequestedPermission = RequestedPermission;
