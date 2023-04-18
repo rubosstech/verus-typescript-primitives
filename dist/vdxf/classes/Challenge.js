@@ -294,7 +294,7 @@ class AttestationRequest extends __1.VDXFObject {
                 arr.push(member);
             }
             if (length === 0)
-                arr.push(new Hash160_1.Hash160());
+                arr = [];
         }
         readHash160Array(this.data.accepted_attestors);
         readHash160Array(this.data.attestation_keys);

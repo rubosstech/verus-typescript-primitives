@@ -468,7 +468,7 @@ export class AttestationRequest extends VDXFObject {
         reader.offset = member.fromBuffer(reader.buffer, false, reader.offset);
         arr.push(member);
       }
-      if (length === 0) arr.push(new Hash160());
+      if (length === 0) arr = [];
     }
 
     readHash160Array(this.data.accepted_attestors);
