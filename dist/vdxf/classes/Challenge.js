@@ -301,6 +301,24 @@ class AttestationRequest extends __1.VDXFObject {
         readHash160Array(this.data.attestor_filters);
         return reader.offset;
     }
+    static initializeData(data) {
+        var retData;
+        if (typeof data === 'object') {
+            retData = {
+                accepted_attestors: (data.accepted_attestors || []).map((x) => typeof x === 'string' ? Hash160_1.Hash160.fromAddress(x) : x),
+                attestation_keys: (data.attestation_keys || []).map((x) => typeof x === 'string' ? Hash160_1.Hash160.fromAddress(x) : x),
+                attestor_filters: (data.attestor_filters || []).map((x) => typeof x === 'string' ? Hash160_1.Hash160.fromAddress(x) : x)
+            };
+        }
+        else {
+            retData = {
+                accepted_attestors: [],
+                attestation_keys: [],
+                attestor_filters: []
+            };
+        }
+        return retData;
+    }
     toJson() {
         const { accepted_attestors, attestation_keys, attestor_filters } = this.data;
         return {
@@ -322,43 +340,27 @@ class RequestedPermission extends __1.VDXFObject {
             this.addPrototypes(data);
     }
     addPrototypes(data) {
-        const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
+        var classType;
         switch (this.vdxfkey) {
             case __1.IDENTITY_DATA_REQUEST.vdxfid:
-                var temp;
-                if (typeof data === 'object') {
-                    this.data = {
-                        accepted_attestors: (data.accepted_attestors || []).map((x) => typeof x === 'string' ? Hash160_1.Hash160.fromAddress(x) : x),
-                        attestation_keys: (data.attestation_keys || []).map((x) => typeof x === 'string' ? Hash160_1.Hash160.fromAddress(x) : x),
-                        attestor_filters: (data.attestor_filters || []).map((x) => typeof x === 'string' ? Hash160_1.Hash160.fromAddress(x) : x)
-                    };
-                }
-                else {
-                    this.data = {
-                        accepted_attestors: [],
-                        attestation_keys: [],
-                        attestor_filters: []
-                    };
-                }
-                prototypes.forEach(name => {
-                    Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(AttestationRequest.prototype, name));
-                });
-                break;
-            case __1.IDENTITY_VIEW.vdxfid:
-                prototypes.forEach(name => {
-                    Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(__1.VDXFObject.prototype, name));
-                });
+                classType = AttestationRequest;
+                this.data = AttestationRequest.initializeData(data);
                 break;
             case __1.IDENTITY_AGREEMENT.vdxfid:
+                classType = index_1.BufferDataVdxfObject;
                 this.data = data;
                 this.encoding = "utf-8";
-                prototypes.forEach(name => {
-                    Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(index_1.BufferDataVdxfObject.prototype, name));
-                });
+                break;
+            case __1.IDENTITY_VIEW.vdxfid:
+                classType = __1.VDXFObject;
                 break;
             default:
                 break;
         }
+        const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
+        prototypes.forEach(name => {
+            Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(classType.prototype, name));
+        });
     }
     fromDataBuffer(buffer, offset) {
         this.addPrototypes("");

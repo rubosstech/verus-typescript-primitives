@@ -89,6 +89,7 @@ export declare class AttestationRequest extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
+    static initializeData(data: string | AttestationRequestInterfaceDataInterface): any;
     toJson(): {
         vdxfkey: string;
         data: {
