@@ -6,7 +6,7 @@ import {
   Utf8DataVdxfObject,
   VDXFObject,
   Utf8OrBase58Object,
-  IDENTITY_DATA_REQUEST,
+  ATTESTATION_READ_REQUEST,
   IDENTITY_VIEW,
   IDENTITY_AGREEMENT,
 } from "../";
@@ -512,7 +512,7 @@ export class AttestationRequest extends VDXFObject {
 
 export class RequestedPermission extends VDXFObject {
   data: string | AttestationRequestInterfaceDataInterface;
-  encoding: BufferEncoding = "hex";
+  encoding?: BufferEncoding;
   constructor(data: string | AttestationRequestInterfaceDataInterface, vdxfkey: string = "") {
     super(vdxfkey);
     if (vdxfkey) this.addPrototypes(data);
@@ -521,7 +521,7 @@ export class RequestedPermission extends VDXFObject {
  addPrototypes(data: string | AttestationRequestInterfaceDataInterface): void {
     var classType;
     switch (this.vdxfkey) {
-      case IDENTITY_DATA_REQUEST.vdxfid:
+      case ATTESTATION_READ_REQUEST.vdxfid:
         classType = AttestationRequest;
         this.data = AttestationRequest.initializeData(data)
         break;
@@ -531,10 +531,12 @@ export class RequestedPermission extends VDXFObject {
         this.encoding = "utf-8";
         break;
       case IDENTITY_VIEW.vdxfid:
-        classType = VDXFObject;
+        classType = BufferDataVdxfObject;
+        this.data = data;
+        this.encoding = "utf-8";
         break;
       default:
-        break;
+        throw new Error("Invalid vdxfkey")
     }
     const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
     prototypes.forEach(name => {

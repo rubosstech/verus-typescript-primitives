@@ -18,11 +18,11 @@ export const IDENTITY_AGREEMENT: VDXFKeyInterface = {
   }
 };
 
-export const IDENTITY_DATA_REQUEST: VDXFKeyInterface = {
+export const ATTESTATION_READ_REQUEST: VDXFKeyInterface = {
   vdxfid: "iNqLaiDJjcADGCvXcQZnPqwTqMXzQbDCFu",
   hash160result: "fbd8fe825062b19a9bd26dc51b6f768828115ad4",
   qualifiedname: {
     namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    name: "vrsc::identitydata.request"
+    name: "vrsc::identity.attestation.read"
   }
 };

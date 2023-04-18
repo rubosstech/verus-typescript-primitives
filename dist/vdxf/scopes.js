@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IDENTITY_DATA_REQUEST = exports.IDENTITY_AGREEMENT = exports.IDENTITY_VIEW = void 0;
+exports.ATTESTATION_READ_REQUEST = exports.IDENTITY_AGREEMENT = exports.IDENTITY_VIEW = void 0;
 exports.IDENTITY_VIEW = {
     vdxfid: "iLUrA89mDKnwxZcMiPadfNB9TLp58A2TKU",
     hash160result: "aeab47faa1b2bde2633a63b8284770a8e5c489ba",
@@ -17,11 +17,11 @@ exports.IDENTITY_AGREEMENT = {
         name: "vrsc::identity.authentication.permission.agree"
     }
 };
-exports.IDENTITY_DATA_REQUEST = {
+exports.ATTESTATION_READ_REQUEST = {
     vdxfid: "iNqLaiDJjcADGCvXcQZnPqwTqMXzQbDCFu",
     hash160result: "fbd8fe825062b19a9bd26dc51b6f768828115ad4",
     qualifiedname: {
         namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        name: "vrsc::identitydata.request"
+        name: "vrsc::identity.attestation.read"
     }
 };

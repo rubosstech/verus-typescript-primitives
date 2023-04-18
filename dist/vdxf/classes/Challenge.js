@@ -335,14 +335,13 @@ exports.AttestationRequest = AttestationRequest;
 class RequestedPermission extends __1.VDXFObject {
     constructor(data, vdxfkey = "") {
         super(vdxfkey);
-        this.encoding = "hex";
         if (vdxfkey)
             this.addPrototypes(data);
     }
     addPrototypes(data) {
         var classType;
         switch (this.vdxfkey) {
-            case __1.IDENTITY_DATA_REQUEST.vdxfid:
+            case __1.ATTESTATION_READ_REQUEST.vdxfid:
                 classType = AttestationRequest;
                 this.data = AttestationRequest.initializeData(data);
                 break;
@@ -352,10 +351,12 @@ class RequestedPermission extends __1.VDXFObject {
                 this.encoding = "utf-8";
                 break;
             case __1.IDENTITY_VIEW.vdxfid:
-                classType = __1.VDXFObject;
+                classType = index_1.BufferDataVdxfObject;
+                this.data = data;
+                this.encoding = "utf-8";
                 break;
             default:
-                break;
+                throw new Error("Invalid vdxfkey");
         }
         const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
         prototypes.forEach(name => {

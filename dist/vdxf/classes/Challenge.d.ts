@@ -101,8 +101,8 @@ export declare class AttestationRequest extends VDXFObject {
 }
 export declare class RequestedPermission extends VDXFObject {
     data: string | AttestationRequestInterfaceDataInterface;
-    encoding: BufferEncoding;
+    encoding?: BufferEncoding;
     constructor(data: string | AttestationRequestInterfaceDataInterface, vdxfkey?: string);
-    private addPrototypes;
+    addPrototypes(data: string | AttestationRequestInterfaceDataInterface): void;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
 }
