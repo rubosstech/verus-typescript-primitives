@@ -143,7 +143,9 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
     super(vdxfkey);
 
     this.challenge_id = challenge.challenge_id;
-    this.requested_access = challenge.requested_access;
+    this.requested_access = challenge.requested_access
+      ? challenge.requested_access.map((x) => new RequestedPermission(x.vdxfkey))
+      : challenge.requested_access;
     this.requested_access_audience = challenge.requested_access_audience;
     this.subject = challenge.subject
       ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))

@@ -69,7 +69,9 @@ class Challenge extends __1.VDXFObject {
     constructor(challenge = { challenge_id: "", created_at: 0 }, vdxfkey = __1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
         super(vdxfkey);
         this.challenge_id = challenge.challenge_id;
-        this.requested_access = challenge.requested_access;
+        this.requested_access = challenge.requested_access
+            ? challenge.requested_access.map((x) => new RequestedPermission(x.vdxfkey))
+            : challenge.requested_access;
         this.requested_access_audience = challenge.requested_access_audience;
         this.subject = challenge.subject
             ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
