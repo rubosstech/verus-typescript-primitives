@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignMessageResponse = exports.SignMessageRequest = exports.VerifyMessageResponse = exports.VerifyMessageRequest = exports.GetInfoResponse = exports.GetInfoRequest = exports.SendRawTransactionResponse = exports.SendRawTransactionRequest = exports.MakeOfferResponse = exports.MakeOfferRequest = exports.GetRawTransactionResponse = exports.GetRawTransactionRequest = exports.GetOffersResponse = exports.GetOffersRequest = exports.GetCurrencyResponse = exports.GetCurrencyRequest = exports.GetIdentityResponse = exports.GetIdentityRequest = exports.GetBlockResponse = exports.GetBlockRequest = exports.GetAddressUtxosResponse = exports.GetAddressUtxosRequest = exports.GetAddressMempoolResponse = exports.GetAddressMempoolRequest = exports.GetAddressDeltasResponse = exports.GetAddressDeltasRequest = exports.GetAddressBalanceResponse = exports.GetAddressBalanceRequest = void 0;
+exports.SignMessageResponse = exports.SignMessageRequest = exports.VerifyMessageResponse = exports.VerifyMessageRequest = exports.GetInfoResponse = exports.GetInfoRequest = exports.SendRawTransactionResponse = exports.SendRawTransactionRequest = exports.MakeOfferResponse = exports.MakeOfferRequest = exports.GetRawTransactionResponse = exports.GetRawTransactionRequest = exports.GetOffersResponse = exports.GetOffersRequest = exports.GetCurrencyResponse = exports.GetCurrencyRequest = exports.GetIdentityResponse = exports.GetIdentityRequest = exports.GetVdxfIdResponse = exports.GetVdxfIdRequest = exports.GetBlockResponse = exports.GetBlockRequest = exports.GetAddressUtxosResponse = exports.GetAddressUtxosRequest = exports.GetAddressMempoolResponse = exports.GetAddressMempoolRequest = exports.GetAddressDeltasResponse = exports.GetAddressDeltasRequest = exports.GetAddressBalanceResponse = exports.GetAddressBalanceRequest = void 0;
 const GetAddressBalanceRequest_1 = require("./GetAddressBalance/GetAddressBalanceRequest");
 Object.defineProperty(exports, "GetAddressBalanceRequest", { enumerable: true, get: function () { return GetAddressBalanceRequest_1.GetAddressBalanceRequest; } });
 const GetAddressBalanceResponse_1 = require("./GetAddressBalance/GetAddressBalanceResponse");
@@ -17,6 +17,10 @@ const GetBlockRequest_1 = require("./GetBlock/GetBlockRequest");
 Object.defineProperty(exports, "GetBlockRequest", { enumerable: true, get: function () { return GetBlockRequest_1.GetBlockRequest; } });
 const GetBlockResponse_1 = require("./GetBlock/GetBlockResponse");
 Object.defineProperty(exports, "GetBlockResponse", { enumerable: true, get: function () { return GetBlockResponse_1.GetBlockResponse; } });
+const GetVdxfIdRequest_1 = require("./GetVdxfId/GetVdxfIdRequest");
+Object.defineProperty(exports, "GetVdxfIdRequest", { enumerable: true, get: function () { return GetVdxfIdRequest_1.GetVdxfIdRequest; } });
+const GetVdxfIdResponse_1 = require("./GetVdxfId/GetVdxfIdResponse");
+Object.defineProperty(exports, "GetVdxfIdResponse", { enumerable: true, get: function () { return GetVdxfIdResponse_1.GetVdxfIdResponse; } });
 const GetIdentityRequest_1 = require("./GetIdentity/GetIdentityRequest");
 Object.defineProperty(exports, "GetIdentityRequest", { enumerable: true, get: function () { return GetIdentityRequest_1.GetIdentityRequest; } });
 const GetIdentityResponse_1 = require("./GetIdentity/GetIdentityResponse");
