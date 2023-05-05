@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
+exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.SignedSessionObjectData = exports.SignedSessionObject = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
 var Challenge_1 = require("./Challenge");
 Object.defineProperty(exports, "LoginConsentChallenge", { enumerable: true, get: function () { return Challenge_1.Challenge; } });
 var Decision_1 = require("./Decision");
@@ -9,6 +9,10 @@ var Request_1 = require("./Request");
 Object.defineProperty(exports, "LoginConsentRequest", { enumerable: true, get: function () { return Request_1.Request; } });
 var Response_1 = require("./Response");
 Object.defineProperty(exports, "LoginConsentResponse", { enumerable: true, get: function () { return Response_1.Response; } });
+var SignedSessionObject_1 = require("./Web/SignedSessionObject");
+Object.defineProperty(exports, "SignedSessionObject", { enumerable: true, get: function () { return SignedSessionObject_1.SignedSessionObject; } });
+var SignedSessionObjectData_1 = require("./Web/SignedSessionObjectData");
+Object.defineProperty(exports, "SignedSessionObjectData", { enumerable: true, get: function () { return SignedSessionObjectData_1.SignedSessionObjectData; } });
 var ProvisioningRequest_1 = require("./provisioning/ProvisioningRequest");
 Object.defineProperty(exports, "LoginConsentProvisioningRequest", { enumerable: true, get: function () { return ProvisioningRequest_1.ProvisioningRequest; } });
 var ProvisioningChallenge_1 = require("./provisioning/ProvisioningChallenge");

@@ -6,6 +6,8 @@ export { ChallengeInterface as LoginConsentChallengeInterface } from "./Challeng
 export { DecisionInterface as LoginConsentDecisionInterface } from "./Decision";
 export { RequestInterface as LoginConsentRequestInterface } from "./Request";
 export { ResponseInterface as LoginConsentResponseInterface } from "./Response";
+export { SignedSessionObject } from './Web/SignedSessionObject';
+export { SignedSessionObjectData } from './Web/SignedSessionObjectData';
 export { ProvisioningRequest as LoginConsentProvisioningRequest } from "./provisioning/ProvisioningRequest";
 export { ProvisioningChallenge as LoginConsentProvisioningChallenge } from "./provisioning/ProvisioningChallenge";
 export { ProvisioningResponse as LoginConsentProvisioningResponse } from "./provisioning/ProvisioningResponse";
