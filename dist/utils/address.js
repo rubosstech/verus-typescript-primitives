@@ -13,7 +13,9 @@ const fromBase58Check = (address) => {
     var offset = multibyte ? 2 : 1;
     var version = multibyte ? payload.readUInt16BE(0) : payload[0];
     var hash = payload.slice(offset);
-    return { version: version, hash: hash };
+    // Turn hash to buffer with Buffer.from due to strange bug where certain JS engines
+    // don't keep hash a buffer
+    return { version: version, hash: Buffer.from(hash) };
 };
 exports.fromBase58Check = fromBase58Check;
 const toBase58Check = (hash, version) => {

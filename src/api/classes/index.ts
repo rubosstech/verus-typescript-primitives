@@ -6,6 +6,8 @@ import { GetAddressUtxosRequest } from './GetAddressUtxos/GetAddressUtxosRequest
 import { GetAddressUtxosResponse } from './GetAddressUtxos/GetAddressUtxosResponse'
 import { GetBlockRequest } from './GetBlock/GetBlockRequest'
 import { GetBlockResponse } from './GetBlock/GetBlockResponse'
+import { GetVdxfIdRequest } from './GetVdxfId/GetVdxfIdRequest'
+import { GetVdxfIdResponse } from './GetVdxfId/GetVdxfIdResponse'
 import { GetIdentityRequest } from './GetIdentity/GetIdentityRequest'
 import { GetIdentityResponse } from './GetIdentity/GetIdentityResponse'
 import { GetCurrencyRequest } from './GetCurrency/GetCurrencyRequest'
@@ -38,6 +40,8 @@ export {
   GetAddressUtxosResponse,
   GetBlockRequest,
   GetBlockResponse,
+  GetVdxfIdRequest,
+  GetVdxfIdResponse,
   GetIdentityRequest,
   GetIdentityResponse,
   GetCurrencyRequest,
@@ -66,6 +70,7 @@ export type RpcRequest =
   | typeof GetAddressMempoolRequest
   | typeof GetAddressUtxosRequest
   | typeof GetBlockRequest
+  | typeof GetVdxfIdRequest
   | typeof GetInfoRequest
   | typeof GetIdentityRequest
   | typeof GetCurrencyRequest
@@ -82,6 +87,7 @@ export type RpcResponse =
   | typeof GetAddressMempoolResponse
   | typeof GetAddressUtxosResponse
   | typeof GetBlockResponse
+  | typeof GetVdxfIdResponse
   | typeof GetInfoResponse
   | typeof GetIdentityResponse
   | typeof GetCurrencyResponse
