@@ -20,15 +20,17 @@
   "repository": "https://github.com/VerusCoin/verus-typescript-primitives.git",
   "license": "MIT",
   "dependencies": {
-    "@types/bs58check": "2.1.0",
-    "@types/create-hash": "1.2.2",
     "base64url": "3.0.1",
+    "bn.js": "5.2.1",
     "bs58check": "https://github.com/bitcoinjs/bs58check",
     "create-hash": "1.2.0"
   },
   "devDependencies": {
+    "@types/bn.js": "5.1.1",
+    "@types/bs58check": "2.1.0",
+    "@types/create-hash": "1.2.2",
     "@types/jest": "28.1.6",
-    "@types/node": "^18.7.22",
+    "@types/node": "18.7.22",
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@typescript-eslint/parser": "5.30.7",
     "eslint": "8.20.0",

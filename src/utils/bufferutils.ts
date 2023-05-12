@@ -20,7 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import { BigNumber } from "./types/BigNumber";
 import varuint from "./varuint";
+import varint from './varint'
+import { BN } from "bn.js";
 
 // https://github.com/feross/buffer/blob/master/index.js#L1127
 function verifuint(value: number, max: number) {
@@ -97,8 +100,18 @@ class BufferWriter {
     this.offset = writeUInt64LE(this.buffer, i, this.offset);
   }
 
-  writeVarInt(i: number) {
+  writeInt64(i: BigNumber) {
+    const slice = i.toBuffer('le', 8);
+    this.writeSlice(slice);
+  }
+
+  writeCompactSize(i: number) {
     const encoding = varuint.encode(i, this.buffer, this.offset);
+    this.offset += encoding.bytes;
+  }
+
+  writeVarInt(i: BigNumber) {
+    const encoding = varint.encode(i, this.buffer, this.offset);
     this.offset += encoding.bytes;
   }
 
@@ -110,17 +123,17 @@ class BufferWriter {
   }
 
   writeVarSlice(slice: Buffer) {
-    this.writeVarInt(slice.length);
+    this.writeCompactSize(slice.length);
     this.writeSlice(slice);
   }
 
   writeVector(vector: Array<Buffer>) {
-    this.writeVarInt(vector.length);
+    this.writeCompactSize(vector.length);
     vector.forEach((buf) => this.writeVarSlice(buf));
   }
 
   writeArray(array: Array<Buffer>) {
-    this.writeVarInt(array.length);
+    this.writeCompactSize(array.length);
     array.forEach((buf) => this.writeSlice(buf));
   }
 }
@@ -161,8 +174,18 @@ class BufferReader {
     return result;
   }
 
-  readVarInt() {
+  readInt64(): BigNumber {
+    return new BN(this.readSlice(8), 16, 'le')
+  }
+
+  readCompactSize() {
     const vi = varuint.decode(this.buffer, this.offset);
+    this.offset += vi.bytes;
+    return vi.decoded;
+  }
+
+  readVarInt() {
+    const vi = varint.decode(this.buffer, this.offset);
     this.offset += vi.bytes;
     return vi.decoded;
   }
@@ -177,18 +200,18 @@ class BufferReader {
   }
 
   readVarSlice() {
-    return this.readSlice(this.readVarInt());
+    return this.readSlice(this.readCompactSize());
   }
 
   readVector() {
-    const count = this.readVarInt();
+    const count = this.readCompactSize();
     const vector = [];
     for (let i = 0; i < count; i++) vector.push(this.readVarSlice());
     return vector;
   }
 
   readArray(sliceLength: number) {
-    const count = this.readVarInt();
+    const count = this.readCompactSize();
     const array = [];
     for (let i = 0; i < count; i++) array.push(this.readSlice(sliceLength));
     return array;

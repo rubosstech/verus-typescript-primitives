@@ -182,7 +182,7 @@ export class ProvisioningResult extends VDXFObject {
 
   fromDataBuffer(buffer: Buffer, offset?: number): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
-    const resultLength = reader.readVarInt();
+    const resultLength = reader.readCompactSize();
 
     if (resultLength == 0) {
       throw new Error("Cannot create provisioning result from empty buffer");
@@ -234,7 +234,7 @@ export class ProvisioningResult extends VDXFObject {
       this.info_uri = reader.readVarSlice().toString('utf8')
 
       this.provisioning_txids = [];
-      const provisioningTxidLength = reader.readVarInt();
+      const provisioningTxidLength = reader.readCompactSize();
 
       for (let i = 0; i < provisioningTxidLength; i++) {
         const _provisioning_txid = new ProvisioningTxid();
