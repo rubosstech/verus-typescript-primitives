@@ -4,6 +4,7 @@ import { fromBase58Check, toBase58Check } from "../utils/address";
 import bufferutils from '../utils/bufferutils'
 import { BN } from 'bn.js';
 import { BigNumber } from '../utils/types/BigNumber';
+import { I_ADDR_VERSION } from '../constants/vdxf';
 const { BufferReader, BufferWriter } = bufferutils
 
 export default class CurrencyValueMap {
@@ -53,25 +54,25 @@ export default class CurrencyValueMap {
     return bufferWriter.buffer
   }
 
-  fromBuffer (buffer, offset) {
-    const bufferReader = new BufferReader(buffer, offset);
+  fromBuffer (buffer, offset: number = 0) {
+    const reader = new BufferReader(buffer, offset);
     let count: number;
 
     if (this.multivalue) {
-      count = bufferReader.readCompactSize();
+      count = reader.readCompactSize();
     } else {
       count = 1;
     }
 
     for (let i = 0; i < count; i++) {
-      const hash = bufferReader.readSlice(20)
-      const value = this.multivalue ? bufferReader.readInt64() : bufferReader.readVarInt()
+      const hash = reader.readSlice(20)
+      const value = this.multivalue ? reader.readInt64() : reader.readVarInt()
 
-      const base58Key = toBase58Check(hash, 102)
+      const base58Key = toBase58Check(hash, I_ADDR_VERSION)
 
       this.value_map.set(base58Key, value)
     }
 
-    return offset;
+    return reader.offset;
   }
 }

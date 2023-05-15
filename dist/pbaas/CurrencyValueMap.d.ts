@@ -11,5 +11,5 @@ export default class CurrencyValueMap {
     getNumValues(): import("bn.js");
     getByteLength(): number;
     toBuffer(): Buffer;
-    fromBuffer(buffer: any, offset: any): any;
+    fromBuffer(buffer: any, offset?: number): number;
 }
