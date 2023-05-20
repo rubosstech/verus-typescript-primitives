@@ -43,7 +43,7 @@ class SignedSessionObjectData extends __1.VDXFObject {
     }
     fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        const length = reader.readVarInt();
+        const length = reader.readCompactSize();
         if (length == 0) {
             throw new Error("Cannot create signed session object data from empty buffer");
         }

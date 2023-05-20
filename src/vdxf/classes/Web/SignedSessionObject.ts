@@ -133,7 +133,7 @@ export class SignedSessionObject extends VDXFObject {
 
   protected _fromDataBuffer(buffer: Buffer, offset?: number): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
-    const reqLength = reader.readVarInt();
+    const reqLength = reader.readCompactSize();
 
     if (reqLength == 0) {
       throw new Error("Cannot create signed session object from empty buffer");
@@ -166,11 +166,11 @@ export class SignedSessionObject extends VDXFObject {
 
   getHeaders() {
     return {
-      ['VDXF-Key']: this.vdxfkey,
-      ['VDXF-Version']: this.version.toString(),
-      ['VerusID-Session-ID']: this.data.session_id,
+      ['VDXF-Key']: this.vdxfkey, // VDXF key of signed session object (SSO), denoting that this is a SSO
+      ['VDXF-Version']: this.version.toString(), // SSO version
+      ['VerusID-Session-ID']: this.data.session_id, // Session ID of original response made
       ['VerusID-Timestamp-Micro']: this.data.timestamp_micro.toString(), // Microsecond timestamp
-      ['VerusID-Signature']: this.signature!.signature
+      ['VerusID-Signature']: this.signature!.signature // Signature of this SSO serialized
     }
   }
 

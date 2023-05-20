@@ -141,7 +141,7 @@ export class Request extends VDXFObject {
 
   protected _fromDataBuffer(buffer: Buffer, offset?: number): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
-    const reqLength = reader.readVarInt();
+    const reqLength = reader.readCompactSize();
 
     if (reqLength == 0) {
       throw new Error("Cannot create request from empty buffer");

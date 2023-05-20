@@ -2,23 +2,9 @@
 // The MIT License (MIT)
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reverseBuffer = exports.writeUInt64LE = exports.readUInt64LE = void 0;
-// Copyright (c) 2011-2017 bitcoinjs-lib contributors
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
 const varuint_1 = require("./varuint");
+const varint_1 = require("./varint");
+const bn_js_1 = require("bn.js");
 // https://github.com/feross/buffer/blob/master/index.js#L1127
 function verifuint(value, max) {
     if (typeof value !== "number")
@@ -82,8 +68,16 @@ class BufferWriter {
     writeUInt64(i) {
         this.offset = (0, exports.writeUInt64LE)(this.buffer, i, this.offset);
     }
-    writeVarInt(i) {
+    writeInt64(i) {
+        const slice = i.toBuffer('le', 8);
+        this.writeSlice(slice);
+    }
+    writeCompactSize(i) {
         const encoding = varuint_1.default.encode(i, this.buffer, this.offset);
+        this.offset += encoding.bytes;
+    }
+    writeVarInt(i) {
+        const encoding = varint_1.default.encode(i, this.buffer, this.offset);
         this.offset += encoding.bytes;
     }
     writeSlice(slice) {
@@ -93,15 +87,15 @@ class BufferWriter {
         this.offset += slice.copy(this.buffer, this.offset);
     }
     writeVarSlice(slice) {
-        this.writeVarInt(slice.length);
+        this.writeCompactSize(slice.length);
         this.writeSlice(slice);
     }
     writeVector(vector) {
-        this.writeVarInt(vector.length);
+        this.writeCompactSize(vector.length);
         vector.forEach((buf) => this.writeVarSlice(buf));
     }
     writeArray(array) {
-        this.writeVarInt(array.length);
+        this.writeCompactSize(array.length);
         array.forEach((buf) => this.writeSlice(buf));
     }
 }
@@ -133,8 +127,16 @@ class BufferReader {
         this.offset += 8;
         return result;
     }
-    readVarInt() {
+    readInt64() {
+        return new bn_js_1.BN(this.readSlice(8), 16, 'le');
+    }
+    readCompactSize() {
         const vi = varuint_1.default.decode(this.buffer, this.offset);
+        this.offset += vi.bytes;
+        return vi.decoded;
+    }
+    readVarInt() {
+        const vi = varint_1.default.decode(this.buffer, this.offset);
         this.offset += vi.bytes;
         return vi.decoded;
     }
@@ -147,17 +149,17 @@ class BufferReader {
         return result;
     }
     readVarSlice() {
-        return this.readSlice(this.readVarInt());
+        return this.readSlice(this.readCompactSize());
     }
     readVector() {
-        const count = this.readVarInt();
+        const count = this.readCompactSize();
         const vector = [];
         for (let i = 0; i < count; i++)
             vector.push(this.readVarSlice());
         return vector;
     }
     readArray(sliceLength) {
-        const count = this.readVarInt();
+        const count = this.readCompactSize();
         const array = [];
         for (let i = 0; i < count; i++)
             array.push(this.readSlice(sliceLength));

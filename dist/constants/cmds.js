@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VERIFY_MESSAGE = exports.SIGN_MESSAGE = exports.GET_ADDRESS_UTXOS = exports.SEND_RAW_TRANSACTION = exports.GET_ADDRESS_MEMPOOL = exports.GET_ADDRESS_DELTAS = exports.GET_RAW_TRANSACTION = exports.GET_VDXF_ID = exports.GET_BLOCK = exports.GET_INFO = exports.GET_ADDRESS_BALANCE = exports.GET_CURRENCY = exports.GET_IDENTITY = exports.GET_OFFERS = exports.MAKE_OFFER = void 0;
+exports.SEND_CURRENCY = exports.FUND_RAW_TRANSACTION = exports.VERIFY_MESSAGE = exports.SIGN_MESSAGE = exports.GET_ADDRESS_UTXOS = exports.SEND_RAW_TRANSACTION = exports.GET_ADDRESS_MEMPOOL = exports.GET_ADDRESS_DELTAS = exports.GET_RAW_TRANSACTION = exports.GET_VDXF_ID = exports.GET_BLOCK = exports.GET_INFO = exports.GET_ADDRESS_BALANCE = exports.GET_CURRENCY = exports.GET_IDENTITY = exports.GET_OFFERS = exports.MAKE_OFFER = void 0;
 exports.MAKE_OFFER = 'makeoffer';
 exports.GET_OFFERS = 'getoffers';
 exports.GET_IDENTITY = 'getidentity';
@@ -16,3 +16,5 @@ exports.SEND_RAW_TRANSACTION = 'sendrawtransaction';
 exports.GET_ADDRESS_UTXOS = 'getaddressutxos';
 exports.SIGN_MESSAGE = 'signmessage';
 exports.VERIFY_MESSAGE = 'verifymessage';
+exports.FUND_RAW_TRANSACTION = 'fundrawtransaction';
+exports.SEND_CURRENCY = 'sendcurrency';
