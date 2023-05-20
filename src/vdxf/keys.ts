@@ -308,8 +308,8 @@ export const SIGNED_SESSION_OBJECT_DATA: VDXFKeyInterface = {
   "vdxfid": "iGQiFxLgGDtpTT9CVBARTjhUMoWnnMetzy",
   "hash160result": "db9e0983fc2da941c8fadee6d08cc6790c02e18d",
   "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identity.signedsessionobject.data"
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identity.signedsessionobject.data"
   }
 };
 
@@ -317,7 +317,16 @@ export const SIGNED_SESSION_OBJECT: VDXFKeyInterface = {
   "vdxfid": "iQFqjYQnaiCPENEShSb8Jy3qD6En43juVr",
   "hash160result": "76733b2dbe76a03c6da94719733c0a06cf82f4e3",
   "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identity.signedsessionobject"
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identity.signedsessionobject"
   }
 };
+
+export const CURRENCY_ADDRESS: VDXFKeyInterface = {
+  "vdxfid":"iBy2s9cQL9RadMVPjog6bbSV5ityBxTuNR",
+  "hash160result":"4fb4c86b8ce18e596e28f62bc9a78f43d738255d",
+  "qualifiedname": {
+    "namespace":"i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name":"vrsc::currency.address"
+  }
+}

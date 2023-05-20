@@ -28,6 +28,10 @@ import { VerifyMessageRequest } from './VerifyMessage/VerifyMessageRequest'
 import { VerifyMessageResponse } from './VerifyMessage/VerifyMessageResponse'
 import { GetAddressMempoolResponse } from './GetAddressMempool/GetAddressMempoolResponse'
 import { GetAddressMempoolRequest } from './GetAddressMempool/GetAddressMempoolRequest'
+import { SendCurrencyRequest } from './SendCurrency/SendCurrencyRequest'
+import { SendCurrencyResponse } from './SendCurrency/SendCurrencyResponse'
+import { FundRawTransactionRequest } from './FundRawTransaction/FundRawTransactionRequest'
+import { FundRawTransactionResponse } from './FundRawTransaction/FundRawTransactionResponse'
 
 export {
   GetAddressBalanceRequest,
@@ -59,7 +63,11 @@ export {
   VerifyMessageRequest,
   VerifyMessageResponse,
   SignMessageRequest,
-  SignMessageResponse
+  SignMessageResponse,
+  SendCurrencyRequest,
+  SendCurrencyResponse,
+  FundRawTransactionRequest,
+  FundRawTransactionResponse
 }
 
 export type RpcRequest =
@@ -77,7 +85,9 @@ export type RpcRequest =
   | typeof SendRawTransactionRequest
   | typeof GetRawTransactionRequest
   | typeof VerifyMessageRequest
-  | typeof SignMessageRequest;
+  | typeof SignMessageRequest
+  | typeof SendCurrencyRequest
+  | typeof FundRawTransactionRequest;
 
 export type RpcResponse =
   | typeof MakeOfferResponse
@@ -94,4 +104,6 @@ export type RpcResponse =
   | typeof SendRawTransactionResponse
   | typeof GetRawTransactionResponse
   | typeof VerifyMessageResponse
-  | typeof SignMessageResponse;
+  | typeof SignMessageResponse
+  | typeof SendCurrencyResponse
+  | typeof FundRawTransactionResponse;
