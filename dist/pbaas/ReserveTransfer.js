@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RESERVE_TRANSFER_ARBITRAGE_ONLY = exports.RESERVE_TRANSFER_CURRENCY_EXPORT = exports.RESERVE_TRANSFER_IDENTITY_EXPORT = exports.RESERVE_TRANSFER_REFUND = exports.RESERVE_TRANSFER_RESERVE_TO_RESERVE = exports.RESERVE_TRANSFER_IMPORT_TO_SOURCE = exports.RESERVE_TRANSFER_BURN_CHANGE_WEIGHT = exports.RESERVE_TRANSFER_BURN_CHANGE_PRICE = exports.RESERVE_TRANSFER_CROSS_SYSTEM = exports.RESERVE_TRANSFER_MINT_CURRENCY = exports.RESERVE_TRANSFER_DOUBLE_SEND = exports.RESERVE_TRANSFER_FEE_OUTPUT = exports.RESERVE_TRANSFER_PRECONVERT = exports.RESERVE_TRANSFER_CONVERT = exports.RESERVE_TRANSFER_VALID = exports.RESERVE_TRANSFER_INVALID = void 0;
+exports.ReserveTransfer = exports.RESERVE_TRANSFER_ARBITRAGE_ONLY = exports.RESERVE_TRANSFER_CURRENCY_EXPORT = exports.RESERVE_TRANSFER_IDENTITY_EXPORT = exports.RESERVE_TRANSFER_REFUND = exports.RESERVE_TRANSFER_RESERVE_TO_RESERVE = exports.RESERVE_TRANSFER_IMPORT_TO_SOURCE = exports.RESERVE_TRANSFER_BURN_CHANGE_WEIGHT = exports.RESERVE_TRANSFER_BURN_CHANGE_PRICE = exports.RESERVE_TRANSFER_CROSS_SYSTEM = exports.RESERVE_TRANSFER_MINT_CURRENCY = exports.RESERVE_TRANSFER_DOUBLE_SEND = exports.RESERVE_TRANSFER_FEE_OUTPUT = exports.RESERVE_TRANSFER_PRECONVERT = exports.RESERVE_TRANSFER_CONVERT = exports.RESERVE_TRANSFER_VALID = exports.RESERVE_TRANSFER_INVALID = void 0;
 const varint_1 = require("../utils/varint");
 const bufferutils_1 = require("../utils/bufferutils");
 const bn_js_1 = require("bn.js");
@@ -25,13 +25,13 @@ exports.RESERVE_TRANSFER_REFUND = new bn_js_1.BN("800", 16); // this transfer sh
 exports.RESERVE_TRANSFER_IDENTITY_EXPORT = new bn_js_1.BN("1000", 16); // this exports a full identity when the next cross-chain leg is processed
 exports.RESERVE_TRANSFER_CURRENCY_EXPORT = new bn_js_1.BN("2000", 16); // this exports a currency definition
 exports.RESERVE_TRANSFER_ARBITRAGE_ONLY = new bn_js_1.BN("4000", 16); // in PBaaS V1, one additional reserve transfer from the local system may be added by the importer
-class ReserveTransfer extends TokenOutput_1.default {
+class ReserveTransfer extends TokenOutput_1.TokenOutput {
     constructor(data) {
         super(data);
         this.flags = exports.RESERVE_TRANSFER_INVALID;
         this.fee_currency_id = null;
         this.fee_amount = new bn_js_1.BN(0, 10);
-        this.transfer_destination = new TransferDestination_1.default();
+        this.transfer_destination = new TransferDestination_1.TransferDestination();
         this.dest_currency_id = null;
         this.second_reserve_id = null;
         this.dest_currency_id = null;
@@ -111,7 +111,7 @@ class ReserveTransfer extends TokenOutput_1.default {
     }
     toBuffer() {
         const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
-        const ownOutput = new TokenOutput_1.default({
+        const ownOutput = new TokenOutput_1.TokenOutput({
             values: this.reserve_values,
             version: this.version
         });
@@ -135,7 +135,7 @@ class ReserveTransfer extends TokenOutput_1.default {
         this.flags = reader.readVarInt();
         this.fee_currency_id = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
         this.fee_amount = reader.readVarInt();
-        this.transfer_destination = new TransferDestination_1.default();
+        this.transfer_destination = new TransferDestination_1.TransferDestination();
         reader.offset = this.transfer_destination.fromBuffer(buffer, reader.offset);
         this.dest_currency_id = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
         if (this.isReserveToReserve()) {
@@ -147,4 +147,4 @@ class ReserveTransfer extends TokenOutput_1.default {
         return reader.offset;
     }
 }
-exports.default = ReserveTransfer;
+exports.ReserveTransfer = ReserveTransfer;

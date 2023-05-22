@@ -1,7 +1,7 @@
 /// <reference types="bn.js" />
 /// <reference types="node" />
 import { BigNumber } from '../utils/types/BigNumber';
-export default class CurrencyValueMap {
+export declare class CurrencyValueMap {
     value_map: Map<string, BigNumber>;
     multivalue: boolean;
     constructor(data?: {

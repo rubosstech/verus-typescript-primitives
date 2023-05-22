@@ -1,6 +1,6 @@
 import { BN } from "bn.js";
-import CurrencyValueMap from "../../pbaas/CurrencyValueMap";
-import TokenOutput, { VERSION_MULTIVALUE } from "../../pbaas/TokenOutput";
+import { CurrencyValueMap } from "../../pbaas/CurrencyValueMap";
+import { TokenOutput, VERSION_MULTIVALUE } from "../../pbaas/TokenOutput";
 import { BigNumber } from "../../utils/types/BigNumber";
 
 describe('Serializes and deserializes token output properly', () => {

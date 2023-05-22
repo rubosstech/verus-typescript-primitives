@@ -1,4 +1,4 @@
-import CurrencyValueMap from './CurrencyValueMap';
+import { CurrencyValueMap } from './CurrencyValueMap';
 import varint from '../utils/varint'
 import bufferutils from '../utils/bufferutils'
 import { BN } from 'bn.js';
@@ -11,7 +11,7 @@ export const VERSION_FIRSTVALID = new BN(1, 10)
 export const VERSION_LASTVALID = new BN(1, 10)
 export const VERSION_MULTIVALUE = new BN('80000000', 16)
 
-export default class TokenOutput {
+export class TokenOutput {
   version: BigNumber;
   reserve_values: CurrencyValueMap;
 

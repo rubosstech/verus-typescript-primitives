@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CurrencyValueMap = void 0;
 const varint_1 = require("../utils/varint");
 const varuint_1 = require("../utils/varuint");
 const address_1 = require("../utils/address");
@@ -59,4 +60,4 @@ class CurrencyValueMap {
         return reader.offset;
     }
 }
-exports.default = CurrencyValueMap;
+exports.CurrencyValueMap = CurrencyValueMap;

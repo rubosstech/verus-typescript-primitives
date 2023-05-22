@@ -17,7 +17,7 @@ export declare const AST_VALID_TYPE_NO_FLAGS: import("bn.js");
 export declare const FLAG_DEST_AUX: import("bn.js");
 export declare const FLAG_DEST_GATEWAY: import("bn.js");
 export declare const FLAG_MASK: import("bn.js");
-export default class TransferDestination {
+export declare class TransferDestination {
     type: BigNumber;
     destination_bytes: Buffer;
     gateway_id: string;

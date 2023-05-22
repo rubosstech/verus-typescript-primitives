@@ -23,7 +23,7 @@ export const FLAG_DEST_AUX = new BN(64, 10)
 export const FLAG_DEST_GATEWAY = new BN(128, 10)
 export const FLAG_MASK = FLAG_DEST_AUX.add(FLAG_DEST_GATEWAY)
 
-export default class TransferDestination {
+export class TransferDestination {
   type: BigNumber;
   destination_bytes: Buffer;
   gateway_id: string;

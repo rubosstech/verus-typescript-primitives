@@ -1,10 +1,10 @@
-import CurrencyValueMap from './CurrencyValueMap';
+import { CurrencyValueMap } from './CurrencyValueMap';
 import varint from '../utils/varint'
 import bufferutils from '../utils/bufferutils'
 import { BN } from 'bn.js';
 import { BigNumber } from '../utils/types/BigNumber';
-import TokenOutput from './TokenOutput';
-import TransferDestination from './TransferDestination';
+import { TokenOutput } from './TokenOutput';
+import { TransferDestination } from './TransferDestination';
 import { fromBase58Check, toBase58Check } from '../utils/address';
 import { I_ADDR_VERSION } from '../constants/vdxf';
 const { BufferReader, BufferWriter } = bufferutils
@@ -26,7 +26,7 @@ export const RESERVE_TRANSFER_IDENTITY_EXPORT = new BN("1000", 16)           // 
 export const RESERVE_TRANSFER_CURRENCY_EXPORT = new BN("2000", 16)           // this exports a currency definition
 export const RESERVE_TRANSFER_ARBITRAGE_ONLY = new BN("4000", 16)            // in PBaaS V1, one additional reserve transfer from the local system may be added by the importer
 
-export default class ReserveTransfer extends TokenOutput {
+export class ReserveTransfer extends TokenOutput {
   flags: BigNumber;
   fee_currency_id: string;
   fee_amount: BigNumber;

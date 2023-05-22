@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VERSION_MULTIVALUE = exports.VERSION_LASTVALID = exports.VERSION_FIRSTVALID = exports.VERSION_CURRENT = exports.VERSION_INVALID = void 0;
+exports.TokenOutput = exports.VERSION_MULTIVALUE = exports.VERSION_LASTVALID = exports.VERSION_FIRSTVALID = exports.VERSION_CURRENT = exports.VERSION_INVALID = void 0;
 const CurrencyValueMap_1 = require("./CurrencyValueMap");
 const varint_1 = require("../utils/varint");
 const bufferutils_1 = require("../utils/bufferutils");
@@ -14,7 +14,7 @@ exports.VERSION_MULTIVALUE = new bn_js_1.BN('80000000', 16);
 class TokenOutput {
     constructor(data) {
         this.version = exports.VERSION_INVALID;
-        this.reserve_values = new CurrencyValueMap_1.default();
+        this.reserve_values = new CurrencyValueMap_1.CurrencyValueMap();
         if (data != null) {
             if (data.values != null)
                 this.reserve_values = data.values;
@@ -40,7 +40,7 @@ class TokenOutput {
         const reader = new BufferReader(buffer, offset);
         this.version = reader.readVarInt();
         const multivalue = !!(this.version.and(exports.VERSION_MULTIVALUE).toNumber());
-        this.reserve_values = new CurrencyValueMap_1.default({ multivalue });
+        this.reserve_values = new CurrencyValueMap_1.CurrencyValueMap({ multivalue });
         reader.offset = this.reserve_values.fromBuffer(reader.buffer, reader.offset);
         return reader.offset;
     }
@@ -60,4 +60,4 @@ class TokenOutput {
             this.version.lte(exports.VERSION_LASTVALID));
     }
 }
-exports.default = TokenOutput;
+exports.TokenOutput = TokenOutput;

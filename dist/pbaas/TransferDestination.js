@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FLAG_MASK = exports.FLAG_DEST_GATEWAY = exports.FLAG_DEST_AUX = exports.AST_VALID_TYPE_NO_FLAGS = exports.DEST_RAW = exports.DEST_ETHNFT = exports.DEST_ETH = exports.DEST_NESTEDTRANSFER = exports.DEST_QUANTUM = exports.DEST_REGISTERCURRENCY = exports.DEST_FULLID = exports.DEST_ID = exports.DEST_SH = exports.DEST_PKH = exports.DEST_PK = exports.DEST_INVALID = void 0;
+exports.TransferDestination = exports.FLAG_MASK = exports.FLAG_DEST_GATEWAY = exports.FLAG_DEST_AUX = exports.AST_VALID_TYPE_NO_FLAGS = exports.DEST_RAW = exports.DEST_ETHNFT = exports.DEST_ETH = exports.DEST_NESTEDTRANSFER = exports.DEST_QUANTUM = exports.DEST_REGISTERCURRENCY = exports.DEST_FULLID = exports.DEST_ID = exports.DEST_SH = exports.DEST_PKH = exports.DEST_PK = exports.DEST_INVALID = void 0;
 const bufferutils_1 = require("../utils/bufferutils");
 const bn_js_1 = require("bn.js");
 const varuint_1 = require("../utils/varuint");
@@ -124,4 +124,4 @@ class TransferDestination {
         return reader.offset;
     }
 }
-exports.default = TransferDestination;
+exports.TransferDestination = TransferDestination;

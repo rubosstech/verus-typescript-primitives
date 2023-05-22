@@ -7,7 +7,7 @@ import { BigNumber } from '../utils/types/BigNumber';
 import { I_ADDR_VERSION } from '../constants/vdxf';
 const { BufferReader, BufferWriter } = bufferutils
 
-export default class CurrencyValueMap {
+export class CurrencyValueMap {
   value_map: Map<string,BigNumber>;
   multivalue: boolean;
 

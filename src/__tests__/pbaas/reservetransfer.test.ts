@@ -1,8 +1,8 @@
 import { BN } from "bn.js";
-import CurrencyValueMap from "../../pbaas/CurrencyValueMap";
-import ReserveTransfer from "../../pbaas/ReserveTransfer";
+import { CurrencyValueMap } from "../../pbaas/CurrencyValueMap";
+import { ReserveTransfer } from "../../pbaas/ReserveTransfer";
 import { BigNumber } from "../../utils/types/BigNumber";
-import TransferDestination from "../../pbaas/TransferDestination";
+import { TransferDestination } from "../../pbaas/TransferDestination";
 import { fromBase58Check } from "../../utils/address";
 
 describe('Serializes and deserializes token output properly', () => {
