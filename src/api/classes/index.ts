@@ -32,6 +32,8 @@ import { SendCurrencyRequest } from './SendCurrency/SendCurrencyRequest'
 import { SendCurrencyResponse } from './SendCurrency/SendCurrencyResponse'
 import { FundRawTransactionRequest } from './FundRawTransaction/FundRawTransactionRequest'
 import { FundRawTransactionResponse } from './FundRawTransaction/FundRawTransactionResponse'
+import { GetCurrencyConvertersRequest } from './GetCurrencyConverters/GetCurrencyConvertersRequest'
+import { GetCurrencyConvertersResponse } from './GetCurrencyConverters/GetCurrencyConvertersResponse'
 
 export {
   GetAddressBalanceRequest,
@@ -67,7 +69,9 @@ export {
   SendCurrencyRequest,
   SendCurrencyResponse,
   FundRawTransactionRequest,
-  FundRawTransactionResponse
+  FundRawTransactionResponse,
+  GetCurrencyConvertersRequest,
+  GetCurrencyConvertersResponse
 }
 
 export type RpcRequest =
@@ -87,7 +91,8 @@ export type RpcRequest =
   | typeof VerifyMessageRequest
   | typeof SignMessageRequest
   | typeof SendCurrencyRequest
-  | typeof FundRawTransactionRequest;
+  | typeof FundRawTransactionRequest
+  | typeof GetCurrencyConvertersRequest;
 
 export type RpcResponse =
   | typeof MakeOfferResponse
@@ -106,4 +111,5 @@ export type RpcResponse =
   | typeof VerifyMessageResponse
   | typeof SignMessageResponse
   | typeof SendCurrencyResponse
-  | typeof FundRawTransactionResponse;
+  | typeof FundRawTransactionResponse
+  | typeof GetCurrencyConvertersResponse;

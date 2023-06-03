@@ -15,3 +15,4 @@ export declare const SIGN_MESSAGE = "signmessage";
 export declare const VERIFY_MESSAGE = "verifymessage";
 export declare const FUND_RAW_TRANSACTION = "fundrawtransaction";
 export declare const SEND_CURRENCY = "sendcurrency";
+export declare const GET_CURRENCY_CONVERTERS = "getcurrencyconverters";

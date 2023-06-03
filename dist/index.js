@@ -24,3 +24,5 @@ __exportStar(require("./utils/address"), exports);
 __exportStar(require("./utils/bufferutils"), exports);
 __exportStar(require("./utils/varuint"), exports);
 __exportStar(require("./pbaas/index"), exports);
+__exportStar(require("./identity/IdentityDefinition"), exports);
+__exportStar(require("./currency/CurrencyDefinition"), exports);
