@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReserveTransfer = exports.RESERVE_TRANSFER_ARBITRAGE_ONLY = exports.RESERVE_TRANSFER_CURRENCY_EXPORT = exports.RESERVE_TRANSFER_IDENTITY_EXPORT = exports.RESERVE_TRANSFER_REFUND = exports.RESERVE_TRANSFER_RESERVE_TO_RESERVE = exports.RESERVE_TRANSFER_IMPORT_TO_SOURCE = exports.RESERVE_TRANSFER_BURN_CHANGE_WEIGHT = exports.RESERVE_TRANSFER_BURN_CHANGE_PRICE = exports.RESERVE_TRANSFER_CROSS_SYSTEM = exports.RESERVE_TRANSFER_MINT_CURRENCY = exports.RESERVE_TRANSFER_DOUBLE_SEND = exports.RESERVE_TRANSFER_FEE_OUTPUT = exports.RESERVE_TRANSFER_PRECONVERT = exports.RESERVE_TRANSFER_CONVERT = exports.RESERVE_TRANSFER_VALID = exports.RESERVE_TRANSFER_INVALID = void 0;
+exports.ReserveTransfer = exports.RESERVE_TRANSFER_DESTINATION = exports.RESERVE_TRANSFER_ARBITRAGE_ONLY = exports.RESERVE_TRANSFER_CURRENCY_EXPORT = exports.RESERVE_TRANSFER_IDENTITY_EXPORT = exports.RESERVE_TRANSFER_REFUND = exports.RESERVE_TRANSFER_RESERVE_TO_RESERVE = exports.RESERVE_TRANSFER_IMPORT_TO_SOURCE = exports.RESERVE_TRANSFER_BURN_CHANGE_WEIGHT = exports.RESERVE_TRANSFER_BURN_CHANGE_PRICE = exports.RESERVE_TRANSFER_CROSS_SYSTEM = exports.RESERVE_TRANSFER_MINT_CURRENCY = exports.RESERVE_TRANSFER_DOUBLE_SEND = exports.RESERVE_TRANSFER_FEE_OUTPUT = exports.RESERVE_TRANSFER_PRECONVERT = exports.RESERVE_TRANSFER_CONVERT = exports.RESERVE_TRANSFER_VALID = exports.RESERVE_TRANSFER_INVALID = void 0;
 const varint_1 = require("../utils/varint");
 const bufferutils_1 = require("../utils/bufferutils");
 const bn_js_1 = require("bn.js");
@@ -25,6 +25,10 @@ exports.RESERVE_TRANSFER_REFUND = new bn_js_1.BN("800", 16); // this transfer sh
 exports.RESERVE_TRANSFER_IDENTITY_EXPORT = new bn_js_1.BN("1000", 16); // this exports a full identity when the next cross-chain leg is processed
 exports.RESERVE_TRANSFER_CURRENCY_EXPORT = new bn_js_1.BN("2000", 16); // this exports a currency definition
 exports.RESERVE_TRANSFER_ARBITRAGE_ONLY = new bn_js_1.BN("4000", 16); // in PBaaS V1, one additional reserve transfer from the local system may be added by the importer
+exports.RESERVE_TRANSFER_DESTINATION = new TransferDestination_1.TransferDestination({
+    type: TransferDestination_1.DEST_PKH,
+    destination_bytes: (0, address_1.fromBase58Check)("RTqQe58LSj2yr5CrwYFwcsAQ1edQwmrkUU").hash
+});
 class ReserveTransfer extends TokenOutput_1.TokenOutput {
     constructor(data) {
         super(data);

@@ -20,6 +20,7 @@ export declare const RESERVE_TRANSFER_REFUND: import("bn.js");
 export declare const RESERVE_TRANSFER_IDENTITY_EXPORT: import("bn.js");
 export declare const RESERVE_TRANSFER_CURRENCY_EXPORT: import("bn.js");
 export declare const RESERVE_TRANSFER_ARBITRAGE_ONLY: import("bn.js");
+export declare const RESERVE_TRANSFER_DESTINATION: TransferDestination;
 export declare class ReserveTransfer extends TokenOutput {
     flags: BigNumber;
     fee_currency_id: string;
