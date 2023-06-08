@@ -36,6 +36,7 @@ export declare class TransferDestination {
     hasAuxDests(): boolean;
     isIAddr(): boolean;
     isPKH(): boolean;
+    typeNoFlags(): import("bn.js");
     getAddressString(): string;
     getByteLength(): number;
     toBuffer(): Buffer;

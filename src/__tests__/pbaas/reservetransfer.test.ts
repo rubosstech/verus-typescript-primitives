@@ -295,4 +295,14 @@ describe('Serializes and deserializes token output properly', () => {
 
     expect(trans_tobuf.toBuffer().toString('hex')).toBe(vdata)
   });
+
+  test('Decodes reservetransfer with auxdests', async () => {
+    const vdata = "01a6ef9ea235635e328124ff3429db9f9e91b64e2da49faec7008743a6ef9ea235635e328124ff3429db9f9e91b64e2d91a6604214402f01e78edb0f5c8251658dde07f0d52b12e97201160214402f01e78edb0f5c8251658dde07f0d52b12e97265ffba3d69510d6f31845e60b9ee0c275389f84fcd51509db53e822df7eed11cac11e7b729e22400cd51509db53e822df7eed11cac11e7b729e22400"
+    
+    const trans_frombuf = new ReserveTransfer()
+    trans_frombuf.fromBuffer(Buffer.from(vdata, 'hex'))
+
+    expect(trans_frombuf.transfer_destination.getAddressString()).toBe("RF8ZdvjvGMNdtu3jNwcmaTDeU8hFJ28ajN")
+    expect(trans_frombuf.transfer_destination.aux_dests[0].getAddressString()).toBe("RF8ZdvjvGMNdtu3jNwcmaTDeU8hFJ28ajN")
+  });
 });

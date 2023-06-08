@@ -53,10 +53,13 @@ class TransferDestination {
         return !!(this.type.and(exports.FLAG_DEST_AUX).toNumber());
     }
     isIAddr() {
-        return this.type.eq(exports.DEST_ID);
+        return this.typeNoFlags().eq(exports.DEST_ID);
     }
     isPKH() {
-        return this.type.eq(exports.DEST_PKH);
+        return this.typeNoFlags().eq(exports.DEST_PKH);
+    }
+    typeNoFlags() {
+        return this.type.and(exports.FLAG_MASK.notn(exports.FLAG_MASK.bitLength()));
     }
     getAddressString() {
         if (this.isPKH()) {

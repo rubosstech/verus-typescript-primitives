@@ -58,11 +58,15 @@ export class TransferDestination {
   }
 
   isIAddr() {
-    return this.type.eq(DEST_ID)
+    return this.typeNoFlags().eq(DEST_ID)
   }
 
   isPKH() {
-    return this.type.eq(DEST_PKH)
+    return this.typeNoFlags().eq(DEST_PKH)
+  }
+
+  typeNoFlags() {
+    return this.type.and(FLAG_MASK.notn(FLAG_MASK.bitLength()))
   }
 
   getAddressString() {
