@@ -19,7 +19,7 @@ class GetRawTransactionRequest extends ApiRequest_1.ApiRequest {
     toJson() {
         return {
             chain: this.chain,
-            hashOrHeight: this.txid,
+            txid: this.txid,
             verbosity: this.verbose,
         };
     }
