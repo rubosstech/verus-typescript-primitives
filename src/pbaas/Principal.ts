@@ -21,7 +21,7 @@ export class Principal {
         version?: BigNumber, 
         flags?: BigNumber, 
         min_sigs?: BigNumber, 
-        primary_addresses?: TxDestination 
+        primary_addresses?: Array<string>;
       }) {
     
         this.flags = VERSION_INVALID;
@@ -31,12 +31,12 @@ export class Principal {
           if (data.flags != null) this.flags = data.flags
           if (data.version != null) this.version = data.version
           if (data.min_sigs != null) this.min_sigs = data.min_sigs
-          if (data.primary_addresses != null) this.primary_addresses = data.primary_addresses
+          if (data.primary_addresses != null) this.primary_addresses = new TxDestination({primary_addresses: data.primary_addresses});
 
         }
       }
 
-    dataByteLength() {
+    _dataByteLength() {
         let byteLength = 0;
 
         byteLength += 4; //uint32 version size
@@ -48,8 +48,8 @@ export class Principal {
         return byteLength
     }
 
-    toBuffer() {
-        const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()))
+    _toBuffer() {
+        const bufferWriter = new BufferWriter(Buffer.alloc(this._dataByteLength()))
 
         bufferWriter.writeUInt32(this.version.toNumber())
         bufferWriter.writeUInt32(this.flags.toNumber())
@@ -59,7 +59,7 @@ export class Principal {
         return bufferWriter.buffer
     }
 
-    fromBuffer(buffer, offset: number = 0) {
+    _fromBuffer(buffer, offset: number = 0) {
         const reader = new BufferReader(buffer, offset);
 
         this.flags = new BN(reader.readUInt32(), 10);
