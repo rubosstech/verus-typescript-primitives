@@ -7,8 +7,6 @@ import { fromBase58Check, toBase58Check } from '../utils/address';
 import { R_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
 
-export const VERSION_INVALID = new BN(0, 10)
-export const VERSION_CURRENT = new BN(1, 10)
 
 const { BufferReader, BufferWriter } = bufferutils
 
