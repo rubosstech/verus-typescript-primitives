@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignMessageResponse = exports.SignMessageRequest = exports.VerifyMessageResponse = exports.VerifyMessageRequest = exports.GetInfoResponse = exports.GetInfoRequest = exports.SendRawTransactionResponse = exports.SendRawTransactionRequest = exports.MakeOfferResponse = exports.MakeOfferRequest = exports.GetRawTransactionResponse = exports.GetRawTransactionRequest = exports.GetOffersResponse = exports.GetOffersRequest = exports.GetCurrencyResponse = exports.GetCurrencyRequest = exports.GetIdentityResponse = exports.GetIdentityRequest = exports.GetVdxfIdResponse = exports.GetVdxfIdRequest = exports.GetBlockResponse = exports.GetBlockRequest = exports.GetAddressUtxosResponse = exports.GetAddressUtxosRequest = exports.GetAddressMempoolResponse = exports.GetAddressMempoolRequest = exports.GetAddressDeltasResponse = exports.GetAddressDeltasRequest = exports.GetAddressBalanceResponse = exports.GetAddressBalanceRequest = void 0;
+exports.ListCurrenciesResponse = exports.ListCurrenciesRequest = exports.GetCurrencyConvertersResponse = exports.GetCurrencyConvertersRequest = exports.FundRawTransactionResponse = exports.FundRawTransactionRequest = exports.SendCurrencyResponse = exports.SendCurrencyRequest = exports.SignMessageResponse = exports.SignMessageRequest = exports.VerifyMessageResponse = exports.VerifyMessageRequest = exports.GetInfoResponse = exports.GetInfoRequest = exports.SendRawTransactionResponse = exports.SendRawTransactionRequest = exports.MakeOfferResponse = exports.MakeOfferRequest = exports.GetRawTransactionResponse = exports.GetRawTransactionRequest = exports.GetOffersResponse = exports.GetOffersRequest = exports.GetCurrencyResponse = exports.GetCurrencyRequest = exports.GetIdentityResponse = exports.GetIdentityRequest = exports.GetVdxfIdResponse = exports.GetVdxfIdRequest = exports.GetBlockResponse = exports.GetBlockRequest = exports.GetAddressUtxosResponse = exports.GetAddressUtxosRequest = exports.GetAddressMempoolResponse = exports.GetAddressMempoolRequest = exports.GetAddressDeltasResponse = exports.GetAddressDeltasRequest = exports.GetAddressBalanceResponse = exports.GetAddressBalanceRequest = void 0;
 const GetAddressBalanceRequest_1 = require("./GetAddressBalance/GetAddressBalanceRequest");
 Object.defineProperty(exports, "GetAddressBalanceRequest", { enumerable: true, get: function () { return GetAddressBalanceRequest_1.GetAddressBalanceRequest; } });
 const GetAddressBalanceResponse_1 = require("./GetAddressBalance/GetAddressBalanceResponse");
@@ -61,3 +61,19 @@ const GetAddressMempoolResponse_1 = require("./GetAddressMempool/GetAddressMempo
 Object.defineProperty(exports, "GetAddressMempoolResponse", { enumerable: true, get: function () { return GetAddressMempoolResponse_1.GetAddressMempoolResponse; } });
 const GetAddressMempoolRequest_1 = require("./GetAddressMempool/GetAddressMempoolRequest");
 Object.defineProperty(exports, "GetAddressMempoolRequest", { enumerable: true, get: function () { return GetAddressMempoolRequest_1.GetAddressMempoolRequest; } });
+const SendCurrencyRequest_1 = require("./SendCurrency/SendCurrencyRequest");
+Object.defineProperty(exports, "SendCurrencyRequest", { enumerable: true, get: function () { return SendCurrencyRequest_1.SendCurrencyRequest; } });
+const SendCurrencyResponse_1 = require("./SendCurrency/SendCurrencyResponse");
+Object.defineProperty(exports, "SendCurrencyResponse", { enumerable: true, get: function () { return SendCurrencyResponse_1.SendCurrencyResponse; } });
+const FundRawTransactionRequest_1 = require("./FundRawTransaction/FundRawTransactionRequest");
+Object.defineProperty(exports, "FundRawTransactionRequest", { enumerable: true, get: function () { return FundRawTransactionRequest_1.FundRawTransactionRequest; } });
+const FundRawTransactionResponse_1 = require("./FundRawTransaction/FundRawTransactionResponse");
+Object.defineProperty(exports, "FundRawTransactionResponse", { enumerable: true, get: function () { return FundRawTransactionResponse_1.FundRawTransactionResponse; } });
+const GetCurrencyConvertersRequest_1 = require("./GetCurrencyConverters/GetCurrencyConvertersRequest");
+Object.defineProperty(exports, "GetCurrencyConvertersRequest", { enumerable: true, get: function () { return GetCurrencyConvertersRequest_1.GetCurrencyConvertersRequest; } });
+const GetCurrencyConvertersResponse_1 = require("./GetCurrencyConverters/GetCurrencyConvertersResponse");
+Object.defineProperty(exports, "GetCurrencyConvertersResponse", { enumerable: true, get: function () { return GetCurrencyConvertersResponse_1.GetCurrencyConvertersResponse; } });
+const ListCurrenciesRequest_1 = require("./ListCurrencies/ListCurrenciesRequest");
+Object.defineProperty(exports, "ListCurrenciesRequest", { enumerable: true, get: function () { return ListCurrenciesRequest_1.ListCurrenciesRequest; } });
+const ListCurrenciesResponse_1 = require("./ListCurrencies/ListCurrenciesResponse");
+Object.defineProperty(exports, "ListCurrenciesResponse", { enumerable: true, get: function () { return ListCurrenciesResponse_1.ListCurrenciesResponse; } });

@@ -88,7 +88,7 @@ class SignedSessionObject extends __1.VDXFObject {
     }
     _fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        const reqLength = reader.readVarInt();
+        const reqLength = reader.readCompactSize();
         if (reqLength == 0) {
             throw new Error("Cannot create signed session object from empty buffer");
         }
@@ -113,7 +113,7 @@ class SignedSessionObject extends __1.VDXFObject {
             ['VDXF-Version']: this.version.toString(),
             ['VerusID-Session-ID']: this.data.session_id,
             ['VerusID-Timestamp-Micro']: this.data.timestamp_micro.toString(),
-            ['VerusID-Signature']: this.signature.signature
+            ['VerusID-Signature']: this.signature.signature // Signature of this SSO serialized
         };
     }
     static fromHttpRequest(headers, body, system_id, signing_id) {

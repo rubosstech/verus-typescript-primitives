@@ -129,7 +129,7 @@ export class Decision extends VDXFObject {
     readRequest: boolean = true
   ): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
-    const decisionLength = reader.readVarInt();
+    const decisionLength = reader.readCompactSize();
 
     if (decisionLength == 0) {
       throw new Error("Cannot create decision from empty buffer");
@@ -152,7 +152,7 @@ export class Decision extends VDXFObject {
         this.skipped = reader.readUInt8() === 1 ? true : false;
 
         this.attestations = [];
-        const attestationsLength = reader.readVarInt();
+        const attestationsLength = reader.readCompactSize();
   
         for (let i = 0; i < attestationsLength; i++) {
           const _att = new Attestation();

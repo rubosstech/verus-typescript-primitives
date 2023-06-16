@@ -42,7 +42,7 @@ export class Context extends VDXFObject {
     const writer = new bufferutils.BufferWriter(buffer);
     const keys = Object.keys(this.kv);
 
-    writer.writeVarInt(keys.length);
+    writer.writeCompactSize(keys.length);
 
     for (const key of Object.keys(this.kv)) {
       const value = this.kv[key];
@@ -57,13 +57,13 @@ export class Context extends VDXFObject {
 
   fromDataBuffer(buffer: Buffer, offset?: number): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
-    const contextLength = reader.readVarInt();
+    const contextLength = reader.readCompactSize();
 
     if (contextLength == 0) {
       this.kv = {};
       return reader.offset;
     } else {
-      const numKeys = reader.readVarInt();
+      const numKeys = reader.readCompactSize();
 
       for (let i = 0; i < numKeys; i++) {
         this.kv[

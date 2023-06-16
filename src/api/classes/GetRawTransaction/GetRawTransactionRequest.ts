@@ -29,7 +29,7 @@ export class GetRawTransactionRequest extends ApiRequest {
   toJson(): ApiPrimitiveJson {
     return {
       chain: this.chain,
-      hashOrHeight: this.txid,
+      txid: this.txid,
       verbosity: this.verbose,
     };
   }

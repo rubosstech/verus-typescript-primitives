@@ -14,5 +14,7 @@ export class GetAddressUtxosResponse extends ApiResponse {
     };
     satoshis: number;
     height: number;
+    isspendable: number;
+    blocktime: number;
   }>;
 }

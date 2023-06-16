@@ -9,3 +9,8 @@ export * from './vdxf/index'
 export * from './utils/address'
 export * from './utils/bufferutils'
 export * from './utils/varuint'
+
+export * from './pbaas/index'
+
+export * from './identity/IdentityDefinition'
+export * from './currency/CurrencyDefinition'
