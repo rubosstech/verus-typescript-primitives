@@ -223,9 +223,6 @@ class Challenge extends __1.VDXFObject {
                 }
                 this.attestations = [];
                 const attestationsLength = reader.readCompactSize();
-                if (attestationsLength > 0) {
-                    throw new Error("Attestations currently unsupported");
-                const attestationsLength = reader.readVarInt();
                 for (let i = 0; i < attestationsLength; i++) {
                     const _att = new Attestation();
                     reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
