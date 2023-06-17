@@ -36,6 +36,8 @@ import { GetCurrencyConvertersRequest } from './GetCurrencyConverters/GetCurrenc
 import { GetCurrencyConvertersResponse } from './GetCurrencyConverters/GetCurrencyConvertersResponse'
 import { ListCurrenciesRequest } from './ListCurrencies/ListCurrenciesRequest'
 import { ListCurrenciesResponse } from './ListCurrencies/ListCurrenciesResponse'
+import { EstimateConversionRequest } from './EstimateConversion/EstimateConversionRequest'
+import { EstimateConversionResponse } from './EstimateConversion/EstimateConversionResponse'
 
 export {
   GetAddressBalanceRequest,
@@ -75,7 +77,9 @@ export {
   GetCurrencyConvertersRequest,
   GetCurrencyConvertersResponse,
   ListCurrenciesRequest,
-  ListCurrenciesResponse
+  ListCurrenciesResponse,
+  EstimateConversionRequest,
+  EstimateConversionResponse
 }
 
 export type RpcRequest =
@@ -97,7 +101,8 @@ export type RpcRequest =
   | typeof SendCurrencyRequest
   | typeof FundRawTransactionRequest
   | typeof GetCurrencyConvertersRequest
-  | typeof ListCurrenciesRequest;
+  | typeof ListCurrenciesRequest
+  | typeof EstimateConversionRequest;
 
 export type RpcResponse =
   | typeof MakeOfferResponse
@@ -118,4 +123,5 @@ export type RpcResponse =
   | typeof SendCurrencyResponse
   | typeof FundRawTransactionResponse
   | typeof GetCurrencyConvertersResponse
-  | typeof ListCurrenciesResponse;
+  | typeof ListCurrenciesResponse
+  | typeof EstimateConversionResponse;
