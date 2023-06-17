@@ -6,8 +6,8 @@ type Output = {
   currency: string;
   amount: number;
   convertto: string;
-  preconvert: boolean;
-  via: string;
+  preconvert?: boolean;
+  via?: string;
 }
 
 export class EstimateConversionRequest extends ApiRequest {
