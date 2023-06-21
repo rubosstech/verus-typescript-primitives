@@ -148,8 +148,10 @@ class TxDestination {
 
       count = reader.readVarInt().toNumber();
 
+      this.primary_addresses = new Array<Buffer>;
+
       for (let i = 0; i < count; i++) {
-          this.primary_addresses[i] = reader.readVarSlice();
+          this.primary_addresses.push(reader.readVarSlice());
       }
 
       return reader.offset;
