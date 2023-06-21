@@ -76,19 +76,20 @@ export class Identity extends Principal {
     timelock: number;
 
     constructor (data?: { 
-        version?: BigNumber, 
-        flags?: BigNumber, 
-        primary_addresses?: Array<string>, 
-        min_sigs?: BigNumber, 
+        version?: BigNumber | number, 
+        flags?: BigNumber | number, 
+        primaryaddresses?: Array<string>, 
+        minimumsignatures?: BigNumber | number, 
         parent?: string, 
-        system_id?: string, 
+        systemid?: string, 
         name?: string,
         contentmap?: Map<string,Buffer>;
-        contentmultimap?: Map<string,Array<Buffer>>;
-        revocation_authority?: string;
-        recovery_authority?: string;
-        private_addresses: Array<{d: Buffer, pk_d: Buffer}>;
+        contentmultimap?: Map<string,Array<Buffer>> | {[name: string]: Array<{[name: string]: string}>};
+        revocationauthority?: string;
+        recoveryauthority?: string;
+        private_addresses?: Array<{d: Buffer, pk_d: Buffer}>;
         timelock?: number;
+        identityaddress?: string;
 
       }) {
     
@@ -96,11 +97,30 @@ export class Identity extends Principal {
     
         if (data != null) {
           if (data.parent != null) this.parent = data.parent
-          if (data.system_id != null) this.system_id = data.system_id
-          if (data.min_sigs != null) this.min_sigs = data.min_sigs
+          if (data.systemid != null) this.system_id = data.systemid
           if (data.contentmap != null) this.contentmap = new Map(data.contentmap || []);
-          if (data.contentmultimap != null) this.contentmultimap = new Map(data.contentmultimap || []);
-          if (data.revocation_authority != null) this.revocation_authority = data.revocation_authority
+          if (data.contentmultimap != null) {
+
+              if (typeof data.contentmultimap == "object") {
+
+                const keys = Object.keys(data.contentmultimap);
+                this.contentmultimap = new Map<string,Array<Buffer>>;
+               
+                for (const key in keys ) {
+                  const itemkeys = Object.keys(data.contentmultimap[key])
+                  const multivalue = itemkeys.map((item) => {return {[Object.keys(item)[0]]: Buffer.from(item, "utf8")}});
+
+                  this.contentmultimap.set(key, multivalue)
+                }
+
+              }
+              else {
+                this.contentmultimap = new Map(data.contentmultimap || []);
+              }
+
+          }
+          if (data.revocationauthority != null) this.revocation_authority = data.revocationauthority
+          if (data.recoveryauthority != null) this.recovery_authority = data.recoveryauthority
           if (data.timelock != null) this.timelock = data.timelock
           if (data.private_addresses != null) this.private_addresses = data.private_addresses.map ( (addr) => {return decodeSaplingAddress(addr)})
         }
@@ -235,4 +255,127 @@ export class Identity extends Principal {
 
         return reader.offset;
     }
+}
+
+function contentmultimapFromObject (input) {
+
+    var contentmultimap = new Map;
+    var nVersion = 1;
+    const keys = Object.keys(input);
+    const values = keys.map((item) => input[item]);
+
+    for (var i = 0; i < keys.length; i++)
+    {
+        try
+        {
+          const key = fromBase58Check(keys[i]).hash;
+
+
+            if (key != null)
+            {
+                if (Array.isArray(values[i]))
+                {
+                    for (var j = 0; j < values[i].length; j++)
+                    {
+                        const oneValue = values[i][j];
+                        var items = [];
+                        if (typeof oneValue == "string")
+                        {
+
+                          items.push(Buffer.from(oneValue, 'hex'));
+                        }
+                        else if (typeof oneValue == "object")
+                        {
+                            const mapBytesValue = VectorEncodeVDXFUni(oneValue);
+                            if (mapBytesValue.length === 0 || nVersion == VERSION_INVALID)
+                            {
+                                nVersion = VERSION_INVALID;
+                                break;
+                            }
+                            contentMultiMap.insert(std::make_pair(key, mapBytesValue));
+                        }
+                    }
+                    contentmultimap.set(key ,items);
+                }
+                else if (values[i].isStr())
+                {
+                    std::string valueString;
+                    if (IsHex(valueString = uni_get_str(values[i])))
+                    {
+                        contentMultiMap.insert(std::make_pair(key, ParseHex(valueString)));
+                    }
+                    else
+                    {
+                        nVersion = VERSION_INVALID;
+                        break;
+                    }
+                }
+                else if (values[i].isObject())
+                {
+                    std::vector<unsigned char> mapBytesValue = VectorEncodeVDXFUni(values[i]);
+                    if (!mapBytesValue.size() || nVersion == VERSION_INVALID)
+                    {
+                        nVersion = VERSION_INVALID;
+                        break;
+                    }
+                    contentMultiMap.insert(std::make_pair(key, mapBytesValue));
+                }
+                else
+                {
+                    nVersion = VERSION_INVALID;
+                    break;
+                }
+            }
+            else
+            {
+                nVersion = VERSION_INVALID;
+                break;
+            }
+        }
+        catch (const std::exception &e)
+        {
+            nVersion = VERSION_INVALID;
+        }
+        if (nVersion == VERSION_INVALID)
+        {
+            LogPrint("contentmap", "%s: contentmultimap entry is not valid keys: %s, values: %s\n", __func__, keys[i].c_str(), values[i].write().c_str());
+            break;
+        }
+    }
+}
+
+
+const CVDXF_Data = {
+  iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c:
+    {
+      "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
+      "indexid": "xPwgY6oPdusaAgNK3u5yHCQG5NsHEcBpi5",
+      "hash160result": "e5c061641228a399169211e666de18448b7b8bab",
+      "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::data.type.string"
+      }
+    }
+}
+
+function VectorEncodeVDXFUni (obj) {
+
+  const bufferWriter = new BufferWriter(Buffer.from(''))
+
+  const keys = Object.keys(obj);
+  const values = keys.map((item) => obj[item]);
+
+  for (var i = 0; i < keys.length; i++) {
+    if (CVDXF_Data[keys[i]] && CVDXF_Data[keys[i]].qualifiedname.name === "vrsc::data.type.string" ) {
+      bufferWriter.writeVarInt(new BN(1));
+      bufferWriter.writeSlice(Buffer.from(CVDXF_Data[keys[i]].hash160result.hash, 'hex'))
+      bufferWriter.writeCompactSize(Buffer.from(values[i], 'utf8').length); 
+      bufferWriter.writeSlice(Buffer.from(values[i], 'utf8'))
+    }
+
+    // TODO: add alltypes
+  }
+
+  return bufferWriter.buffer;
+
 }

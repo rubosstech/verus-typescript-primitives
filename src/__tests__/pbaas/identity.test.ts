@@ -13,7 +13,36 @@ describe('Serializes and deserializes identity properly', () => {
     identity_frombuf.fromBuffer(Buffer.from(vdata, 'hex'))
 
 
+    const identity_tobuf = new Identity({
+        "version":3,
+        "flags":0,
+        "primaryaddresses":[
+           "RKjVHqM4VF2pCfVcwGzKH7CxvfMUE4H6o8"
+        ],
+        "minimumsignatures":1,
+        "name":"Chris",
+        "identityaddress":"iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j",
+        "parent":"iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq",
+        "systemid":"iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq",
+        "contentmultimap":{
+           "iAqxJCbv2veLLHGdantvrzJRupyh3dkT6B":[
+              {
+                 "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c":"{\"artistName\": \"ivan@\", \"albumName\": \"testAlbum\", \"genre\": \"rock\", \"url\": \"https:///jukebox\", \"networkId\": \"roomful\", \"signature\": \"AgXmEgAAAUEgwLEQjSOMDGvQ9OqXYC6TpmvlSj+lYg17MW3aaIM58cE9ufW7gF4Jyf6M/nJJVM3wFodIm4Irb/TUeFjeKCan5g==\", \"tracks\": [{\"resourceId\": \"1945dc9dqtrg21\", \"name\": \"\\u0412\\u043e\\u043f\\u043b\\u0456 \\u0412\\u0456\\u0434\\u043e\\u043f\\u043b\\u044f\\u0441\\u043e\\u0432\\u0430 - \\u0412\\u0435\\u0441\\u043d\\u0430 (Cover by Grandma\\s Smuzi)\", \"duration\": 240.432}], \"albumCover\": {\"resourceId\": \"91dsp8tq6rsq1v\"}, \"artistLogo\": {\"resourceId\": \"r2f06bgtzhr8bv\"}, \"sleeveDocument\": {\"resourceId\": \"5pc60wsq353zsm\"}, \"copiesSold\": 0, \"releaseTimestamp\": \"1682559212\", \"price\": {\"VALU\": 1, \"USDC\": 200}}"
+              }
+           ],
+           "iChNhyJiQSZ3HumofCBhuASjgupq1m1NgP":[
+              {
+                 "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c":"{\"albumCover\": {\"resourceId\": \"91dsp8tq6rsq1v\"}, \"albumName\": \"testAlbum11\", \"artistLogo\": {\"resourceId\": \"r2f06bgtzhr8bv\"}, \"artistName\": \"ivan@\", \"genre\": \"rock\", \"networkId\": \"roomful\", \"signature\": \"AgXmEgAAAUEgwLEQjSOMDGvQ9OqXYC6TpmvlSj+lYg17MW3aaIM58cE9ufW7gF4Jyf6M/nJJVM3wFodIm4Irb/TUeFjeKCan5g==\", \"sleeveDocument\": {\"resourceId\": \"5pc60wsq353zsm\"}, \"tracks\": [{\"duration\": 240.432, \"name\": \"\\u0412\\u043e\\u043f\\u043b\\u0456 \\u0412\\u0456\\u0434\\u043e\\u043f\\u043b\\u044f\\u0441\\u043e\\u0432\\u0430 - \\u0412\\u0435\\u0441\\u043d\\u0430 (Cover by Grandma\\s Smuzi)\", \"resourceId\": \"1945dc9dqtrg21\"}], \"url\": \"https:///jukebox\", \"copiesSold\": 0, \"releaseTimestamp\": \"1682536170\", \"price\": {\"VALU\": 1, \"USDC\": 200}}"
+              }
+           ]
+        },
+        "revocationauthority":"iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j",
+        "recoveryauthority":"iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j",
+        "timelock":0
+     })
+
+
   });
 
-  
+
 });

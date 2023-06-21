@@ -17,9 +17,9 @@ export class Principal {
     primary_addresses: TxDestination; 
 
     constructor (data?: { 
-        version?: BigNumber, 
-        flags?: BigNumber, 
-        min_sigs?: BigNumber, 
+        version?: BigNumber | number, 
+        flags?: BigNumber | number, 
+        minimumsignatures?: BigNumber | number, 
         primary_addresses?: Array<string>;
       }) {
     
@@ -27,9 +27,9 @@ export class Principal {
         this.version = VERSION_INVALID;
     
         if (data != null) {
-          if (data.flags != null) this.flags = data.flags
-          if (data.version != null) this.version = data.version
-          if (data.min_sigs != null) this.min_sigs = data.min_sigs
+          if (data.flags != null) this.flags = new BN(data.flags)
+          if (data.version != null) this.version = new BN(data.version)
+          if (data.minimumsignatures != null) this.min_sigs = new BN(data.minimumsignatures)
           if (data.primary_addresses != null) this.primary_addresses = new TxDestination({primary_addresses: data.primary_addresses});
 
         }
