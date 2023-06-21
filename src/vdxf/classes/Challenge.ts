@@ -463,12 +463,12 @@ export class AttestationRequest extends VDXFObject {
 
     function readHash160Array(arr: Hash160[]): void {
       const length = reader.readVarInt();
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < length.toNumber(); i++) {
         const member = new Hash160();
         reader.offset = member.fromBuffer(reader.buffer, false, reader.offset);
         arr.push(member);
       }
-      if (length === 0) arr = [];
+      if (length.toNumber() === 0) arr = [];
     }
 
     readHash160Array(this.data.accepted_attestors);
