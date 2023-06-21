@@ -20,7 +20,7 @@ export class Principal {
         version?: BigNumber | number, 
         flags?: BigNumber | number, 
         minimumsignatures?: BigNumber | number, 
-        primary_addresses?: Array<string>;
+        primaryaddresses?: Array<string>;
       }) {
     
         this.flags = VERSION_INVALID;
@@ -30,7 +30,7 @@ export class Principal {
           if (data.flags != null) this.flags = new BN(data.flags)
           if (data.version != null) this.version = new BN(data.version)
           if (data.minimumsignatures != null) this.min_sigs = new BN(data.minimumsignatures)
-          if (data.primary_addresses != null) this.primary_addresses = new TxDestination({primary_addresses: data.primary_addresses});
+          if (data.primaryaddresses != null) this.primary_addresses = new TxDestination({primary_addresses: data.primaryaddresses});
 
         }
       }
