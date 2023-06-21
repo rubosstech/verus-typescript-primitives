@@ -9,6 +9,7 @@ import { BN } from 'bn.js';
 const bech32 = require('bech32')
 
 const VERSION_PBAAS = 3;
+const VERSION_INVALID = 0;
 
 const { BufferReader, BufferWriter } = bufferutils
 
@@ -103,19 +104,11 @@ export class Identity extends Principal {
 
               if (typeof data.contentmultimap == "object") {
 
-                const keys = Object.keys(data.contentmultimap);
-                this.contentmultimap = new Map<string,Array<Buffer>>;
-               
-                for (const key in keys ) {
-                  const itemkeys = Object.keys(data.contentmultimap[key])
-                  const multivalue = itemkeys.map((item) => {return {[Object.keys(item)[0]]: Buffer.from(item, "utf8")}});
-
-                  this.contentmultimap.set(key, multivalue)
-                }
+                this.contentmultimap = contentmultimapFromObject(data.contentmultimap);
 
               }
               else {
-                this.contentmultimap = new Map(data.contentmultimap || []);
+                throw new Error("multimap root not an object")
               }
 
           }
@@ -290,58 +283,57 @@ function contentmultimapFromObject (input) {
                             if (mapBytesValue.length === 0 || nVersion == VERSION_INVALID)
                             {
                                 nVersion = VERSION_INVALID;
-                                break;
+                                throw new Error("object not as expected")
                             }
-                            contentMultiMap.insert(std::make_pair(key, mapBytesValue));
+                            items.push(mapBytesValue, 'hex');
                         }
                     }
                     contentmultimap.set(key ,items);
                 }
-                else if (values[i].isStr())
+                else if (typeof values[i] === "string")
                 {
-                    std::string valueString;
-                    if (IsHex(valueString = uni_get_str(values[i])))
+                    if (isHexByteString(values[i]))
                     {
-                        contentMultiMap.insert(std::make_pair(key, ParseHex(valueString)));
+                      contentmultimap.set(key, Buffer.from(items));
                     }
                     else
                     {
                         nVersion = VERSION_INVALID;
-                        break;
+                        throw new Error("string not formatted as hex")
+
                     }
                 }
-                else if (values[i].isObject())
+                else if (typeof values[i] === "object")
                 {
-                    std::vector<unsigned char> mapBytesValue = VectorEncodeVDXFUni(values[i]);
-                    if (!mapBytesValue.size() || nVersion == VERSION_INVALID)
+                    const mapBytesValue = VectorEncodeVDXFUni(values[i]);
+                    var item = [];
+                    if (mapBytesValue.length === 0 || nVersion == VERSION_INVALID)
                     {
                         nVersion = VERSION_INVALID;
-                        break;
+                        throw new Error("object not as expected")
                     }
-                    contentMultiMap.insert(std::make_pair(key, mapBytesValue));
+                    item.push(mapBytesValue, 'hex');
+                    contentmultimap.set(key ,item);
                 }
                 else
                 {
                     nVersion = VERSION_INVALID;
-                    break;
+                    throw new Error("not valid content multimap sub type")
                 }
             }
             else
             {
                 nVersion = VERSION_INVALID;
-                break;
+                throw new Error("key in multimap == null")
             }
         }
-        catch (const std::exception &e)
+        catch (e)
         {
             nVersion = VERSION_INVALID;
-        }
-        if (nVersion == VERSION_INVALID)
-        {
-            LogPrint("contentmap", "%s: contentmultimap entry is not valid keys: %s, values: %s\n", __func__, keys[i].c_str(), values[i].write().c_str());
-            break;
+            throw new Error(e.message)
         }
     }
+    return contentmultimap;
 }
 
 
@@ -378,4 +370,9 @@ function VectorEncodeVDXFUni (obj) {
 
   return bufferWriter.buffer;
 
+}
+
+function isHexByteString(str: string): boolean {
+  const hexByteRegex = /^[0-9a-fA-F]{2}$/;
+  return hexByteRegex.test(str);
 }
