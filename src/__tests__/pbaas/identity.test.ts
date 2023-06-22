@@ -40,7 +40,7 @@ describe('Serializes and deserializes identity properly', () => {
         "recoveryauthority":"iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j",
         "timelock":0
      })
-
+     console.log(identity_tobuf.toBuffer().toString('hex'))
 
   });
 
