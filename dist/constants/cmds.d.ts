@@ -17,3 +17,4 @@ export declare const FUND_RAW_TRANSACTION = "fundrawtransaction";
 export declare const SEND_CURRENCY = "sendcurrency";
 export declare const GET_CURRENCY_CONVERTERS = "getcurrencyconverters";
 export declare const LIST_CURRENCIES = "listcurrencies";
+export declare const ESTIMATE_CONVERSION = "estimateconversion";
