@@ -96,28 +96,27 @@ export class Identity extends Principal {
     
         super (data)
     
-        if (data != null) {
-          if (data.parent != null) this.parent = data.parent;
-          if (data.name != null) this.name = data.name;
-          if (data.systemid != null) this.system_id = data.systemid;
-          this.contentmap = data.contentmap ? new Map(data.contentmap) : new Map();
-          if (data.contentmultimap != null) {
+        if (data?.parent) this.parent = data.parent;
+        if (data?.name) this.name = data.name;
+        if (data?.systemid) this.system_id = data.systemid;
+        this.contentmap = data?.contentmap ? new Map(data.contentmap) : new Map();
+        if (data?.contentmultimap) {
 
-              if (typeof data.contentmultimap == "object") {
+            if (typeof data.contentmultimap == "object") {
 
-                this.contentmultimap = contentmultimapFromObject(data.contentmultimap);
+              this.contentmultimap = contentmultimapFromObject(data.contentmultimap);
 
-              }
-              else {
-                throw new Error("multimap root not an object")
-              }
+            }
+            else {
+              throw new Error("multimap root not an object")
+            }
 
-          }
-          if (data.revocationauthority != null) this.revocation_authority = data.revocationauthority
-          if (data.recoveryauthority != null) this.recovery_authority = data.recoveryauthority
-          if (data.timelock != null) this.timelock = data.timelock
-          this.private_addresses = data.private_addresses?.map ( (addr) => {return decodeSaplingAddress(addr)}) || new Array();
         }
+        if (data?.revocationauthority) this.revocation_authority = data.revocationauthority
+        if (data?.recoveryauthority) this.recovery_authority = data.recoveryauthority
+        if (data?.timelock) this.timelock = data.timelock
+
+        this.private_addresses = data?.private_addresses?.map ( (addr) => {return decodeSaplingAddress(addr)}) || new Array();
       }
 
     dataByteLength() {
@@ -164,7 +163,7 @@ export class Identity extends Principal {
         byteLength += 20;   //uint160 recovery authority
 
         // privateaddresses
-        byteLength += varuint.encodingLength(this.private_addresses.length);
+        byteLength += varuint.encodingLength(this.private_addresses.length | 0);
 
         for (const n of this.private_addresses) {
           byteLength += varuint.encodingLength(n.d.length); 
@@ -247,7 +246,61 @@ export class Identity extends Principal {
         reader.offset = this._fromBuffer(reader.buffer, reader.offset);
 
         this.parent = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
-        //TODO:
+
+        this.name =  Buffer.from(reader.readVarSlice()).toString('utf8')
+
+        //contentmultimap
+        if (this.version.toNumber() >= VERSION_PBAAS) {
+
+          const contentMapSize = reader.readVarInt();
+          this.contentmultimap = new Map();
+
+          for (var i = 0; i < contentMapSize.toNumber(); i++) {
+            
+            const contentMapKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
+            var innervector = reader.readVector();
+            
+            this.contentmultimap.set(contentMapKey, innervector);
+
+          }
+        } 
+
+        // contentmap
+        if (this.version.toNumber() < VERSION_PBAAS) { 
+
+          const contentMultiMapSize = reader.readVarInt();
+          this.contentmap = new Map();
+
+          for (var i = 0; i < contentMultiMapSize.toNumber(); i++) {
+            
+            const contentMapKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
+            const hash = reader.readSlice(32);
+            this.contentmap.set(contentMapKey, hash);
+          }
+        }
+
+        const contentMapSize = reader.readVarInt();
+        this.contentmap = new Map();
+
+        for (var i = 0; i < contentMapSize.toNumber(); i++) {
+          const contentMapKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
+          const hash = reader.readSlice(32);
+          this.contentmap.set(contentMapKey, hash);
+        }
+
+        this.revocation_authority = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+        this.recovery_authority = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+
+        const numPrivateAddresses = reader.readVarInt();
+
+        for (var i = 0; i < numPrivateAddresses.toNumber(); i++) {
+          this.private_addresses.push({d: Buffer.from(reader.readVector()), pk_d: reader.readSlice(20)})
+        }
+        
+        if (this.version.toNumber() >= VERSION_PBAAS) {
+          this.system_id = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+          this.timelock = reader.readUInt32();
+        }
 
         return reader.offset;
     }

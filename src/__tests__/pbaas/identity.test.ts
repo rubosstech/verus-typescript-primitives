@@ -11,8 +11,7 @@ describe('Serializes and deserializes identity properly', () => {
     
     const identity_frombuf = new Identity()
     identity_frombuf.fromBuffer(Buffer.from(vdata, 'hex'))
- //   TODO: expect(identity_frombuf.toBuffer().toString('hex')).toBe(vdata)
-
+    expect(identity_frombuf.toBuffer().toString('hex')).toBe(vdata)
 
     const identity_tobuf = new Identity({
         "version":3,
