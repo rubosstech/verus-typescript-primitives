@@ -69,7 +69,7 @@ class Challenge extends __1.VDXFObject {
     constructor(challenge = { challenge_id: "", created_at: 0 }, vdxfkey = __1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
         super(vdxfkey);
         this.challenge_id = challenge.challenge_id;
-        this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.data, x.vdxfkey)) : challenge.requested_access;
+        this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.vdxfkey, x.data)) : challenge.requested_access;
         this.requested_access_audience = challenge.requested_access_audience;
         this.subject = challenge.subject
             ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
@@ -193,7 +193,7 @@ class Challenge extends __1.VDXFObject {
                 const requestedAccessLength = reader.readCompactSize();
                 for (let i = 0; i < requestedAccessLength; i++) {
                     const _vdxfkey = (0, address_1.toBase58Check)(reader.buffer.slice(reader.offset, reader.offset + vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
-                    const _perm = new RequestedPermission("", _vdxfkey);
+                    const _perm = new RequestedPermission(_vdxfkey, "");
                     reader.offset = _perm.fromBuffer(reader.buffer, reader.offset);
                     this.requested_access.push(_perm);
                 }
@@ -288,12 +288,12 @@ class AttestationRequest extends __1.VDXFObject {
         reader.readVarInt(); //skip data length
         function readHash160Array(arr) {
             const length = reader.readVarInt();
-            for (let i = 0; i < length; i++) {
+            for (let i = 0; i < length.toNumber(); i++) {
                 const member = new Hash160_1.Hash160();
                 reader.offset = member.fromBuffer(reader.buffer, false, reader.offset);
                 arr.push(member);
             }
-            if (length === 0)
+            if (length.toNumber() === 0)
                 arr = [];
         }
         readHash160Array(this.data.accepted_attestors);
@@ -324,16 +324,16 @@ class AttestationRequest extends __1.VDXFObject {
         return {
             vdxfkey: this.vdxfkey,
             data: {
-                accepted_attestors: (accepted_attestors === null || accepted_attestors === void 0 ? void 0 : accepted_attestors.map(x => x.toAddress())) || [],
-                attestation_keys: (attestation_keys === null || attestation_keys === void 0 ? void 0 : attestation_keys.map(x => x.toAddress())) || [],
-                attestor_filters: (attestor_filters === null || attestor_filters === void 0 ? void 0 : attestor_filters.map(x => x.toAddress())) || []
+                accepted_attestors: (accepted_attestors === null || accepted_attestors === void 0 ? void 0 : accepted_attestors.map((x) => x.toAddress())) || [],
+                attestation_keys: (attestation_keys === null || attestation_keys === void 0 ? void 0 : attestation_keys.map((x) => x.toAddress())) || [],
+                attestor_filters: (attestor_filters === null || attestor_filters === void 0 ? void 0 : attestor_filters.map((x) => x.toAddress())) || []
             }
         };
     }
 }
 exports.AttestationRequest = AttestationRequest;
 class RequestedPermission extends __1.VDXFObject {
-    constructor(data, vdxfkey = "") {
+    constructor(vdxfkey = "", data = "") {
         super(vdxfkey);
         if (vdxfkey)
             this.addPrototypes(data);
