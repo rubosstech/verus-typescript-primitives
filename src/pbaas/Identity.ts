@@ -340,8 +340,9 @@ function contentmultimapFromObject (input) {
 }
 
 const getbytes_std = function (data){
-    var length = 1;
-    length += 20;
+    var length = 20;
+    length += 1; // varint length 1
+    length += 2; // ss type + ver (lengths)
     length += varuint.encodingLength(Buffer.from(data, 'utf8').length);
     length += Buffer.from(data, 'utf8').length;
     return length;
@@ -376,8 +377,9 @@ function VectorEncodeVDXFUni (obj) {
 
   for (var i = 0; i < keys.length; i++) {
     if (CVDXF_Data[keys[i]] && CVDXF_Data[keys[i]].qualifiedname.name === "vrsc::data.type.string" ) {
+      bufferWriter.writeSlice(fromBase58Check(CVDXF_Data[keys[i]].vdxfid).hash)
       bufferWriter.writeVarInt(new BN(1));
-      bufferWriter.writeSlice(Buffer.from(CVDXF_Data[keys[i]].hash160result, 'hex'))
+      bufferWriter.writeVarInt(new BN(Buffer.from(values[i], 'utf8').length + 3)) //NOTE 3 is from ss type + ver + vdxfidver 
       bufferWriter.writeCompactSize(Buffer.from(values[i], 'utf8').length); 
       bufferWriter.writeSlice(Buffer.from(values[i], 'utf8'))
     } 
