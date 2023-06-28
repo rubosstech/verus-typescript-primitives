@@ -29,8 +29,8 @@ export {
   RequestedPermission,
   Audience,
   AltAuthFactor,
-  Attestation,
 } from "./Challenge";
+export  {Attestation } from './Attestation'
 export {
   ProvisioningTxid
 } from './provisioning/ProvisioningResult'

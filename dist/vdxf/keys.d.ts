@@ -41,3 +41,4 @@ export declare const LOGIN_CONSENT_PROVISIONING_ERROR_KEY_TRANSFER_FAILED: VDXFK
 export declare const SIGNED_SESSION_OBJECT_DATA: VDXFKeyInterface;
 export declare const SIGNED_SESSION_OBJECT: VDXFKeyInterface;
 export declare const CURRENCY_ADDRESS: VDXFKeyInterface;
+export declare const ATTESTATION_IDENTITY_DATA: {};

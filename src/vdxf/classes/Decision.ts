@@ -1,7 +1,7 @@
 import { LOGIN_CONSENT_DECISION_VDXF_KEY, VDXFObject } from "..";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
-import { Attestation } from "./Challenge";
+import { Attestation } from "./Attestation";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
 import { Request, RequestInterface } from "./Request";

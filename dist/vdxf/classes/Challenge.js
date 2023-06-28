@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestedPermission = exports.AttestationRequest = exports.Challenge = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = void 0;
+exports.RequestedPermission = exports.AttestationRequest = exports.Challenge = exports.AltAuthFactor = exports.Audience = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = void 0;
 const __1 = require("../");
 const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
 const Context_1 = require("./Context");
 const Hash160_1 = require("./Hash160");
+const Attestation_1 = require("./Attestation");
 const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
 const index_1 = require("../index");
@@ -59,12 +60,6 @@ exports.Audience = Audience;
 class AltAuthFactor extends __1.Utf8DataVdxfObject {
 }
 exports.AltAuthFactor = AltAuthFactor;
-class Attestation extends __1.Utf8DataVdxfObject {
-    constructor(data = "", vdxfkey = "") {
-        super(data, vdxfkey);
-    }
-}
-exports.Attestation = Attestation;
 class Challenge extends __1.VDXFObject {
     constructor(challenge = { challenge_id: "", created_at: 0 }, vdxfkey = __1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
         super(vdxfkey);
@@ -79,7 +74,7 @@ class Challenge extends __1.VDXFObject {
             : challenge.provisioning_info;
         this.alt_auth_factors = challenge.alt_auth_factors;
         this.session_id = challenge.session_id;
-        this.attestations = challenge.attestations ? challenge.attestations.map((x) => new Attestation(x.data, x.vdxfkey)) : challenge.attestations;
+        this.attestations = challenge.attestations ? challenge.attestations.map((x) => new Attestation_1.Attestation(x.data, x.vdxfkey)) : challenge.attestations;
         this.redirect_uris = challenge.redirect_uris
             ? challenge.redirect_uris.map((x) => new RedirectUri(x.uri, x.vdxfkey))
             : challenge.redirect_uris;
@@ -224,7 +219,7 @@ class Challenge extends __1.VDXFObject {
                 this.attestations = [];
                 const attestationsLength = reader.readCompactSize();
                 for (let i = 0; i < attestationsLength; i++) {
-                    const _att = new Attestation();
+                    const _att = new Attestation_1.Attestation();
                     reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
                     this.attestations.push(_att);
                 }

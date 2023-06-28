@@ -2,6 +2,7 @@
 import { Utf8DataVdxfObject, VDXFObject, Utf8OrBase58Object } from "../";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
+import { Attestation } from "./Attestation";
 export declare class RedirectUri extends VDXFObject {
     uri: string;
     constructor(uri?: string, vdxfkey?: string);
@@ -22,9 +23,6 @@ export declare class ProvisioningInfo extends Utf8OrBase58Object {
 export declare class Audience extends Utf8DataVdxfObject {
 }
 export declare class AltAuthFactor extends Utf8DataVdxfObject {
-}
-export declare class Attestation extends Utf8DataVdxfObject {
-    constructor(data?: string, vdxfkey?: string);
 }
 export interface ChallengeInterface {
     challenge_id: string;

@@ -323,10 +323,67 @@ export const SIGNED_SESSION_OBJECT: VDXFKeyInterface = {
 };
 
 export const CURRENCY_ADDRESS: VDXFKeyInterface = {
-  "vdxfid":"iBy2s9cQL9RadMVPjog6bbSV5ityBxTuNR",
-  "hash160result":"4fb4c86b8ce18e596e28f62bc9a78f43d738255d",
+  "vdxfid": "iBy2s9cQL9RadMVPjog6bbSV5ityBxTuNR",
+  "hash160result": "4fb4c86b8ce18e596e28f62bc9a78f43d738255d",
   "qualifiedname": {
-    "namespace":"i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name":"vrsc::currency.address"
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::currency.address"
   }
 }
+
+
+interface VDXFIdentityData extends VDXFKeyInterface {
+  detail: string;
+}
+
+const IDENTITY_DATA: VDXFIdentityData[] = [
+  {
+    "vdxfid": "iSSxdyTcCp8VALGBGKy8R7ATYSRuK15NkL",
+    "hash160result": "92cb346dd5c5886898a7ebcab6a0e4dded19fffb",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestations.identitydata.firstname"
+    },
+    "detail": "First Name"
+  },
+  {
+    "vdxfid": "i3jWsqLVnYyJu78E7mw6pbD3TazwZJpuk4",
+    "hash160result": "03d10a9768234e11d4cc2f73238cad4e7fc6d502",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestations.identitydata.lastname"
+    },
+    "detail": "Last Name"
+  },
+  {
+    "vdxfid": "i9MRw6YUhXtP6DT8eufGnB5oRQ34TjDsdb",
+    "hash160result": "c886a8db81a891f9fc017001b6f6949588407940",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestations.identitydata.attestor"
+    },
+    "detail": "Attestor"
+  },
+  {
+    "vdxfid": "iJvFSXk2EDeEu9BkJQSwAVeiochF6AYpfF",
+    "hash160result": "cac8e0c062de7abf4fd0a606c2b83eea275a67a9",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestations.identitydata.identity"
+    },
+    "detail": "Identity"
+  },
+  {
+    "vdxfid": "iLY58rsr39UB8BptNGYX63qPhcpv5N5yuC",
+    "hash160result": "ab812395536444a22463318c2691e886c6d925bb",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestations.type"
+    },
+    "detail": "Document Type"
+  }
+]
+
+export const ATTESTATION_IDENTITY_DATA = {};
+IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.vdxfid] = item)
+IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.detail] = item)
