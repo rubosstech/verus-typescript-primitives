@@ -6,6 +6,9 @@ import { Context } from "../../vdxf/classes/Context";
 import { ProvisioningRequest } from "../../vdxf/classes/provisioning/ProvisioningRequest";
 import { ProvisioningResponse } from "../../vdxf/classes/provisioning/ProvisioningResponse";
 import { ProvisioningResult, ProvisioningTxid } from "../../vdxf/classes/provisioning/ProvisioningResult";
+import { AttestationData } from "../../vdxf/classes/Attestation";
+
+const SIMPLE_ATTESTATION = 1;
 
 describe('Serializes and deserializes attestation request', () => {
     test('attestation request with reply', async () => {
@@ -42,12 +45,19 @@ describe('Serializes and deserializes attestation request', () => {
           },
         });
 
-        const test  = {"firstname": "John", "lastname": "Doe", 
-        "identity":"jdoe123@", 
-        "attestor": "valu attestation@", 
-        "type":"simple name attestation v1" }
+        const componentsArray = new Array<AttestationData>;
 
-        const attestationResponse = new Attestation({data: {type: SIMPLE_ATTESTATION, components: {} }});
+        componentsArray.push({type: 1, attestationKey: ATTESTATION_IDENTITY_DATA["First Name"].vdxfid, salt: "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210", value: "Chris"})
+        componentsArray.push({type: 1, attestationKey: ATTESTATION_IDENTITY_DATA["Last Name"].vdxfid, salt: "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210", value: "Monkins"})
+        componentsArray.push({type: 1, attestationKey: ATTESTATION_IDENTITY_DATA["Attestor"].vdxfid, salt: "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210", value: "valu attestation@"})
+        componentsArray.push({type: 1, attestationKey: ATTESTATION_IDENTITY_DATA["Identity"].vdxfid, salt: "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210", value: "chad@"})
+        componentsArray.push({type: 1, attestationKey: ATTESTATION_IDENTITY_DATA["Document Type"].vdxfid, salt: "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210", value: "KYC Attestation v1"})
+        componentsArray.push({type: 2, hash: "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210"})
+        componentsArray.push({type: 2, hash: "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210"})
+
+        const signaturesForAttestation = {"i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV": "AYG2IQABQSAN1fp6A9NIVbxvKuOVLLU+0I+G3oQGbRtS6u4Eampfb217Cdf5FCMScQhV9kMxtjI9GWzpchmjuiTB2tctk6qT"};
+
+        const attestationResponse = new Attestation("",{type: SIMPLE_ATTESTATION, nIndex: 123,components: componentsArray, signatures: signaturesForAttestation});
     
         const res = new LoginConsentResponse({
           system_id: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
@@ -62,7 +72,8 @@ describe('Serializes and deserializes attestation request', () => {
               ["i4KyLCxWZXeSkw15dF95CUKytEK3HU7em9"]: "test",
             }),
             request: req,
-            created_at: 1664392484
+            created_at: 1664392484,
+            attestations: [attestationResponse]
           }
         })
     

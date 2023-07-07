@@ -151,7 +151,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       : challenge.provisioning_info;
     this.alt_auth_factors = challenge.alt_auth_factors;
     this.session_id = challenge.session_id;
-    this.attestations = challenge.attestations ? challenge.attestations.map((x) => new Attestation(x.data, x.vdxfkey)) : challenge.attestations;
+    this.attestations = challenge.attestations;
     this.redirect_uris = challenge.redirect_uris
       ? challenge.redirect_uris.map((x) => new RedirectUri(x.uri, x.vdxfkey))
       : challenge.redirect_uris;
