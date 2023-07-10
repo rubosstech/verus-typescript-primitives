@@ -82,7 +82,7 @@ export class Attestation extends VDXFObject {
       return byteLength;
     }
   
-    toBuffer(): Buffer {
+    toDataBuffer(): Buffer {
       const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
       bufferWriter.writeCompactSize(this.type);
       bufferWriter.writeCompactSize(this.nIndex);
@@ -116,9 +116,10 @@ export class Attestation extends VDXFObject {
       return bufferWriter.buffer
     }
   
-    fromBuffer(buffer: Buffer, offset?: number): number {
+    fromDataBuffer(buffer: Buffer, offset?: number): number {
 
       const reader = new bufferutils.BufferReader(buffer, offset);  
+      const attestationsByteLength = reader.readCompactSize();
       this.type = reader.readVarInt().toNumber();
       this.nIndex = reader.readVarInt().toNumber();
 

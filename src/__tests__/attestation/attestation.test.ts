@@ -84,7 +84,9 @@ describe('Serializes and deserializes attestation request', () => {
         const resbuf = res.toBuffer()
         const _res = new LoginConsentResponse()
         _res.fromBuffer(resbuf)
-    
+
+        const checkres = _res.toBuffer()
+        expect(checkres).toStrictEqual(resbuf);
         const uri = _req.toWalletDeeplinkUri()
     
         expect(uri).toBe(LoginConsentRequest.fromWalletDeeplinkUri(uri).toWalletDeeplinkUri());
