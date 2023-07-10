@@ -1,5 +1,6 @@
 import varuint from '../../utils/varuint'
 import bufferutils from '../../utils/bufferutils'
+import createHash = require("create-hash");
 import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
 import {
@@ -156,5 +157,43 @@ export class Attestation extends VDXFObject {
   
       return reader.offset;
     }
+
+    routeHash() {
+
+      const attestationHashes = this.sortHashes();
+
+      //TODO: sort into MMR
+
+    }
+
+    getHash(n: AttestationData): Buffer {
+      
+      if (n.type === ATTESTATION_TYPE_DATA) {
+        const bufferWriter = new BufferWriter(Buffer.alloc(20 + 
+                                                           32 + 
+                                                           varuint.encodingLength(Buffer.from(n.value, "utf8").length) + 
+                                                           Buffer.from(n.value, "utf8").length ));
+        bufferWriter.writeSlice(fromBase58Check(n.attestationKey).hash);
+        bufferWriter.writeSlice(Buffer.from(n.salt, "hex"));
+        bufferWriter.writeCompactSize(Buffer.from(n.value, "utf8").length)
+        bufferWriter.writeSlice(Buffer.from(n.value, "utf8"));
+
+        return createHash("sha256").update(bufferWriter.buffer).digest();
+      } else if (n.type === ATTESTATION_TYPE_HASH) {
+        return Buffer.from(n.hash, "hex");
+      } else {
+        throw new Error("Attestation Type not supported")
+      }
+
+    }
+
+    sortHashes(): Array<Buffer> {
+      
+      const hashArray = this.components.map((item) => this.getHash(item) )
+      const sortedHashArray = hashArray.sort((a, b) => (BigInt(`0x${a.toString('hex')}`) > BigInt(`0x${b.toString('hex')}`))? 0 : -1 );
+
+      return sortedHashArray;
+    }
+
   }
 
