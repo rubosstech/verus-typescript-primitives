@@ -132,11 +132,11 @@ export class Attestation extends VDXFObject {
 
         if (type === ATTESTATION_TYPE_DATA) {
           const attestationKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
-          const salt = Buffer.from(reader.readVarSlice()).toString('hex');
+          const salt = Buffer.from(reader.readSlice(32)).toString('hex');
           const value = Buffer.from(reader.readVarSlice()).toString('utf8');
           this.components.push({type, attestationKey, salt, value});
         } else if (type === ATTESTATION_TYPE_HASH) {
-          const hash = Buffer.from(reader.readVarSlice()).toString('hex');
+          const hash = Buffer.from(reader.readSlice(32)).toString('hex');
           this.components.push({type, hash});
         } else {
           throw new Error("Attestation Type not supported")

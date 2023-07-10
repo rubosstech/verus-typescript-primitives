@@ -57,7 +57,7 @@ describe('Serializes and deserializes attestation request', () => {
 
         const signaturesForAttestation = {"i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV": "AYG2IQABQSAN1fp6A9NIVbxvKuOVLLU+0I+G3oQGbRtS6u4Eampfb217Cdf5FCMScQhV9kMxtjI9GWzpchmjuiTB2tctk6qT"};
 
-        const attestationResponse = new Attestation("",{type: SIMPLE_ATTESTATION, nIndex: 123,components: componentsArray, signatures: signaturesForAttestation});
+        const attestationResponse = new Attestation("i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",{type: SIMPLE_ATTESTATION, nIndex: 123,components: componentsArray, signatures: signaturesForAttestation});
     
         const res = new LoginConsentResponse({
           system_id: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
