@@ -38,7 +38,7 @@ export const toBase58Check = (hash: Buffer, version: number): string => {
   return bs58check.encode(payload);
 };
 
-export const toIAddress = (fullyqualifiedname: string): string => {
+export const toIAddress = (fullyqualifiedname: string, rootSystemName: string = ""): string => {
   const splitFqnAt = fullyqualifiedname.split("@").filter(x => x.length > 0);
 
   if (splitFqnAt.length !== 1) throw new Error("Invalid name")
@@ -46,6 +46,11 @@ export const toIAddress = (fullyqualifiedname: string): string => {
   const cleanFqn = splitFqnAt[0];
 
   const splitFqnDot = cleanFqn.split('.');
+
+  if (splitFqnDot[splitFqnDot.length - 1] !== rootSystemName && 
+      splitFqnDot[splitFqnDot.length - 1] !== "") {
+    splitFqnDot.push(rootSystemName)
+  }
 
   const name = splitFqnDot.shift();
 
@@ -55,14 +60,16 @@ export const toIAddress = (fullyqualifiedname: string): string => {
     let idHash: Buffer;
     const parentName = Buffer.from(splitFqnDot[i].toLowerCase(), "utf8");
 
-    if (Parent == null) {
-      idHash = hash(parentName);
-    } else {
-      idHash = hash(parentName);
-      idHash = hash(Parent, idHash);
+    if (parentName.length > 0) {
+      if (Parent == null) {
+        idHash = hash(parentName);
+      } else {
+        idHash = hash(parentName);
+        idHash = hash(Parent, idHash);
+      }
+  
+      Parent = hash160(idHash);
     }
-
-    Parent = hash160(idHash);
   }
 
   let idHash: Buffer;

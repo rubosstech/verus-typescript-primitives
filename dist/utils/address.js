@@ -33,25 +33,31 @@ const toBase58Check = (hash, version) => {
     return bs58check.encode(payload);
 };
 exports.toBase58Check = toBase58Check;
-const toIAddress = (fullyqualifiedname) => {
+const toIAddress = (fullyqualifiedname, rootSystemName = "") => {
     const splitFqnAt = fullyqualifiedname.split("@").filter(x => x.length > 0);
     if (splitFqnAt.length !== 1)
         throw new Error("Invalid name");
     const cleanFqn = splitFqnAt[0];
     const splitFqnDot = cleanFqn.split('.');
+    if (splitFqnDot[splitFqnDot.length - 1] !== rootSystemName &&
+        splitFqnDot[splitFqnDot.length - 1] !== "") {
+        splitFqnDot.push(rootSystemName);
+    }
     const name = splitFqnDot.shift();
     let Parent;
     for (let i = splitFqnDot.length - 1; i >= 0; i--) {
         let idHash;
         const parentName = Buffer.from(splitFqnDot[i].toLowerCase(), "utf8");
-        if (Parent == null) {
-            idHash = (0, hash_1.hash)(parentName);
+        if (parentName.length > 0) {
+            if (Parent == null) {
+                idHash = (0, hash_1.hash)(parentName);
+            }
+            else {
+                idHash = (0, hash_1.hash)(parentName);
+                idHash = (0, hash_1.hash)(Parent, idHash);
+            }
+            Parent = (0, hash_1.hash160)(idHash);
         }
-        else {
-            idHash = (0, hash_1.hash)(parentName);
-            idHash = (0, hash_1.hash)(Parent, idHash);
-        }
-        Parent = (0, hash_1.hash160)(idHash);
     }
     let idHash;
     const nameBuffer = Buffer.from(name.toLowerCase(), "utf8");
