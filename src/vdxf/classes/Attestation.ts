@@ -3,11 +3,9 @@ import bufferutils from '../../utils/bufferutils'
 import createHash = require("create-hash");
 import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
-import {
-    ATTESTATION_IDENTITY_DATA,
-    Utf8DataVdxfObject,
-    VDXFObject
-  } from "../";
+import { VDXFObject } from "../";
+import { MMR } from "./MMR"
+
 
 const { BufferReader, BufferWriter } = bufferutils;
 
@@ -28,6 +26,7 @@ export class Attestation extends VDXFObject {
     nIndex: number;
     components: Array<AttestationData>;
     signatures: {[attestor: string]: string};
+    mmr: MMR;
 
     constructor(vdxfkey: string = "", data?: { 
       type?: number;
@@ -158,12 +157,25 @@ export class Attestation extends VDXFObject {
       return reader.offset;
     }
 
-    routeHash() {
+    async getMMR() {
 
       const attestationHashes = this.sortHashes();
 
-      //TODO: sort into MMR
+      if (!this.mmr) {
+        this.mmr = new MMR();
+      }
 
+      for (var i = 0; i < attestationHashes.length; i++) {
+        await this.mmr.append(attestationHashes[i], i)
+      }
+
+      return this.mmr;
+    }
+
+    async routeHash() {
+
+      this.getMMR();
+      return this.mmr.getRoot();
     }
 
     getHash(n: AttestationData): Buffer {
