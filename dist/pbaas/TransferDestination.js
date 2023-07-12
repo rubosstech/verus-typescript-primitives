@@ -58,6 +58,9 @@ class TransferDestination {
     isPKH() {
         return this.typeNoFlags().eq(exports.DEST_PKH);
     }
+    isETHAccount() {
+        return this.typeNoFlags().eq(exports.DEST_ETH);
+    }
     typeNoFlags() {
         return this.type.and(exports.FLAG_MASK.notn(exports.FLAG_MASK.bitLength()));
     }
@@ -67,6 +70,9 @@ class TransferDestination {
         }
         else if (this.isIAddr()) {
             return (0, address_1.toBase58Check)(this.destination_bytes, vdxf_1.I_ADDR_VERSION);
+        }
+        else if (this.isETHAccount()) {
+            return "0x" + this.destination_bytes.toString('hex');
         }
         else {
             throw new Error("Cannot get address for unsupported transfer destination type.");
