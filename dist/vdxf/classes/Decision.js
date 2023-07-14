@@ -19,7 +19,7 @@ class Decision extends __1.VDXFObject {
         this.request = new Request_1.Request(decision.request);
         this.context = decision.context;
         this.created_at = decision.created_at;
-        this.attestations = decision.attestations ? decision.attestations.map((x) => new Attestation_1.Attestation(x.data, x.vdxfkey)) : decision.attestations;
+        this.attestations = decision.attestations;
         this.salt = decision.salt;
         this.skipped = decision.skipped ? true : false;
     }

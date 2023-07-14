@@ -1,23 +1,34 @@
+/// <reference types="node" />
 import { VDXFObject } from "../";
-export interface MerkleBranch {
-    nIndex?: number;
-    branch?: Array<string>;
-}
-export interface AttestationData extends VDXFObject {
+import { MMR } from "./MMR";
+export interface AttestationData {
     type?: number;
-    key?: string;
+    attestationKey?: string;
     salt?: string;
     value?: string;
     hash?: string;
 }
-export interface AttestationSignature extends VDXFObject {
-    signatures: Array<string>;
-    attestors: Array<string>;
-}
 export declare class Attestation extends VDXFObject {
     type: number;
-    branch: MerkleBranch;
+    nIndex: number;
     components: Array<AttestationData>;
-    proof: AttestationSignature;
-    constructor(vdxfkey?: string);
+    signatures: {
+        [attestor: string]: string;
+    };
+    mmr: MMR;
+    constructor(vdxfkey?: string, data?: {
+        type?: number;
+        nIndex?: number;
+        components?: Array<AttestationData>;
+        signatures?: {
+            [attestor: string]: string;
+        };
+    });
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    getMMR(): Promise<MMR>;
+    routeHash(): Promise<Uint8Array>;
+    getHash(n: AttestationData): Buffer;
+    sortHashes(): Array<Buffer>;
 }
