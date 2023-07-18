@@ -2,7 +2,7 @@ import { BN } from "bn.js";
 import { CurrencyValueMap } from "../../pbaas/CurrencyValueMap";
 import { ReserveTransfer } from "../../pbaas/ReserveTransfer";
 import { BigNumber } from "../../utils/types/BigNumber";
-import { TransferDestination } from "../../pbaas/TransferDestination";
+import { DEST_ETH, DEST_ID, DEST_PKH, TransferDestination } from "../../pbaas/TransferDestination";
 import { fromBase58Check } from "../../utils/address";
 
 describe('Serializes and deserializes token output properly', () => {
@@ -304,5 +304,38 @@ describe('Serializes and deserializes token output properly', () => {
 
     expect(trans_frombuf.transfer_destination.getAddressString()).toBe("RF8ZdvjvGMNdtu3jNwcmaTDeU8hFJ28ajN")
     expect(trans_frombuf.transfer_destination.aux_dests[0].getAddressString()).toBe("RF8ZdvjvGMNdtu3jNwcmaTDeU8hFJ28ajN")
+  });
+
+  test('transferdestination getAddressString work as intended', async () => {
+    const destpkh = "R9J8E2no2HVjQmzX6Ntes2ShSGcn7WiRcx";
+    const desteth = "0x1f9090aae28b8a3dceadf281b0f12828e676c326";
+    const destid = "iCtawpxUiCc2sEupt7Z4u8SDAncGZpgSKm";
+
+    const transdestpkh = new TransferDestination({
+      type: DEST_PKH,
+      destination_bytes: fromBase58Check(destpkh).hash
+    });
+    expect(transdestpkh.getAddressString()).toBe(destpkh);
+    expect(transdestpkh.isPKH()).toBe(true);
+    expect(transdestpkh.isETHAccount()).toBe(false);
+    expect(transdestpkh.isIAddr()).toBe(false);
+
+    const transdesteth = new TransferDestination({
+      type: DEST_ETH,
+      destination_bytes: Buffer.from(desteth.substring(2), 'hex')
+    });
+    expect(transdesteth.getAddressString()).toBe(desteth);
+    expect(transdesteth.isETHAccount()).toBe(true);
+    expect(transdesteth.isPKH()).toBe(false);
+    expect(transdesteth.isIAddr()).toBe(false);
+
+    const transdestid = new TransferDestination({
+      type: DEST_ID,
+      destination_bytes: fromBase58Check(destid).hash
+    });
+    expect(transdestid.getAddressString()).toBe(destid);
+    expect(transdestid.isIAddr()).toBe(true);
+    expect(transdestid.isETHAccount()).toBe(false);
+    expect(transdestid.isPKH()).toBe(false);
   });
 });
