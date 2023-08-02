@@ -94,7 +94,11 @@ export class TransferDestination {
 
     if (this.isGateway()) {
       length += fromBase58Check(this.gateway_id).hash.length; // gateway_id
-      length += fromBase58Check(this.gateway_code).hash.length; // gateway_code
+      if (this.gateway_code) {
+        length += fromBase58Check(this.gateway_code).hash.length; // gateway_code
+      } else {
+        length += 20
+      }
       length += 8 // fees
     }
 
@@ -120,7 +124,11 @@ export class TransferDestination {
 
     if (this.isGateway()) {
       writer.writeSlice(fromBase58Check(this.gateway_id).hash);
-      writer.writeSlice(fromBase58Check(this.gateway_code).hash);
+      if (this.gateway_code) {
+        writer.writeSlice(fromBase58Check(this.gateway_code).hash);
+      } else {
+        writer.writeSlice(Buffer.alloc(20));
+      }
       writer.writeInt64(this.fees);
     }
 
