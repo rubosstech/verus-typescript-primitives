@@ -85,7 +85,12 @@ class TransferDestination {
         length += this.destination_bytes.length; // destination_bytes
         if (this.isGateway()) {
             length += (0, address_1.fromBase58Check)(this.gateway_id).hash.length; // gateway_id
-            length += (0, address_1.fromBase58Check)(this.gateway_code).hash.length; // gateway_code
+            if (this.gateway_code) {
+                length += (0, address_1.fromBase58Check)(this.gateway_code).hash.length; // gateway_code
+            }
+            else {
+                length += 20;
+            }
             length += 8; // fees
         }
         if (this.hasAuxDests()) {
@@ -104,7 +109,12 @@ class TransferDestination {
         writer.writeVarSlice(this.destination_bytes);
         if (this.isGateway()) {
             writer.writeSlice((0, address_1.fromBase58Check)(this.gateway_id).hash);
-            writer.writeSlice((0, address_1.fromBase58Check)(this.gateway_code).hash);
+            if (this.gateway_code) {
+                writer.writeSlice((0, address_1.fromBase58Check)(this.gateway_code).hash);
+            }
+            else {
+                writer.writeSlice(Buffer.alloc(20));
+            }
             writer.writeInt64(this.fees);
         }
         if (this.hasAuxDests()) {
