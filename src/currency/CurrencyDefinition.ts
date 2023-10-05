@@ -5,6 +5,8 @@ export type CurrencyDefinition = {
   currencyid: string;
   parent: string;
   systemid: string;
+  maxpreconversion?: Array<number>,
+  minpreconversion?: Array<number>,
   notarizationprotocol: number;
   proofprotocol: number;
   launchsystemid: string;
