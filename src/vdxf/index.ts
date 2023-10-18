@@ -157,7 +157,7 @@ export class Utf8OrBase58Object extends VDXFObject {
   data: string;
 
   // VDXF keys that would cause this object to be base58 instead of utf8
-  base58Keys: { [key: string]: boolean } = {};
+  base58Keys: {[key: string]: boolean} = {};
 
   constructor(data: string = "", vdxfkey: string = "", base58Keys: Array<string> = []) {
     super(vdxfkey);
@@ -246,4 +246,3 @@ export class VerusIDSignature extends VDXFObject {
     };
   }
 }
-

@@ -2,6 +2,7 @@
 import { Utf8DataVdxfObject, VDXFObject, Utf8OrBase58Object } from "../";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
+import { Attestation } from "./Attestation";
 export declare class RedirectUri extends VDXFObject {
     uri: string;
     constructor(uri?: string, vdxfkey?: string);
@@ -22,9 +23,6 @@ export declare class ProvisioningInfo extends Utf8OrBase58Object {
 export declare class Audience extends Utf8DataVdxfObject {
 }
 export declare class AltAuthFactor extends Utf8DataVdxfObject {
-}
-export declare class Attestation extends Utf8DataVdxfObject {
-    constructor(data?: string, vdxfkey?: string);
 }
 export interface ChallengeInterface {
     challenge_id: string;
@@ -80,9 +78,9 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     };
 }
 export interface AttestationRequestInterfaceDataInterface {
-    accepted_attestors: Array<Hash160>;
-    attestation_keys: Array<Hash160>;
-    attestor_filters: Array<Hash160>;
+    accepted_attestors: Array<Hash160 | string>;
+    attestation_keys: Array<Hash160 | string>;
+    attestor_filters?: Array<Hash160 | string>;
 }
 export declare class AttestationRequest extends VDXFObject {
     data: AttestationRequestInterfaceDataInterface;
@@ -102,7 +100,7 @@ export declare class AttestationRequest extends VDXFObject {
 export declare class RequestedPermission extends VDXFObject {
     data: string | AttestationRequestInterfaceDataInterface;
     encoding?: BufferEncoding;
-    constructor(data: string | AttestationRequestInterfaceDataInterface, vdxfkey?: string);
+    constructor(vdxfkey?: string, data?: string | AttestationRequestInterfaceDataInterface);
     addPrototypes(data: string | AttestationRequestInterfaceDataInterface): void;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
 }

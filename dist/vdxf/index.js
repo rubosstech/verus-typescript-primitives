@@ -75,6 +75,7 @@ class VDXFObject {
         if (dataLength) {
             writer.writeVarSlice(this.toDataBuffer());
         }
+
         return writer.buffer;
     }
     toSha256() {

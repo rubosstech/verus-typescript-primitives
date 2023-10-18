@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { VDXFObject } from "..";
-import { Attestation } from "./Challenge";
+import { Attestation } from "./Attestation";
 import { Context } from "./Context";
 import { Request, RequestInterface } from "./Request";
 export interface DecisionInterface {

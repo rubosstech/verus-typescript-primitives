@@ -1,7 +1,7 @@
 import { LOGIN_CONSENT_DECISION_VDXF_KEY, VDXFObject } from "..";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
-import { Attestation } from "./Challenge";
+import { Attestation } from "./Attestation";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
 import { Request, RequestInterface } from "./Request";
@@ -52,7 +52,7 @@ export class Decision extends VDXFObject {
     this.request = new Request(decision.request);
     this.context = decision.context;
     this.created_at = decision.created_at;
-    this.attestations = decision.attestations ? decision.attestations.map((x) => new Attestation(x.data, x.vdxfkey)) : decision.attestations;
+    this.attestations = decision.attestations;
     this.salt = decision.salt;
     this.skipped = decision.skipped ? true : false;
   }

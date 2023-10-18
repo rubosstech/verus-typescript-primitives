@@ -14,6 +14,7 @@ import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
 import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
+import { Attestation } from "./Attestation";
 import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../../constants/vdxf';
 import { BufferDataVdxfObject } from '../index'
@@ -73,12 +74,6 @@ export class ProvisioningInfo extends Utf8OrBase58Object {
 export class Audience extends Utf8DataVdxfObject { }
 
 export class AltAuthFactor extends Utf8DataVdxfObject { }
-
-export class Attestation extends Utf8DataVdxfObject {
-  constructor(data: string = "", vdxfkey: string = "") {
-    super(data, vdxfkey);
-  }
-}
 
 export interface ChallengeInterface {
   // Challenge specific VDXF key
@@ -146,7 +141,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
     super(vdxfkey);
 
     this.challenge_id = challenge.challenge_id;
-    this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.data, x.vdxfkey)) : challenge.requested_access;
+    this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.vdxfkey,x.data)) : challenge.requested_access;
     this.requested_access_audience = challenge.requested_access_audience;
     this.subject = challenge.subject
       ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
@@ -156,7 +151,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
       : challenge.provisioning_info;
     this.alt_auth_factors = challenge.alt_auth_factors;
     this.session_id = challenge.session_id;
-    this.attestations = challenge.attestations ? challenge.attestations.map((x) => new Attestation(x.data, x.vdxfkey)) : challenge.attestations;
+    this.attestations = challenge.attestations;
     this.redirect_uris = challenge.redirect_uris
       ? challenge.redirect_uris.map((x) => new RedirectUri(x.uri, x.vdxfkey))
       : challenge.redirect_uris;
@@ -335,7 +330,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
           const _vdxfkey = toBase58Check(reader.buffer.slice(reader.offset,
             reader.offset + HASH160_BYTE_LENGTH),
             I_ADDR_VERSION);
-          const _perm = new RequestedPermission("", _vdxfkey);
+          const _perm = new RequestedPermission(_vdxfkey,"");
           reader.offset = _perm.fromBuffer(reader.buffer, reader.offset);
           this.requested_access.push(_perm);
         }
@@ -425,9 +420,9 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
 }
 
 export interface AttestationRequestInterfaceDataInterface {
-  accepted_attestors: Array<Hash160>,
-  attestation_keys: Array<Hash160>,
-  attestor_filters: Array<Hash160>
+  accepted_attestors: Array<Hash160 | string>,
+  attestation_keys: Array<Hash160 | string>,
+  attestor_filters?: Array<Hash160 | string>
 }
 export class AttestationRequest extends VDXFObject {
   data: AttestationRequestInterfaceDataInterface;
@@ -436,11 +431,11 @@ export class AttestationRequest extends VDXFObject {
 
     let length = 0;
     length += varuint.encodingLength(this.data.accepted_attestors?.length ?? 0);
-    length += this.data.accepted_attestors?.reduce((sum, current) => sum + current.byteLength(), 0) ?? 0;
+    length += this.data.accepted_attestors?.reduce((sum, current: Hash160) => sum + current.byteLength(), 0) ?? 0;
     length += varuint.encodingLength(this.data.attestation_keys?.length ?? 0);
-    length += this.data.attestation_keys?.reduce((sum, current) => sum + current.byteLength(), 0) ?? 0;
+    length += this.data.attestation_keys?.reduce((sum, current: Hash160) => sum + current.byteLength(), 0) ?? 0;
     length += varuint.encodingLength(this.data.attestor_filters?.length ?? 0);
-    length += this.data.attestor_filters?.reduce((sum, current) => sum + current.byteLength(), 0) ?? 0;
+    length += this.data.attestor_filters?.reduce((sum, current: Hash160) => sum + current.byteLength(), 0) ?? 0;
 
     return length;
   }
@@ -449,9 +444,9 @@ export class AttestationRequest extends VDXFObject {
 
     const writer = new bufferutils.BufferWriter(Buffer.alloc(this.dataByteLength()))
 
-    writer.writeArray(this.data.accepted_attestors.map((x) => x.toBuffer()));
-    writer.writeArray(this.data.attestation_keys.map((x) => x.toBuffer()));
-    writer.writeArray(this.data.attestor_filters.map((x) => x.toBuffer()));
+    writer.writeArray(this.data.accepted_attestors.map((x: Hash160) => x.toBuffer()));
+    writer.writeArray(this.data.attestation_keys.map((x: Hash160) => x.toBuffer()));
+    writer.writeArray(this.data.attestor_filters.map((x: Hash160) => x.toBuffer()));
 
     return writer.buffer;
   }
@@ -461,14 +456,14 @@ export class AttestationRequest extends VDXFObject {
     const reader = new bufferutils.BufferReader(buffer, offset);
     reader.readVarInt(); //skip data length
 
-    function readHash160Array(arr: Hash160[]): void {
+    function readHash160Array(arr: (Hash160 | string)[]): void {
       const length = reader.readVarInt();
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < length.toNumber(); i++) {
         const member = new Hash160();
         reader.offset = member.fromBuffer(reader.buffer, false, reader.offset);
         arr.push(member);
       }
-      if (length === 0) arr = [];
+      if (length.toNumber() === 0) arr = [];
     }
 
     readHash160Array(this.data.accepted_attestors);
@@ -501,9 +496,9 @@ export class AttestationRequest extends VDXFObject {
     return {
       vdxfkey: this.vdxfkey,
       data: {
-        accepted_attestors: accepted_attestors?.map(x => x.toAddress()) || [],
-        attestation_keys: attestation_keys?.map(x => x.toAddress()) || [],
-        attestor_filters: attestor_filters?.map(x => x.toAddress()) || []
+        accepted_attestors: accepted_attestors?.map((x: Hash160) => x.toAddress()) || [],
+        attestation_keys: attestation_keys?.map((x: Hash160) => x.toAddress()) || [],
+        attestor_filters: attestor_filters?.map((x: Hash160) => x.toAddress()) || []
       }
     };
   }
@@ -513,7 +508,7 @@ export class AttestationRequest extends VDXFObject {
 export class RequestedPermission extends VDXFObject {
   data: string | AttestationRequestInterfaceDataInterface;
   encoding?: BufferEncoding;
-  constructor(data: string | AttestationRequestInterfaceDataInterface, vdxfkey: string = "") {
+  constructor(vdxfkey: string = "", data: string | AttestationRequestInterfaceDataInterface = "") {
     super(vdxfkey);
     if (vdxfkey) this.addPrototypes(data);
   }
