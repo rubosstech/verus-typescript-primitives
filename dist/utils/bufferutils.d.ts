@@ -1,4 +1,6 @@
 /// <reference types="node" />
+/// <reference types="bn.js" />
+import { BigNumber } from "./types/BigNumber";
 export declare const readUInt64LE: (buffer: Buffer, offset: number) => number;
 export declare const writeUInt64LE: (buffer: Buffer, value: number, offset: number) => number;
 export declare const reverseBuffer: (buffer: Buffer) => Buffer;
@@ -14,7 +16,9 @@ declare class BufferWriter {
     writeInt32(i: number): void;
     writeUInt32(i: number): void;
     writeUInt64(i: number): void;
-    writeVarInt(i: number): void;
+    writeInt64(i: BigNumber): void;
+    writeCompactSize(i: number): void;
+    writeVarInt(i: BigNumber): void;
     writeSlice(slice: Buffer): void;
     writeVarSlice(slice: Buffer): void;
     writeVector(vector: Array<Buffer>): void;
@@ -31,7 +35,9 @@ declare class BufferReader {
     readInt32(): number;
     readUInt32(): number;
     readUInt64(): number;
-    readVarInt(): number;
+    readInt64(): BigNumber;
+    readCompactSize(): number;
+    readVarInt(): import("bn.js");
     readSlice(n: number): Buffer;
     readVarSlice(): Buffer;
     readVector(): any[];

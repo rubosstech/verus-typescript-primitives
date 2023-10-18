@@ -172,7 +172,7 @@ class Challenge extends __1.VDXFObject {
     }
     fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        const challengeLength = reader.readVarInt();
+        const challengeLength = reader.readCompactSize();
         if (challengeLength == 0) {
             throw new Error("Cannot create challenge from empty buffer");
         }
@@ -190,7 +190,7 @@ class Challenge extends __1.VDXFObject {
                 reader.offset = _session_id.fromBuffer(reader.buffer, true, reader.offset);
                 this.session_id = _session_id.toAddress();
                 this.requested_access = [];
-                const requestedAccessLength = reader.readVarInt();
+                const requestedAccessLength = reader.readCompactSize();
                 for (let i = 0; i < requestedAccessLength; i++) {
                     const _vdxfkey = (0, address_1.toBase58Check)(reader.buffer.slice(reader.offset, reader.offset + vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
                     const _perm = new RequestedPermission("", _vdxfkey);
@@ -198,26 +198,26 @@ class Challenge extends __1.VDXFObject {
                     this.requested_access.push(_perm);
                 }
                 this.requested_access_audience = [];
-                const audienceLength = reader.readVarInt();
+                const audienceLength = reader.readCompactSize();
                 if (audienceLength > 0) {
                     throw new Error("Requested access audience currently unsupported");
                 }
                 this.subject = [];
-                const subjectLength = reader.readVarInt();
+                const subjectLength = reader.readCompactSize();
                 for (let i = 0; i < subjectLength; i++) {
                     const _subject = new Subject();
                     reader.offset = _subject.fromBuffer(reader.buffer, reader.offset);
                     this.subject.push(_subject);
                 }
                 this.provisioning_info = [];
-                const provisioningInfoLength = reader.readVarInt();
+                const provisioningInfoLength = reader.readCompactSize();
                 for (let i = 0; i < provisioningInfoLength; i++) {
                     const _provisioning_info = new ProvisioningInfo();
                     reader.offset = _provisioning_info.fromBuffer(reader.buffer, reader.offset);
                     this.provisioning_info.push(_provisioning_info);
                 }
                 this.alt_auth_factors = [];
-                const altAuthFactorLength = reader.readVarInt();
+                const altAuthFactorLength = reader.readCompactSize();
                 if (altAuthFactorLength > 0) {
                     throw new Error("Alt auth factors currently unsupported");
                 }
@@ -229,7 +229,7 @@ class Challenge extends __1.VDXFObject {
                     this.attestations.push(_att);
                 }
                 this.redirect_uris = [];
-                const urisLength = reader.readVarInt();
+                const urisLength = reader.readCompactSize();
                 for (let i = 0; i < urisLength; i++) {
                     const _redirect_uri = new RedirectUri();
                     reader.offset = _redirect_uri.fromBuffer(reader.buffer, reader.offset);

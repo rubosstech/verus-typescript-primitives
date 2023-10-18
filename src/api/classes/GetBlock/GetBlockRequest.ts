@@ -3,10 +3,10 @@ import { RequestParams, ApiPrimitiveJson } from "../../ApiPrimitive";
 import { GET_BLOCK } from "../../../constants/cmds";
 
 export class GetBlockRequest extends ApiRequest {
-  hashOrHeight: string | number;
+  hashOrHeight: string;
   verbosity?: number;
 
-  constructor(chain: string, hashOrHeight: string | number, verbosity?: number) {
+  constructor(chain: string, hashOrHeight: string, verbosity?: number) {
     super(chain, GET_BLOCK);
     this.hashOrHeight = hashOrHeight;
     this.verbosity = verbosity;
@@ -24,7 +24,7 @@ export class GetBlockRequest extends ApiRequest {
   static fromJson(object: ApiPrimitiveJson): GetBlockRequest {
     return new GetBlockRequest(
       object.chain as string,
-      object.hashOrHeight as string | number,
+      object.hashOrHeight as string,
       object.verbosity != null ? (object.verbosity as number) : undefined
     );
   }

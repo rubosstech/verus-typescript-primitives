@@ -3,9 +3,11 @@ import createHash = require("create-hash");
 import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constants/vdxf';
 import { fromBase58Check, toBase58Check } from '../utils/address';
 import bufferutils from '../utils/bufferutils';
+import varint from '../utils/varint';
 import varuint from '../utils/varuint';
 import { Hash160 } from "./classes/Hash160";
 import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY, VDXFKeyInterface } from './keys';
+import { BN } from "bn.js";
 export * from './keys'
 export * from './scopes'
 
@@ -61,7 +63,7 @@ export class VDXFObject implements VDXFObjectInterface {
     const version = reader.readVarInt();
 
     this.vdxfkey = toBase58Check(keyHash, I_ADDR_VERSION)
-    this.version = version
+    this.version = version.toNumber();
 
     if (offset < buffer.length - 1) {
       reader.offset = this.fromDataBuffer(reader.buffer, reader.offset)
@@ -73,7 +75,7 @@ export class VDXFObject implements VDXFObjectInterface {
   byteLength() {
     const dataLength = this.dataByteLength();
     const keyLength = fromBase58Check(this.vdxfkey).hash.length
-    const versionEncodingLength = varuint.encodingLength(this.version)
+    const versionEncodingLength = varint.encodingLength(new BN(this.version))
     const dataEncodingLength = varuint.encodingLength(dataLength)
 
     return dataLength + keyLength + versionEncodingLength + dataEncodingLength;
@@ -86,7 +88,7 @@ export class VDXFObject implements VDXFObjectInterface {
     const writer = new bufferutils.BufferWriter(buffer);
 
     writer.writeSlice(key.hash);
-    writer.writeVarInt(this.version);
+    writer.writeVarInt(new BN(this.version, 10));
 
     
     writer.writeVarSlice(this.toDataBuffer());

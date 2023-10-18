@@ -29,7 +29,7 @@ class Context extends __1.VDXFObject {
         const buffer = Buffer.alloc(this.dataByteLength());
         const writer = new bufferutils_1.default.BufferWriter(buffer);
         const keys = Object.keys(this.kv);
-        writer.writeVarInt(keys.length);
+        writer.writeCompactSize(keys.length);
         for (const key of Object.keys(this.kv)) {
             const value = this.kv[key];
             const valueBuf = Buffer.from(value, "utf-8");
@@ -40,13 +40,13 @@ class Context extends __1.VDXFObject {
     }
     fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        const contextLength = reader.readVarInt();
+        const contextLength = reader.readCompactSize();
         if (contextLength == 0) {
             this.kv = {};
             return reader.offset;
         }
         else {
-            const numKeys = reader.readVarInt();
+            const numKeys = reader.readCompactSize();
             for (let i = 0; i < numKeys; i++) {
                 this.kv[(0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION)] = reader.readVarSlice().toString("utf-8");
             }

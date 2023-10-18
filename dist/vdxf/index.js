@@ -20,9 +20,11 @@ const createHash = require("create-hash");
 const vdxf_1 = require("../constants/vdxf");
 const address_1 = require("../utils/address");
 const bufferutils_1 = require("../utils/bufferutils");
+const varint_1 = require("../utils/varint");
 const varuint_1 = require("../utils/varuint");
 const Hash160_1 = require("./classes/Hash160");
 const keys_1 = require("./keys");
+const bn_js_1 = require("bn.js");
 __exportStar(require("./keys"), exports);
 __exportStar(require("./scopes"), exports);
 class VDXFObject {
@@ -50,7 +52,7 @@ class VDXFObject {
         const keyHash = reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH);
         const version = reader.readVarInt();
         this.vdxfkey = (0, address_1.toBase58Check)(keyHash, vdxf_1.I_ADDR_VERSION);
-        this.version = version;
+        this.version = version.toNumber();
         if (offset < buffer.length - 1) {
             reader.offset = this.fromDataBuffer(reader.buffer, reader.offset);
         }
@@ -59,7 +61,7 @@ class VDXFObject {
     byteLength() {
         const dataLength = this.dataByteLength();
         const keyLength = (0, address_1.fromBase58Check)(this.vdxfkey).hash.length;
-        const versionEncodingLength = varuint_1.default.encodingLength(this.version);
+        const versionEncodingLength = varint_1.default.encodingLength(new bn_js_1.BN(this.version));
         const dataEncodingLength = varuint_1.default.encodingLength(dataLength);
         return dataLength + keyLength + versionEncodingLength + dataEncodingLength;
     }
@@ -69,8 +71,10 @@ class VDXFObject {
         const buffer = Buffer.alloc(this.byteLength());
         const writer = new bufferutils_1.default.BufferWriter(buffer);
         writer.writeSlice(key.hash);
-        writer.writeVarInt(this.version);
-        writer.writeVarSlice(this.toDataBuffer());
+        writer.writeVarInt(new bn_js_1.BN(this.version, 10));
+        if (dataLength) {
+            writer.writeVarSlice(this.toDataBuffer());
+        }
         return writer.buffer;
     }
     toSha256() {

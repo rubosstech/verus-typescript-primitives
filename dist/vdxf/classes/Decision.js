@@ -68,7 +68,7 @@ class Decision extends __1.VDXFObject {
     }
     fromDataBuffer(buffer, offset, readRequest = true) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        const decisionLength = reader.readVarInt();
+        const decisionLength = reader.readCompactSize();
         if (decisionLength == 0) {
             throw new Error("Cannot create decision from empty buffer");
         }
