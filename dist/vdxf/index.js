@@ -72,7 +72,10 @@ class VDXFObject {
         const writer = new bufferutils_1.default.BufferWriter(buffer);
         writer.writeSlice(key.hash);
         writer.writeVarInt(new bn_js_1.BN(this.version, 10));
-        writer.writeVarSlice(this.toDataBuffer());
+        if (dataLength) {
+            writer.writeVarSlice(this.toDataBuffer());
+        }
+
         return writer.buffer;
     }
     toSha256() {
