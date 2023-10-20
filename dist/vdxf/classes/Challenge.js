@@ -217,8 +217,7 @@ class Challenge extends __1.VDXFObject {
                     throw new Error("Alt auth factors currently unsupported");
                 }
                 this.attestations = [];
-
-                const attestationsLength = reader.readVarInt();
+                const attestationsLength = reader.readCompactSize();
                 for (let i = 0; i < attestationsLength; i++) {
                     const _att = new Attestation_1.Attestation();
                     reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
