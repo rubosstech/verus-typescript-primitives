@@ -1,3 +1,13 @@
+// Licence MIT
+// Adapted to Verus Blake2b MMR. 
+// MMR Code is from
+//Copyright (c) 2019 Zac Mitton under MIT License
+//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+//documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
+//the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+//to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+
 const { Lock } = require('semaphore-async-await')
 import { blake2b } from '@noble/hashes/blake2b'
 
@@ -12,7 +22,6 @@ class Position{
     }
   }
   
-
 export class MMR{
     lock: any;
     _leafLength: number;
@@ -26,7 +35,6 @@ export class MMR{
 
   digest(input){
     return blake2b(Buffer.concat([...input]), {dkLen: 32, personalization: "VerusDefaultHash"}) 
-
   }
 
   async get(leafIndex){
@@ -44,6 +52,7 @@ export class MMR{
     }
     return leafValue
   }
+
   async _get(nodePosition){
     let nodeValue
     await this.lock.acquire()
@@ -66,6 +75,7 @@ export class MMR{
     }
     return nodeValue
   }
+
   async append(value, leafIndex){
     await this.lock.acquire()
     try{

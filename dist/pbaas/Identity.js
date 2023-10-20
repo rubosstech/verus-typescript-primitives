@@ -6,6 +6,7 @@ const bufferutils_1 = require("../utils/bufferutils");
 const Principal_1 = require("./Principal");
 const address_1 = require("../utils/address");
 const vdxf_1 = require("../constants/vdxf");
+const vdxf_2 = require("../vdxf");
 const bn_js_1 = require("bn.js");
 const bech32 = require('bech32');
 const VERSION_PBAAS = 3;
@@ -286,34 +287,13 @@ function contentmultimapFromObject(input) {
     }
     return contentmultimap;
 }
-const getbytes_std = function (data) {
-    var length = 20;
-    length += 1; // varint length 1
-    length += 2; // ss type + ver (lengths)
-    length += varuint_1.default.encodingLength(Buffer.from(data, 'utf8').length);
-    length += Buffer.from(data, 'utf8').length;
-    return length;
-};
-const CVDXF_Data = {
-    iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c: //CVDXF_Data::DataStringKey()
-    {
-        "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
-        "indexid": "xPwgY6oPdusaAgNK3u5yHCQG5NsHEcBpi5",
-        "hash160result": "e5c061641228a399169211e666de18448b7b8bab",
-        "qualifiedname": {
-            "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-            "name": "vrsc::data.type.string"
-        },
-        getbytes: getbytes_std
-    }
-};
 function VectorEncodeVDXFUni(obj) {
     const keys = Object.keys(obj);
     const values = keys.map((item) => obj[item]);
     var bufsize = 0;
     for (var i = 0; i < keys.length; i++) {
-        if (CVDXF_Data[keys[i]]) {
-            bufsize += CVDXF_Data[keys[i]].getbytes(values[i]);
+        if (vdxf_2.CVDXF_Data[keys[i]]) {
+            bufsize += vdxf_2.CVDXF_Data[keys[i]].getbytes(values[i]);
         }
         else {
             throw new Error("VDXF key not found: " + keys[i]);
@@ -321,8 +301,8 @@ function VectorEncodeVDXFUni(obj) {
     }
     const bufferWriter = new BufferWriter(Buffer.alloc(bufsize));
     for (var i = 0; i < keys.length; i++) {
-        if (CVDXF_Data[keys[i]] && CVDXF_Data[keys[i]].qualifiedname.name === "vrsc::data.type.string") {
-            bufferWriter.writeSlice((0, address_1.fromBase58Check)(CVDXF_Data[keys[i]].vdxfid).hash);
+        if (vdxf_2.CVDXF_Data[keys[i]] && vdxf_2.CVDXF_Data[keys[i]].qualifiedname.name === "vrsc::data.type.string") {
+            bufferWriter.writeSlice((0, address_1.fromBase58Check)(vdxf_2.CVDXF_Data[keys[i]].vdxfid).hash);
             bufferWriter.writeVarInt(new bn_js_1.BN(1));
             bufferWriter.writeVarInt(new bn_js_1.BN(Buffer.from(values[i], 'utf8').length + 3)); //NOTE 3 is from ss type + ver + vdxfidver 
             bufferWriter.writeCompactSize(Buffer.from(values[i], 'utf8').length);

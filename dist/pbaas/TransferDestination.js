@@ -23,6 +23,7 @@ exports.AST_VALID_TYPE_NO_FLAGS = exports.DEST_RAW;
 exports.FLAG_DEST_AUX = new bn_js_1.BN(64, 10);
 exports.FLAG_DEST_GATEWAY = new bn_js_1.BN(128, 10);
 exports.FLAG_MASK = exports.FLAG_DEST_AUX.add(exports.FLAG_DEST_GATEWAY);
+const UINT160_BYTE_SIZE = 20;
 class TransferDestination {
     constructor(data) {
         this.type = exports.DEST_INVALID;
@@ -85,8 +86,13 @@ class TransferDestination {
         length += this.destination_bytes.length; // destination_bytes
         if (this.isGateway()) {
             length += (0, address_1.fromBase58Check)(this.gateway_id).hash.length; // gateway_id
-            length += (0, address_1.fromBase58Check)(this.gateway_code).hash.length; // gateway_code
-            length += 8; // fees
+            if (this.gateway_code) {
+                length += (0, address_1.fromBase58Check)(this.gateway_code).hash.length; // gateway_code
+            }
+            else {
+                length += UINT160_BYTE_SIZE;
+            }
+            length += 8; // fees int64
         }
         if (this.hasAuxDests()) {
             length += varuint_1.default.encodingLength(this.aux_dests.length); // aux dests compact size
@@ -104,7 +110,12 @@ class TransferDestination {
         writer.writeVarSlice(this.destination_bytes);
         if (this.isGateway()) {
             writer.writeSlice((0, address_1.fromBase58Check)(this.gateway_id).hash);
-            writer.writeSlice((0, address_1.fromBase58Check)(this.gateway_code).hash);
+            if (this.gateway_code) {
+                writer.writeSlice((0, address_1.fromBase58Check)(this.gateway_code).hash);
+            }
+            else {
+                writer.writeSlice(Buffer.alloc(UINT160_BYTE_SIZE));
+            }
             writer.writeInt64(this.fees);
         }
         if (this.hasAuxDests()) {
