@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { VDXFKeyInterface } from './keys';
+import { BigNumber } from "../utils/types/BigNumber";
 export * from './keys';
 export * from './scopes';
 export interface VDXFObjectInterface {
@@ -20,16 +21,17 @@ export interface VerusIDSignatureInterface {
 }
 export declare class VDXFObject implements VDXFObjectInterface {
     vdxfkey: string;
-    version: number;
-    constructor(key?: string);
+    version: BigNumber;
+    serializekey: boolean;
+    constructor(key?: string, serializekey?: boolean);
     toJson(): {};
-    toString(): string;
+    toString(includeKey?: boolean): string;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    fromBuffer(buffer: Buffer, offset?: number): number;
-    byteLength(): number;
-    toBuffer(): Buffer;
+    fromBuffer(buffer: Buffer, offset?: number, vdxfkey?: string): number;
+    byteLength(includeKey?: boolean): number;
+    toBuffer(includeKey?: boolean): Buffer;
     toSha256(): Buffer;
 }
 export declare class BufferDataVdxfObject extends VDXFObject {
@@ -67,7 +69,7 @@ export declare class Utf8OrBase58Object extends VDXFObject {
 }
 export declare class VerusIDSignature extends VDXFObject {
     signature: string;
-    constructor(sig?: VerusIDSignatureInterface, vdxfkey?: VDXFKeyInterface);
+    constructor(sig?: VerusIDSignatureInterface, vdxfkey?: VDXFKeyInterface, serializekey?: boolean);
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;

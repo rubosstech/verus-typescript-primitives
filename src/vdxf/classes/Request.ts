@@ -5,7 +5,7 @@ import {
   VerusIDSignature,
   VerusIDSignatureInterface,
 } from "../";
-import { LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY } from "../keys";
+import { IDENTITY_AUTH_SIG_VDXF_KEY } from "../keys";
 import { Challenge, ChallengeInterface } from "./Challenge";
 import { Hash160 } from "./Hash160";
 import bufferutils from "../../utils/bufferutils";
@@ -42,7 +42,7 @@ export class Request extends VDXFObject {
     this.signature = request.signature
       ? new VerusIDSignature(
           request.signature,
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         )
       : undefined;
     this.challenge = new Challenge(request.challenge);
@@ -90,7 +90,7 @@ export class Request extends VDXFObject {
       ? this.signature
       : new VerusIDSignature(
           { signature: "" },
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         );
 
     if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
@@ -114,7 +114,7 @@ export class Request extends VDXFObject {
       ? this.signature
       : new VerusIDSignature(
           { signature: "" },
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         );
 
     if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {

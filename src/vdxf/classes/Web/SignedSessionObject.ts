@@ -3,7 +3,7 @@ import {
   VerusIDSignature,
   VerusIDSignatureInterface,
 } from "../../";
-import { SIGNED_SESSION_OBJECT, LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY } from "../../keys";
+import { SIGNED_SESSION_OBJECT, IDENTITY_AUTH_SIG_VDXF_KEY } from "../../keys";
 import { Hash160 } from "../Hash160";
 import bufferutils from "../../../utils/bufferutils";
 import { HASH160_BYTE_LENGTH, I_ADDR_VERSION, VERUS_DATA_SIGNATURE_PREFIX } from "../../../constants/vdxf";
@@ -38,7 +38,7 @@ export class SignedSessionObject extends VDXFObject {
     this.signature = request.signature
       ? new VerusIDSignature(
           request.signature,
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         )
       : undefined;
     this.data = new SignedSessionObjectData(request.data);
@@ -86,7 +86,7 @@ export class SignedSessionObject extends VDXFObject {
       ? this.signature
       : new VerusIDSignature(
           { signature: "" },
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         );
 
     const _system_id = Hash160.fromAddress(this.system_id);
@@ -108,7 +108,7 @@ export class SignedSessionObject extends VDXFObject {
       ? this.signature
       : new VerusIDSignature(
           { signature: "" },
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         );
 
     const _system_id = Hash160.fromAddress(this.system_id);
@@ -180,7 +180,7 @@ export class SignedSessionObject extends VDXFObject {
       signing_id,
       signature: new VerusIDSignature(
         { signature: headers['VerusID-Signature'] },
-        LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+        IDENTITY_AUTH_SIG_VDXF_KEY
       ),
       data: new SignedSessionObjectData({
         session_id: headers['VerusID-Session-ID'],

@@ -1,0 +1,184 @@
+import varint from '../../../utils/varint'
+import varuint from '../../../utils/varuint'
+import bufferutils from '../../../utils/bufferutils'
+import { BN } from 'bn.js';
+import { BigNumber } from '../../../utils/types/BigNumber';
+import { TransferDestination } from '../../../pbaas/TransferDestination';
+import { fromBase58Check, toBase58Check } from '../../../utils/address';
+import { I_ADDR_VERSION } from '../../../constants/vdxf';
+import createHash = require('create-hash');
+const { BufferReader, BufferWriter } = bufferutils;
+
+export const VERUSPAY_INVALID = new BN(0, 10)
+export const VERUSPAY_VALID = new BN(1, 10)
+export const VERUSPAY_ACCEPTS_CONVERSION = new BN(2, 10)
+export const VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = new BN(4, 10)
+export const VERUSPAY_EXPIRES = new BN(8, 10)
+
+export class VerusPayInvoiceDetails {
+  flags: BigNumber;
+  amount: BigNumber;
+  destination: TransferDestination;
+  requestedcurrencyid: string;
+  expiryheight: BigNumber;
+  mindestcurrencyinreserve: BigNumber;
+  minsourcedestweightratio: BigNumber;
+  acceptedsystems: Array<string>;
+  
+  constructor (data?: {
+    flags?: BigNumber,
+    amount: BigNumber,
+    destination: TransferDestination,
+    requestedcurrencyid: string,
+    expiryheight?: BigNumber,
+    mindestcurrencyinreserve?: BigNumber,
+    minsourcedestweightratio?: BigNumber,
+    acceptedsystems?: Array<string>,
+  }) {
+    this.flags = VERUSPAY_VALID;
+    this.amount = null;
+    this.destination = null;
+    this.requestedcurrencyid = null;
+    this.expiryheight = null;
+    this.mindestcurrencyinreserve = null;
+    this.minsourcedestweightratio = null;
+    this.acceptedsystems = null;
+
+    if (data != null) {
+      if (data.flags != null) this.flags = data.flags
+      if (data.amount != null) this.amount = data.amount
+      if (data.destination != null) this.destination = data.destination
+      if (data.requestedcurrencyid != null) this.requestedcurrencyid = data.requestedcurrencyid
+      if (data.expiryheight != null) this.expiryheight = data.expiryheight
+      if (data.mindestcurrencyinreserve != null) this.mindestcurrencyinreserve = data.mindestcurrencyinreserve
+      if (data.minsourcedestweightratio != null) this.minsourcedestweightratio = data.minsourcedestweightratio
+      if (data.acceptedsystems != null) this.acceptedsystems = data.acceptedsystems
+    }
+  }
+
+  setFlags(flags: {
+    acceptsConversion?: boolean,
+    acceptsNonVerusSystems?: boolean,
+    expires?: boolean
+  }) {
+    if (flags.acceptsConversion) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_CONVERSION);
+    if (flags.acceptsNonVerusSystems) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS);
+    if (flags.expires) this.flags = this.flags.xor(VERUSPAY_EXPIRES);
+  }
+
+  toSha256() {
+    return createHash("sha256").update(this.toBuffer()).digest();
+  }
+
+  acceptsConversion() {
+    return !!(this.flags.and(VERUSPAY_ACCEPTS_CONVERSION).toNumber())
+  }
+
+  acceptsNonVerusSystems() {
+    return !!(this.flags.and(VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS).toNumber())
+  }
+
+  expires() {
+    return !!(this.flags.and(VERUSPAY_EXPIRES).toNumber())
+  }
+
+  isValid () {
+    return (
+      !!(this.flags.and(VERUSPAY_VALID).toNumber())
+    )
+  }
+
+  getByteLength(): number {
+    let length = 0;
+
+    length += varint.encodingLength(this.flags);
+    length += varint.encodingLength(this.amount);
+    length += this.destination.getByteLength();
+    length += fromBase58Check(this.requestedcurrencyid).hash.length;
+
+    if (this.expires()) {
+      length += varint.encodingLength(this.expiryheight);
+    }
+    
+    if (this.acceptsConversion()) {
+      length += varint.encodingLength(this.mindestcurrencyinreserve);
+      length += varint.encodingLength(this.minsourcedestweightratio);
+    }
+
+    if (this.acceptsNonVerusSystems()) {
+      length += varuint.encodingLength(this.acceptedsystems.length);
+
+      this.acceptedsystems.forEach(() => {
+        length += 20
+      })
+    }
+
+    return length;
+  }
+
+  toBuffer () {
+    const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
+    
+    writer.writeVarInt(this.flags);
+    writer.writeVarInt(this.amount);
+    writer.writeSlice(this.destination.toBuffer());
+    writer.writeSlice(fromBase58Check(this.requestedcurrencyid).hash);
+
+    if (this.expires()) {
+      writer.writeVarInt(this.expiryheight);
+    }
+
+    if (this.acceptsConversion()) {
+      writer.writeVarInt(this.mindestcurrencyinreserve);
+      writer.writeVarInt(this.minsourcedestweightratio);
+    }
+
+    if (this.acceptsNonVerusSystems()) {
+      writer.writeArray(this.acceptedsystems.map(x => fromBase58Check(x).hash));
+    }
+
+    return writer.buffer;
+  }
+
+  fromBuffer (buffer: Buffer, offset: number = 0) {
+    const reader = new BufferReader(buffer, offset);
+
+    this.flags = reader.readVarInt();
+    this.amount = reader.readVarInt();
+
+    this.destination = new TransferDestination();
+    reader.offset = this.destination.fromBuffer(buffer, reader.offset);
+
+    this.requestedcurrencyid = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+
+    if (this.expires()) {
+      this.expiryheight = reader.readVarInt();
+    }
+
+    if (this.acceptsConversion()) {
+      this.mindestcurrencyinreserve = reader.readVarInt();
+      this.minsourcedestweightratio = reader.readVarInt();
+    }
+
+    if (this.acceptsNonVerusSystems()) {
+      const acceptedSystemsBuffers = reader.readArray(20);
+
+      this.acceptedsystems = acceptedSystemsBuffers.map(x => toBase58Check(x, I_ADDR_VERSION));
+    }
+
+    return reader.offset;
+  }
+
+  toJson() {
+    return {
+      flags: this.flags.toString(),
+      amount: this.amount.toString(),
+      destination: this.destination.getAddressString(),
+      requestedcurrencyid: this.requestedcurrencyid,
+      expiryheight: this.expires() ? this.expiryheight.toString() : undefined,
+      mindestcurrencyinreserve: this.acceptsConversion() ? this.mindestcurrencyinreserve.toString() : undefined,
+      minsourcedestweightratio: this.acceptsConversion() ? this.minsourcedestweightratio.toString() : undefined,
+      acceptedsystems: this.acceptsNonVerusSystems() ? this.acceptedsystems : undefined,
+    }
+  }
+}
