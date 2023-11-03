@@ -28,6 +28,11 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     const _invfromuri = VerusPayInvoice.fromWalletDeeplinkUri(invuri)
 
     expect(_invfromuri.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+
+    const invqrstring = inv.toQrString()
+    const _invfromqrstring = VerusPayInvoice.fromQrString(invqrstring)
+
+    expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 
   test('verus pay invoice without signature that accepts conversion', async () => {
@@ -60,6 +65,11 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     const _invfromuri = VerusPayInvoice.fromWalletDeeplinkUri(invuri)
 
     expect(_invfromuri.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+
+    const invqrstring = inv.toQrString()
+    const _invfromqrstring = VerusPayInvoice.fromQrString(invqrstring)
+
+    expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 
   test('verus pay invoice without signature that accepts conversion and expires', async () => {
@@ -94,6 +104,11 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     const _invfromuri = VerusPayInvoice.fromWalletDeeplinkUri(invuri)
 
     expect(_invfromuri.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+
+    const invqrstring = inv.toQrString()
+    const _invfromqrstring = VerusPayInvoice.fromQrString(invqrstring)
+
+    expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 
   test('verus pay invoice without signature that accepts conversion on 2 non-verus systems and expires', async () => {
@@ -130,6 +145,11 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     const _invfromuri = VerusPayInvoice.fromWalletDeeplinkUri(invuri)
 
     expect(_invfromuri.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+
+    const invqrstring = inv.toQrString()
+    const _invfromqrstring = VerusPayInvoice.fromQrString(invqrstring)
+
+    expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 
   test('verus pay invoice with signature that accepts conversion on 2 non-verus systems and expires', async () => {
@@ -174,5 +194,10 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     const _invfromuri = VerusPayInvoice.fromWalletDeeplinkUri(invuri)
 
     expect(_invfromuri.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+
+    const invqrstring = inv.toQrString()
+    const _invfromqrstring = VerusPayInvoice.fromQrString(invqrstring)
+
+    expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 });

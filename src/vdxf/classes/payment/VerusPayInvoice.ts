@@ -17,8 +17,8 @@ import { VerusPayInvoiceDetails } from "./VerusPayInvoiceDetails";
 import { BN } from 'bn.js';
 
 export const VERUSPAY_VERSION_CURRENT = new BN(3, 10)
-export const VERUSPAY_VERSION_FIRSTVALID = new BN(1, 10)
-export const VERUSPAY_VERSION_LASTVALID = new BN(1, 10)
+export const VERUSPAY_VERSION_FIRSTVALID = new BN(3, 10)
+export const VERUSPAY_VERSION_LASTVALID = new BN(3, 10)
 export const VERUSPAY_VERSION_SIGNED = new BN('80000000', 16)
 
 export interface VerusPayInvoiceInterface {
@@ -204,6 +204,17 @@ export class VerusPayInvoice extends VDXFObject {
     const split = uri.split(`${VERUSPAY_INVOICE.vdxfid}/`);
     const inv = new VerusPayInvoice();
     inv.fromBuffer(base64url.toBuffer(split[1]), 0, VERUSPAY_INVOICE.vdxfid);
+
+    return inv;
+  }
+
+  toQrString(): string {
+    return this.toString(true);
+  }
+
+  static fromQrString(qrstring: string): VerusPayInvoice {
+    const inv = new VerusPayInvoice();
+    inv.fromBuffer(base64url.toBuffer(qrstring), 0);
 
     return inv;
   }

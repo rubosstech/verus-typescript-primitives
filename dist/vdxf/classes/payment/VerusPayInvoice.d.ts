@@ -48,4 +48,6 @@ export declare class VerusPayInvoice extends VDXFObject {
     fromDataBuffer(buffer: Buffer, offset?: number): number;
     toWalletDeeplinkUri(): string;
     static fromWalletDeeplinkUri(uri: string): VerusPayInvoice;
+    toQrString(): string;
+    static fromQrString(qrstring: string): VerusPayInvoice;
 }

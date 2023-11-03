@@ -12,8 +12,8 @@ const base64url_1 = require("base64url");
 const VerusPayInvoiceDetails_1 = require("./VerusPayInvoiceDetails");
 const bn_js_1 = require("bn.js");
 exports.VERUSPAY_VERSION_CURRENT = new bn_js_1.BN(3, 10);
-exports.VERUSPAY_VERSION_FIRSTVALID = new bn_js_1.BN(1, 10);
-exports.VERUSPAY_VERSION_LASTVALID = new bn_js_1.BN(1, 10);
+exports.VERUSPAY_VERSION_FIRSTVALID = new bn_js_1.BN(3, 10);
+exports.VERUSPAY_VERSION_LASTVALID = new bn_js_1.BN(3, 10);
 exports.VERUSPAY_VERSION_SIGNED = new bn_js_1.BN('80000000', 16);
 class VerusPayInvoice extends __1.VDXFObject {
     constructor(request = {
@@ -136,6 +136,14 @@ class VerusPayInvoice extends __1.VDXFObject {
         const split = uri.split(`${__1.VERUSPAY_INVOICE.vdxfid}/`);
         const inv = new VerusPayInvoice();
         inv.fromBuffer(base64url_1.default.toBuffer(split[1]), 0, __1.VERUSPAY_INVOICE.vdxfid);
+        return inv;
+    }
+    toQrString() {
+        return this.toString(true);
+    }
+    static fromQrString(qrstring) {
+        const inv = new VerusPayInvoice();
+        inv.fromBuffer(base64url_1.default.toBuffer(qrstring), 0);
         return inv;
     }
 }

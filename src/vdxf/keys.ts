@@ -8,12 +8,12 @@ export interface VDXFKeyInterface {
 }
 
 export const VERUSPAY_INVOICE: VDXFKeyInterface = {
-  "hash160result": "573b9b049309a81eec897498a47e60b45f86e186",
-  "qualifiedname": {
-      "name": "vrsc::veruspay.invoice",
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV"
+  hash160result: "628efc28c2e2d40050e1a9de7a93e7ddf2aa0076",
+  qualifiedname: {
+    name: "veruspay.vrsc::invoice",
+    namespace: "iAisVse7piEiE2VsixZx4SARyHzSpxYxgq"
   },
-  "vdxfid": "iFmi9XVomWaY9dKpune3CWmB3ZYdnqhFch"
+  vdxfid: "iEETy7La3FTN2Sd2hNRgepek5S8x8eeUeQ"
 }
 
 export const IDENTITY_AUTH_SIG_VDXF_KEY: VDXFKeyInterface = {
