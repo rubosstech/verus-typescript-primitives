@@ -193,4 +193,17 @@ export class Request extends VDXFObject {
 
     return req;
   }
+
+  toQrString(): string {
+    if (this.signature == null) throw new Error("Request must be signed before it can be used as a deep link")
+
+    return this.toString(true);
+  }
+
+  static fromQrString(qrstring: string): Request {
+    const req = new Request();
+    req.fromBuffer(base64url.toBuffer(qrstring));
+
+    return req;
+  }
 }

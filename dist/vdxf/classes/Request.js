@@ -129,5 +129,15 @@ class Request extends __1.VDXFObject {
         req.fromBuffer(base64url_1.default.toBuffer(split[1]));
         return req;
     }
+    toQrString() {
+        if (this.signature == null)
+            throw new Error("Request must be signed before it can be used as a deep link");
+        return this.toString(true);
+    }
+    static fromQrString(qrstring) {
+        const req = new Request();
+        req.fromBuffer(base64url_1.default.toBuffer(qrstring));
+        return req;
+    }
 }
 exports.Request = Request;

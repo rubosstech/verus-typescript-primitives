@@ -142,6 +142,10 @@ describe('Serializes and deserializes signature objects properly', () => {
     const uri = _req.toWalletDeeplinkUri()
 
     expect(uri).toBe(LoginConsentRequest.fromWalletDeeplinkUri(uri).toWalletDeeplinkUri());
+
+    const qrstring = _req.toQrString()
+
+    expect(qrstring).toBe(LoginConsentRequest.fromQrString(qrstring).toQrString());
   });
 
   test('provisioning request/response', async () => {
