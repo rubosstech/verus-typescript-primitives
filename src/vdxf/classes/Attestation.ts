@@ -46,7 +46,6 @@ export class Attestation extends VDXFObject {
       
     }
 
-
     dataByteLength(): number {
  
       let byteLength = 0;

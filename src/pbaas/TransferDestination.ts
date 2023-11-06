@@ -23,6 +23,8 @@ export const FLAG_DEST_AUX = new BN(64, 10)
 export const FLAG_DEST_GATEWAY = new BN(128, 10)
 export const FLAG_MASK = FLAG_DEST_AUX.add(FLAG_DEST_GATEWAY)
 
+const UINT160_BYTE_SIZE = 20;
+
 export class TransferDestination {
   type: BigNumber;
   destination_bytes: Buffer;
@@ -97,9 +99,9 @@ export class TransferDestination {
       if (this.gateway_code) {
         length += fromBase58Check(this.gateway_code).hash.length; // gateway_code
       } else {
-        length += 20
+        length += UINT160_BYTE_SIZE
       }
-      length += 8 // fees
+      length += 8 // fees int64
     }
 
     if (this.hasAuxDests()) {
@@ -127,7 +129,7 @@ export class TransferDestination {
       if (this.gateway_code) {
         writer.writeSlice(fromBase58Check(this.gateway_code).hash);
       } else {
-        writer.writeSlice(Buffer.alloc(20));
+        writer.writeSlice(Buffer.alloc(UINT160_BYTE_SIZE));
       }
       writer.writeInt64(this.fees);
     }

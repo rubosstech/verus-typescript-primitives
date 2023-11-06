@@ -1,9 +1,4 @@
-import { BN } from "bn.js";
-import { CurrencyValueMap } from "../../pbaas/CurrencyValueMap";
 import { Identity } from "../../pbaas/Identity";
-import { BigNumber } from "../../utils/types/BigNumber";
-import { TransferDestination } from "../../pbaas/TransferDestination";
-import { fromBase58Check } from "../../utils/address";
 
 describe('Serializes and deserializes identity properly', () => {
   test('deserialize id with contentmultimap', async () => {

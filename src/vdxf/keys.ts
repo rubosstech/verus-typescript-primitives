@@ -1,3 +1,4 @@
+import varuint from '../utils/varuint'
 export interface VDXFKeyInterface {
   vdxfid: string;
   hash160result: string;
@@ -334,6 +335,7 @@ export const CURRENCY_ADDRESS: VDXFKeyInterface = {
 
 interface VDXFIdentityData extends VDXFKeyInterface {
   detail: string;
+  name: string;
 }
 
 const IDENTITY_DATA: VDXFIdentityData[] = [
@@ -344,7 +346,8 @@ const IDENTITY_DATA: VDXFIdentityData[] = [
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
       "name": "vrsc::attestations.identitydata.firstname"
     },
-    "detail": "First Name"
+    "detail": "First Name",
+    "name":  "firstname"
   },
   {
     "vdxfid": "i3jWsqLVnYyJu78E7mw6pbD3TazwZJpuk4",
@@ -353,7 +356,8 @@ const IDENTITY_DATA: VDXFIdentityData[] = [
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
       "name": "vrsc::attestations.identitydata.lastname"
     },
-    "detail": "Last Name"
+    "detail": "Last Name",
+    "name":  "lastname"
   },
   {
     "vdxfid": "i9MRw6YUhXtP6DT8eufGnB5oRQ34TjDsdb",
@@ -362,7 +366,8 @@ const IDENTITY_DATA: VDXFIdentityData[] = [
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
       "name": "vrsc::attestations.identitydata.attestor"
     },
-    "detail": "Attestor"
+    "detail": "Attestor",
+    "name":  "attestor"
   },
   {
     "vdxfid": "iJvFSXk2EDeEu9BkJQSwAVeiochF6AYpfF",
@@ -371,7 +376,8 @@ const IDENTITY_DATA: VDXFIdentityData[] = [
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
       "name": "vrsc::attestations.identitydata.identity"
     },
-    "detail": "Identity"
+    "detail": "Identity",
+    "name":  "identity"
   },
   {
     "vdxfid": "iLY58rsr39UB8BptNGYX63qPhcpv5N5yuC",
@@ -380,10 +386,41 @@ const IDENTITY_DATA: VDXFIdentityData[] = [
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
       "name": "vrsc::attestations.type"
     },
-    "detail": "Document Type"
+    "detail": "Document Type",
+    "name":  "documenttype"
   }
 ]
-
+// Allow lookup by vdxfid or name
 export const ATTESTATION_IDENTITY_DATA = {};
 IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.vdxfid] = item)
-IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.detail] = item)
+IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.name] = item)
+
+const getbytes_std = function (data){
+  var length = 20;
+  length += 1; // varint length 1
+  length += 2; // ss type + ver (lengths)
+  length += varuint.encodingLength(Buffer.from(data, 'utf8').length);
+  length += Buffer.from(data, 'utf8').length;
+  return length;
+}
+
+interface CVDXFData extends VDXFKeyInterface {
+  getbytes: Function 
+}
+
+// Defined CVDXF_Data from main Verus Daemon.
+const CVDXF_Data_objects: CVDXFData[] = [
+  {
+    "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
+    "hash160result": "e5c061641228a399169211e666de18448b7b8bab",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::data.type.string"
+    },
+    getbytes: getbytes_std
+  },
+  //TODO: add more types
+]
+
+export const CVDXF_Data = {};
+CVDXF_Data_objects.forEach((item) => CVDXF_Data[item.vdxfid] = item);

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ATTESTATION_IDENTITY_DATA = exports.CURRENCY_ADDRESS = exports.SIGNED_SESSION_OBJECT = exports.SIGNED_SESSION_OBJECT_DATA = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_TRANSFER_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_CREATION_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_COMMIT_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_NAMETAKEN = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_FAILED = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_COMPLETE = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGREQUIREDINFO = exports.IDENTITY_UPDATE_TXID = exports.IDENTITY_REGISTRATION_TXID = exports.IDENTITY_NAME_COMMITMENT_TXID = exports.LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY = exports.ID_PARENT_VDXF_KEY = exports.ID_FULLYQUALIFIEDNAME_VDXF_KEY = exports.ID_SYSTEMID_VDXF_KEY = exports.ID_ADDRESS_VDXF_KEY = exports.LOGIN_CONSENT_ID_PROVISIONING_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_CONTEXT_VDXF_KEY = exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_REDIRECT_VDXF_KEY = exports.WALLET_VDXF_KEY = exports.LOGIN_CONSENT_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = void 0;
+exports.CVDXF_Data = exports.ATTESTATION_IDENTITY_DATA = exports.CURRENCY_ADDRESS = exports.SIGNED_SESSION_OBJECT = exports.SIGNED_SESSION_OBJECT_DATA = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_TRANSFER_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_CREATION_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_COMMIT_FAILED = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_UNKNOWN = exports.LOGIN_CONSENT_PROVISIONING_ERROR_KEY_NAMETAKEN = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_FAILED = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_COMPLETE = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGAPPROVAL = exports.LOGIN_CONSENT_PROVISIONING_RESULT_STATE_PENDINGREQUIREDINFO = exports.IDENTITY_UPDATE_TXID = exports.IDENTITY_REGISTRATION_TXID = exports.IDENTITY_NAME_COMMITMENT_TXID = exports.LOGIN_CONSENT_PROVISIONING_RESULT_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_PROVISIONING_REQUEST_VDXF_KEY = exports.ID_PARENT_VDXF_KEY = exports.ID_FULLYQUALIFIEDNAME_VDXF_KEY = exports.ID_SYSTEMID_VDXF_KEY = exports.ID_ADDRESS_VDXF_KEY = exports.LOGIN_CONSENT_ID_PROVISIONING_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_CONTEXT_VDXF_KEY = exports.LOGIN_CONSENT_WEBHOOK_VDXF_KEY = exports.LOGIN_CONSENT_REDIRECT_VDXF_KEY = exports.WALLET_VDXF_KEY = exports.LOGIN_CONSENT_DECISION_VDXF_KEY = exports.LOGIN_CONSENT_CHALLENGE_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_VDXF_KEY = exports.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY = exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = void 0;
+const varuint_1 = require("../utils/varuint");
 exports.LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY = {
     vdxfid: "iPi1DPgDDu7hP1mAp5xJ8rHBWwXSzc6yA8",
     hash160result: "06d4b963da3dcf17f00905b0720f7a4c241defdd",
@@ -289,7 +290,8 @@ const IDENTITY_DATA = [
             "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
             "name": "vrsc::attestations.identitydata.firstname"
         },
-        "detail": "First Name"
+        "detail": "First Name",
+        "name": "firstname"
     },
     {
         "vdxfid": "i3jWsqLVnYyJu78E7mw6pbD3TazwZJpuk4",
@@ -298,7 +300,8 @@ const IDENTITY_DATA = [
             "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
             "name": "vrsc::attestations.identitydata.lastname"
         },
-        "detail": "Last Name"
+        "detail": "Last Name",
+        "name": "lastname"
     },
     {
         "vdxfid": "i9MRw6YUhXtP6DT8eufGnB5oRQ34TjDsdb",
@@ -307,7 +310,8 @@ const IDENTITY_DATA = [
             "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
             "name": "vrsc::attestations.identitydata.attestor"
         },
-        "detail": "Attestor"
+        "detail": "Attestor",
+        "name": "attestor"
     },
     {
         "vdxfid": "iJvFSXk2EDeEu9BkJQSwAVeiochF6AYpfF",
@@ -316,7 +320,8 @@ const IDENTITY_DATA = [
             "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
             "name": "vrsc::attestations.identitydata.identity"
         },
-        "detail": "Identity"
+        "detail": "Identity",
+        "name": "identity"
     },
     {
         "vdxfid": "iLY58rsr39UB8BptNGYX63qPhcpv5N5yuC",
@@ -325,9 +330,34 @@ const IDENTITY_DATA = [
             "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
             "name": "vrsc::attestations.type"
         },
-        "detail": "Document Type"
+        "detail": "Document Type",
+        "name": "documenttype"
     }
 ];
+// Allow lookup by vdxfid or name
 exports.ATTESTATION_IDENTITY_DATA = {};
 IDENTITY_DATA.forEach((item) => exports.ATTESTATION_IDENTITY_DATA[item.vdxfid] = item);
-IDENTITY_DATA.forEach((item) => exports.ATTESTATION_IDENTITY_DATA[item.detail] = item);
+IDENTITY_DATA.forEach((item) => exports.ATTESTATION_IDENTITY_DATA[item.name] = item);
+const getbytes_std = function (data) {
+    var length = 20;
+    length += 1; // varint length 1
+    length += 2; // ss type + ver (lengths)
+    length += varuint_1.default.encodingLength(Buffer.from(data, 'utf8').length);
+    length += Buffer.from(data, 'utf8').length;
+    return length;
+};
+// Defined CVDXF_Data from main Verus Daemon.
+const CVDXF_Data_objects = [
+    {
+        "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
+        "hash160result": "e5c061641228a399169211e666de18448b7b8bab",
+        "qualifiedname": {
+            "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+            "name": "vrsc::data.type.string"
+        },
+        getbytes: getbytes_std
+    },
+    //TODO: add more types
+];
+exports.CVDXF_Data = {};
+CVDXF_Data_objects.forEach((item) => exports.CVDXF_Data[item.vdxfid] = item);

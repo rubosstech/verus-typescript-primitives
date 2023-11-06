@@ -4,6 +4,7 @@ import { BigNumber } from '../utils/types/BigNumber';
 import { Principal } from './Principal';
 import { fromBase58Check, toBase58Check } from '../utils/address';
 import { I_ADDR_VERSION } from '../constants/vdxf';
+import { CVDXF_Data } from "../vdxf";
 import { R_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
 const bech32 = require('bech32')
@@ -318,8 +319,6 @@ function contentmultimapFromObject (input) {
         try
         {
           const key = fromBase58Check(keys[i]).hash;
-
-
             if (key != null)
             {
                 if (Array.isArray(values[i]))
@@ -330,7 +329,6 @@ function contentmultimapFromObject (input) {
                         var items = [];
                         if (typeof oneValue == "string")
                         {
-
                           items.push(Buffer.from(oneValue, 'hex'));
                         }
                         else if (typeof oneValue == "object")
@@ -392,28 +390,6 @@ function contentmultimapFromObject (input) {
     return contentmultimap;
 }
 
-const getbytes_std = function (data){
-    var length = 20;
-    length += 1; // varint length 1
-    length += 2; // ss type + ver (lengths)
-    length += varuint.encodingLength(Buffer.from(data, 'utf8').length);
-    length += Buffer.from(data, 'utf8').length;
-    return length;
-  }
-const CVDXF_Data = {
-  iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c: //CVDXF_Data::DataStringKey()
-    {
-      "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
-      "indexid": "xPwgY6oPdusaAgNK3u5yHCQG5NsHEcBpi5",
-      "hash160result": "e5c061641228a399169211e666de18448b7b8bab",
-      "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::data.type.string"
-      },
-      getbytes: getbytes_std
-    }
-}
-
 function VectorEncodeVDXFUni (obj) {
     
   const keys = Object.keys(obj);
@@ -421,7 +397,7 @@ function VectorEncodeVDXFUni (obj) {
   var bufsize = 0;
   for (var i = 0; i < keys.length; i++) { 
     if (CVDXF_Data[keys[i]] ) {
-        bufsize+= CVDXF_Data[keys[i]].getbytes(values[i]);
+        bufsize += CVDXF_Data[keys[i]].getbytes(values[i]);
     } else {
       throw new Error("VDXF key not found: " + keys[i])
     }
