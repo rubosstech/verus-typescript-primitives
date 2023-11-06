@@ -83,8 +83,7 @@ class Decision extends __1.VDXFObject {
             if (this.vdxfkey === __1.LOGIN_CONSENT_DECISION_VDXF_KEY.vdxfid) {
                 this.skipped = reader.readUInt8() === 1 ? true : false;
                 this.attestations = [];
-
-                const attestationsLength = reader.readVarInt();
+                const attestationsLength = reader.readCompactSize();
                 for (let i = 0; i < attestationsLength; i++) {
                     const _att = new Attestation_1.Attestation();
                     reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
