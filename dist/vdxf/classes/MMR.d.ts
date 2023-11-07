@@ -10,12 +10,12 @@ export declare class MMR {
     _leafLength: number;
     db: any;
     constructor(db?: MemoryBasedDb);
-    digest(input: any): any;
+    digest(input: any): Uint8Array;
     get(leafIndex: any): Promise<any>;
     _get(nodePosition: any): Promise<any>;
     append(value: any, leafIndex: any): Promise<void>;
     appendMany(values: any, startLeafIndex: any): Promise<void>;
-    getRoot(leafIndex?: number): Promise<any>;
+    getRoot(leafIndex?: number): Promise<Uint8Array>;
     getNodeLength(): Promise<any>;
     getLeafLength(): Promise<number>;
     delete(leafIndex: any): Promise<void>;

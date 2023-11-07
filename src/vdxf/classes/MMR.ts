@@ -8,8 +8,8 @@
 //to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 
+import { blake2b } from '@noble/hashes/blake2b'
 const { Lock } = require('semaphore-async-await')
-const blake2b = require('@bitgo/blake2b')
 
 class Position{
     i: any
@@ -34,8 +34,7 @@ export class MMR{
   }
 
   digest(input){
-    var out = Buffer.allocUnsafe(32)
-    return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(Buffer.concat([...input])).digest(out)
+    return blake2b(Buffer.concat([...input]), {dkLen: 32, personalization: "VerusDefaultHash"}) 
   }
 
   async get(leafIndex){
