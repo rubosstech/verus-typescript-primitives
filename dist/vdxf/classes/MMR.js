@@ -19,7 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MMR = void 0;
 const { Lock } = require('semaphore-async-await');
-const blake2b_1 = require("@noble/hashes/blake2b");
+const blake2b = require('@bitgo/blake2b');
 class Position {
     constructor(index, height, rightness) {
         this.i = index;
@@ -33,7 +33,8 @@ class MMR {
         this.lock = new Lock(1);
     }
     digest(input) {
-        return (0, blake2b_1.blake2b)(Buffer.concat([...input]), { dkLen: 32, personalization: "VerusDefaultHash" });
+        var out = Buffer.allocUnsafe(32);
+        return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(Buffer.concat([...input])).digest(out);
     }
     get(leafIndex) {
         return __awaiter(this, void 0, void 0, function* () {
