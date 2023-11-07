@@ -25,6 +25,7 @@
     "bn.js": "5.2.1",
     "bs58check": "https://github.com/bitcoinjs/bs58check",
     "semaphore-async-await": "^1.5.1",
+    "create-hash": "1.2.0",
     "@bitgo/utxo-lib": "git+https://github.com/VerusCoin/BitGoJS.git#7c754d4a5920198d9fe6827d3e23bd5cf431f264"
   },
   "devDependencies": {
