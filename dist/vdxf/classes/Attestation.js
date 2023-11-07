@@ -163,7 +163,7 @@ class Attestation extends __1.VDXFObject {
     }
     sortHashes() {
         const hashArray = this.components.map((item) => this.getHash(item));
-        const sortedHashArray = hashArray.sort((a, b) => (new bn_js_1.BN(`0x${a.toString('hex')}`) > new bn_js_1.BN(`0x${b.toString('hex')}`)) ? 0 : -1);
+        const sortedHashArray = hashArray.sort((a, b) => (new bn_js_1.BN(a.toString('hex'), 16).gt(new bn_js_1.BN(b.toString('hex'), 16))) ? 0 : -1);
         return sortedHashArray;
     }
 }

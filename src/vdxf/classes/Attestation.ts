@@ -201,7 +201,7 @@ export class Attestation extends VDXFObject {
     sortHashes(): Array<Buffer> {
       
       const hashArray = this.components.map((item) => this.getHash(item) )
-      const sortedHashArray = hashArray.sort((a, b) => (new BN(`0x${a.toString('hex')}`) > new BN(`0x${b.toString('hex')}`))? 0 : -1 );
+      const sortedHashArray = hashArray.sort((a, b) => (new BN(a.toString('hex'), 16).gt( new BN(b.toString('hex'), 16 )))? 0 : -1 );
 
       return sortedHashArray;
     }
