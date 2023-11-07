@@ -5,7 +5,7 @@ import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
 import { VDXFObject } from "../";
 import { MMR } from "./MMR"
-
+import { BN } from 'bn.js'
 
 const { BufferReader, BufferWriter } = bufferutils;
 
@@ -201,7 +201,7 @@ export class Attestation extends VDXFObject {
     sortHashes(): Array<Buffer> {
       
       const hashArray = this.components.map((item) => this.getHash(item) )
-      const sortedHashArray = hashArray.sort((a, b) => (BigInt(`0x${a.toString('hex')}`) > BigInt(`0x${b.toString('hex')}`))? 0 : -1 );
+      const sortedHashArray = hashArray.sort((a, b) => (new BN(`0x${a.toString('hex')}`) > new BN(`0x${b.toString('hex')}`))? 0 : -1 );
 
       return sortedHashArray;
     }

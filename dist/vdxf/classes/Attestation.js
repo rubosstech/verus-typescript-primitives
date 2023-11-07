@@ -17,6 +17,7 @@ const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
 const __1 = require("../");
 const MMR_1 = require("./MMR");
+const bn_js_1 = require("bn.js");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 const ATTESTATION_TYPE_DATA = 1;
 const ATTESTATION_TYPE_HASH = 2;
@@ -162,7 +163,7 @@ class Attestation extends __1.VDXFObject {
     }
     sortHashes() {
         const hashArray = this.components.map((item) => this.getHash(item));
-        const sortedHashArray = hashArray.sort((a, b) => (BigInt(`0x${a.toString('hex')}`) > BigInt(`0x${b.toString('hex')}`)) ? 0 : -1);
+        const sortedHashArray = hashArray.sort((a, b) => (new bn_js_1.BN(`0x${a.toString('hex')}`) > new bn_js_1.BN(`0x${b.toString('hex')}`)) ? 0 : -1);
         return sortedHashArray;
     }
 }
