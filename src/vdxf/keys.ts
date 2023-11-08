@@ -7,7 +7,16 @@ export interface VDXFKeyInterface {
   };
 }
 
-export const LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY: VDXFKeyInterface = {
+export const VERUSPAY_INVOICE: VDXFKeyInterface = {
+  hash160result: "628efc28c2e2d40050e1a9de7a93e7ddf2aa0076",
+  qualifiedname: {
+    name: "veruspay.vrsc::invoice",
+    namespace: "iAisVse7piEiE2VsixZx4SARyHzSpxYxgq"
+  },
+  vdxfid: "iEETy7La3FTN2Sd2hNRgepek5S8x8eeUeQ"
+}
+
+export const IDENTITY_AUTH_SIG_VDXF_KEY: VDXFKeyInterface = {
   vdxfid: "iPi1DPgDDu7hP1mAp5xJ8rHBWwXSzc6yA8",
   hash160result: "06d4b963da3dcf17f00905b0720f7a4c241defdd",
   qualifiedname: {

@@ -6,7 +6,8 @@ export interface VDXFKeyInterface {
         namespace: string;
     };
 }
-export declare const LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY: VDXFKeyInterface;
+export declare const VERUSPAY_INVOICE: VDXFKeyInterface;
+export declare const IDENTITY_AUTH_SIG_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_REQUEST_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_RESPONSE_VDXF_KEY: VDXFKeyInterface;
