@@ -64,7 +64,7 @@ class Challenge extends __1.VDXFObject {
     constructor(challenge = { challenge_id: "", created_at: 0 }, vdxfkey = __1.LOGIN_CONSENT_CHALLENGE_VDXF_KEY.vdxfid) {
         super(vdxfkey);
         this.challenge_id = challenge.challenge_id;
-        this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.vdxfkey, x.data)) : challenge.requested_access;
+        this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.data, x.vdxfkey)) : challenge.requested_access;
         this.requested_access_audience = challenge.requested_access_audience;
         this.subject = challenge.subject
             ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
@@ -188,7 +188,7 @@ class Challenge extends __1.VDXFObject {
                 const requestedAccessLength = reader.readCompactSize();
                 for (let i = 0; i < requestedAccessLength; i++) {
                     const _vdxfkey = (0, address_1.toBase58Check)(reader.buffer.slice(reader.offset, reader.offset + vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
-                    const _perm = new RequestedPermission(_vdxfkey, "");
+                    const _perm = new RequestedPermission("", _vdxfkey);
                     reader.offset = _perm.fromBuffer(reader.buffer, reader.offset);
                     this.requested_access.push(_perm);
                 }
@@ -328,7 +328,7 @@ class AttestationRequest extends __1.VDXFObject {
 }
 exports.AttestationRequest = AttestationRequest;
 class RequestedPermission extends __1.VDXFObject {
-    constructor(vdxfkey = "", data = "") {
+    constructor(data = "", vdxfkey = "") {
         super(vdxfkey);
         if (vdxfkey)
             this.addPrototypes(data);
