@@ -14,6 +14,8 @@ export const VERUSPAY_VALID = new BN(1, 10)
 export const VERUSPAY_ACCEPTS_CONVERSION = new BN(2, 10)
 export const VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = new BN(4, 10)
 export const VERUSPAY_EXPIRES = new BN(8, 10)
+export const VERUSPAY_ACCEPTS_ANY_DESTINATION = new BN(16, 0)
+export const VERUSPAY_ACCEPTS_ANY_AMOUNT = new BN(32, 0)
 
 export class VerusPayInvoiceDetails {
   flags: BigNumber;
@@ -27,8 +29,8 @@ export class VerusPayInvoiceDetails {
   
   constructor (data?: {
     flags?: BigNumber,
-    amount: BigNumber,
-    destination: TransferDestination,
+    amount?: BigNumber,
+    destination?: TransferDestination,
     requestedcurrencyid: string,
     expiryheight?: BigNumber,
     mindestcurrencyinreserve?: BigNumber,
@@ -59,11 +61,15 @@ export class VerusPayInvoiceDetails {
   setFlags(flags: {
     acceptsConversion?: boolean,
     acceptsNonVerusSystems?: boolean,
-    expires?: boolean
+    expires?: boolean,
+    acceptsAnyAmount?: boolean,
+    acceptsAnyDestination?: boolean
   }) {
     if (flags.acceptsConversion) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_CONVERSION);
     if (flags.acceptsNonVerusSystems) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS);
     if (flags.expires) this.flags = this.flags.xor(VERUSPAY_EXPIRES);
+    if (flags.acceptsAnyAmount) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_ANY_AMOUNT);
+    if (flags.acceptsAnyDestination) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_ANY_DESTINATION);
   }
 
   toSha256() {
@@ -76,6 +82,14 @@ export class VerusPayInvoiceDetails {
 
   acceptsNonVerusSystems() {
     return !!(this.flags.and(VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS).toNumber())
+  }
+
+  acceptsAnyAmount() {
+    return !!(this.flags.and(VERUSPAY_ACCEPTS_ANY_AMOUNT).toNumber())
+  }
+
+  acceptsAnyDestination() {
+    return !!(this.flags.and(VERUSPAY_ACCEPTS_ANY_DESTINATION).toNumber())
   }
 
   expires() {
@@ -92,8 +106,15 @@ export class VerusPayInvoiceDetails {
     let length = 0;
 
     length += varint.encodingLength(this.flags);
-    length += varint.encodingLength(this.amount);
-    length += this.destination.getByteLength();
+
+    if (!this.acceptsAnyAmount()) {
+      length += varint.encodingLength(this.amount);
+    }
+    
+    if (!this.acceptsAnyDestination()) {
+      length += this.destination.getByteLength();
+    }
+    
     length += fromBase58Check(this.requestedcurrencyid).hash.length;
 
     if (this.expires()) {
@@ -120,8 +141,10 @@ export class VerusPayInvoiceDetails {
     const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
     
     writer.writeVarInt(this.flags);
-    writer.writeVarInt(this.amount);
-    writer.writeSlice(this.destination.toBuffer());
+
+    if (!this.acceptsAnyAmount()) writer.writeVarInt(this.amount);
+    if (!this.acceptsAnyDestination()) writer.writeSlice(this.destination.toBuffer());
+
     writer.writeSlice(fromBase58Check(this.requestedcurrencyid).hash);
 
     if (this.expires()) {
@@ -144,11 +167,14 @@ export class VerusPayInvoiceDetails {
     const reader = new BufferReader(buffer, offset);
 
     this.flags = reader.readVarInt();
-    this.amount = reader.readVarInt();
+    
+    if (!this.acceptsAnyAmount()) this.amount = reader.readVarInt();
 
-    this.destination = new TransferDestination();
-    reader.offset = this.destination.fromBuffer(buffer, reader.offset);
-
+    if (!this.acceptsAnyDestination()) {
+      this.destination = new TransferDestination();
+      reader.offset = this.destination.fromBuffer(buffer, reader.offset);
+    }
+    
     this.requestedcurrencyid = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
 
     if (this.expires()) {
@@ -172,8 +198,8 @@ export class VerusPayInvoiceDetails {
   toJson() {
     return {
       flags: this.flags.toString(),
-      amount: this.amount.toString(),
-      destination: this.destination.getAddressString(),
+      amount: this.acceptsAnyAmount() ? undefined : this.amount.toString(),
+      destination: this.acceptsAnyDestination() ? undefined : this.destination.getAddressString(),
       requestedcurrencyid: this.requestedcurrencyid,
       expiryheight: this.expires() ? this.expiryheight.toString() : undefined,
       mindestcurrencyinreserve: this.acceptsConversion() ? this.mindestcurrencyinreserve.toString() : undefined,

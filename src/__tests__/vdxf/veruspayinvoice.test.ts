@@ -35,6 +35,37 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 
+  test('basic verus pay invoice without signature that accepts any amount and destination', async () => {
+    const details = new VerusPayInvoiceDetails({
+      requestedcurrencyid: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq"
+    })
+
+    details.setFlags({
+      acceptsAnyAmount: true,
+      acceptsAnyDestination: true
+    })
+
+    const inv = new VerusPayInvoice({
+      details
+    })
+
+    const invbuf = inv.toBuffer()
+    const _inv = new VerusPayInvoice()
+    _inv.fromBuffer(invbuf)
+
+    expect(_inv.toBuffer().toString('hex')).toBe(invbuf.toString('hex'));
+
+    const invuri = inv.toWalletDeeplinkUri()
+    const _invfromuri = VerusPayInvoice.fromWalletDeeplinkUri(invuri)
+
+    expect(_invfromuri.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+
+    const invqrstring = inv.toQrString()
+    const _invfromqrstring = VerusPayInvoice.fromQrString(invqrstring)
+
+    expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+  });
+
   test('verus pay invoice without signature that accepts conversion', async () => {
     const details = new VerusPayInvoiceDetails({
       amount: new BN(10000000000, 10),

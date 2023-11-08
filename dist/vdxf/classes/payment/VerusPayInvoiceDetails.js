@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VerusPayInvoiceDetails = exports.VERUSPAY_EXPIRES = exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = exports.VERUSPAY_ACCEPTS_CONVERSION = exports.VERUSPAY_VALID = exports.VERUSPAY_INVALID = void 0;
+exports.VerusPayInvoiceDetails = exports.VERUSPAY_ACCEPTS_ANY_AMOUNT = exports.VERUSPAY_ACCEPTS_ANY_DESTINATION = exports.VERUSPAY_EXPIRES = exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = exports.VERUSPAY_ACCEPTS_CONVERSION = exports.VERUSPAY_VALID = exports.VERUSPAY_INVALID = void 0;
 const varint_1 = require("../../../utils/varint");
 const varuint_1 = require("../../../utils/varuint");
 const bufferutils_1 = require("../../../utils/bufferutils");
@@ -15,6 +15,8 @@ exports.VERUSPAY_VALID = new bn_js_1.BN(1, 10);
 exports.VERUSPAY_ACCEPTS_CONVERSION = new bn_js_1.BN(2, 10);
 exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = new bn_js_1.BN(4, 10);
 exports.VERUSPAY_EXPIRES = new bn_js_1.BN(8, 10);
+exports.VERUSPAY_ACCEPTS_ANY_DESTINATION = new bn_js_1.BN(16, 0);
+exports.VERUSPAY_ACCEPTS_ANY_AMOUNT = new bn_js_1.BN(32, 0);
 class VerusPayInvoiceDetails {
     constructor(data) {
         this.flags = exports.VERUSPAY_VALID;
@@ -51,6 +53,10 @@ class VerusPayInvoiceDetails {
             this.flags = this.flags.xor(exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS);
         if (flags.expires)
             this.flags = this.flags.xor(exports.VERUSPAY_EXPIRES);
+        if (flags.acceptsAnyAmount)
+            this.flags = this.flags.xor(exports.VERUSPAY_ACCEPTS_ANY_AMOUNT);
+        if (flags.acceptsAnyDestination)
+            this.flags = this.flags.xor(exports.VERUSPAY_ACCEPTS_ANY_DESTINATION);
     }
     toSha256() {
         return createHash("sha256").update(this.toBuffer()).digest();
@@ -61,6 +67,12 @@ class VerusPayInvoiceDetails {
     acceptsNonVerusSystems() {
         return !!(this.flags.and(exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS).toNumber());
     }
+    acceptsAnyAmount() {
+        return !!(this.flags.and(exports.VERUSPAY_ACCEPTS_ANY_AMOUNT).toNumber());
+    }
+    acceptsAnyDestination() {
+        return !!(this.flags.and(exports.VERUSPAY_ACCEPTS_ANY_DESTINATION).toNumber());
+    }
     expires() {
         return !!(this.flags.and(exports.VERUSPAY_EXPIRES).toNumber());
     }
@@ -70,8 +82,12 @@ class VerusPayInvoiceDetails {
     getByteLength() {
         let length = 0;
         length += varint_1.default.encodingLength(this.flags);
-        length += varint_1.default.encodingLength(this.amount);
-        length += this.destination.getByteLength();
+        if (!this.acceptsAnyAmount()) {
+            length += varint_1.default.encodingLength(this.amount);
+        }
+        if (!this.acceptsAnyDestination()) {
+            length += this.destination.getByteLength();
+        }
         length += (0, address_1.fromBase58Check)(this.requestedcurrencyid).hash.length;
         if (this.expires()) {
             length += varint_1.default.encodingLength(this.expiryheight);
@@ -91,8 +107,10 @@ class VerusPayInvoiceDetails {
     toBuffer() {
         const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
         writer.writeVarInt(this.flags);
-        writer.writeVarInt(this.amount);
-        writer.writeSlice(this.destination.toBuffer());
+        if (!this.acceptsAnyAmount())
+            writer.writeVarInt(this.amount);
+        if (!this.acceptsAnyDestination())
+            writer.writeSlice(this.destination.toBuffer());
         writer.writeSlice((0, address_1.fromBase58Check)(this.requestedcurrencyid).hash);
         if (this.expires()) {
             writer.writeVarInt(this.expiryheight);
@@ -109,9 +127,12 @@ class VerusPayInvoiceDetails {
     fromBuffer(buffer, offset = 0) {
         const reader = new BufferReader(buffer, offset);
         this.flags = reader.readVarInt();
-        this.amount = reader.readVarInt();
-        this.destination = new TransferDestination_1.TransferDestination();
-        reader.offset = this.destination.fromBuffer(buffer, reader.offset);
+        if (!this.acceptsAnyAmount())
+            this.amount = reader.readVarInt();
+        if (!this.acceptsAnyDestination()) {
+            this.destination = new TransferDestination_1.TransferDestination();
+            reader.offset = this.destination.fromBuffer(buffer, reader.offset);
+        }
         this.requestedcurrencyid = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
         if (this.expires()) {
             this.expiryheight = reader.readVarInt();
@@ -129,8 +150,8 @@ class VerusPayInvoiceDetails {
     toJson() {
         return {
             flags: this.flags.toString(),
-            amount: this.amount.toString(),
-            destination: this.destination.getAddressString(),
+            amount: this.acceptsAnyAmount() ? undefined : this.amount.toString(),
+            destination: this.acceptsAnyDestination() ? undefined : this.destination.getAddressString(),
             requestedcurrencyid: this.requestedcurrencyid,
             expiryheight: this.expires() ? this.expiryheight.toString() : undefined,
             mindestcurrencyinreserve: this.acceptsConversion() ? this.mindestcurrencyinreserve.toString() : undefined,

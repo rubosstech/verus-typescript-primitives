@@ -7,6 +7,8 @@ export declare const VERUSPAY_VALID: import("bn.js");
 export declare const VERUSPAY_ACCEPTS_CONVERSION: import("bn.js");
 export declare const VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS: import("bn.js");
 export declare const VERUSPAY_EXPIRES: import("bn.js");
+export declare const VERUSPAY_ACCEPTS_ANY_DESTINATION: import("bn.js");
+export declare const VERUSPAY_ACCEPTS_ANY_AMOUNT: import("bn.js");
 export declare class VerusPayInvoiceDetails {
     flags: BigNumber;
     amount: BigNumber;
@@ -18,8 +20,8 @@ export declare class VerusPayInvoiceDetails {
     acceptedsystems: Array<string>;
     constructor(data?: {
         flags?: BigNumber;
-        amount: BigNumber;
-        destination: TransferDestination;
+        amount?: BigNumber;
+        destination?: TransferDestination;
         requestedcurrencyid: string;
         expiryheight?: BigNumber;
         mindestcurrencyinreserve?: BigNumber;
@@ -30,10 +32,14 @@ export declare class VerusPayInvoiceDetails {
         acceptsConversion?: boolean;
         acceptsNonVerusSystems?: boolean;
         expires?: boolean;
+        acceptsAnyAmount?: boolean;
+        acceptsAnyDestination?: boolean;
     }): void;
     toSha256(): Buffer;
     acceptsConversion(): boolean;
     acceptsNonVerusSystems(): boolean;
+    acceptsAnyAmount(): boolean;
+    acceptsAnyDestination(): boolean;
     expires(): boolean;
     isValid(): boolean;
     getByteLength(): number;
