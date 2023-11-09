@@ -50,4 +50,6 @@ export declare class Request extends VDXFObject {
     fromDataBuffer(buffer: Buffer, offset?: number): number;
     toWalletDeeplinkUri(): string;
     static fromWalletDeeplinkUri(uri: string): Request;
+    toQrString(): string;
+    static fromQrString(qrstring: string): Request;
 }

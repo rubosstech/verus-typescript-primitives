@@ -1,6 +1,6 @@
 import base64url from "base64url";
 import createHash = require("create-hash");
-import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constants/vdxf';
+import { VDXF_OBJECT_DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constants/vdxf';
 import { fromBase58Check, toBase58Check } from '../utils/address';
 import bufferutils from '../utils/bufferutils';
 import varint from '../utils/varint';
@@ -8,6 +8,7 @@ import varuint from '../utils/varuint';
 import { Hash160 } from "./classes/Hash160";
 import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY, VDXFKeyInterface } from './keys';
 import { BN } from "bn.js";
+import { BigNumber } from "../utils/types/BigNumber";
 export * from './keys'
 export * from './scopes'
 
@@ -29,19 +30,21 @@ export interface VerusIDSignatureInterface {
 
 export class VDXFObject implements VDXFObjectInterface {
   vdxfkey: string;
-  version: number;
+  version: BigNumber;
+  serializekey: boolean = true;
 
-  constructor(key: string = "") {
+  constructor(key: string = "", serializekey: boolean = true) {
     this.vdxfkey = key;
-    this.version = DEFAULT_VERSION;
+    this.version = VDXF_OBJECT_DEFAULT_VERSION;
+    this.serializekey = serializekey;
   }
 
   toJson() {
     return {};
   }
 
-  toString() {
-    return base64url.encode(this.toBuffer())
+  toString(includeKey: boolean = this.serializekey) {
+    return base64url.encode(this.toBuffer(includeKey))
   }
 
   dataByteLength() {
@@ -56,14 +59,17 @@ export class VDXFObject implements VDXFObjectInterface {
     return offset + 1
   }
 
-  fromBuffer(buffer: Buffer, offset: number = 0) {
+  fromBuffer(buffer: Buffer, offset: number = 0, vdxfkey?: string) {
     const reader = new bufferutils.BufferReader(buffer, offset);
 
-    const keyHash = reader.readSlice(HASH160_BYTE_LENGTH);
+    if (vdxfkey == null) {
+      const keyHash = reader.readSlice(HASH160_BYTE_LENGTH);
+      this.vdxfkey = toBase58Check(keyHash, I_ADDR_VERSION)
+    }
+    
     const version = reader.readVarInt();
-
-    this.vdxfkey = toBase58Check(keyHash, I_ADDR_VERSION)
-    this.version = version.toNumber();
+    
+    this.version = version;
 
     if (offset < buffer.length - 1) {
       reader.offset = this.fromDataBuffer(reader.buffer, reader.offset)
@@ -72,22 +78,25 @@ export class VDXFObject implements VDXFObjectInterface {
     return reader.offset
   }
 
-  byteLength() {
+  byteLength(includeKey: boolean = this.serializekey) {
     const dataLength = this.dataByteLength();
-    const keyLength = fromBase58Check(this.vdxfkey).hash.length
-    const versionEncodingLength = varint.encodingLength(new BN(this.version))
-    const dataEncodingLength = varuint.encodingLength(dataLength)
+    const keyLength = includeKey ? fromBase58Check(this.vdxfkey).hash.length : 0;
+    const versionEncodingLength = varint.encodingLength(new BN(this.version));
+    const dataEncodingLength = varuint.encodingLength(dataLength);
 
     return dataLength + keyLength + versionEncodingLength + dataEncodingLength;
   }
 
-  toBuffer() {
+  toBuffer(includeKey: boolean = this.serializekey) {
     const key = fromBase58Check(this.vdxfkey);
     const dataLength = this.dataByteLength();
-    const buffer = Buffer.alloc(this.byteLength());
+    const buffer = Buffer.alloc(this.byteLength(includeKey));
     const writer = new bufferutils.BufferWriter(buffer);
 
-    writer.writeSlice(key.hash);
+    if (includeKey) {
+      writer.writeSlice(key.hash);
+    }
+    
     writer.writeVarInt(new BN(this.version, 10));
 
     
@@ -217,9 +226,10 @@ export class VerusIDSignature extends VDXFObject {
 
   constructor(
     sig: VerusIDSignatureInterface = { signature: "" },
-    vdxfkey: VDXFKeyInterface = LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY
+    vdxfkey: VDXFKeyInterface = LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY,
+    serializekey: boolean = true
   ) {
-    super(vdxfkey.vdxfid);
+    super(vdxfkey.vdxfid, serializekey);
     this.signature = sig.signature;
   }
 

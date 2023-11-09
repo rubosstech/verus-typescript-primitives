@@ -5,7 +5,7 @@ import {
   VerusIDSignature,
   VerusIDSignatureInterface,
 } from "../";
-import { LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY } from "../keys";
+import { IDENTITY_AUTH_SIG_VDXF_KEY } from "../keys";
 import { Challenge, ChallengeInterface } from "./Challenge";
 import { Hash160 } from "./Hash160";
 import bufferutils from "../../utils/bufferutils";
@@ -42,7 +42,7 @@ export class Request extends VDXFObject {
     this.signature = request.signature
       ? new VerusIDSignature(
           request.signature,
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         )
       : undefined;
     this.challenge = new Challenge(request.challenge);
@@ -90,7 +90,7 @@ export class Request extends VDXFObject {
       ? this.signature
       : new VerusIDSignature(
           { signature: "" },
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         );
 
     if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
@@ -114,7 +114,7 @@ export class Request extends VDXFObject {
       ? this.signature
       : new VerusIDSignature(
           { signature: "" },
-          LOGIN_CONSENT_REQUEST_SIG_VDXF_KEY
+          IDENTITY_AUTH_SIG_VDXF_KEY
         );
 
     if (this.vdxfkey === LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
@@ -190,6 +190,19 @@ export class Request extends VDXFObject {
     const split = uri.split(`${LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid}=`);
     const req = new Request();
     req.fromBuffer(base64url.toBuffer(split[1]));
+
+    return req;
+  }
+
+  toQrString(): string {
+    if (this.signature == null) throw new Error("Request must be signed before it can be used as a deep link")
+
+    return this.toString(true);
+  }
+
+  static fromQrString(qrstring: string): Request {
+    const req = new Request();
+    req.fromBuffer(base64url.toBuffer(qrstring));
 
     return req;
   }
