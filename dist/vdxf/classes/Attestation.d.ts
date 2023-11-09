@@ -28,7 +28,7 @@ export declare class Attestation extends VDXFObject {
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
     getMMR(): Promise<MMR>;
-    routeHash(): Promise<Uint8Array>;
+    routeHash(): Promise<void>;
     getHash(n: AttestationData): Buffer;
     sortHashes(): Array<Buffer>;
 }
