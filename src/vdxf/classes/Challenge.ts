@@ -16,7 +16,7 @@ import { Context } from "./Context";
 import { Hash160 } from "./Hash160";
 import { Attestation } from "./Attestation";
 import { fromBase58Check, toBase58Check } from '../../utils/address';
-import { DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../../constants/vdxf';
+import { HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../../constants/vdxf';
 import { BufferDataVdxfObject } from '../index'
 export class RedirectUri extends VDXFObject {
   uri: string;
