@@ -18,7 +18,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MMR = void 0;
-//import { blake2b } from '@noble/hashes/blake2b'
+var blake2b = require('blake2b');
 const { Lock } = require('semaphore-async-await');
 class Position {
     constructor(index, height, rightness) {
@@ -33,7 +33,8 @@ class MMR {
         this.lock = new Lock(1);
     }
     digest(input) {
-        return; //blake2b(Buffer.concat([...input]), {dkLen: 32, personalization: "VerusDefaultHash"}) 
+        var out = Buffer.allocUnsafe(32);
+        return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(Buffer.concat([...input])).digest(out);
     }
     get(leafIndex) {
         return __awaiter(this, void 0, void 0, function* () {
