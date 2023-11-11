@@ -1,7 +1,7 @@
 import {
   LOGIN_CONSENT_REQUEST_VDXF_KEY,
   WALLET_VDXF_KEY,
-  VERUSPAY_INVOICE,
+  VERUSPAY_INVOICE_VDXF_KEY,
   VDXFObject,
   VerusIDSignature,
   VerusIDSignatureInterface,
@@ -39,7 +39,7 @@ export class VerusPayInvoice extends VDXFObject {
       details: new VerusPayInvoiceDetails(),
     }
   ) {
-    super(VERUSPAY_INVOICE.vdxfid);
+    super(VERUSPAY_INVOICE_VDXF_KEY.vdxfid);
 
     this.system_id = request.system_id;
     this.signing_id = request.signing_id;
@@ -196,14 +196,14 @@ export class VerusPayInvoice extends VDXFObject {
 
   toWalletDeeplinkUri(): string {
     return `${WALLET_VDXF_KEY.vdxfid.toLowerCase()}://x-callback-url/${
-      VERUSPAY_INVOICE.vdxfid
+      VERUSPAY_INVOICE_VDXF_KEY.vdxfid
     }/${this.toString(false)}`;
   }
 
   static fromWalletDeeplinkUri(uri: string): VerusPayInvoice {
-    const split = uri.split(`${VERUSPAY_INVOICE.vdxfid}/`);
+    const split = uri.split(`${VERUSPAY_INVOICE_VDXF_KEY.vdxfid}/`);
     const inv = new VerusPayInvoice();
-    inv.fromBuffer(base64url.toBuffer(split[1]), 0, VERUSPAY_INVOICE.vdxfid);
+    inv.fromBuffer(base64url.toBuffer(split[1]), 0, VERUSPAY_INVOICE_VDXF_KEY.vdxfid);
 
     return inv;
   }

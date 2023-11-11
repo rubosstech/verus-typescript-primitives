@@ -15,3 +15,5 @@ export * from './pbaas/index'
 
 export * from './identity/IdentityDefinition'
 export * from './currency/CurrencyDefinition'
+
+export { BN as BigNumber } from 'bn.js'
