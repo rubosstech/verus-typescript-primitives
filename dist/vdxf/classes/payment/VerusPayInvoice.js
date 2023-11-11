@@ -19,7 +19,7 @@ class VerusPayInvoice extends __1.VDXFObject {
     constructor(request = {
         details: new VerusPayInvoiceDetails_1.VerusPayInvoiceDetails(),
     }) {
-        super(__1.VERUSPAY_INVOICE.vdxfid);
+        super(__1.VERUSPAY_INVOICE_VDXF_KEY.vdxfid);
         this.system_id = request.system_id;
         this.signing_id = request.signing_id;
         this.signature = request.signature
@@ -130,12 +130,12 @@ class VerusPayInvoice extends __1.VDXFObject {
         return this._fromDataBuffer(buffer, offset);
     }
     toWalletDeeplinkUri() {
-        return `${__1.WALLET_VDXF_KEY.vdxfid.toLowerCase()}://x-callback-url/${__1.VERUSPAY_INVOICE.vdxfid}/${this.toString(false)}`;
+        return `${__1.WALLET_VDXF_KEY.vdxfid.toLowerCase()}://x-callback-url/${__1.VERUSPAY_INVOICE_VDXF_KEY.vdxfid}/${this.toString(false)}`;
     }
     static fromWalletDeeplinkUri(uri) {
-        const split = uri.split(`${__1.VERUSPAY_INVOICE.vdxfid}/`);
+        const split = uri.split(`${__1.VERUSPAY_INVOICE_VDXF_KEY.vdxfid}/`);
         const inv = new VerusPayInvoice();
-        inv.fromBuffer(base64url_1.default.toBuffer(split[1]), 0, __1.VERUSPAY_INVOICE.vdxfid);
+        inv.fromBuffer(base64url_1.default.toBuffer(split[1]), 0, __1.VERUSPAY_INVOICE_VDXF_KEY.vdxfid);
         return inv;
     }
     toQrString() {

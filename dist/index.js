@@ -14,6 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BigNumber = void 0;
 __exportStar(require("./api/classes/index"), exports);
 __exportStar(require("./api/ApiRequest"), exports);
 __exportStar(require("./api/ApiResponse"), exports);
@@ -27,3 +28,5 @@ __exportStar(require("./utils/varuint"), exports);
 __exportStar(require("./pbaas/index"), exports);
 __exportStar(require("./identity/IdentityDefinition"), exports);
 __exportStar(require("./currency/CurrencyDefinition"), exports);
+var bn_js_1 = require("bn.js");
+Object.defineProperty(exports, "BigNumber", { enumerable: true, get: function () { return bn_js_1.BN; } });
