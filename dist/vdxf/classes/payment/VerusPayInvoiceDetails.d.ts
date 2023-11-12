@@ -15,8 +15,7 @@ export declare class VerusPayInvoiceDetails {
     destination: TransferDestination;
     requestedcurrencyid: string;
     expiryheight: BigNumber;
-    mindestcurrencyinreserve: BigNumber;
-    minsourcedestweightratio: BigNumber;
+    maxestimatedslippage: BigNumber;
     acceptedsystems: Array<string>;
     constructor(data?: {
         flags?: BigNumber;
@@ -24,8 +23,7 @@ export declare class VerusPayInvoiceDetails {
         destination?: TransferDestination;
         requestedcurrencyid: string;
         expiryheight?: BigNumber;
-        mindestcurrencyinreserve?: BigNumber;
-        minsourcedestweightratio?: BigNumber;
+        maxestimatedslippage?: BigNumber;
         acceptedsystems?: Array<string>;
     });
     setFlags(flags: {
@@ -51,8 +49,7 @@ export declare class VerusPayInvoiceDetails {
         destination: string;
         requestedcurrencyid: string;
         expiryheight: string;
-        mindestcurrencyinreserve: string;
-        minsourcedestweightratio: string;
+        maxestimatedslippage: string;
         acceptedsystems: string[];
     };
 }

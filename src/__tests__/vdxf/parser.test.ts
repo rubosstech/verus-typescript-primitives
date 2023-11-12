@@ -13,8 +13,7 @@ describe('Parses VDXF objects correctly', () => {
       destination_bytes: fromBase58Check("R9J8E2no2HVjQmzX6Ntes2ShSGcn7WiRcx").hash
     }),
     requestedcurrencyid: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq",
-    mindestcurrencyinreserve: new BN(250000000000, 10),
-    minsourcedestweightratio: new BN(40000000, 10),
+    maxestimatedslippage: new BN(40000000, 10),
     expiryheight: new BN(2000000, 10),
     acceptedsystems: ["iNC9NG5Jqk2tqVtqfjfiSpaqxrXaFU6RDu", "iBDkVJqik6BrtcDBQfFygffiYzTMy6EuhU"]
   })

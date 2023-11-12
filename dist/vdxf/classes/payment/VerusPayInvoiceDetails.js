@@ -24,8 +24,7 @@ class VerusPayInvoiceDetails {
         this.destination = null;
         this.requestedcurrencyid = null;
         this.expiryheight = null;
-        this.mindestcurrencyinreserve = null;
-        this.minsourcedestweightratio = null;
+        this.maxestimatedslippage = null;
         this.acceptedsystems = null;
         if (data != null) {
             if (data.flags != null)
@@ -38,10 +37,8 @@ class VerusPayInvoiceDetails {
                 this.requestedcurrencyid = data.requestedcurrencyid;
             if (data.expiryheight != null)
                 this.expiryheight = data.expiryheight;
-            if (data.mindestcurrencyinreserve != null)
-                this.mindestcurrencyinreserve = data.mindestcurrencyinreserve;
-            if (data.minsourcedestweightratio != null)
-                this.minsourcedestweightratio = data.minsourcedestweightratio;
+            if (data.maxestimatedslippage != null)
+                this.maxestimatedslippage = data.maxestimatedslippage;
             if (data.acceptedsystems != null)
                 this.acceptedsystems = data.acceptedsystems;
         }
@@ -93,8 +90,7 @@ class VerusPayInvoiceDetails {
             length += varint_1.default.encodingLength(this.expiryheight);
         }
         if (this.acceptsConversion()) {
-            length += varint_1.default.encodingLength(this.mindestcurrencyinreserve);
-            length += varint_1.default.encodingLength(this.minsourcedestweightratio);
+            length += varint_1.default.encodingLength(this.maxestimatedslippage);
         }
         if (this.acceptsNonVerusSystems()) {
             length += varuint_1.default.encodingLength(this.acceptedsystems.length);
@@ -116,8 +112,7 @@ class VerusPayInvoiceDetails {
             writer.writeVarInt(this.expiryheight);
         }
         if (this.acceptsConversion()) {
-            writer.writeVarInt(this.mindestcurrencyinreserve);
-            writer.writeVarInt(this.minsourcedestweightratio);
+            writer.writeVarInt(this.maxestimatedslippage);
         }
         if (this.acceptsNonVerusSystems()) {
             writer.writeArray(this.acceptedsystems.map(x => (0, address_1.fromBase58Check)(x).hash));
@@ -138,8 +133,7 @@ class VerusPayInvoiceDetails {
             this.expiryheight = reader.readVarInt();
         }
         if (this.acceptsConversion()) {
-            this.mindestcurrencyinreserve = reader.readVarInt();
-            this.minsourcedestweightratio = reader.readVarInt();
+            this.maxestimatedslippage = reader.readVarInt();
         }
         if (this.acceptsNonVerusSystems()) {
             const acceptedSystemsBuffers = reader.readArray(20);
@@ -154,8 +148,7 @@ class VerusPayInvoiceDetails {
             destination: this.acceptsAnyDestination() ? undefined : this.destination.getAddressString(),
             requestedcurrencyid: this.requestedcurrencyid,
             expiryheight: this.expires() ? this.expiryheight.toString() : undefined,
-            mindestcurrencyinreserve: this.acceptsConversion() ? this.mindestcurrencyinreserve.toString() : undefined,
-            minsourcedestweightratio: this.acceptsConversion() ? this.minsourcedestweightratio.toString() : undefined,
+            maxestimatedslippage: this.acceptsConversion() ? this.maxestimatedslippage.toString() : undefined,
             acceptedsystems: this.acceptsNonVerusSystems() ? this.acceptedsystems : undefined,
         };
     }
