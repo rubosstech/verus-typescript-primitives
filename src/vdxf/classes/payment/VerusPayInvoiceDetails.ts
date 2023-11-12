@@ -23,8 +23,7 @@ export class VerusPayInvoiceDetails {
   destination: TransferDestination;
   requestedcurrencyid: string;
   expiryheight: BigNumber;
-  mindestcurrencyinreserve: BigNumber;
-  minsourcedestweightratio: BigNumber;
+  maxestimatedslippage: BigNumber;
   acceptedsystems: Array<string>;
   
   constructor (data?: {
@@ -33,8 +32,7 @@ export class VerusPayInvoiceDetails {
     destination?: TransferDestination,
     requestedcurrencyid: string,
     expiryheight?: BigNumber,
-    mindestcurrencyinreserve?: BigNumber,
-    minsourcedestweightratio?: BigNumber,
+    maxestimatedslippage?: BigNumber,
     acceptedsystems?: Array<string>,
   }) {
     this.flags = VERUSPAY_VALID;
@@ -42,8 +40,7 @@ export class VerusPayInvoiceDetails {
     this.destination = null;
     this.requestedcurrencyid = null;
     this.expiryheight = null;
-    this.mindestcurrencyinreserve = null;
-    this.minsourcedestweightratio = null;
+    this.maxestimatedslippage = null;
     this.acceptedsystems = null;
 
     if (data != null) {
@@ -52,8 +49,7 @@ export class VerusPayInvoiceDetails {
       if (data.destination != null) this.destination = data.destination
       if (data.requestedcurrencyid != null) this.requestedcurrencyid = data.requestedcurrencyid
       if (data.expiryheight != null) this.expiryheight = data.expiryheight
-      if (data.mindestcurrencyinreserve != null) this.mindestcurrencyinreserve = data.mindestcurrencyinreserve
-      if (data.minsourcedestweightratio != null) this.minsourcedestweightratio = data.minsourcedestweightratio
+      if (data.maxestimatedslippage != null) this.maxestimatedslippage = data.maxestimatedslippage
       if (data.acceptedsystems != null) this.acceptedsystems = data.acceptedsystems
     }
   }
@@ -122,8 +118,7 @@ export class VerusPayInvoiceDetails {
     }
     
     if (this.acceptsConversion()) {
-      length += varint.encodingLength(this.mindestcurrencyinreserve);
-      length += varint.encodingLength(this.minsourcedestweightratio);
+      length += varint.encodingLength(this.maxestimatedslippage);
     }
 
     if (this.acceptsNonVerusSystems()) {
@@ -152,8 +147,7 @@ export class VerusPayInvoiceDetails {
     }
 
     if (this.acceptsConversion()) {
-      writer.writeVarInt(this.mindestcurrencyinreserve);
-      writer.writeVarInt(this.minsourcedestweightratio);
+      writer.writeVarInt(this.maxestimatedslippage);
     }
 
     if (this.acceptsNonVerusSystems()) {
@@ -182,8 +176,7 @@ export class VerusPayInvoiceDetails {
     }
 
     if (this.acceptsConversion()) {
-      this.mindestcurrencyinreserve = reader.readVarInt();
-      this.minsourcedestweightratio = reader.readVarInt();
+      this.maxestimatedslippage = reader.readVarInt();
     }
 
     if (this.acceptsNonVerusSystems()) {
@@ -202,8 +195,7 @@ export class VerusPayInvoiceDetails {
       destination: this.acceptsAnyDestination() ? undefined : this.destination.getAddressString(),
       requestedcurrencyid: this.requestedcurrencyid,
       expiryheight: this.expires() ? this.expiryheight.toString() : undefined,
-      mindestcurrencyinreserve: this.acceptsConversion() ? this.mindestcurrencyinreserve.toString() : undefined,
-      minsourcedestweightratio: this.acceptsConversion() ? this.minsourcedestweightratio.toString() : undefined,
+      maxestimatedslippage: this.acceptsConversion() ? this.maxestimatedslippage.toString() : undefined,
       acceptedsystems: this.acceptsNonVerusSystems() ? this.acceptedsystems : undefined,
     }
   }

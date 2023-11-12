@@ -35,8 +35,7 @@ export declare class VerusPayInvoice extends VDXFObject {
             destination: string;
             requestedcurrencyid: string;
             expiryheight: string;
-            mindestcurrencyinreserve: string;
-            minsourcedestweightratio: string;
+            maxestimatedslippage: string;
             acceptedsystems: string[];
         };
     };
