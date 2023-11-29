@@ -141,11 +141,22 @@ class VerusPayInvoiceDetails {
         }
         return reader.offset;
     }
+    static fromJson(data) {
+        return new VerusPayInvoiceDetails({
+            flags: new bn_js_1.BN(data.flags),
+            amount: data.amount != null ? new bn_js_1.BN(data.amount) : undefined,
+            destination: data.destination != null ? TransferDestination_1.TransferDestination.fromJson(data.destination) : undefined,
+            requestedcurrencyid: data.requestedcurrencyid,
+            expiryheight: data.expiryheight != null ? new bn_js_1.BN(data.expiryheight) : undefined,
+            maxestimatedslippage: data.maxestimatedslippage != null ? new bn_js_1.BN(data.maxestimatedslippage) : undefined,
+            acceptedsystems: data.acceptedsystems
+        });
+    }
     toJson() {
         return {
             flags: this.flags.toString(),
             amount: this.acceptsAnyAmount() ? undefined : this.amount.toString(),
-            destination: this.acceptsAnyDestination() ? undefined : this.destination.getAddressString(),
+            destination: this.acceptsAnyDestination() ? undefined : this.destination.toJson(),
             requestedcurrencyid: this.requestedcurrencyid,
             expiryheight: this.expires() ? this.expiryheight.toString() : undefined,
             maxestimatedslippage: this.acceptsConversion() ? this.maxestimatedslippage.toString() : undefined,

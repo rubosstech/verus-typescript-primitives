@@ -26,6 +26,10 @@ class VerusPayInvoice extends __1.VDXFObject {
             ? new __1.VerusIDSignature(request.signature, keys_1.IDENTITY_AUTH_SIG_VDXF_KEY, false)
             : undefined;
         this.details = new VerusPayInvoiceDetails_1.VerusPayInvoiceDetails(request.details);
+        if (request.version)
+            this.version = request.version;
+        else
+            this.version = exports.VERUSPAY_VERSION_CURRENT;
     }
     isSigned() {
         return !!(this.version.and(exports.VERUSPAY_VERSION_SIGNED).toNumber());
@@ -58,15 +62,6 @@ class VerusPayInvoice extends __1.VDXFObject {
         }
         else
             return this.details.toSha256();
-    }
-    toJson() {
-        return {
-            vdxfkey: this.vdxfkey,
-            system_id: this.system_id,
-            signing_id: this.signing_id,
-            signature: this.isSigned() ? this.signature.toJson() : this.signature,
-            details: this.details.toJson(),
-        };
     }
     _dataByteLength(signer = this.signing_id) {
         if (this.isSigned()) {
@@ -145,6 +140,25 @@ class VerusPayInvoice extends __1.VDXFObject {
         const inv = new VerusPayInvoice();
         inv.fromBuffer(base64url_1.default.toBuffer(qrstring), 0);
         return inv;
+    }
+    static fromJson(data) {
+        return new VerusPayInvoice({
+            details: VerusPayInvoiceDetails_1.VerusPayInvoiceDetails.fromJson(data.details),
+            signature: data.signature != null ? __1.VerusIDSignature.fromJson(data.signature) : undefined,
+            signing_id: data.signing_id,
+            system_id: data.system_id,
+            version: new bn_js_1.BN(data.version)
+        });
+    }
+    toJson() {
+        return {
+            vdxfkey: this.vdxfkey,
+            system_id: this.system_id,
+            signing_id: this.signing_id,
+            signature: this.isSigned() ? this.signature.toJson() : this.signature,
+            details: this.details.toJson(),
+            version: this.version.toString()
+        };
     }
 }
 exports.VerusPayInvoice = VerusPayInvoice;

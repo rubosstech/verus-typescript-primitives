@@ -5,6 +5,7 @@ import {
   VDXFObject,
   VerusIDSignature,
   VerusIDSignatureInterface,
+  VerusIDSignatureJson,
 } from "../../";
 import { IDENTITY_AUTH_SIG_VDXF_KEY } from "../../keys";
 import { Hash160 } from "./../Hash160";
@@ -13,8 +14,9 @@ import { HASH160_BYTE_LENGTH, I_ADDR_VERSION, R_ADDR_VERSION, VERUS_DATA_SIGNATU
 import { fromBase58Check, toBase58Check } from "../../../utils/address";
 import createHash = require("create-hash");
 import base64url from "base64url";
-import { VerusPayInvoiceDetails } from "./VerusPayInvoiceDetails";
+import { VerusPayInvoiceDetails, VerusPayInvoiceDetailsJson } from "./VerusPayInvoiceDetails";
 import { BN } from 'bn.js';
+import { BigNumber } from "../../../utils/types/BigNumber";
 
 export const VERUSPAY_VERSION_CURRENT = new BN(3, 10)
 export const VERUSPAY_VERSION_FIRSTVALID = new BN(3, 10)
@@ -26,6 +28,16 @@ export interface VerusPayInvoiceInterface {
   system_id?: string;
   signing_id?: string;
   signature?: VerusIDSignatureInterface;
+  version?: BigNumber;
+}
+
+export type VerusPayInvoiceJson = {
+  vdxfkey: string,
+  details: VerusPayInvoiceDetailsJson;
+  system_id?: string;
+  signing_id?: string;
+  signature?: VerusIDSignatureJson;
+  version: string
 }
 
 export class VerusPayInvoice extends VDXFObject {
@@ -51,6 +63,9 @@ export class VerusPayInvoice extends VDXFObject {
         )
       : undefined;
     this.details = new VerusPayInvoiceDetails(request.details);
+
+    if (request.version) this.version = request.version;
+    else this.version = VERUSPAY_VERSION_CURRENT;
   }
 
   isSigned() {
@@ -86,16 +101,6 @@ export class VerusPayInvoice extends VDXFObject {
           .digest();
       }
     } else return this.details.toSha256()
-  }
-
-  toJson() {
-    return {
-      vdxfkey: this.vdxfkey,
-      system_id: this.system_id,
-      signing_id: this.signing_id,
-      signature: this.isSigned() ? this.signature.toJson() : this.signature,
-      details: this.details.toJson(),
-    };
   }
 
   protected _dataByteLength(signer: string = this.signing_id): number {
@@ -217,5 +222,26 @@ export class VerusPayInvoice extends VDXFObject {
     inv.fromBuffer(base64url.toBuffer(qrstring), 0);
 
     return inv;
+  }
+
+  static fromJson(data: VerusPayInvoiceJson): VerusPayInvoice {
+    return new VerusPayInvoice({
+      details: VerusPayInvoiceDetails.fromJson(data.details),
+      signature: data.signature != null ? VerusIDSignature.fromJson(data.signature) : undefined,
+      signing_id: data.signing_id,
+      system_id: data.system_id,
+      version: new BN(data.version)
+    })
+  }
+
+  toJson(): VerusPayInvoiceJson {
+    return {
+      vdxfkey: this.vdxfkey,
+      system_id: this.system_id,
+      signing_id: this.signing_id,
+      signature: this.isSigned() ? this.signature.toJson() : this.signature,
+      details: this.details.toJson(),
+      version: this.version.toString()
+    };
   }
 }

@@ -35,6 +35,25 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 
+  test('JSON test basic verus pay invoice without signature', async () => {
+    const details = new VerusPayInvoiceDetails({
+      amount: new BN(10000000000, 10),
+      destination: new TransferDestination({
+        type: DEST_PKH,
+        destination_bytes: fromBase58Check("R9J8E2no2HVjQmzX6Ntes2ShSGcn7WiRcx").hash
+      }),
+      requestedcurrencyid: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq"
+    })
+
+    const inv = new VerusPayInvoice({
+      details
+    })
+
+    const invFromJson = VerusPayInvoice.fromJson(inv.toJson());
+
+    expect(invFromJson.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+  });
+
   test('basic verus pay invoice without signature that accepts any amount and destination', async () => {
     const details = new VerusPayInvoiceDetails({
       requestedcurrencyid: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq"
@@ -226,5 +245,9 @@ describe('Serializes and deserializes VerusPay invoice', () => {
     const _invfromqrstring = VerusPayInvoice.fromQrString(invqrstring)
 
     expect(_invfromqrstring.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
+
+    const invFromJson = VerusPayInvoice.fromJson(inv.toJson());
+    
+    expect(invFromJson.toBuffer().toString('hex')).toBe(inv.toBuffer().toString('hex'));
   });
 });

@@ -3,7 +3,7 @@ import varuint from '../../../utils/varuint'
 import bufferutils from '../../../utils/bufferutils'
 import { BN } from 'bn.js';
 import { BigNumber } from '../../../utils/types/BigNumber';
-import { TransferDestination } from '../../../pbaas/TransferDestination';
+import { TransferDestination, TransferDestinationJson } from '../../../pbaas/TransferDestination';
 import { fromBase58Check, toBase58Check } from '../../../utils/address';
 import { I_ADDR_VERSION } from '../../../constants/vdxf';
 import createHash = require('create-hash');
@@ -16,6 +16,16 @@ export const VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = new BN(4, 10)
 export const VERUSPAY_EXPIRES = new BN(8, 10)
 export const VERUSPAY_ACCEPTS_ANY_DESTINATION = new BN(16, 0)
 export const VERUSPAY_ACCEPTS_ANY_AMOUNT = new BN(32, 0)
+
+export type VerusPayInvoiceDetailsJson = {
+  flags?: string,
+  amount?: string,
+  destination?: TransferDestinationJson,
+  requestedcurrencyid: string,
+  expiryheight?: string,
+  maxestimatedslippage?: string,
+  acceptedsystems?: Array<string>,
+}
 
 export class VerusPayInvoiceDetails {
   flags: BigNumber;
@@ -188,11 +198,23 @@ export class VerusPayInvoiceDetails {
     return reader.offset;
   }
 
-  toJson() {
+  static fromJson(data: VerusPayInvoiceDetailsJson): VerusPayInvoiceDetails {
+    return new VerusPayInvoiceDetails({
+      flags: new BN(data.flags),
+      amount: data.amount != null ? new BN(data.amount) : undefined,
+      destination: data.destination != null ? TransferDestination.fromJson(data.destination) : undefined,
+      requestedcurrencyid: data.requestedcurrencyid,
+      expiryheight: data.expiryheight != null ? new BN(data.expiryheight) : undefined,
+      maxestimatedslippage: data.maxestimatedslippage != null ? new BN(data.maxestimatedslippage) : undefined,
+      acceptedsystems: data.acceptedsystems
+    })
+  }
+
+  toJson(): VerusPayInvoiceDetailsJson {
     return {
       flags: this.flags.toString(),
       amount: this.acceptsAnyAmount() ? undefined : this.amount.toString(),
-      destination: this.acceptsAnyDestination() ? undefined : this.destination.getAddressString(),
+      destination: this.acceptsAnyDestination() ? undefined : this.destination.toJson(),
       requestedcurrencyid: this.requestedcurrencyid,
       expiryheight: this.expires() ? this.expiryheight.toString() : undefined,
       maxestimatedslippage: this.acceptsConversion() ? this.maxestimatedslippage.toString() : undefined,

@@ -142,5 +142,25 @@ class TransferDestination {
         }
         return reader.offset;
     }
+    static fromJson(data) {
+        return new TransferDestination({
+            type: new bn_js_1.BN(data.type),
+            destination_bytes: Buffer.from(data.destination_bytes, 'hex'),
+            gateway_id: data.gateway_id,
+            gateway_code: data.gateway_code,
+            fees: new bn_js_1.BN(data.fees),
+            aux_dests: data.aux_dests.map(x => TransferDestination.fromJson(x))
+        });
+    }
+    toJson() {
+        return {
+            type: this.type.toString(),
+            destination_bytes: this.destination_bytes.toString('hex'),
+            gateway_id: this.gateway_id,
+            gateway_code: this.gateway_code,
+            fees: this.fees.toString(),
+            aux_dests: this.aux_dests.map(x => x.toJson())
+        };
+    }
 }
 exports.TransferDestination = TransferDestination;
