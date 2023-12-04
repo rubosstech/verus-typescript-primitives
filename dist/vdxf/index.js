@@ -171,7 +171,7 @@ class Utf8OrBase58Object extends VDXFObject {
 }
 exports.Utf8OrBase58Object = Utf8OrBase58Object;
 class VerusIDSignature extends VDXFObject {
-    constructor(sig = { signature: "" }, vdxfkey = keys_1.LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY, serializekey = true) {
+    constructor(sig = { signature: "" }, vdxfkey = keys_1.IDENTITY_AUTH_SIG_VDXF_KEY, serializekey = true) {
         super(vdxfkey.vdxfid, serializekey);
         this.signature = sig.signature;
     }
@@ -186,10 +186,14 @@ class VerusIDSignature extends VDXFObject {
         this.signature = reader.readVarSlice().toString("base64");
         return reader.offset;
     }
+    static fromJson(data) {
+        return new VerusIDSignature({ signature: data.signature }, keys_1.IDENTITY_AUTH_SIG_VDXF_KEY, data.serializekey);
+    }
     toJson() {
         return {
             vdxfkey: this.vdxfkey,
             signature: this.signature,
+            serializekey: this.serializekey
         };
     }
 }

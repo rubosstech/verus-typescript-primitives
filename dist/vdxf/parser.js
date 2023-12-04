@@ -21,7 +21,7 @@ function parseVdxfObjectString(str) {
         if (deeplinkType === keys_1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
             return classes_1.LoginConsentRequest.fromWalletDeeplinkUri(str);
         }
-        else if (deeplinkType === keys_1.VERUSPAY_INVOICE.vdxfid) {
+        else if (deeplinkType === keys_1.VERUSPAY_INVOICE_VDXF_KEY.vdxfid) {
             return classes_1.VerusPayInvoice.fromWalletDeeplinkUri(str);
         }
         else
@@ -35,7 +35,7 @@ function parseVdxfObjectString(str) {
         if (vdxfKey === keys_1.LOGIN_CONSENT_REQUEST_VDXF_KEY.vdxfid) {
             return classes_1.LoginConsentRequest.fromQrString(str);
         }
-        else if (vdxfKey === keys_1.VERUSPAY_INVOICE.vdxfid) {
+        else if (vdxfKey === keys_1.VERUSPAY_INVOICE_VDXF_KEY.vdxfid) {
             return classes_1.VerusPayInvoice.fromQrString(str);
         }
         else

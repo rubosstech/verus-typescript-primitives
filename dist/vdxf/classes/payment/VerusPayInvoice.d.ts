@@ -1,7 +1,8 @@
 /// <reference types="bn.js" />
 /// <reference types="node" />
-import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface } from "../../";
-import { VerusPayInvoiceDetails } from "./VerusPayInvoiceDetails";
+import { VDXFObject, VerusIDSignature, VerusIDSignatureInterface, VerusIDSignatureJson } from "../../";
+import { VerusPayInvoiceDetails, VerusPayInvoiceDetailsJson } from "./VerusPayInvoiceDetails";
+import { BigNumber } from "../../../utils/types/BigNumber";
 export declare const VERUSPAY_VERSION_CURRENT: import("bn.js");
 export declare const VERUSPAY_VERSION_FIRSTVALID: import("bn.js");
 export declare const VERUSPAY_VERSION_LASTVALID: import("bn.js");
@@ -11,7 +12,16 @@ export interface VerusPayInvoiceInterface {
     system_id?: string;
     signing_id?: string;
     signature?: VerusIDSignatureInterface;
+    version?: BigNumber;
 }
+export declare type VerusPayInvoiceJson = {
+    vdxfkey: string;
+    details: VerusPayInvoiceDetailsJson;
+    system_id?: string;
+    signing_id?: string;
+    signature?: VerusIDSignatureJson;
+    version: string;
+};
 export declare class VerusPayInvoice extends VDXFObject {
     system_id: string;
     signing_id: string;
@@ -21,25 +31,6 @@ export declare class VerusPayInvoice extends VDXFObject {
     isSigned(): boolean;
     setSigned(): void;
     getDetailsHash(signedBlockheight: number, signatureVersion?: number): Buffer;
-    toJson(): {
-        vdxfkey: string;
-        system_id: string;
-        signing_id: string;
-        signature: {
-            vdxfkey: string;
-            signature: string;
-        };
-        details: {
-            flags: string;
-            amount: string;
-            destination: string;
-            requestedcurrencyid: string;
-            expiryheight: string;
-            mindestcurrencyinreserve: string;
-            minsourcedestweightratio: string;
-            acceptedsystems: string[];
-        };
-    };
     protected _dataByteLength(signer?: string): number;
     protected _toDataBuffer(signer?: string): Buffer;
     dataByteLength(): number;
@@ -50,4 +41,6 @@ export declare class VerusPayInvoice extends VDXFObject {
     static fromWalletDeeplinkUri(uri: string): VerusPayInvoice;
     toQrString(): string;
     static fromQrString(qrstring: string): VerusPayInvoice;
+    static fromJson(data: VerusPayInvoiceJson): VerusPayInvoice;
+    toJson(): VerusPayInvoiceJson;
 }

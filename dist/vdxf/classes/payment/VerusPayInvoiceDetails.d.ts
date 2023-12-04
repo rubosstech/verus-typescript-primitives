@@ -1,7 +1,7 @@
 /// <reference types="bn.js" />
 /// <reference types="node" />
 import { BigNumber } from '../../../utils/types/BigNumber';
-import { TransferDestination } from '../../../pbaas/TransferDestination';
+import { TransferDestination, TransferDestinationJson } from '../../../pbaas/TransferDestination';
 export declare const VERUSPAY_INVALID: import("bn.js");
 export declare const VERUSPAY_VALID: import("bn.js");
 export declare const VERUSPAY_ACCEPTS_CONVERSION: import("bn.js");
@@ -9,14 +9,22 @@ export declare const VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS: import("bn.js");
 export declare const VERUSPAY_EXPIRES: import("bn.js");
 export declare const VERUSPAY_ACCEPTS_ANY_DESTINATION: import("bn.js");
 export declare const VERUSPAY_ACCEPTS_ANY_AMOUNT: import("bn.js");
+export declare type VerusPayInvoiceDetailsJson = {
+    flags?: string;
+    amount?: string;
+    destination?: TransferDestinationJson;
+    requestedcurrencyid: string;
+    expiryheight?: string;
+    maxestimatedslippage?: string;
+    acceptedsystems?: Array<string>;
+};
 export declare class VerusPayInvoiceDetails {
     flags: BigNumber;
     amount: BigNumber;
     destination: TransferDestination;
     requestedcurrencyid: string;
     expiryheight: BigNumber;
-    mindestcurrencyinreserve: BigNumber;
-    minsourcedestweightratio: BigNumber;
+    maxestimatedslippage: BigNumber;
     acceptedsystems: Array<string>;
     constructor(data?: {
         flags?: BigNumber;
@@ -24,8 +32,7 @@ export declare class VerusPayInvoiceDetails {
         destination?: TransferDestination;
         requestedcurrencyid: string;
         expiryheight?: BigNumber;
-        mindestcurrencyinreserve?: BigNumber;
-        minsourcedestweightratio?: BigNumber;
+        maxestimatedslippage?: BigNumber;
         acceptedsystems?: Array<string>;
     });
     setFlags(flags: {
@@ -45,14 +52,6 @@ export declare class VerusPayInvoiceDetails {
     getByteLength(): number;
     toBuffer(): Buffer;
     fromBuffer(buffer: Buffer, offset?: number): number;
-    toJson(): {
-        flags: string;
-        amount: string;
-        destination: string;
-        requestedcurrencyid: string;
-        expiryheight: string;
-        mindestcurrencyinreserve: string;
-        minsourcedestweightratio: string;
-        acceptedsystems: string[];
-    };
+    static fromJson(data: VerusPayInvoiceDetailsJson): VerusPayInvoiceDetails;
+    toJson(): VerusPayInvoiceDetailsJson;
 }

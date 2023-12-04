@@ -6,7 +6,7 @@ import bufferutils from '../utils/bufferutils';
 import varint from '../utils/varint';
 import varuint from '../utils/varuint';
 import { Hash160 } from "./classes/Hash160";
-import { LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY, VDXFKeyInterface } from './keys';
+import { IDENTITY_AUTH_SIG_VDXF_KEY, LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY, VDXFKeyInterface } from './keys';
 import { BN } from "bn.js";
 import { BigNumber } from "../utils/types/BigNumber";
 export * from './keys'
@@ -26,6 +26,12 @@ export interface VDXFObjectInterface {
 
 export interface VerusIDSignatureInterface {
   signature: string;
+}
+
+export type VerusIDSignatureJson = {
+  signature: string,
+  vdxfkey: string,
+  serializekey: boolean
 }
 
 export class VDXFObject implements VDXFObjectInterface {
@@ -226,7 +232,7 @@ export class VerusIDSignature extends VDXFObject {
 
   constructor(
     sig: VerusIDSignatureInterface = { signature: "" },
-    vdxfkey: VDXFKeyInterface = LOGIN_CONSENT_RESPONSE_SIG_VDXF_KEY,
+    vdxfkey: VDXFKeyInterface = IDENTITY_AUTH_SIG_VDXF_KEY,
     serializekey: boolean = true
   ) {
     super(vdxfkey.vdxfid, serializekey);
@@ -249,10 +255,19 @@ export class VerusIDSignature extends VDXFObject {
     return reader.offset;
   }
 
-  toJson() {
+  static fromJson(data: VerusIDSignatureJson): VerusIDSignature {
+    return new VerusIDSignature(
+      { signature: data.signature },
+      IDENTITY_AUTH_SIG_VDXF_KEY,
+      data.serializekey
+    )
+  }
+
+  toJson(): VerusIDSignatureJson {
     return {
       vdxfkey: this.vdxfkey,
       signature: this.signature,
+      serializekey: this.serializekey
     };
   }
 }

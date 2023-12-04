@@ -19,6 +19,11 @@ export interface VDXFObjectInterface {
 export interface VerusIDSignatureInterface {
     signature: string;
 }
+export declare type VerusIDSignatureJson = {
+    signature: string;
+    vdxfkey: string;
+    serializekey: boolean;
+};
 export declare class VDXFObject implements VDXFObjectInterface {
     vdxfkey: string;
     version: BigNumber;
@@ -73,8 +78,6 @@ export declare class VerusIDSignature extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    toJson(): {
-        vdxfkey: string;
-        signature: string;
-    };
+    static fromJson(data: VerusIDSignatureJson): VerusIDSignature;
+    toJson(): VerusIDSignatureJson;
 }

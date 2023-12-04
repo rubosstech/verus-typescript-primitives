@@ -25,6 +25,15 @@ export const FLAG_MASK = FLAG_DEST_AUX.add(FLAG_DEST_GATEWAY)
 
 const UINT160_BYTE_SIZE = 20;
 
+export type TransferDestinationJson = {
+  type: string;
+  destination_bytes: string;
+  gateway_id?: string;
+  gateway_code?: string;
+  fees: string;
+  aux_dests: Array<TransferDestinationJson>
+}
+
 export class TransferDestination {
   type: BigNumber;
   destination_bytes: Buffer;
@@ -166,5 +175,27 @@ export class TransferDestination {
     }
 
     return reader.offset;
+  }
+
+  static fromJson(data: TransferDestinationJson): TransferDestination {
+    return new TransferDestination({
+      type: new BN(data.type),
+      destination_bytes: Buffer.from(data.destination_bytes, 'hex'),
+      gateway_id: data.gateway_id,
+      gateway_code: data.gateway_code,
+      fees: new BN(data.fees),
+      aux_dests: data.aux_dests.map(x => TransferDestination.fromJson(x))
+    })
+  }
+
+  toJson(): TransferDestinationJson {
+    return {
+      type: this.type.toString(),
+      destination_bytes: this.destination_bytes.toString('hex'),
+      gateway_id: this.gateway_id,
+      gateway_code: this.gateway_code,
+      fees: this.fees.toString(),
+      aux_dests: this.aux_dests.map(x => x.toJson())
+    }
   }
 }

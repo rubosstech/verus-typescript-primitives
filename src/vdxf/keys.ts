@@ -8,7 +8,7 @@ export interface VDXFKeyInterface {
   };
 }
 
-export const VERUSPAY_INVOICE: VDXFKeyInterface = {
+export const VERUSPAY_INVOICE_VDXF_KEY: VDXFKeyInterface = {
   hash160result: "628efc28c2e2d40050e1a9de7a93e7ddf2aa0076",
   qualifiedname: {
     name: "veruspay.vrsc::invoice",
