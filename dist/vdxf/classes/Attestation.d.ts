@@ -2,23 +2,17 @@
 import { VDXFObject } from "../";
 import { MMR } from "./MMR";
 export interface AttestationData {
-    type?: number;
     attestationKey?: string;
     salt?: string;
     value?: string;
-    hash?: string;
 }
 export declare class Attestation extends VDXFObject {
-    type: number;
-    nIndex: number;
     components: Array<AttestationData>;
     signatures: {
         [attestor: string]: string;
     };
     mmr: MMR;
     constructor(vdxfkey?: string, data?: {
-        type?: number;
-        nIndex?: number;
         components?: Array<AttestationData>;
         signatures?: {
             [attestor: string]: string;
@@ -27,8 +21,24 @@ export declare class Attestation extends VDXFObject {
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
-    getMMR(): Promise<MMR>;
+    createMMR(): Promise<MMR>;
     routeHash(): Promise<any>;
+    getRoot(): Promise<any>;
+    getProof(keys: Array<number>): Promise<AttestationProof>;
     getHash(n: AttestationData): Buffer;
-    sortHashes(): Array<Buffer>;
+    getHashes(): Array<Buffer>;
+}
+export declare class AttestationProof extends VDXFObject {
+    component: Map<number, AttestationData>;
+    mmr: MMR;
+    constructor(vdxfkey?: string, data?: {
+        component?: Map<number, AttestationData>;
+        mmr?: MMR;
+    });
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    routeHash(): Promise<any>;
+    checkProof(): Promise<void>;
+    getHash(key: any): Buffer;
 }

@@ -22,6 +22,6 @@ export { ProvisioningDecisionInterface as LoginConsentProvisioningDecisionInterf
 export { ProvisioningResultInterface as LoginConsentProvisioningResultInterface } from "./provisioning/ProvisioningResult";
 export { Hash160 } from './Hash160';
 export { RedirectUri, Subject, ProvisioningInfo, RequestedPermission, Audience, AltAuthFactor, } from "./Challenge";
-export { Attestation } from './Attestation';
+export { Attestation, AttestationProof } from './Attestation';
 export { ProvisioningTxid } from './provisioning/ProvisioningResult';
 export { Context } from './Context';

@@ -37,7 +37,7 @@ export declare class MMR {
     static proofPositions(leafIndexes: any, referenceTreeLength: any): {};
     static _hasPosition(nodes: any, position: any): boolean;
 }
-declare class MemoryBasedDb {
+export declare class MemoryBasedDb {
     leafLength: any;
     nodes: {
         [number: number]: Buffer;

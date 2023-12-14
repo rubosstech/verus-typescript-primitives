@@ -33,7 +33,7 @@ export {
   Audience,
   AltAuthFactor,
 } from "./Challenge";
-export  {Attestation } from './Attestation'
+export  {Attestation, AttestationProof } from './Attestation'
 export {
   ProvisioningTxid
 } from './provisioning/ProvisioningResult'
