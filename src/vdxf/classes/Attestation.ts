@@ -18,59 +18,75 @@ export interface AttestationData{
 
 
 export class Attestation extends VDXFObject {
-    components: Array<AttestationData>;
+    components: Map<number,AttestationData>;
     signatures: {[attestor: string]: string};
     mmr: MMR;
 
     constructor(vdxfkey: string = "", data?: { 
-      components?: Array<AttestationData>;
+      components?: Map<number,AttestationData>;
       signatures?: {[attestor: string]: string};
+      mmr?: MMR;
     }) {
       super(vdxfkey);
 
       if (data) {
-        if (data?.components) this.components = data.components;
-        if (data?.signatures) this.signatures = data.signatures;
+        this.components = data.components || null;
+        this.signatures = data.signatures || null;
+        this.mmr = data.mmr || null;
       }
       
     }
 
     dataByteLength(): number {
- 
+
       let byteLength = 0;
+      byteLength += varuint.encodingLength(this.components.size)
 
-      byteLength += varuint.encodingLength(this.components.length)
-      for (const n of this.components) {
-
+      for (const [key, item] of this.components) {
+        byteLength += varuint.encodingLength(key)
         byteLength += 20;  //key
         byteLength += 32;  //salt
-        byteLength += varuint.encodingLength(Buffer.from(n.value, "utf8").length);
-        byteLength += Buffer.from(n.value, "utf8").length;
-
+        byteLength += varuint.encodingLength(Buffer.from(item.value, "utf8").length);
+        byteLength += Buffer.from(item.value, "utf8").length;
       }
 
-      const objKeys = Object.keys(this.signatures);
-      byteLength += varuint.encodingLength(objKeys.length);
+      const sigKeys = Object.keys(this.signatures);
+      byteLength += varuint.encodingLength(sigKeys.length);
 
-      for (const item of objKeys) {
+      for (const item of sigKeys) {
         byteLength += 20;  //key
         byteLength += varuint.encodingLength(Buffer.from(this.signatures[item], "base64").length);
         byteLength += Buffer.from(this.signatures[item], "base64").length;
 
       }   
+
+      if (this.mmr) {
+        const nodes = this.mmr.db.nodes;
+        const mmrKeys = Object.keys(nodes);
+   
+        byteLength += varuint.encodingLength(this.mmr.db.leafLength);
+        byteLength += varuint.encodingLength(mmrKeys.length);
+
+        for (const item of mmrKeys) {
+          byteLength += varuint.encodingLength(parseInt(item));
+          byteLength += varuint.encodingLength(nodes[item].length);
+          byteLength += nodes[item].length;
+        }  
+      } else {
+        byteLength += varuint.encodingLength(0);
+      }
       return byteLength;
     }
   
     toDataBuffer(): Buffer {
       const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
-      bufferWriter.writeCompactSize(this.components.length);
-      for (const n of this.components) {
 
-        bufferWriter.writeSlice(fromBase58Check(n.attestationKey).hash);
-        bufferWriter.writeSlice(Buffer.from(n.salt, "hex"));
-        bufferWriter.writeCompactSize(Buffer.from(n.value, "utf8").length)
-        bufferWriter.writeSlice(Buffer.from(n.value, "utf8"));
-
+      bufferWriter.writeCompactSize(this.components.size);
+      for (const [key, item] of this.components) {
+        bufferWriter.writeCompactSize(key);
+        bufferWriter.writeSlice(fromBase58Check(item.attestationKey).hash);
+        bufferWriter.writeSlice(Buffer.from(item.salt, "hex"));
+        bufferWriter.writeVarSlice(Buffer.from(item.value, "utf8"))
       }
 
       const objKeys = Object.keys(this.signatures);
@@ -83,170 +99,21 @@ export class Attestation extends VDXFObject {
 
       }
 
-      return bufferWriter.buffer
-    }
-  
-    fromDataBuffer(buffer: Buffer, offset?: number): number {
+      if (this.mmr) {
 
-      const reader = new bufferutils.BufferReader(buffer, offset);  
-      const attestationsByteLength = reader.readCompactSize();
+        bufferWriter.writeCompactSize(this.mmr.db.leafLength);
+        const nodes = this.mmr.db.nodes;
+        const mmrKeys = Object.keys(nodes);
+        bufferWriter.writeCompactSize(mmrKeys.length);
 
+        for (const item of mmrKeys) {
 
-      this.components = new Array();
-      
-      const componentsMapSize = reader.readVarInt();
+          bufferWriter.writeCompactSize(parseInt(item));
+          bufferWriter.writeVarSlice(nodes[item])
 
-      for (var i = 0; i < componentsMapSize.toNumber(); i++) {
-
-        const attestationKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
-        const salt = Buffer.from(reader.readSlice(32)).toString('hex');
-        const value = Buffer.from(reader.readVarSlice()).toString('utf8');
-        this.components.push({attestationKey, salt, value});
-
-      }
-    
-      const signaturesSize = reader.readVarInt();
-      this.signatures = {};
-
-      for (var i = 0; i < signaturesSize.toNumber(); i++) {
-
-        const attestor = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
-        const signature = reader.readVarSlice().toString('base64');
-        this.signatures[attestor] = signature;
-      }
-  
-      return reader.offset;
-    }
-
-    async createMMR() {
-
-      const attestationHashes = this.getHashes();
-
-      if (!this.mmr) {
-        this.mmr = new MMR();
-      }
-
-      for (var i = 0; i < attestationHashes.length; i++) {
-        await this.mmr.append(attestationHashes[i], i)
-      }
-
-      return this.mmr;
-    }
-
-    async routeHash() {
-
-      await this.createMMR();
-      return await this.mmr.getRoot();
-    }
-
-    async getRoot() {
-
-      return await this.mmr.getRoot();
-
-    }
-
-    async getProof(keys: Array<number>): Promise<AttestationProof> {
-  
-      const itemMaps = new Map();
-
-      keys.forEach((key, index) => {itemMaps.set(index, this.components[key])});
-            
-      const reply = new AttestationProof("", {component: itemMaps, mmr: await this.mmr.getProof(keys, null)});
-      
-      return reply;
-
-    }
-
-    getHash(n: AttestationData): Buffer {
-      
-      const bufferWriter = new BufferWriter(Buffer.alloc(20 + 
-                                                          32 + 
-                                                          varuint.encodingLength(Buffer.from(n.value, "utf8").length) + 
-                                                          Buffer.from(n.value, "utf8").length ));
-      bufferWriter.writeSlice(fromBase58Check(n.attestationKey).hash);
-      bufferWriter.writeSlice(Buffer.from(n.salt, "hex"));
-      bufferWriter.writeCompactSize(Buffer.from(n.value, "utf8").length)
-      bufferWriter.writeSlice(Buffer.from(n.value, "utf8"));
-
-      return createHash("sha256").update(bufferWriter.buffer).digest();
-
-    }
-
-    getHashes(): Array<Buffer> {
-      
-      const hashArray = [];
-      this.components.forEach((item) => hashArray.push(this.getHash(item)));
-      return hashArray;
-    }
-
-  }
-
-  export class AttestationProof extends VDXFObject {
-    component: Map<number,AttestationData>;
-    mmr: MMR;
-
-    constructor(vdxfkey: string = "", data?: { 
-      component?: Map<number,AttestationData>;
-      mmr?: MMR;
-
-    }) {
-      super(vdxfkey);
-
-      if (data) {
-        if (data?.component) this.component = data.component;
-        if (data?.mmr) this.mmr = data.mmr;
-      }
-      
-    }
-
-    dataByteLength(): number {
- 
-      let byteLength = 0;
-      byteLength += varuint.encodingLength(this.component.size)
-
-      for (const [key, item] of this.component) {
-        byteLength += varuint.encodingLength(this.component.size)
-        byteLength += varuint.encodingLength(key)
-        byteLength += 20;  //key
-        byteLength += 32;  //salt
-        byteLength += varuint.encodingLength(Buffer.from(item.value, "utf8").length);
-        byteLength += Buffer.from(item.value, "utf8").length;
-      }
-
-      byteLength += varuint.encodingLength(this.mmr.db.getLeafLength());
-
-      const nodes = this.mmr.db.getNodes();
-      const objKeys = Object.keys(nodes);
-      byteLength += varuint.encodingLength(objKeys.length);
-
-      for (const item of objKeys) {
-        byteLength += varuint.encodingLength(parseInt(item));
-        byteLength += varuint.encodingLength(nodes[item].length);
-
-      }   
-      return byteLength;
-    }
-  
-    toDataBuffer(): Buffer {
-      const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
-      
-      bufferWriter.writeCompactSize(this.component.size);
-      for (const [key, item] of this.component) {
-        bufferWriter.writeCompactSize(key);
-        bufferWriter.writeSlice(fromBase58Check(item.attestationKey).hash);
-        bufferWriter.writeSlice(Buffer.from(item.salt, "hex"));
-        bufferWriter.writeVarSlice(Buffer.from(item.value, "utf8"))
-      }
-
-      bufferWriter.writeCompactSize(this.mmr.db.getLeafLength());
-      const nodes = this.mmr.db.getNodes();
-      const objKeys = Object.keys(nodes);
-
-      for (const item of objKeys) {
-
-        bufferWriter.writeCompactSize(parseInt(item));
-        bufferWriter.writeVarSlice(nodes[item])
-
+        }
+      } else {
+        bufferWriter.writeCompactSize(0);
       }
 
       return bufferWriter.buffer
@@ -258,40 +125,91 @@ export class Attestation extends VDXFObject {
       const attestationsByteLength = reader.readCompactSize(); //dummy read
 
       const componentsLength = reader.readCompactSize();
-      this.component = new Map();
+      this.components = new Map();
 
       for (var i = 0; i < componentsLength; i++) {
         const key = reader.readCompactSize();
         const attestationKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
         const salt = Buffer.from(reader.readSlice(32)).toString('hex');
         const value = Buffer.from(reader.readVarSlice()).toString('utf8');
-        this.component.set(key, {attestationKey, salt, value});
+        this.components.set(key, {attestationKey, salt, value});
+      }
+    
+      const signaturesSize = reader.readCompactSize();
+      this.signatures = {};
+
+      for (var i = 0; i < signaturesSize; i++) {
+
+        const attestor = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+        const signature = reader.readVarSlice().toString('base64');
+        this.signatures[attestor] = signature;
       }
 
-      const referenceTreeLength = reader.readVarInt();
-      const nodes = {};
+      const leafLength = reader.readCompactSize();
       
-      for (var i = 0; i < referenceTreeLength.toNumber(); i++) {
+      if (leafLength > 0) {
+        const referenceTreeLength = reader.readCompactSize();
+        const nodes = {};
         
-        const nodeIndex = reader.readCompactSize();
-        const signature = reader.readVarSlice();
-        nodes[nodeIndex] = signature;
+        for (var i = 0; i < referenceTreeLength; i++) {
+          
+          const nodeIndex = reader.readCompactSize();
+          const signature = reader.readVarSlice();
+          nodes[nodeIndex] = signature;
+        }
+
+        if (Object.keys(nodes).length > 0) {
+          this.mmr = new MMR(new MemoryBasedDb(leafLength, nodes))
+        }
       }
 
-      this.mmr = new MMR(new MemoryBasedDb(referenceTreeLength, nodes))
-      
       return reader.offset;
     }
 
+    async createMMR() {
+
+      if (!this.mmr) {
+        this.mmr = new MMR();
+      } else {
+        return this.mmr;
+      }
+
+      for (const [key, item] of this.components) {
+
+        await this.mmr.append(this.getHash(key), key)
+
+      }
+
+      return this.mmr;
+    }
+
     async routeHash() {
+
+      if (!this.mmr) {
+        await this.createMMR();
+      }
+
       return await this.mmr.getRoot();
+    }
+
+    // returns an attestation with a sparse MMR containing the leaves specified
+    async getProof(keys: Array<number>): Promise<Attestation> {
+  
+      const itemMaps = new Map();
+
+      keys.forEach((key, index) => {itemMaps.set(index, this.components.get(key))});
+            
+      const reply = new Attestation(this.vdxfkey, {components: itemMaps, mmr: await this.mmr.getProof(keys, null), signatures: this.signatures});
+      
+      return reply;
+
     }
 
     async checkProof() { 
       
       try {
 
-        for (const [key, item] of this.component) {
+        for (const [key, item] of this.components) {
 
           const hash = this.getHash(key);
           const proof = await this.mmr.getProof([key], null);
@@ -301,7 +219,7 @@ export class Attestation extends VDXFObject {
           }
         }
       } catch (e) { 
-
+        throw new Error("Error checking MMR");
       }
     }
 
@@ -309,17 +227,15 @@ export class Attestation extends VDXFObject {
       
       const bufferWriter = new BufferWriter(Buffer.alloc(20 + 
                                                           32 + 
-                                                          varuint.encodingLength(Buffer.from(this.component.get(key).value, "utf8").length) + 
-                                                          Buffer.from(this.component.get(key).value, "utf8").length ));
-      bufferWriter.writeSlice(fromBase58Check(this.component.get(key).attestationKey).hash);
-      bufferWriter.writeSlice(Buffer.from(this.component.get(key).salt, "hex"));
-      bufferWriter.writeCompactSize(Buffer.from(this.component.get(key).value, "utf8").length)
-      bufferWriter.writeSlice(Buffer.from(this.component.get(key).value, "utf8"));
+                                                          varuint.encodingLength(Buffer.from(this.components.get(key).value, "utf8").length) + 
+                                                          Buffer.from(this.components.get(key).value, "utf8").length ));
+      bufferWriter.writeSlice(fromBase58Check(this.components.get(key).attestationKey).hash);
+      bufferWriter.writeSlice(Buffer.from(this.components.get(key).salt, "hex"));
+      bufferWriter.writeCompactSize(Buffer.from(this.components.get(key).value, "utf8").length)
+      bufferWriter.writeSlice(Buffer.from(this.components.get(key).value, "utf8"));
 
       return createHash("sha256").update(bufferWriter.buffer).digest();
 
     }
-
-
 
   }
