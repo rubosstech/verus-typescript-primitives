@@ -16,6 +16,7 @@ export declare const LOGIN_CONSENT_DECISION_VDXF_KEY: VDXFKeyInterface;
 export declare const WALLET_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_REDIRECT_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
+export declare const LOGIN_CONSENT_ATTESTATION_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_ID_PROVISIONING_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
 export declare const ID_ADDRESS_VDXF_KEY: VDXFKeyInterface;
@@ -42,5 +43,12 @@ export declare const LOGIN_CONSENT_PROVISIONING_ERROR_KEY_TRANSFER_FAILED: VDXFK
 export declare const SIGNED_SESSION_OBJECT_DATA: VDXFKeyInterface;
 export declare const SIGNED_SESSION_OBJECT: VDXFKeyInterface;
 export declare const CURRENCY_ADDRESS: VDXFKeyInterface;
-export declare const ATTESTATION_IDENTITY_DATA: {};
+interface VDXFIdentityData extends VDXFKeyInterface {
+    detail: string;
+    name: string;
+}
+export declare const ATTESTATION_IDENTITY_DATA: {
+    [vdxfid: string]: VDXFIdentityData;
+};
 export declare const CVDXF_Data: {};
+export {};

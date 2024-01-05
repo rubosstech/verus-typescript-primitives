@@ -98,6 +98,15 @@ export const LOGIN_CONSENT_WEBHOOK_VDXF_KEY: VDXFKeyInterface = {
   },
 };
 
+export const LOGIN_CONSENT_ATTESTATION_WEBHOOK_VDXF_KEY: VDXFKeyInterface = {
+  vdxfid: "iEiQe3C68gKvAevZWAx6MLmoSR64hVqfMb",
+  hash160result: "6759ec3006891e89422e59fb613ab2653389497b",
+  qualifiedname: {
+    namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    name: "vrsc::identity.attestation.webhook",
+  },
+};
+
 export const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface = {
   vdxfid: "iBMochrKPSQfua5yZYWyd6p4QnREakqU44",
   hash160result: "3b605d4ace1e19dd0bddb2eef63171b1879a7b56",
@@ -400,7 +409,7 @@ const IDENTITY_DATA: VDXFIdentityData[] = [
   }
 ]
 // Allow lookup by vdxfid or name
-export const ATTESTATION_IDENTITY_DATA = {};
+export const ATTESTATION_IDENTITY_DATA: {[vdxfid: string]: VDXFIdentityData} = {}
 IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.vdxfid] = item)
 IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.name] = item)
 
