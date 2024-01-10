@@ -5,8 +5,6 @@ import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
 import { VDXFObject } from "../";
 import { MMR, MemoryBasedDb } from "./MMR"
-import { BN } from 'bn.js'
-import { get } from 'http';
 
 const { BufferReader, BufferWriter } = bufferutils;
 

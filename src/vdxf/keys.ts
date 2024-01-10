@@ -350,6 +350,14 @@ export const CURRENCY_ADDRESS: VDXFKeyInterface = {
   }
 }
 
+export const ATTESTATION_RECIPIENT: VDXFKeyInterface = {
+  "vdxfid": "iGz3PbkrgqaqqgiRHZzLZvRR8xNMkLBkxP",
+  "hash160result": "f0e8cdf215f6031e0787e3a1ff1d185386b42e94",
+  "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestations.recipient"
+  }
+};
 
 interface VDXFIdentityData extends VDXFKeyInterface {
   detail: string;
