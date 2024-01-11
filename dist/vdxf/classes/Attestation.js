@@ -40,9 +40,10 @@ class Attestation extends __1.VDXFObject {
         const sigKeys = Object.keys(this.signatures);
         byteLength += varuint_1.default.encodingLength(sigKeys.length);
         for (const item of sigKeys) {
-            byteLength += 20; //key
-            byteLength += varuint_1.default.encodingLength(Buffer.from(this.signatures[item], "base64").length);
-            byteLength += Buffer.from(this.signatures[item], "base64").length;
+            byteLength += 20; //Attestor
+            byteLength += 20; //System
+            byteLength += varuint_1.default.encodingLength(Buffer.from(this.signatures[item].signature, "base64").length);
+            byteLength += Buffer.from(this.signatures[item].signature, "base64").length;
         }
         if (this.mmr) {
             const nodes = this.mmr.db.nodes;
@@ -73,7 +74,8 @@ class Attestation extends __1.VDXFObject {
         bufferWriter.writeCompactSize(objKeys.length);
         for (const item of objKeys) {
             bufferWriter.writeSlice((0, address_1.fromBase58Check)(item).hash);
-            bufferWriter.writeVarSlice(Buffer.from(this.signatures[item], "base64"));
+            bufferWriter.writeSlice((0, address_1.fromBase58Check)(this.signatures[item].system).hash);
+            bufferWriter.writeVarSlice(Buffer.from(this.signatures[item].signature, "base64"));
         }
         if (this.mmr) {
             bufferWriter.writeCompactSize(this.mmr.db.leafLength);
@@ -106,8 +108,9 @@ class Attestation extends __1.VDXFObject {
         this.signatures = {};
         for (var i = 0; i < signaturesSize; i++) {
             const attestor = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
+            const system = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
             const signature = reader.readVarSlice().toString('base64');
-            this.signatures[attestor] = signature;
+            this.signatures[attestor] = { signature, system };
         }
         const leafLength = reader.readCompactSize();
         if (leafLength > 0) {

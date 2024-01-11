@@ -9,13 +9,19 @@ export interface AttestationData {
 export declare class Attestation extends VDXFObject {
     components: Map<number, AttestationData>;
     signatures: {
-        [attestor: string]: string;
+        [attestor: string]: {
+            signature: string;
+            system: string;
+        };
     };
     mmr: MMR;
     constructor(vdxfkey?: string, data?: {
         components?: Map<number, AttestationData>;
         signatures?: {
-            [attestor: string]: string;
+            [attestor: string]: {
+                signature: string;
+                system: string;
+            };
         };
         mmr?: MMR;
     });

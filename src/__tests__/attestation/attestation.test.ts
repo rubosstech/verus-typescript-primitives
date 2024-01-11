@@ -51,7 +51,9 @@ describe('Serializes and deserializes attestation request', () => {
         componentsMap.set(4, {attestationKey: ATTESTATION_IDENTITY_DATA["documenttype"].vdxfid, salt: "338b6ad44179f46fc24f3ed01fd247c9664384a71ba5465aebceece8d7c45a0a", value: "KYC Attestation v1"})
 
 
-        const signaturesForAttestation = {"i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV": "AYG2IQABQSAN1fp6A9NIVbxvKuOVLLU+0I+G3oQGbRtS6u4Eampfb217Cdf5FCMScQhV9kMxtjI9GWzpchmjuiTB2tctk6qT"};
+        const signaturesForAttestation = {"i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV": 
+          {signature:"AYG2IQABQSAN1fp6A9NIVbxvKuOVLLU+0I+G3oQGbRtS6u4Eampfb217Cdf5FCMScQhV9kMxtjI9GWzpchmjuiTB2tctk6qT",
+          system: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq"}};
 
         const attestationResponse = new Attestation("i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",{components: componentsMap, signatures: signaturesForAttestation});
 

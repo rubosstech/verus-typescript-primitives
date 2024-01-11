@@ -17,12 +17,12 @@ export interface AttestationData{
 
 export class Attestation extends VDXFObject {
     components: Map<number,AttestationData>;
-    signatures: {[attestor: string]: string};
+    signatures: {[attestor: string]: {signature: string, system: string}};
     mmr: MMR;
 
     constructor(vdxfkey: string = "", data?: { 
       components?: Map<number,AttestationData>;
-      signatures?: {[attestor: string]: string};
+      signatures?: {[attestor: string]: {signature: string, system: string}};
       mmr?: MMR;
     }) {
       super(vdxfkey);
@@ -52,9 +52,10 @@ export class Attestation extends VDXFObject {
       byteLength += varuint.encodingLength(sigKeys.length);
 
       for (const item of sigKeys) {
-        byteLength += 20;  //key
-        byteLength += varuint.encodingLength(Buffer.from(this.signatures[item], "base64").length);
-        byteLength += Buffer.from(this.signatures[item], "base64").length;
+        byteLength += 20;  //Attestor
+        byteLength += 20;  //System
+        byteLength += varuint.encodingLength(Buffer.from(this.signatures[item].signature, "base64").length);
+        byteLength += Buffer.from(this.signatures[item].signature, "base64").length;
 
       }   
 
@@ -93,7 +94,8 @@ export class Attestation extends VDXFObject {
       for (const item of objKeys) {
 
         bufferWriter.writeSlice(fromBase58Check(item).hash);
-        bufferWriter.writeVarSlice(Buffer.from(this.signatures[item], "base64"))
+        bufferWriter.writeSlice(fromBase58Check(this.signatures[item].system).hash);
+        bufferWriter.writeVarSlice(Buffer.from(this.signatures[item].signature, "base64"))
 
       }
 
@@ -139,8 +141,9 @@ export class Attestation extends VDXFObject {
       for (var i = 0; i < signaturesSize; i++) {
 
         const attestor = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+        const system = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
         const signature = reader.readVarSlice().toString('base64');
-        this.signatures[attestor] = signature;
+        this.signatures[attestor] = {signature, system};
       }
 
       const leafLength = reader.readCompactSize();
