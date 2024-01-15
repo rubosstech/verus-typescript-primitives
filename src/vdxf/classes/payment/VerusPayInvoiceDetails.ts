@@ -16,6 +16,8 @@ export const VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = new BN(4, 10)
 export const VERUSPAY_EXPIRES = new BN(8, 10)
 export const VERUSPAY_ACCEPTS_ANY_DESTINATION = new BN(16, 0)
 export const VERUSPAY_ACCEPTS_ANY_AMOUNT = new BN(32, 0)
+export const VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN = new BN(64, 0)
+export const VERUSPAY_IS_TESTNET = new BN(128, 0)
 
 export type VerusPayInvoiceDetailsJson = {
   flags?: string,
@@ -69,13 +71,29 @@ export class VerusPayInvoiceDetails {
     acceptsNonVerusSystems?: boolean,
     expires?: boolean,
     acceptsAnyAmount?: boolean,
-    acceptsAnyDestination?: boolean
+    acceptsAnyDestination?: boolean,
+    excludesVerusBlockchain?: boolean,
+    isTestnet?: boolean
   }) {
     if (flags.acceptsConversion) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_CONVERSION);
     if (flags.acceptsNonVerusSystems) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS);
     if (flags.expires) this.flags = this.flags.xor(VERUSPAY_EXPIRES);
     if (flags.acceptsAnyAmount) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_ANY_AMOUNT);
     if (flags.acceptsAnyDestination) this.flags = this.flags.xor(VERUSPAY_ACCEPTS_ANY_DESTINATION);
+    if (flags.excludesVerusBlockchain) this.flags = this.flags.xor(VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN);
+    if (flags.isTestnet) this.flags = this.flags.xor(VERUSPAY_IS_TESTNET);
+  }
+
+  getFlagsJson(): { [key: string]: boolean } {
+    return {
+      acceptsConversion: this.acceptsConversion(),
+      acceptsNonVerusSystems: this.acceptsNonVerusSystems(),
+      expires: this.expires(),
+      acceptsAnyAmount: this.acceptsAnyAmount(),
+      acceptsAnyDestination: this.acceptsAnyDestination(),
+      excludesVerusBlockchain: this.excludesVerusBlockchain(),
+      isTestnet: this.isTestnet()
+    }
   }
 
   toSha256() {
@@ -100,6 +118,14 @@ export class VerusPayInvoiceDetails {
 
   expires() {
     return !!(this.flags.and(VERUSPAY_EXPIRES).toNumber())
+  }
+
+  excludesVerusBlockchain() {
+    return !!(this.flags.and(VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN).toNumber())
+  }
+
+  isTestnet() {
+    return !!(this.flags.and(VERUSPAY_IS_TESTNET).toNumber())
   }
 
   isValid () {

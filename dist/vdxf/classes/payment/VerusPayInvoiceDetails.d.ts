@@ -9,6 +9,8 @@ export declare const VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS: import("bn.js");
 export declare const VERUSPAY_EXPIRES: import("bn.js");
 export declare const VERUSPAY_ACCEPTS_ANY_DESTINATION: import("bn.js");
 export declare const VERUSPAY_ACCEPTS_ANY_AMOUNT: import("bn.js");
+export declare const VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN: import("bn.js");
+export declare const VERUSPAY_IS_TESTNET: import("bn.js");
 export declare type VerusPayInvoiceDetailsJson = {
     flags?: string;
     amount?: string;
@@ -41,13 +43,20 @@ export declare class VerusPayInvoiceDetails {
         expires?: boolean;
         acceptsAnyAmount?: boolean;
         acceptsAnyDestination?: boolean;
+        excludesVerusBlockchain?: boolean;
+        isTestnet?: boolean;
     }): void;
+    getFlagsJson(): {
+        [key: string]: boolean;
+    };
     toSha256(): Buffer;
     acceptsConversion(): boolean;
     acceptsNonVerusSystems(): boolean;
     acceptsAnyAmount(): boolean;
     acceptsAnyDestination(): boolean;
     expires(): boolean;
+    excludesVerusBlockchain(): boolean;
+    isTestnet(): boolean;
     isValid(): boolean;
     getByteLength(): number;
     toBuffer(): Buffer;

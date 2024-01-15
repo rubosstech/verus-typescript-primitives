@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VerusPayInvoiceDetails = exports.VERUSPAY_ACCEPTS_ANY_AMOUNT = exports.VERUSPAY_ACCEPTS_ANY_DESTINATION = exports.VERUSPAY_EXPIRES = exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = exports.VERUSPAY_ACCEPTS_CONVERSION = exports.VERUSPAY_VALID = exports.VERUSPAY_INVALID = void 0;
+exports.VerusPayInvoiceDetails = exports.VERUSPAY_IS_TESTNET = exports.VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN = exports.VERUSPAY_ACCEPTS_ANY_AMOUNT = exports.VERUSPAY_ACCEPTS_ANY_DESTINATION = exports.VERUSPAY_EXPIRES = exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = exports.VERUSPAY_ACCEPTS_CONVERSION = exports.VERUSPAY_VALID = exports.VERUSPAY_INVALID = void 0;
 const varint_1 = require("../../../utils/varint");
 const varuint_1 = require("../../../utils/varuint");
 const bufferutils_1 = require("../../../utils/bufferutils");
@@ -17,6 +17,8 @@ exports.VERUSPAY_ACCEPTS_NON_VERUS_SYSTEMS = new bn_js_1.BN(4, 10);
 exports.VERUSPAY_EXPIRES = new bn_js_1.BN(8, 10);
 exports.VERUSPAY_ACCEPTS_ANY_DESTINATION = new bn_js_1.BN(16, 0);
 exports.VERUSPAY_ACCEPTS_ANY_AMOUNT = new bn_js_1.BN(32, 0);
+exports.VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN = new bn_js_1.BN(64, 0);
+exports.VERUSPAY_IS_TESTNET = new bn_js_1.BN(128, 0);
 class VerusPayInvoiceDetails {
     constructor(data) {
         this.flags = exports.VERUSPAY_VALID;
@@ -54,6 +56,21 @@ class VerusPayInvoiceDetails {
             this.flags = this.flags.xor(exports.VERUSPAY_ACCEPTS_ANY_AMOUNT);
         if (flags.acceptsAnyDestination)
             this.flags = this.flags.xor(exports.VERUSPAY_ACCEPTS_ANY_DESTINATION);
+        if (flags.excludesVerusBlockchain)
+            this.flags = this.flags.xor(exports.VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN);
+        if (flags.isTestnet)
+            this.flags = this.flags.xor(exports.VERUSPAY_IS_TESTNET);
+    }
+    getFlagsJson() {
+        return {
+            acceptsConversion: this.acceptsConversion(),
+            acceptsNonVerusSystems: this.acceptsNonVerusSystems(),
+            expires: this.expires(),
+            acceptsAnyAmount: this.acceptsAnyAmount(),
+            acceptsAnyDestination: this.acceptsAnyDestination(),
+            excludesVerusBlockchain: this.excludesVerusBlockchain(),
+            isTestnet: this.isTestnet()
+        };
     }
     toSha256() {
         return createHash("sha256").update(this.toBuffer()).digest();
@@ -72,6 +89,12 @@ class VerusPayInvoiceDetails {
     }
     expires() {
         return !!(this.flags.and(exports.VERUSPAY_EXPIRES).toNumber());
+    }
+    excludesVerusBlockchain() {
+        return !!(this.flags.and(exports.VERUSPAY_EXCLUDES_VERUS_BLOCKCHAIN).toNumber());
+    }
+    isTestnet() {
+        return !!(this.flags.and(exports.VERUSPAY_IS_TESTNET).toNumber());
     }
     isValid() {
         return (!!(this.flags.and(exports.VERUSPAY_VALID).toNumber()));
