@@ -231,25 +231,25 @@ export class VerusMMR {
               // printf("adding2: upperNodes.size(): %lu, upperNodes[%d].size(): %lu\n", upperNodes.size(), height, height && upperNodes.size() ? upperNodes[height-1].size() : 0);
           }
 
-          uint32_t curSizeAbove = upperNodes[height].size();
+          let curSizeAbove = this.upperNodes[height].size();
 
           // if we need to add an element to the vector above us, do it
           // printf("layerSize: %u, newSizeAbove: %u, curSizeAbove: %u\n", layerSize, newSizeAbove, curSizeAbove);
           if (!(layerSize & 1) && newSizeAbove > curSizeAbove)
           {
-              uint32_t idx = layerSize - 2;
-              if (height)
+              let idx = layerSize - 2;
+              if (height > 0)
               {
                   // printf("upperNodes.size(): %lu, upperNodes[%d].size(): %lu, upperNodes[%d].size(): %lu\n", upperNodes.size(), height, upperNodes[height].size(), height - 1, upperNodes[height - 1].size());
                   // upperNodes[height - 1].Printout();
                   // upperNodes[height].Printout();
                   // printf("upperNodes[%d].size(): %lu, nodep hash: %s\n", height - 1, upperNodes[height - 1].size(), upperNodes[height - 1][idx].hash.GetHex().c_str());
                   // printf("nodep + 1 hash: %p\n", upperNodes[height - 1][idx + 1].hash.GetHex().c_str());
-                  upperNodes[height].push_back(upperNodes[height - 1][idx].CreateParentNode(upperNodes[height - 1][idx + 1]));
+                  this.upperNodes[height].push_back(this.upperNodes[height - 1][idx].CreateParentNode(this.upperNodes[height - 1][idx + 1]));
               }
               else
               {
-                  upperNodes[height].push_back(layer0[idx].CreateParentNode(layer0[idx + 1]));
+                  this.upperNodes[height].push_back(this.layer0[idx].CreateParentNode(this.layer0[idx + 1]));
                   // printf("upperNodes.size(): %lu, upperNodes[%d].size(): %lu\n", upperNodes.size(), height, upperNodes[height].size());
                   // upperNodes[height].Printout();
               }
@@ -257,16 +257,16 @@ export class VerusMMR {
           layerSize = newSizeAbove;
       }
       // return new index
-      return layer0.size() - 1;
+      return this.layer0.size() - 1;
   }
   size() 
   {
-      return this.layer0 ? this.layer0.length : 0;
+      return this.size();
   }
 
   height()
   {
-      return this.layer0.length > 0 ? this.upperNodes.length + 1 : 0;
+      return this.layer0.size() > 0 ? this.upperNodes.length + 1 : 0;
   }
 
   getNode(Height, Index)
@@ -283,7 +283,7 @@ export class VerusMMR {
           }
           else
           {
-              if (Index < this.layer0.length)
+              if (Index < this.layer0.size())
               {
                   return this.layer0[Index];
               }
