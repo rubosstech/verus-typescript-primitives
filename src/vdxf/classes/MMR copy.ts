@@ -13,22 +13,185 @@ const { Lock } = require('semaphore-async-await')
 import { BN } from 'bn.js';
 import { AttestationData } from './Attestation';
 import { VDXFObject } from "../";
-class Position {
-  i: any
-  h: any
-  r: any
-  constructor(index, height, rightness) {
-    this.i = index
-    this.h = height
-    this.r = rightness // inherent unchanging property of every node index
+
+
+class CChunkedLayer<NODE_TYPE>
+{
+private CHUNK_SHIFT: number;
+private vSize: number;
+private nodes: Array<Array<NODE_TYPE>>;
+
+    constructor() { this.nodes = []; this.vSize = 0; this.CHUNK_SHIFT = 2; }
+
+    chunkSize(): number
+    {
+      return 1 << this.CHUNK_SHIFT;
+    }
+
+    chunkMask(): number
+    {
+        return this.chunkSize() - 1;
+    }
+
+    size(): number
+    {
+        return this.vSize;
+    }
+
+    getIndex(idx: number): NODE_TYPE
+    {
+        if (idx < this.vSize)
+        {
+            return this.nodes[idx >> this.CHUNK_SHIFT][idx & this.chunkMask()];
+        }
+        else
+        {
+            throw new Error("CChunkedLayer [] index out of range");
+        }
+    }
+
+    push_back(node:NODE_TYPE)
+    {
+        this.vSize++;
+
+        // if we wrapped around and need more space, we need to allocate a new chunk
+        // printf("vSize: %lx, chunkMask: %lx\n", vSize, chunkMask());
+
+        if ((this.vSize & this.chunkMask()) == 1)
+        {
+            this.nodes.push(Array<NODE_TYPE>());
+            // this.nodes[this.nodes.length - 1].reserve(chunkSize()); 
+            // TypeScript, arrays are dynamic and don't have a reserve method or an equivalent.
+        }
+        this.nodes[this.nodes.length - 1].push(node);
+        // printf("nodes.size(): %lu\n", nodes.size());
+    }
+
+    clear()
+    {
+        this.nodes = [];
+        this.vSize = 0;
+    }
+
+    resize(newSize: number)
+    {
+        if (newSize == 0)
+        {
+            this.clear();
+        }
+        else
+        {
+            let chunksSize = ((newSize - 1) >> this.CHUNK_SHIFT) + 1;
+            this.nodes.length = chunksSize;
+            for (let i = this.size() ? ((this.size() - 1) >> this.CHUNK_SHIFT) + 1 : 1; i <= chunksSize; i++)
+            {
+                if (i < chunksSize)
+                {
+                  this.nodes[this.nodes.length - 1].length = this.chunkSize();
+                }
+                else
+                {
+                 // this.nodes[this.nodes.length - 1].reserve(chunkSize());
+                  this.nodes[this.nodes.length - 1].length = (((newSize - 1) & this.chunkMask()) + 1);
+                }
+            }
+
+            this.vSize = ((this.nodes.length - 1) << this.CHUNK_SHIFT) + ((newSize - 1) & this.chunkMask()) + 1;
+        }
+    }
+};
+
+//template <typename NODE_TYPE, typename UNDERLYING>
+class COverlayNodeLayer<NODE_TYPE, UNDERLYING> {
+  
+  private nodeSource: UNDERLYING;
+  private vSize: number;
+
+  constructor(NodeSource:UNDERLYING) {
+    this.nodeSource = NodeSource;
+    this.vSize = 0; 
   }
+
+    size(): number
+    {
+        return this.vSize;
+    }
+
+    getIndex(idx: number): NODE_TYPE
+    {
+        if (idx < this.vSize)
+        {
+          let retval: NODE_TYPE;  
+          return retval;
+        }
+        else
+        {
+            throw new Error("COverlayNodeLayer [] index out of range");
+
+        }
+    }
+
+    // node type must be moveable just to be passed here, but the default overlay has no control over the underlying storage
+    // and only tracks size changes
+    push_back(node: NODE_TYPE) { this.vSize++; }
+    clear() { this.vSize = 0; }
+    resize(newSize: number) { this.vSize = newSize; }
+};
+
+export class CMMRNode
+{
+    hash: Buffer;
+
+    constructor(Hash?: Buffer) {
+      if(Hash) {
+        this.hash = Hash;
+      }
+    }
+
+    digest(input) {
+      var out = Buffer.allocUnsafe(32);
+      return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(input).digest(out);
+    }
+
+    HashObj(obj: Buffer, onbjR?: Buffer): Buffer
+    {
+        if (!onbjR) return this.digest(obj);
+        else return this.digest(Buffer.concat([obj, onbjR]));
+    }
+
+    // add a right to this left and create a parent node
+    CreateParentNode(nRight: CMMRNode): CMMRNode
+    {
+        return this.digest(Buffer.concat([this.hash, nRight.hash]));
+    }
+
+    GetProofHash(opposite: CMMRNode): Array<Buffer>
+    {
+        return [this.hash];
+    }
+
+    // leaf nodes that track additional data, such as block power, may need a hash added to the path
+    // at the very beginning
+    GetLeafHash() { return {}; }
+
+    GetExtraHashCount()
+    {
+        // how many extra proof hashes per layer are added with this node
+        return 0;
+    }
+};
+
+function loggingIdentity<Type>(arg: Type[]): Type[] {
+  console.log(arg.length);
+  return arg;
 }
 
+//template <typename NODE_TYPE=CDefaultMMRNode, typename LAYER_TYPE=CChunkedLayer<NODE_TYPE>, typename LAYER0_TYPE=LAYER_TYPE>
 export class VerusMMR {
   lock: any;
-  layer0: Array<any>;
+  layer0: CChunkedLayer<CMMRNode>;
   vSize: number;
-  upperNodes: Array<any>;
+  upperNodes: Array<CChunkedLayer<CMMRNode>>;
   _leafLength: number;
   db: any;
 
@@ -51,8 +214,50 @@ export class VerusMMR {
     return Buffer.from([]);
   }
 
-  add() {
+  add(leaf: CMMRNode): number
+  {
+      this.layer0.push_back(leaf);
 
+      let height = 0;
+      let layerSize: number;
+      for (layerSize = this.layer0.size(); height <= this.upperNodes.length && layerSize > 1; height++)
+      {
+          let newSizeAbove = layerSize >> 1;
+
+          // expand vector of vectors if we are adding a new layer
+          if (height == this.upperNodes.length)
+          {
+              this.upperNodes.length = (this.upperNodes.length + 1);
+              // printf("adding2: upperNodes.size(): %lu, upperNodes[%d].size(): %lu\n", upperNodes.size(), height, height && upperNodes.size() ? upperNodes[height-1].size() : 0);
+          }
+
+          uint32_t curSizeAbove = upperNodes[height].size();
+
+          // if we need to add an element to the vector above us, do it
+          // printf("layerSize: %u, newSizeAbove: %u, curSizeAbove: %u\n", layerSize, newSizeAbove, curSizeAbove);
+          if (!(layerSize & 1) && newSizeAbove > curSizeAbove)
+          {
+              uint32_t idx = layerSize - 2;
+              if (height)
+              {
+                  // printf("upperNodes.size(): %lu, upperNodes[%d].size(): %lu, upperNodes[%d].size(): %lu\n", upperNodes.size(), height, upperNodes[height].size(), height - 1, upperNodes[height - 1].size());
+                  // upperNodes[height - 1].Printout();
+                  // upperNodes[height].Printout();
+                  // printf("upperNodes[%d].size(): %lu, nodep hash: %s\n", height - 1, upperNodes[height - 1].size(), upperNodes[height - 1][idx].hash.GetHex().c_str());
+                  // printf("nodep + 1 hash: %p\n", upperNodes[height - 1][idx + 1].hash.GetHex().c_str());
+                  upperNodes[height].push_back(upperNodes[height - 1][idx].CreateParentNode(upperNodes[height - 1][idx + 1]));
+              }
+              else
+              {
+                  upperNodes[height].push_back(layer0[idx].CreateParentNode(layer0[idx + 1]));
+                  // printf("upperNodes.size(): %lu, upperNodes[%d].size(): %lu\n", upperNodes.size(), height, upperNodes[height].size());
+                  // upperNodes[height].Printout();
+              }
+          }
+          layerSize = newSizeAbove;
+      }
+      // return new index
+      return layer0.size() - 1;
   }
   size() 
   {

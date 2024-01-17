@@ -4,6 +4,7 @@ import { RedirectUri, RequestedPermission } from "../../vdxf/classes/Challenge";
 import { Context } from "../../vdxf/classes/Context";
 
 import { AttestationData } from "../../vdxf/classes/Attestation";
+const { randomBytes } = require('crypto')
 
 const SIMPLE_ATTESTATION = 1;
 
