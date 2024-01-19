@@ -7,6 +7,7 @@ export declare const VERUSPAY_VERSION_CURRENT: import("bn.js");
 export declare const VERUSPAY_VERSION_FIRSTVALID: import("bn.js");
 export declare const VERUSPAY_VERSION_LASTVALID: import("bn.js");
 export declare const VERUSPAY_VERSION_SIGNED: import("bn.js");
+export declare const VERUSPAY_VERSION_MASK: import("bn.js");
 export interface VerusPayInvoiceInterface {
     details: VerusPayInvoiceDetails;
     system_id?: string;
@@ -28,6 +29,8 @@ export declare class VerusPayInvoice extends VDXFObject {
     signature?: VerusIDSignature;
     details: VerusPayInvoiceDetails;
     constructor(request?: VerusPayInvoiceInterface);
+    getVersionNoFlags(): BigNumber;
+    isValidVersion(): boolean;
     isSigned(): boolean;
     setSigned(): void;
     getDetailsHash(signedBlockheight: number, signatureVersion?: number): Buffer;

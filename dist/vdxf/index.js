@@ -34,6 +34,9 @@ class VDXFObject {
         this.version = vdxf_1.VDXF_OBJECT_DEFAULT_VERSION;
         this.serializekey = serializekey;
     }
+    getVersionNoFlags() {
+        return this.version;
+    }
     toJson() {
         return {};
     }
@@ -49,6 +52,9 @@ class VDXFObject {
     fromDataBuffer(buffer, offset = 0) {
         return offset;
     }
+    isValidVersion() {
+        return true;
+    }
     fromBuffer(buffer, offset = 0, vdxfkey) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         if (vdxfkey == null) {
@@ -57,6 +63,8 @@ class VDXFObject {
         }
         const version = reader.readVarInt();
         this.version = version;
+        if (!this.isValidVersion())
+            throw new Error("Unsupported version for vdxf object.");
         if (offset < buffer.length - 1) {
             reader.offset = this.fromDataBuffer(reader.buffer, reader.offset);
         }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VerusPayInvoice = exports.VERUSPAY_VERSION_SIGNED = exports.VERUSPAY_VERSION_LASTVALID = exports.VERUSPAY_VERSION_FIRSTVALID = exports.VERUSPAY_VERSION_CURRENT = void 0;
+exports.VerusPayInvoice = exports.VERUSPAY_VERSION_MASK = exports.VERUSPAY_VERSION_SIGNED = exports.VERUSPAY_VERSION_LASTVALID = exports.VERUSPAY_VERSION_FIRSTVALID = exports.VERUSPAY_VERSION_CURRENT = void 0;
 const __1 = require("../../");
 const keys_1 = require("../../keys");
 const Hash160_1 = require("./../Hash160");
@@ -15,6 +15,7 @@ exports.VERUSPAY_VERSION_CURRENT = new bn_js_1.BN(3, 10);
 exports.VERUSPAY_VERSION_FIRSTVALID = new bn_js_1.BN(3, 10);
 exports.VERUSPAY_VERSION_LASTVALID = new bn_js_1.BN(3, 10);
 exports.VERUSPAY_VERSION_SIGNED = new bn_js_1.BN('80000000', 16);
+exports.VERUSPAY_VERSION_MASK = exports.VERUSPAY_VERSION_SIGNED;
 class VerusPayInvoice extends __1.VDXFObject {
     constructor(request = {
         details: new VerusPayInvoiceDetails_1.VerusPayInvoiceDetails(),
@@ -30,6 +31,12 @@ class VerusPayInvoice extends __1.VDXFObject {
             this.version = request.version;
         else
             this.version = exports.VERUSPAY_VERSION_CURRENT;
+    }
+    getVersionNoFlags() {
+        return this.version.and(exports.VERUSPAY_VERSION_MASK.notn(exports.VERUSPAY_VERSION_MASK.bitLength()));
+    }
+    isValidVersion() {
+        return this.getVersionNoFlags().gte(exports.VERUSPAY_VERSION_FIRSTVALID) && this.getVersionNoFlags().lte(exports.VERUSPAY_VERSION_LASTVALID);
     }
     isSigned() {
         return !!(this.version.and(exports.VERUSPAY_VERSION_SIGNED).toNumber());
