@@ -86,7 +86,6 @@ export class AttestationData {
     
     const bufferWriter = new BufferWriter(Buffer.alloc(this.componentDataByteLength(key)));
 
-    bufferWriter.writeCompactSize(this.components.size);
     const item = this.components.get(key);
     if(!forHash) {
       bufferWriter.writeCompactSize(key);

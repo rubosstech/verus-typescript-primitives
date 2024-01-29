@@ -68,7 +68,8 @@ describe('Serializes and deserializes attestation request', () => {
    
     const rootOfItemZero = proofOfItemZero.checkProof(0);
 
-    expect(proofResponseRoot.toString('hex')).toStrictEqual("56dbb8cb952b8f4d8648abd918136d0eb790894acf5e62dca8884e68d6d476e5");
+    expect(proofResponseRoot.toString('hex')).toStrictEqual("88f2cb78088118e550e6162575a68482167d429c00337997d133fa630440f3f7");
+    expect(rootOfItemZero.toString('hex')).toStrictEqual("88f2cb78088118e550e6162575a68482167d429c00337997d133fa630440f3f7");
   });
 
 
