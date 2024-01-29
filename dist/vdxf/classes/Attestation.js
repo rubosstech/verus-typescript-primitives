@@ -141,7 +141,7 @@ class Attestation extends __1.VDXFObject {
             return this.mmr;
         });
     }
-    routeHash() {
+    rootHash() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.mmr) {
                 yield this.createMMR();

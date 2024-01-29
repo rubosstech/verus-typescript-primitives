@@ -4,16 +4,201 @@ import createHash = require("create-hash");
 import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
 import { VDXFObject } from "../";
-import { MMR, MemoryBasedDb, CMMRBranch, VerusMMR } from "./MMR"
+import { CMerkleMountainRange, CMMRNode, CMerkleMountainView, CMMRProof, CPartialAttestationProof } from "./MMR"
 const { randomBytes } = require('crypto')
 
 const { BufferReader, BufferWriter } = bufferutils;
 
-export interface AttestationData {
+export interface AttestationInterface {
   type: number;
   attestationKey: string;
   salt: Buffer;
   value: string | Buffer | URL;
+}
+
+export class AttestationData {
+  
+  components: Map<number, AttestationInterface>;
+  constructor(components: Map<number, AttestationInterface> = new Map()) {
+    this.components = components;
+  }
+
+  determineType(value: string | Buffer | URL) {
+    if (Buffer.isBuffer(value)) {
+      return Attestation.TYPE_BYTES;
+    }
+    // Check if it's a Base64 string
+    // Base64 string pattern: contains only Base64 characters and possibly padding at the end
+    const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+    if (typeof value === 'string' && base64Pattern.test(value)) {
+      return Attestation.TYPE_BASE64;
+    }
+    if (value instanceof URL) {
+      return Attestation.TYPE_URL;
+    }
+    return Attestation.TYPE_STRING;
+  }
+
+  componentDataByteLength(key: number, forhash: boolean = false ): number {
+    let byteLength = 0;
+
+    const item = this.components.get(key);
+    if(!forhash){
+      byteLength += varuint.encodingLength(key);   //key
+    }
+    if(!item.type) {
+      item.type = this.determineType(item.value);
+    }
+    byteLength += 1;   //type
+    byteLength += 20;  //vdxfid
+    byteLength += 32;  //salt
+    if (item.type === Attestation.TYPE_STRING) {
+      byteLength += varuint.encodingLength(Buffer.from(item.value as string, "utf8").length);
+      byteLength += Buffer.from(item.value as string, "utf8").length;
+    } else if (item.type === Attestation.TYPE_BYTES) {
+      byteLength += varuint.encodingLength((item.value as Buffer).length);
+      byteLength += (item.value as Buffer).length;
+    } else if (item.type === Attestation.TYPE_BASE64) {
+      byteLength += varuint.encodingLength(Buffer.from(item.value as string, "base64").length);
+      byteLength += Buffer.from(item.value as string, "base64").length;
+    } else if (item.type === Attestation.TYPE_URL) {
+      byteLength += varuint.encodingLength(Buffer.from((item.value as URL).toString(), "utf8").length);
+      byteLength += Buffer.from((item.value as URL).toString(), "utf8").length;
+    } else {
+      throw new Error("Invalid Attestation Type");
+    }
+
+    return byteLength;
+  }
+
+  dataByteLength(): number { 
+    let byteLength = 0;
+    byteLength += varuint.encodingLength(this.components.size)
+
+    for (const [key, item] of this.components) {
+      byteLength += this.componentDataByteLength(key);
+    }
+
+    return byteLength;
+  }
+
+  componentToDataBuffer(key: number, forHash: boolean = false): Buffer { 
+    
+    const bufferWriter = new BufferWriter(Buffer.alloc(this.componentDataByteLength(key)));
+
+    bufferWriter.writeCompactSize(this.components.size);
+    const item = this.components.get(key);
+    if(!forHash) {
+      bufferWriter.writeCompactSize(key);
+    }
+    bufferWriter.writeUInt8(item.type);
+    bufferWriter.writeSlice(fromBase58Check(item.attestationKey).hash);
+    bufferWriter.writeSlice(item.salt);
+
+    if (item.type === Attestation.TYPE_STRING) {
+      bufferWriter.writeVarSlice(Buffer.from(item.value as string, "utf8"))
+    } else if (item.type === Attestation.TYPE_BYTES) {
+      bufferWriter.writeVarSlice(item.value as Buffer)
+    } else if (item.type === Attestation.TYPE_BASE64) {
+      bufferWriter.writeVarSlice(Buffer.from(item.value as string, "base64"))
+    } else if (item.type === Attestation.TYPE_URL) {
+      bufferWriter.writeVarSlice(Buffer.from((item.value as URL).toString(), "utf8"))
+    } else {
+      throw new Error("Invalid Attestation Type");
+    }
+    
+    return bufferWriter.buffer;
+
+  }
+
+  toDataBuffer(): Buffer {  
+    const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
+
+    bufferWriter.writeCompactSize(this.components.size);
+
+    for (const [key, item] of this.components) {
+      bufferWriter.writeSlice(this.componentToDataBuffer(key));
+    }
+
+    return bufferWriter.buffer;
+  }
+
+  componentsFromDataBuffer(buffer: Buffer, offset?: number): number {
+      
+    const reader = new bufferutils.BufferReader(buffer, offset);
+    const componentsLength = reader.readCompactSize();
+    this.components = new Map();
+
+    for (var i = 0; i < componentsLength; i++) {
+      const key = reader.readCompactSize();
+      const type = reader.readUInt8();
+      const attestationKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+      const salt = Buffer.from(reader.readSlice(32));
+      const value = Buffer.from(reader.readVarSlice()).toString('utf8');
+      this.components.set(key, { type, attestationKey, salt, value });
+    }
+
+    return reader.offset;
+  }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+
+    const reader = new bufferutils.BufferReader(buffer, offset);
+
+    const componentsLength = reader.readCompactSize();
+
+    for (var i = 0; i < componentsLength; i++) {
+      reader.offset = this.componentsFromDataBuffer(reader.buffer, reader.offset);
+    }
+
+    return reader.offset;
+
+  }
+  size(): number {
+    return this.components.size;
+  } 
+
+  setData(data: Array<AttestationInterface>, getSalt: Function) {
+
+    if (!this.components) {
+      this.components = new Map();
+    }
+
+    for (let i = 0; i < data.length; i++) {
+
+      const item = data[i];
+
+      if (!(item.salt instanceof Buffer) || item.salt.length !== 32) {
+        if (typeof getSalt === "function") {
+          item.salt = getSalt();
+        } else {
+          throw new Error("Salt is required to be a 32 random byte Buffer");
+        }
+      }
+
+      try {
+        fromBase58Check(item.attestationKey)
+      } catch (e) {
+        throw new Error("Attestation Key is required to be base58 format");
+      }
+
+      if (this.determineType(item.value) != item.type) {
+        throw new Error("Value is wrong type");
+      }
+      this.components.set(i, item);
+    }
+
+  }
+
+  getHash(key): Buffer {
+
+    let value: Buffer;
+
+    value = this.componentToDataBuffer(key, true);
+
+    return createHash("sha256").update(value).digest();
+  }
+
 }
 export class Attestation extends VDXFObject {
 
@@ -22,19 +207,19 @@ export class Attestation extends VDXFObject {
   static TYPE_BASE64 = 3;
   static TYPE_URL = 4;
 
-  components: Map<number, AttestationData>;
+  data: AttestationData;
   signatures: { [attestor: string]: { signature: string, system: string } };
-  mmr: VerusMMR;
+  mmr: CMerkleMountainRange;
 
   constructor(vdxfkey: string = "", data?: {
-    components?: Map<number, AttestationData>;
+    data?: AttestationData;
     signatures?: { [attestor: string]: { signature: string, system: string } };
-    mmr?: VerusMMR;
+    mmr?: CMerkleMountainRange;
   }) {
     super(vdxfkey);
 
     if (data) {
-      this.components = data.components || null;
+      this.data = data.data || null;
       this.signatures = data.signatures || null;
       this.mmr = data.mmr || null;
     }
@@ -60,29 +245,8 @@ export class Attestation extends VDXFObject {
   dataByteLength(): number {
 
     let byteLength = 0;
-    byteLength += varuint.encodingLength(this.components.size)
 
-    for (const [key, item] of this.components) {
-      byteLength += varuint.encodingLength(key)
-      byteLength += 1;   //type
-      byteLength += 20;  //vdxfid
-      byteLength += 32;  //salt
-      if (item.type === Attestation.TYPE_STRING) {
-        byteLength += varuint.encodingLength(Buffer.from(item.value as string, "utf8").length);
-        byteLength += Buffer.from(item.value as string, "utf8").length;
-      } else if (item.type === Attestation.TYPE_BYTES) {
-        byteLength += varuint.encodingLength((item.value as Buffer).length);
-        byteLength += (item.value as Buffer).length;
-      } else if (item.type === Attestation.TYPE_BASE64) {
-        byteLength += varuint.encodingLength(Buffer.from(item.value as string, "base64").length);
-        byteLength += Buffer.from(item.value as string, "base64").length;
-      } else if (item.type === Attestation.TYPE_URL) {
-        byteLength += varuint.encodingLength(Buffer.from((item.value as URL).toString(), "utf8").length);
-        byteLength += Buffer.from((item.value as URL).toString(), "utf8").length;
-      } else {
-        throw new Error("Invalid Attestation Type");
-      }
-    }
+    byteLength += this.data.dataByteLength()
 
     const sigKeys = Object.keys(this.signatures);
     byteLength += varuint.encodingLength(sigKeys.length);
@@ -107,25 +271,7 @@ export class Attestation extends VDXFObject {
   toDataBuffer(): Buffer {
     const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
 
-    bufferWriter.writeCompactSize(this.components.size);
-    for (const [key, item] of this.components) {
-      bufferWriter.writeUInt8(item.type);
-      bufferWriter.writeCompactSize(key);
-      bufferWriter.writeSlice(fromBase58Check(item.attestationKey).hash);
-      bufferWriter.writeSlice(item.salt);
-
-      if (item.type === Attestation.TYPE_STRING) {
-        bufferWriter.writeVarSlice(Buffer.from(item.value as string, "utf8"))
-      } else if (item.type === Attestation.TYPE_BYTES) {
-        bufferWriter.writeVarSlice(item.value as Buffer)
-      } else if (item.type === Attestation.TYPE_BASE64) {
-        bufferWriter.writeVarSlice(Buffer.from(item.value as string, "base64"))
-      } else if (item.type === Attestation.TYPE_URL) {
-        bufferWriter.writeVarSlice(Buffer.from((item.value as URL).toString(), "utf8"))
-      } else {
-        throw new Error("Invalid Attestation Type");
-      }
-    }
+    bufferWriter.writeSlice(this.data.toDataBuffer());
 
     const objKeys = Object.keys(this.signatures);
     bufferWriter.writeCompactSize(objKeys.length);
@@ -155,15 +301,13 @@ export class Attestation extends VDXFObject {
     const attestationsByteLength = reader.readCompactSize(); //dummy read
 
     const componentsLength = reader.readCompactSize();
-    this.components = new Map();
+
+    if (!this.data) {
+      this.data = new AttestationData();
+    }
 
     for (var i = 0; i < componentsLength; i++) {
-      const key = reader.readCompactSize();
-      const type = reader.readUInt8();
-      const attestationKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
-      const salt = Buffer.from(reader.readSlice(32));
-      const value = Buffer.from(reader.readVarSlice()).toString('utf8');
-      this.components.set(key, { type, attestationKey, salt, value });
+      reader.offset = this.data.componentsFromDataBuffer(reader.buffer, reader.offset);
     }
 
     const signaturesSize = reader.readCompactSize();
@@ -191,49 +335,55 @@ export class Attestation extends VDXFObject {
       }
 
       if (Object.keys(nodes).length > 0) {
-        this.mmr = new MMR(new MemoryBasedDb(leafLength, nodes))
+        this.mmr = new CMerkleMountainRange().fromBuffer(reader.buffer);
       }
     }
 
     return reader.offset;
   }
 
-  async createMMR() {
+  createMMR() {
 
     if (!this.mmr) {
-      this.mmr = new MMR();
+      this.mmr = new CMerkleMountainRange();
     } else {
       return this.mmr;
     }
 
-    for (const [key, item] of this.components) {
+    for (const [key, item] of this.data.components) {
 
-      await this.mmr.append(this.getHash(key), key)
+      this.mmr.add(new CMMRNode(this.getHash(key)))
 
     }
 
     return this.mmr;
   }
 
-  async routeHash() {
+  rootHash() { //TODO: spell correctly for all
 
     if (!this.mmr) {
-      await this.createMMR();
+      this.createMMR();
     }
+    const view = new CMerkleMountainView(this.mmr)
 
-    return await this.mmr.getRoot();
+    return view.GetRoot();
   }
 
   // returns an attestation with a sparse MMR containing the leaves specified
-  async getProof(keys: Array<number>): Promise<Attestation> {
+  getProof(keys: Array<number>): CPartialAttestationProof {
 
-    const itemMaps = new Map();
+    const view = new CMerkleMountainView(this.mmr);
+    const attestationItems = new AttestationData()
+    const localCMMR = new CMMRProof();
+    
+    keys.forEach((key, index) => { 
+      view.GetProof(localCMMR, key);
+      attestationItems.components.set(key, this.data.components.get(key));
+    });
 
-    keys.forEach((key, index) => { itemMaps.set(index, this.components.get(key)) });
-
-    const reply = new Attestation(this.vdxfkey, { components: itemMaps, mmr: await this.mmr.getProof(keys, null), signatures: this.signatures });
-
-    return reply;
+    const attestationAndProof = new CPartialAttestationProof(localCMMR, attestationItems);
+    
+    return attestationAndProof;
 
   }
 
@@ -241,10 +391,10 @@ export class Attestation extends VDXFObject {
 
     try {
 
-      for (const [key, item] of this.components) {
+      for (const [key, item] of this.data.components) {
 
         const hash = this.getHash(key);
-        const proof = await this.mmr.getProof([key], null);
+        const proof = null//await this.mmr.getProof([key], null);
 
         if (hash !== proof) {
           throw new Error("Attestation not found in MMR");
@@ -259,54 +409,9 @@ export class Attestation extends VDXFObject {
 
     let value: Buffer;
 
-    if (this.components.get(key).type === Attestation.TYPE_STRING) {
-      value = Buffer.from(this.components.get(key).value as string, "utf8");
-    } else if (this.components.get(key).type === Attestation.TYPE_BYTES) {
-      value = this.components.get(key).value as Buffer;
-    } else if (this.components.get(key).type === Attestation.TYPE_BASE64) {
-      value = Buffer.from(this.components.get(key).value as string, "base64");
-    } else if (this.components.get(key).type === Attestation.TYPE_URL) {
-      value = Buffer.from((this.components.get(key).value as URL).toString(), "utf8");
-    } else {
-      throw new Error("Invalid Attestation Type");
-    }
+    value = this.data.componentToDataBuffer(key, true);
 
-    const bufferWriter = new BufferWriter(Buffer.alloc(1 + 20 + 32 + varuint.encodingLength(value.length) + value.length));
-    bufferWriter.writeUInt8(this.components.get(key).type);
-    bufferWriter.writeSlice(fromBase58Check(this.components.get(key).attestationKey).hash);
-    bufferWriter.writeSlice(this.components.get(key).salt);
-    bufferWriter.writeVarSlice(value);
-
-    return createHash("sha256").update(bufferWriter.buffer).digest();
-
-  }
-
-  setData(data: Array<AttestationData>, getSalt: Function) {
-
-    if (!this.components) {
-      this.components = new Map();
-    }
-
-    for (let i = 0; i < data.length; i++) {
-
-      const item = data[i];
-
-      if (!(item.salt instanceof Buffer) || item.salt.length !== 32) {
-        throw new Error("Salt is required to be a 32 random byte Buffer");
-      }
-
-      try {
-        fromBase58Check(item.attestationKey)
-      } catch (e) {
-        throw new Error("Attestation Key is required to be base58 format");
-      }
-
-      if (this.determineType(item.value) != item.type) {
-        throw new Error("Value is wrong type");
-      }
-      this.components.set(i, item);
-    }
-
+    return createHash("sha256").update(value).digest();
   }
 
 }

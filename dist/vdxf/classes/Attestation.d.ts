@@ -29,7 +29,7 @@ export declare class Attestation extends VDXFObject {
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
     createMMR(): Promise<MMR>;
-    routeHash(): Promise<any>;
+    rootHash(): Promise<any>;
     getProof(keys: Array<number>): Promise<Attestation>;
     checkProof(): Promise<void>;
     getHash(key: any): Buffer;
