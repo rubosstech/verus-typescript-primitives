@@ -243,10 +243,10 @@ export class CMMRBranch {
 
     const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
 
-    bufferWriter.writeVarInt(new BN(this.branchType));
-    bufferWriter.writeVarInt(new BN(this.nIndex));
-    bufferWriter.writeVarInt(new BN(this.nSize));
-    bufferWriter.writeVarInt(new BN(this.branch.length));
+    bufferWriter.writeCompactSize(this.branchType);
+    bufferWriter.writeCompactSize(this.nIndex);
+    bufferWriter.writeCompactSize(this.nSize);
+    bufferWriter.writeCompactSize(this.branch.length);
 
     for (let i = 0; i < this.branch.length; i++) {
       bufferWriter.writeSlice(this.branch[i]);
@@ -332,7 +332,7 @@ export class CMMRProof {
 
     const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
 
-    bufferWriter.writeVarInt(new BN(this.proofSequence.length));
+    bufferWriter.writeCompactSize(this.proofSequence.length);
 
     for (let i = 0; i < this.proofSequence.length; i++) {
       bufferWriter.writeSlice(this.proofSequence[i].toBuffer());
@@ -352,7 +352,7 @@ export class CMMRProof {
 
     for (let i = 0; i < proofSequenceLength; i++) {
       let proof = new CMMRBranch();
-      reader.offset = proof.fromBuffer(buffer, reader.offset);
+      reader.offset = proof.fromBuffer(reader.buffer, reader.offset);
       this.setProof(proof);
     }
 

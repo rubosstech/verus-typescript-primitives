@@ -502,11 +502,14 @@ export class CPartialAttestationProof extends VDXFObject {
   fromDataBuffer(buffer: Buffer, offset?: number): number {
 
     const reader = new bufferutils.BufferReader(buffer, offset);
-
+    const lengthOfBuffer = reader.readCompactSize(); //dummy read
     this.type = reader.readCompactSize(); 
+    
     this.proof = new CMMRProof();
-
     reader.offset = this.proof.fromDataBuffer(reader.buffer, reader.offset);
+
+    this.componentsArray = new AttestationData();
+    reader.offset =this.componentsArray.fromDataBuffer(reader.buffer, reader.offset);
 
     this.system_id = toBase58Check(
       reader.readSlice(HASH160_BYTE_LENGTH),
