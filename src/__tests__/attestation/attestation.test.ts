@@ -1,12 +1,8 @@
-import { ATTESTATION_READ_REQUEST, IDENTITY_VIEW, ATTESTATION_IDENTITY_DATA, LOGIN_CONSENT_REDIRECT_VDXF_KEY } from "../../vdxf";
-import { Attestation, LoginConsentRequest, LoginConsentResponse } from "../../vdxf/classes";
+import { ATTESTATION_READ_REQUEST, IDENTITY_VIEW, ATTESTATION_IDENTITY_DATA, LOGIN_CONSENT_REDIRECT_VDXF_KEY, VerusIDSignature } from "../../vdxf";
+import { Attestation, LoginConsentRequest } from "../../vdxf/classes";
 import { RedirectUri, RequestedPermission } from "../../vdxf/classes/Challenge";
 import { Context } from "../../vdxf/classes/Context";
-
-import { AttestationInterface, AttestationData } from "../../vdxf/classes/Attestation";
-const { randomBytes } = require('crypto')
-
-const SIMPLE_ATTESTATION = 1;
+import {AttestationData, CPartialAttestationProof } from "../../vdxf/classes/Attestation";
 
 describe('Serializes and deserializes attestation request', () => {
   test('attestation request with reply', async () => {
@@ -52,24 +48,55 @@ describe('Serializes and deserializes attestation request', () => {
     componentsMap.set(3, { attestationKey: ATTESTATION_IDENTITY_DATA["attestor"].vdxfid, salt: Buffer.from("9067dc6a9b38dd15f985770bb819eb62de39a5d1f0e12f9a4807f78968794af4", 'hex'), value: "valu attestation@" })
     componentsMap.set(4, { attestationKey: ATTESTATION_IDENTITY_DATA["documenttype"].vdxfid, salt: Buffer.from("338b6ad44179f46fc24f3ed01fd247c9664384a71ba5465aebceece8d7c45a0a", 'hex'), value: "KYC Attestation v1" })
 
-    const signaturesForAttestation = {
-      "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV":
-      {
-        signature: "AYG2IQABQSAN1fp6A9NIVbxvKuOVLLU+0I+G3oQGbRtS6u4Eampfb217Cdf5FCMScQhV9kMxtjI9GWzpchmjuiTB2tctk6qT",
-        system: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq"
-      }
-    };
+    const signaturesForAttestation = new VerusIDSignature({
+      signature: "AYG2IQABQSAN1fp6A9NIVbxvKuOVLLU+0I+G3oQGbRtS6u4Eampfb217Cdf5FCMScQhV9kMxtjI9GWzpchmjuiTB2tctk6qT",
+    })
 
-    const attestationResponse = new Attestation("i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV", {data: new AttestationData(componentsMap), signatures: signaturesForAttestation });
-    const test = attestationResponse.createMMR();
+    const attestationResponse = new Attestation({
+      data: new AttestationData(componentsMap),
+      signature: signaturesForAttestation,
+      system_id: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      signing_id: "iB5PRXMHLYcNtM8dfLB6KwfJrHU2mKDYuU"
+    },
+    );
+
     const proofResponseRoot = attestationResponse.rootHash();
-
     const proofOfItemZero = attestationResponse.getProof([0]);
-   
+    const proofOfAll = attestationResponse.getProof([0, 1, 2, 3, 4]);
     const rootOfItemZero = proofOfItemZero.checkProof(0);
 
-    expect(proofResponseRoot.toString('hex')).toStrictEqual("88f2cb78088118e550e6162575a68482167d429c00337997d133fa630440f3f7");
-    expect(rootOfItemZero.toString('hex')).toStrictEqual("88f2cb78088118e550e6162575a68482167d429c00337997d133fa630440f3f7");
+    for (let i = 0; i < 5; i++) {
+
+      const rootOfItem = proofOfAll.checkProof(i);
+      expect(rootOfItem.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+    }
+
+    expect(proofResponseRoot.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+    expect(rootOfItemZero.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+
+    // check attestation serializes and deserializes correctly
+
+    const attestationFromBuffer = new Attestation();
+
+    const attestationResponseBuffer = attestationResponse.toBuffer();
+    attestationFromBuffer.fromBuffer(attestationResponseBuffer);
+
+    const proofResponseRootFromBuffer = attestationResponse.rootHash();
+    expect(proofResponseRootFromBuffer.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+
+    //check the partialproofs serialize and desserialize
+
+    const proofItemZeroBuffer = proofOfItemZero.toBuffer();
+
+    const proofItemZeroFromBuffer = new CPartialAttestationProof();
+
+    proofItemZeroFromBuffer.fromBuffer(proofItemZeroBuffer);
+
+    const rootOfItemZerofromBuffer = proofOfItemZero.checkProof(0);
+
+    expect(rootOfItemZerofromBuffer.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+
+
   });
 
 

@@ -351,11 +351,29 @@ export const CURRENCY_ADDRESS: VDXFKeyInterface = {
 }
 
 export const ATTESTATION_RECIPIENT: VDXFKeyInterface = {
-  "vdxfid": "iGz3PbkrgqaqqgiRHZzLZvRR8xNMkLBkxP",
-  "hash160result": "f0e8cdf215f6031e0787e3a1ff1d185386b42e94",
+  "vdxfid": "iF9W7VBoeB1qooRBhZnbx1edN45oT6N3T1",
+  "hash160result": "fd9b77f956447beae6e9eba1de71d855fa800880",
   "qualifiedname": {
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestations.recipient"
+      "name": "vrsc::attestation.recipient"
+  }
+};
+
+export const ATTESTATION_OBJECT: VDXFKeyInterface = {
+  "vdxfid": "iKzefmmS3nMXjLTsrQ1emigirJBTK7rBTP",
+  "hash160result": "5d57536b22b79ea267ae71852779db21258834b5",
+  "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestation.object"
+  }
+};
+
+export const ATTESTATION_VIEW_RESPONSE: VDXFKeyInterface = {
+  "vdxfid": "i5R9p3V1sxZ9p1NDV7nPkz1wvmQTUvuByY",
+  "hash160result": "872923256c56f6bda8256c5bb6a4c98d85f44c15",
+  "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::attestation.view.response"
   }
 };
 
@@ -366,51 +384,51 @@ interface VDXFIdentityData extends VDXFKeyInterface {
 
 const IDENTITY_DATA: VDXFIdentityData[] = [
   {
-    "vdxfid": "iSSxdyTcCp8VALGBGKy8R7ATYSRuK15NkL",
-    "hash160result": "92cb346dd5c5886898a7ebcab6a0e4dded19fffb",
+    "vdxfid": "i4GqsotHGa4czCdtg2d8FVHKfJFzVyBPrM",
+    "hash160result": "31e7d78d45dd436cd977ac0f9ed03094bd87c208",
     "qualifiedname": {
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestations.identitydata.firstname"
+      "name": "vrsc::identitydata.firstname"
     },
     "detail": "First Name",
     "name":  "firstname"
   },
   {
-    "vdxfid": "i3jWsqLVnYyJu78E7mw6pbD3TazwZJpuk4",
-    "hash160result": "03d10a9768234e11d4cc2f73238cad4e7fc6d502",
+    "vdxfid": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z",
+    "hash160result": "3c3fb99f2b33f5c20c890f36fa8cc1ff3d30119f",
     "qualifiedname": {
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestations.identitydata.lastname"
+      "name": "vrsc::identitydata.lastname"
     },
     "detail": "Last Name",
     "name":  "lastname"
   },
   {
-    "vdxfid": "i9MRw6YUhXtP6DT8eufGnB5oRQ34TjDsdb",
-    "hash160result": "c886a8db81a891f9fc017001b6f6949588407940",
+    "vdxfid": "iNe8VaRBRFDhb6xjZ7WHNWgfM73428GN8B",
+    "hash160result": "5e01d5d356d517df57ea0f391c86e11a84663bd2",
     "qualifiedname": {
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestations.identitydata.attestor"
+      "name": "vrsc::identitydata.attestor"
     },
     "detail": "Attestor",
     "name":  "attestor"
   },
   {
-    "vdxfid": "iJvFSXk2EDeEu9BkJQSwAVeiochF6AYpfF",
-    "hash160result": "cac8e0c062de7abf4fd0a606c2b83eea275a67a9",
+    "vdxfid": "iFa41TpKfvbjaEnP78BNpSA9KYNgED58ms",
+    "hash160result": "63730181dc037834a7b2b9e7fed49863ca1cad84",
     "qualifiedname": {
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestations.identitydata.identity"
+      "name": "vrsc::identitydata.identity"
     },
     "detail": "Identity",
     "name":  "identity"
   },
   {
-    "vdxfid": "iLY58rsr39UB8BptNGYX63qPhcpv5N5yuC",
-    "hash160result": "ab812395536444a22463318c2691e886c6d925bb",
+    "vdxfid": "iAJUD5mgT6MHz8ymF49XUtBDRS7uvYqNWZ",
+    "hash160result": "e56544849c038b7cfadb0a1074ac51df9207e24a",
     "qualifiedname": {
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestations.type"
+      "name": "vrsc::attestation.type"
     },
     "detail": "Document Type",
     "name":  "documenttype"

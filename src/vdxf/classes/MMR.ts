@@ -6,7 +6,10 @@ const { Lock } = require('semaphore-async-await')
 import { BN } from 'bn.js';
 import { AttestationData } from './Attestation';
 import { VDXFObject } from "../";
+import varuint from '../../utils/varuint'
+import bufferutils from '../../utils/bufferutils'
 
+const { BufferReader, BufferWriter } = bufferutils;
 const BRANCH_MMRBLAKE_NODE = 2
 
 class CLayer<NODE_TYPE>
@@ -219,6 +222,59 @@ export class CMMRBranch {
     this.branch = branch;
   }
 
+  dataByteLength(): number {
+
+    let length = 0;
+
+    length += varuint.encodingLength(this.branchType);
+    length += varuint.encodingLength(this.nIndex);
+    length += varuint.encodingLength(this.nSize);
+    length += varuint.encodingLength(this.branch.length);
+
+    for (let i = 0; i < this.branch.length; i++) {
+      length += this.branch[i].length;
+    }
+
+    return length;
+
+  }
+
+  toBuffer(): Buffer {
+
+    const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
+
+    bufferWriter.writeVarInt(new BN(this.branchType));
+    bufferWriter.writeVarInt(new BN(this.nIndex));
+    bufferWriter.writeVarInt(new BN(this.nSize));
+    bufferWriter.writeVarInt(new BN(this.branch.length));
+
+    for (let i = 0; i < this.branch.length; i++) {
+      bufferWriter.writeSlice(this.branch[i]);
+
+    }
+
+    return bufferWriter.buffer;
+
+  }
+
+  fromBuffer(buffer: Buffer, offset?: number): number {
+
+    const reader = new bufferutils.BufferReader(buffer, offset);
+
+    this.branchType = reader.readCompactSize();
+    this.nIndex = reader.readCompactSize();
+    this.nSize = reader.readCompactSize();
+
+    let branchLength = reader.readCompactSize();
+
+    this.branch = new Array<Buffer>();
+
+    for (let i = 0; i < branchLength; i++) {
+      this.branch.push(reader.readSlice(32));
+    }
+
+    return reader.offset;
+  }
 
   digest(input) {
     var out = Buffer.allocUnsafe(32);
@@ -257,6 +313,50 @@ export class CMMRProof {
       this.proofSequence = new Array<CMMRBranch>();
     }
     this.proofSequence.push(proof);
+  }
+
+  dataByteLength(): number {
+
+    let length = 0;
+
+    length += varuint.encodingLength(this.proofSequence.length);
+
+    for (let i = 0; i < this.proofSequence.length; i++) {
+      length += this.proofSequence[i].dataByteLength();
+    }
+
+    return length;
+  }
+
+  toBuffer(): Buffer {
+
+    const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
+
+    bufferWriter.writeVarInt(new BN(this.proofSequence.length));
+
+    for (let i = 0; i < this.proofSequence.length; i++) {
+      bufferWriter.writeSlice(this.proofSequence[i].toBuffer());
+
+    }
+
+    return bufferWriter.buffer;
+  }
+
+  fromDataBuffer(buffer: Buffer, offset?: number): number {
+
+    const reader = new bufferutils.BufferReader(buffer, offset);
+
+    let proofSequenceLength = reader.readCompactSize();
+
+    this.proofSequence = new Array<CMMRBranch>();
+
+    for (let i = 0; i < proofSequenceLength; i++) {
+      let proof = new CMMRBranch();
+      reader.offset = proof.fromBuffer(buffer, reader.offset);
+      this.setProof(proof);
+    }
+
+    return reader.offset;
   }
 
 }
@@ -616,47 +716,4 @@ const GetMMRProofIndex = (pos: number, mmvSize: number, extraHashes: number): In
   return index;
 }
 
-export class CPartialAttestationProof {
-  private EVersion = {
-    VERSION_INVALID: 0,
-    VERSION_FIRST: 1,
-    VERSION_LAST: 1,
-    VERSION_CURRENT: 1
-  };
-
-  private EType = {
-    TYPE_INVALID: 0,
-    TYPE_ATTESTATION: 1,
-    TYPE_LAST: 1,
-    TYPE_CURRENT: 1
-  }
-
-  version: number;                      // to enable versioning of this type of proof
-  type: number;                         // this may represent differnt types of attestations
-  proof: CMMRProof;          // proof of the attestation in the MMR
-  componentsArray: AttestationData;
-
-  constructor(proof: CMMRProof = new CMMRProof(), componentsArray: AttestationData = new AttestationData()) {
-    this.version = this.EVersion.VERSION_CURRENT;
-    this.type = this.EType.TYPE_ATTESTATION;
-    this.proof = proof;
-    this.componentsArray = componentsArray;
-  }
-
-  checkProof(item: number): Buffer {
-
-    const dataHash = this.componentsArray.getHash(item)
-    let currentIndex = 0;
-    const component = this.componentsArray.components.get(item);
-
-    for (let value of this.componentsArray.components.values()) {
-      if (component == value) {
-        return this.proof.proofSequence[currentIndex].safeCheck(dataHash);
-      }
-      currentIndex++;
-    }
-
-    return Buffer.allocUnsafe(32);
-  }
-}
 
