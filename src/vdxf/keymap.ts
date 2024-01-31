@@ -19,35 +19,9 @@ export const friendlyNames = (vdfxkey) => {
                 return "Identity";
             case keylist.ATTESTATION_TYPE.vdxfid:
                 return "Attestation Type";
-
         }
         
     } else {
         throw new Error("Unknown VDXF key");
     }
-}
-
-const stringDataByteLength = function (data) {
-    var length = 20;
-    length += 1; // varint length 1
-    length += 2; // ss type + ver (lengths)
-    length += varuint.encodingLength(Buffer.from(data, 'utf8').length);
-    length += Buffer.from(data, 'utf8').length;
-    return length;
-  }
-
-export const utils: Function = (vdfxkey) => {
-
-    if (vdfxkey in keymap) {
-        
-        switch (vdfxkey) {
-            case keylist.DATA_TYPE_STRING.vdxfid:
-                return stringDataByteLength
-        }
-        
-    } else {
-        throw new Error("Unknown VDXF key");
-    }
-
-
 }

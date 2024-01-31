@@ -11,6 +11,7 @@ import { BN } from "bn.js";
 import { BigNumber } from "../utils/types/BigNumber";
 export * from './keys'
 export * from './scopes'
+export * from './keymap'
 
 export interface VDXFObjectInterface {
   vdxfkey: string;
