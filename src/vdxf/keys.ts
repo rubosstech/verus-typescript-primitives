@@ -1,4 +1,3 @@
-import varuint from '../utils/varuint'
 export interface VDXFKeyInterface {
   vdxfid: string;
   hash160result: string;
@@ -354,8 +353,8 @@ export const ATTESTATION_RECIPIENT: VDXFKeyInterface = {
   "vdxfid": "iF9W7VBoeB1qooRBhZnbx1edN45oT6N3T1",
   "hash160result": "fd9b77f956447beae6e9eba1de71d855fa800880",
   "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestation.recipient"
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.recipient"
   }
 };
 
@@ -363,8 +362,8 @@ export const ATTESTATION_OBJECT: VDXFKeyInterface = {
   "vdxfid": "iKzefmmS3nMXjLTsrQ1emigirJBTK7rBTP",
   "hash160result": "5d57536b22b79ea267ae71852779db21258834b5",
   "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestation.object"
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.object"
   }
 };
 
@@ -372,88 +371,57 @@ export const ATTESTATION_VIEW_RESPONSE: VDXFKeyInterface = {
   "vdxfid": "i5R9p3V1sxZ9p1NDV7nPkz1wvmQTUvuByY",
   "hash160result": "872923256c56f6bda8256c5bb6a4c98d85f44c15",
   "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestation.view.response"
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.view.response"
   }
 };
 
-interface VDXFIdentityData extends VDXFKeyInterface {
-  detail: string;
-  name: string;
-}
+export const IDENTITY_DATA_FIRSTNAME: VDXFKeyInterface = {
+  "vdxfid": "i4GqsotHGa4czCdtg2d8FVHKfJFzVyBPrM",
+  "hash160result": "31e7d78d45dd436cd977ac0f9ed03094bd87c208",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identitydata.firstname"
+  },
+};
 
-const IDENTITY_DATA: VDXFIdentityData[] = [
-  {
-    "vdxfid": "i4GqsotHGa4czCdtg2d8FVHKfJFzVyBPrM",
-    "hash160result": "31e7d78d45dd436cd977ac0f9ed03094bd87c208",
-    "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.firstname"
-    },
-    "detail": "First Name",
-    "name":  "firstname"
+export const IDENTITY_DATA_LASTNAME: VDXFKeyInterface = {
+  "vdxfid": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z",
+  "hash160result": "3c3fb99f2b33f5c20c890f36fa8cc1ff3d30119f",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identitydata.lastname"
   },
-  {
-    "vdxfid": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z",
-    "hash160result": "3c3fb99f2b33f5c20c890f36fa8cc1ff3d30119f",
-    "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.lastname"
-    },
-    "detail": "Last Name",
-    "name":  "lastname"
-  },
-  {
-    "vdxfid": "iNe8VaRBRFDhb6xjZ7WHNWgfM73428GN8B",
-    "hash160result": "5e01d5d356d517df57ea0f391c86e11a84663bd2",
-    "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.attestor"
-    },
-    "detail": "Attestor",
-    "name":  "attestor"
-  },
-  {
-    "vdxfid": "iFa41TpKfvbjaEnP78BNpSA9KYNgED58ms",
-    "hash160result": "63730181dc037834a7b2b9e7fed49863ca1cad84",
-    "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.identity"
-    },
-    "detail": "Identity",
-    "name":  "identity"
-  },
-  {
-    "vdxfid": "iAJUD5mgT6MHz8ymF49XUtBDRS7uvYqNWZ",
-    "hash160result": "e56544849c038b7cfadb0a1074ac51df9207e24a",
-    "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::attestation.type"
-    },
-    "detail": "Document Type",
-    "name":  "documenttype"
+};
+
+export const IDENTITY_DATA_ATTESTOR: VDXFKeyInterface = {
+  "vdxfid": "iNe8VaRBRFDhb6xjZ7WHNWgfM73428GN8B",
+  "hash160result": "5e01d5d356d517df57ea0f391c86e11a84663bd2",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identitydata.attestor"
   }
-]
-// Allow lookup by vdxfid or name
-export const ATTESTATION_IDENTITY_DATA: {[vdxfid: string]: VDXFIdentityData} = {}
-IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.vdxfid] = item)
-IDENTITY_DATA.forEach((item) => ATTESTATION_IDENTITY_DATA[item.name] = item)
+};
 
-const getbytes_std = function (data){
-  var length = 20;
-  length += 1; // varint length 1
-  length += 2; // ss type + ver (lengths)
-  length += varuint.encodingLength(Buffer.from(data, 'utf8').length);
-  length += Buffer.from(data, 'utf8').length;
-  return length;
-}
+export const IDENTITY_DATA_IDENTITY: VDXFKeyInterface = {
+  "vdxfid": "iFa41TpKfvbjaEnP78BNpSA9KYNgED58ms",
+  "hash160result": "63730181dc037834a7b2b9e7fed49863ca1cad84",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identitydata.identity"
+  }
+};
 
-interface CVDXFData extends VDXFKeyInterface {
-  getbytes: Function 
-}
+export const ATTESTATION_TYPE: VDXFKeyInterface = {
+  "vdxfid": "iAJUD5mgT6MHz8ymF49XUtBDRS7uvYqNWZ",
+  "hash160result": "e56544849c038b7cfadb0a1074ac51df9207e24a",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.type"
+  }
+};
 
-// Defined CVDXF_Data from main Verus Daemon.
-const CVDXF_Data_objects: CVDXFData[] = [
+export const DATA_TYPE_STRING: VDXFKeyInterface = 
   {
     "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
     "hash160result": "e5c061641228a399169211e666de18448b7b8bab",
@@ -461,10 +429,4 @@ const CVDXF_Data_objects: CVDXFData[] = [
       "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
       "name": "vrsc::data.type.string"
     },
-    getbytes: getbytes_std
-  },
-  //TODO: add more types
-]
-
-export const CVDXF_Data = {};
-CVDXF_Data_objects.forEach((item) => CVDXF_Data[item.vdxfid] = item);
+};
