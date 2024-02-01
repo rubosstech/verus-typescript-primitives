@@ -1,8 +1,9 @@
-import { ATTESTATION_READ_REQUEST, IDENTITY_VIEW, ATTESTATION_IDENTITY_DATA, LOGIN_CONSENT_REDIRECT_VDXF_KEY, VerusIDSignature } from "../../vdxf";
+import { ATTESTATION_READ_REQUEST, IDENTITY_VIEW, IDENTITY_DATA_FIRSTNAME, LOGIN_CONSENT_REDIRECT_VDXF_KEY, VerusIDSignature, IDENTITY_DATA_LASTNAME, IDENTITY_DATA_ATTESTOR, IDENTITY_DATA_IDENTITY, ATTESTATION_TYPE } from "../../vdxf";
 import { Attestation, LoginConsentRequest } from "../../vdxf/classes";
 import { RedirectUri, RequestedPermission } from "../../vdxf/classes/Challenge";
 import { Context } from "../../vdxf/classes/Context";
-import {AttestationData, CPartialAttestationProof } from "../../vdxf/classes/Attestation";
+import { CPartialAttestationProof } from "../../vdxf/classes/Attestation";
+import { AttestationData, AttestationDataType } from "../../vdxf/classes/attestationData";
 
 describe('Serializes and deserializes attestation request', () => {
   test('attestation request with reply', async () => {
@@ -19,11 +20,11 @@ describe('Serializes and deserializes attestation request', () => {
         new RequestedPermission({
           accepted_attestors: ["iC9x9VZ2XMop7spFzeXqSKX8WqmrG9cu41"],
           attestation_keys: [
-            ATTESTATION_IDENTITY_DATA["firstname"].vdxfid,
-            ATTESTATION_IDENTITY_DATA["lastname"].vdxfid,
-            ATTESTATION_IDENTITY_DATA["attestor"].vdxfid,
-            ATTESTATION_IDENTITY_DATA["identity"].vdxfid,
-            ATTESTATION_IDENTITY_DATA["documenttype"].vdxfid]
+            IDENTITY_DATA_FIRSTNAME.vdxfid,
+            IDENTITY_DATA_LASTNAME.vdxfid,
+            IDENTITY_DATA_ATTESTOR.vdxfid,
+            IDENTITY_DATA_IDENTITY.vdxfid,
+            ATTESTATION_TYPE.vdxfid]
         }, ATTESTATION_READ_REQUEST.vdxfid)],
         session_id: "iRQZGW36o3RcVR1xyVT1qWdAKdxp3wUyrh",
         redirect_uris: [
@@ -42,11 +43,11 @@ describe('Serializes and deserializes attestation request', () => {
 
     const componentsMap = new Map();
 
-    componentsMap.set(0, { attestationKey: ATTESTATION_IDENTITY_DATA["firstname"].vdxfid, salt: Buffer.from("8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210", 'hex'), value: "Chris" })
-    componentsMap.set(1, { attestationKey: ATTESTATION_IDENTITY_DATA["lastname"].vdxfid, salt: Buffer.from("7c3920940db4385cd305557a57a8df33346712096e76b58d7c4ace05e17b90a2", 'hex'), value: "Monkins" })
-    componentsMap.set(2, { attestationKey: ATTESTATION_IDENTITY_DATA["identity"].vdxfid, salt: Buffer.from("ce662d61a20ae211728cdb1b924628c84edfe0fcbd59a86f56a125ad73689ac1", 'hex'), value: "chad@" })
-    componentsMap.set(3, { attestationKey: ATTESTATION_IDENTITY_DATA["attestor"].vdxfid, salt: Buffer.from("9067dc6a9b38dd15f985770bb819eb62de39a5d1f0e12f9a4807f78968794af4", 'hex'), value: "valu attestation@" })
-    componentsMap.set(4, { attestationKey: ATTESTATION_IDENTITY_DATA["documenttype"].vdxfid, salt: Buffer.from("338b6ad44179f46fc24f3ed01fd247c9664384a71ba5465aebceece8d7c45a0a", 'hex'), value: "KYC Attestation v1" })
+    componentsMap.set(0, new AttestationDataType("Chris", IDENTITY_DATA_FIRSTNAME.vdxfid, "8e6744dc4f229e543bbd00d65b395829e44c8eb7b358ee3131ca25e6ecc3b210"));
+    componentsMap.set(1, new AttestationDataType("Monkins", IDENTITY_DATA_LASTNAME.vdxfid, "7c3920940db4385cd305557a57a8df33346712096e76b58d7c4ace05e17b90a2"));
+    componentsMap.set(2, new AttestationDataType("chad@", IDENTITY_DATA_IDENTITY.vdxfid, "ce662d61a20ae211728cdb1b924628c84edfe0fcbd59a86f56a125ad73689ac1"));
+    componentsMap.set(3, new AttestationDataType("valu attestation@", IDENTITY_DATA_ATTESTOR.vdxfid, "9067dc6a9b38dd15f985770bb819eb62de39a5d1f0e12f9a4807f78968794af4"));
+    componentsMap.set(4, new AttestationDataType("KYC Attestation v1", ATTESTATION_TYPE.vdxfid, "338b6ad44179f46fc24f3ed01fd247c9664384a71ba5465aebceece8d7c45a0a"));
 
     const signaturesForAttestation = new VerusIDSignature({
       signature: "AYG2IQABQSAN1fp6A9NIVbxvKuOVLLU+0I+G3oQGbRtS6u4Eampfb217Cdf5FCMScQhV9kMxtjI9GWzpchmjuiTB2tctk6qT",
@@ -68,11 +69,11 @@ describe('Serializes and deserializes attestation request', () => {
     for (let i = 0; i < 5; i++) {
 
       const rootOfItem = proofOfAll.checkProof(i);
-      expect(rootOfItem.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+      expect(rootOfItem.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
     }
 
-    expect(proofResponseRoot.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
-    expect(rootOfItemZero.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+    expect(proofResponseRoot.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
+    expect(rootOfItemZero.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
 
     // check attestation serializes and deserializes correctly
 
@@ -82,7 +83,7 @@ describe('Serializes and deserializes attestation request', () => {
     attestationFromBuffer.fromBuffer(attestationResponseBuffer);
 
     const proofResponseRootFromBuffer = attestationResponse.rootHash();
-    expect(proofResponseRootFromBuffer.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
+    expect(proofResponseRootFromBuffer.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
 
     //check the partialproofs serialize and desserialize
 
@@ -94,10 +95,6 @@ describe('Serializes and deserializes attestation request', () => {
 
     const rootOfItemZerofromBuffer = proofOfItemZero.checkProof(0);
 
-    expect(rootOfItemZerofromBuffer.toString('hex')).toStrictEqual("bfdc433abea085fc54e65642a36139ee13f86261e104d7befe068c11702facb4");
-
-
+    expect(rootOfItemZerofromBuffer.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
   });
-
-
 });

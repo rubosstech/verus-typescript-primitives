@@ -3,7 +3,7 @@ import bufferutils from '../utils/bufferutils'
 import { BigNumber } from '../utils/types/BigNumber';
 import { Principal } from './Principal';
 import { fromBase58Check, toBase58Check } from '../utils/address';
-import { I_ADDR_VERSION } from '../constants/vdxf';
+import { I_ADDR_VERSION, HASH160_BYTE_LENGTH } from '../constants/vdxf';
 import { DATA_TYPE_STRING, keymap } from "../vdxf";
 import { R_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
@@ -383,7 +383,7 @@ function VectorEncodeVDXFUni(obj) {
 
   for (var i = 0; i < keys.length; i++) {
     if (keys[i] == DATA_TYPE_STRING.vdxfid) {
-      bufsize += 20;
+      bufsize += HASH160_BYTE_LENGTH;
       bufsize += 1; // varint length 1
       bufsize += 2; // ss type + ver (lengths)
       bufsize += varuint.encodingLength(Buffer.from(values[i], 'utf8').length);

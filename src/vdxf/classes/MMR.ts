@@ -4,7 +4,6 @@
 var blake2b = require('blake2b')
 const { Lock } = require('semaphore-async-await')
 import { BN } from 'bn.js';
-import { AttestationData } from './Attestation';
 import { VDXFObject } from "../";
 import varuint from '../../utils/varuint'
 import bufferutils from '../../utils/bufferutils'
