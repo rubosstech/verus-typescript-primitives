@@ -4,8 +4,8 @@ import {
   BufferDataVdxfObject,
   PNGImageVdxfObject
 } from "..";
+import * as identitykeys from '../identityDataKeys';
 import * as keylist from '../keys';
-import { keymap } from '../keymap';
 import bufferutils from '../../utils/bufferutils';
 import createHash = require("create-hash");
 import { fromBase58Check, toBase58Check } from '../../utils/address';
@@ -22,50 +22,44 @@ export const AttestationClassTypes = {
 }
 
 export const AttestationVdxfidMap = {
-  [keylist.IDENTITY_DATA_FIRSTNAME.vdxfid]: { name: "First Name", type: AttestationClassTypes.BUFFER_DATA_STRING },
-  [keylist.IDENTITY_DATA_LASTNAME.vdxfid]: { name: "Last Name", type: AttestationClassTypes.BUFFER_DATA_STRING },
-  [keylist.IDENTITY_DATA_ATTESTOR.vdxfid]: { name: "Attestor ID", type: AttestationClassTypes.BUFFER_DATA_STRING },
-  [keylist.IDENTITY_DATA_IDENTITY.vdxfid]: { name: "Identity", type: AttestationClassTypes.BUFFER_DATA_STRING },
+  [identitykeys.IDENTITYDATA_FIRSTNAME.vdxfid]: { name: "First Name", type: AttestationClassTypes.BUFFER_DATA_STRING },
+  [identitykeys.IDENTITYDATA_LASTNAME.vdxfid]: { name: "Last Name", type: AttestationClassTypes.BUFFER_DATA_STRING },
+  [identitykeys.IDENTITYDATA_ATTESTOR.vdxfid]: { name: "Attestor ID", type: AttestationClassTypes.BUFFER_DATA_STRING },
+  [identitykeys.IDENTITYDATA_IDENTITY.vdxfid]: { name: "Identity", type: AttestationClassTypes.BUFFER_DATA_STRING },
   [keylist.ATTESTATION_TYPE.vdxfid]: { name: "Attestation Type", type: AttestationClassTypes.BUFFER_DATA_STRING },
 };
 
-
-
 export class AttestationDataType {
 
-  dataItem: Utf8DataVdxfObject |  HexDataVdxfObject | BufferDataVdxfObject | PNGImageVdxfObject;
+  dataItem: Utf8DataVdxfObject | HexDataVdxfObject | BufferDataVdxfObject | PNGImageVdxfObject;
   salt: Buffer;
 
   constructor(data: any, vdxfkey: string, salt?: string) {
 
-    if (vdxfkey in keymap) {
-      switch (AttestationVdxfidMap[vdxfkey].type) {
-
-        case AttestationClassTypes.BUFFER_DATA_STRING:
-          this.dataItem = new Utf8DataVdxfObject(data, vdxfkey);
-          break;
-        case AttestationClassTypes.BUFFER_DATA_BYTES:
-          this.dataItem = new HexDataVdxfObject(data, vdxfkey);
-          break;
-        case AttestationClassTypes.BUFFER_DATA_BASE64:
-          this.dataItem = new BufferDataVdxfObject(data, vdxfkey, "base64");
-          break;
-        case AttestationClassTypes.URL:
-          this.dataItem = new BufferDataVdxfObject(data, vdxfkey, "utf8");
-          break;
-        case AttestationClassTypes.PNG_IMAGE:
-          this.dataItem = new PNGImageVdxfObject(data, vdxfkey);
-          break;
-        default:
-          throw new Error("Unknown VDXF key");
+    switch (AttestationVdxfidMap[vdxfkey].type) {
+      case AttestationClassTypes.BUFFER_DATA_STRING:
+        this.dataItem = new Utf8DataVdxfObject(data, vdxfkey);
+        break;
+      case AttestationClassTypes.BUFFER_DATA_BYTES:
+        this.dataItem = new HexDataVdxfObject(data, vdxfkey);
+        break;
+      case AttestationClassTypes.BUFFER_DATA_BASE64:
+        this.dataItem = new BufferDataVdxfObject(data, vdxfkey, "base64");
+        break;
+      case AttestationClassTypes.URL:
+        this.dataItem = new BufferDataVdxfObject(data, vdxfkey, "utf8");
+        break;
+      case AttestationClassTypes.PNG_IMAGE:
+        this.dataItem = new PNGImageVdxfObject(data, vdxfkey);
+        break;
+      default:
+        this.dataItem = new HexDataVdxfObject(data, vdxfkey);
+        break;
       }
-    } else {
-      throw new Error("Unknown VDXF key");
-    }
 
-    if (salt) {
-      this.salt = Buffer.from(salt, "hex");
-    }
+        if (salt) {
+          this.salt = Buffer.from(salt, "hex");
+        }
   }
 
   dataBytelength(): number {

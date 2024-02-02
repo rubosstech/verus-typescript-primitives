@@ -12,6 +12,7 @@ import { BigNumber } from "../utils/types/BigNumber";
 export * from './keys'
 export * from './scopes'
 export * from './keymap'
+export * from './identityDataKeys'
 
 export interface VDXFObjectInterface {
   vdxfkey: string;

@@ -5,6 +5,10 @@ export interface VDXFKeyInterface {
     name: string;
     namespace: string;
   };
+  bounddata?: {
+    vdxfkey: string;
+  }
+  indexid?: string;
 }
 
 export const VERUSPAY_INVOICE_VDXF_KEY: VDXFKeyInterface = {
@@ -376,42 +380,6 @@ export const ATTESTATION_VIEW_RESPONSE: VDXFKeyInterface = {
   }
 };
 
-export const IDENTITY_DATA_FIRSTNAME: VDXFKeyInterface = {
-  "vdxfid": "i4GqsotHGa4czCdtg2d8FVHKfJFzVyBPrM",
-  "hash160result": "31e7d78d45dd436cd977ac0f9ed03094bd87c208",
-  "qualifiedname": {
-    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::identitydata.firstname"
-  },
-};
-
-export const IDENTITY_DATA_LASTNAME: VDXFKeyInterface = {
-  "vdxfid": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z",
-  "hash160result": "3c3fb99f2b33f5c20c890f36fa8cc1ff3d30119f",
-  "qualifiedname": {
-    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::identitydata.lastname"
-  },
-};
-
-export const IDENTITY_DATA_ATTESTOR: VDXFKeyInterface = {
-  "vdxfid": "iNe8VaRBRFDhb6xjZ7WHNWgfM73428GN8B",
-  "hash160result": "5e01d5d356d517df57ea0f391c86e11a84663bd2",
-  "qualifiedname": {
-    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::identitydata.attestor"
-  }
-};
-
-export const IDENTITY_DATA_IDENTITY: VDXFKeyInterface = {
-  "vdxfid": "iFa41TpKfvbjaEnP78BNpSA9KYNgED58ms",
-  "hash160result": "63730181dc037834a7b2b9e7fed49863ca1cad84",
-  "qualifiedname": {
-    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::identitydata.identity"
-  }
-};
-
 export const ATTESTATION_TYPE: VDXFKeyInterface = {
   "vdxfid": "iAJUD5mgT6MHz8ymF49XUtBDRS7uvYqNWZ",
   "hash160result": "e56544849c038b7cfadb0a1074ac51df9207e24a",
@@ -421,6 +389,7 @@ export const ATTESTATION_TYPE: VDXFKeyInterface = {
   }
 };
 
+// DATA TYPES
 export const DATA_TYPE_STRING: VDXFKeyInterface = 
   {
     "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
