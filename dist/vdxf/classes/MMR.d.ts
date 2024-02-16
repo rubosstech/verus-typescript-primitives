@@ -1,54 +1,72 @@
 /// <reference types="node" />
-declare class Position {
-    i: any;
-    h: any;
-    r: any;
-    constructor(index: any, height: any, rightness: any);
+declare class CLayer<NODE_TYPE> {
+    private vSize;
+    private nodes;
+    constructor();
+    size(): number;
+    getIndex(idx: number): NODE_TYPE;
+    push_back(node: NODE_TYPE): void;
+    clear(): void;
 }
-export declare class MMR {
-    lock: any;
-    _leafLength: number;
-    db: any;
-    constructor(db?: MemoryBasedDb);
+export declare class CMMRNode {
+    hash: Buffer;
+    constructor(Hash?: Buffer);
     digest(input: any): any;
-    get(leafIndex: any): Promise<any>;
-    _get(nodePosition: any): Promise<any>;
-    append(value: any, leafIndex: any): Promise<void>;
-    appendMany(values: any, startLeafIndex: any): Promise<void>;
-    getRoot(leafIndex?: number): Promise<any>;
-    getNodeLength(): Promise<any>;
-    getLeafLength(): Promise<number>;
-    delete(leafIndex: any): Promise<void>;
-    getProof(leafIndexes: any, referenceTreeLength: any): Promise<any>;
-    _getNodeValue(position: any): any;
-    _verifyPath(currentPosition: any, currentValue: any, destinationPosition: any): any;
-    _setLeafLength(leafLength: any): Promise<void>;
-    _hashUp(positionPairs: any): Promise<void>;
-    static leftChildPosition(position: any): Position;
-    static rightChildPosition(position: any): Position;
-    static siblingPosition(position: any): Position;
-    static parentIndex(position: any): any;
-    static peakPositions(leafIndex: any): any[];
-    static localPeakPosition(leafIndex: any, leafLength: any): any;
-    static _localPeakPosition(leafIndex: any, peakPositions: any): any;
-    static mountainPositions(currentPosition: any, targetNodeIndex: any): any[];
-    static godPeakFromLeafIndex(leafIndex: any): Position;
-    static getNodePosition(leafIndex: any): Position;
-    static proofPositions(leafIndexes: any, referenceTreeLength: any): {};
-    static _hasPosition(nodes: any, position: any): boolean;
+    HashObj(obj: Buffer, onbjR?: Buffer): Buffer;
+    CreateParentNode(nRight: CMMRNode): CMMRNode;
+    GetProofHash(opposite: CMMRNode): Array<Buffer>;
+    GetLeafHash(): Array<Buffer>;
+    GetExtraHashCount(): number;
 }
-export declare class MemoryBasedDb {
-    leafLength: any;
-    nodes: {
-        [number: number]: Buffer;
-    };
-    constructor(...args: any[]);
-    get(index: any): Promise<Buffer>;
-    set(value: any, index: any): Promise<void>;
-    getLeafLength(): Promise<any>;
-    setLeafLength(leafLength: any): Promise<any>;
-    getNodes(): Promise<{
-        [number: number]: Buffer;
-    }>;
+export declare class CMerkleMountainRange {
+    layer0: CLayer<CMMRNode>;
+    vSize: number;
+    upperNodes: Array<CLayer<CMMRNode>>;
+    _leafLength: number;
+    constructor();
+    getbyteLength(): number;
+    toBuffer(): Buffer;
+    fromBuffer(bufferIn: Buffer): CMerkleMountainRange;
+    add(leaf: CMMRNode): number;
+    size(): number;
+    height(): number;
+    getNode(Height: any, Index: any): CMMRNode;
+}
+export declare class CMMRBranch {
+    branchType?: number;
+    nIndex?: number;
+    nSize?: number;
+    branch?: Array<Buffer>;
+    constructor(branchType?: number, nIndex?: number, nSize?: number, branch?: Array<Buffer>);
+    dataByteLength(): number;
+    toBuffer(): Buffer;
+    fromBuffer(buffer: Buffer, offset?: number): number;
+    digest(input: any): any;
+    safeCheck(hash: Buffer): Buffer;
+}
+export declare class CMMRProof {
+    proofSequence: Array<CMMRBranch>;
+    setProof(proof: CMMRBranch): void;
+    dataByteLength(): number;
+    toBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+}
+export declare class CMerkleMountainView {
+    mmr: CMerkleMountainRange;
+    sizes: Array<number>;
+    peaks: Array<CMMRNode>;
+    peakMerkle: Array<Array<CMMRNode>>;
+    constructor(mountainRange: CMerkleMountainRange, viewSize?: number);
+    size(): number;
+    CalcPeaks(force?: boolean): void;
+    resize(newSize: number): number;
+    maxsize(): number;
+    GetPeaks(): Array<CMMRNode>;
+    GetRoot(): Buffer;
+    GetRootNode(): CMMRNode;
+    GetHash(index: number): Buffer;
+    GetBranchType(): number;
+    GetProof(retProof: CMMRProof, pos: number): boolean;
+    GetProofBits(pos: number, mmvSize: number): void;
 }
 export {};

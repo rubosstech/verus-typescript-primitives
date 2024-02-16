@@ -1,408 +1,570 @@
 "use strict";
 // Licence MIT
 // Adapted to Verus Blake2b MMR. 
-// MMR Code is from
-//Copyright (c) 2019 Zac Mitton under MIT License
-//Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-//documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-//the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
-//to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MemoryBasedDb = exports.MMR = void 0;
+exports.CMerkleMountainView = exports.CMMRProof = exports.CMMRBranch = exports.CMerkleMountainRange = exports.CMMRNode = void 0;
 var blake2b = require('blake2b');
 const { Lock } = require('semaphore-async-await');
-class Position {
-    constructor(index, height, rightness) {
-        this.i = index;
-        this.h = height;
-        this.r = rightness; // inherent unchanging property of every node index
+const bn_js_1 = require("bn.js");
+const varuint_1 = require("../../utils/varuint");
+const bufferutils_1 = require("../../utils/bufferutils");
+const { BufferReader, BufferWriter } = bufferutils_1.default;
+const BRANCH_MMRBLAKE_NODE = 2;
+class CLayer {
+    constructor() { this.vSize = 0; }
+    size() {
+        return this.vSize;
+    }
+    getIndex(idx) {
+        if (idx < this.vSize) {
+            return this.nodes[idx];
+        }
+        else {
+            throw new Error("CChunkedLayer [] index out of range");
+        }
+    }
+    push_back(node) {
+        this.vSize++;
+        if (!this.nodes) {
+            this.nodes = new Array();
+        }
+        this.nodes.push(node);
+    }
+    clear() {
+        this.nodes = null;
+        this.vSize = 0;
     }
 }
-class MMR {
-    constructor(db = new MemoryBasedDb()) {
-        this.db = db;
-        this.lock = new Lock(1);
+;
+//template <typename NODE_TYPE, typename UNDERLYING>
+class COverlayNodeLayer {
+    constructor(NodeSource) {
+        this.nodeSource = NodeSource;
+        this.vSize = 0;
+    }
+    size() {
+        return this.vSize;
+    }
+    getIndex(idx) {
+        if (idx < this.vSize) {
+            let retval;
+            return retval;
+        }
+        else {
+            throw new Error("COverlayNodeLayer [] index out of range");
+        }
+    }
+    // node type must be moveable just to be passed here, but the default overlay has no control over the underlying storage
+    // and only tracks size changes
+    push_back(node) { this.vSize++; }
+    clear() { this.vSize = 0; }
+    resize(newSize) { this.vSize = newSize; }
+}
+;
+class CMMRNode {
+    constructor(Hash) {
+        if (Hash) {
+            this.hash = Hash;
+        }
     }
     digest(input) {
         var out = Buffer.allocUnsafe(32);
-        return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(Buffer.concat([...input])).digest(out);
+        return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(input).digest(out);
     }
-    get(leafIndex) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let leafValue;
-            yield this.lock.acquire();
-            try {
-                let leafLength = yield this.getLeafLength();
-                if (leafIndex >= leafLength) {
-                    throw new Error('Leaf not in tree');
-                }
-                let leafPosition = MMR.getNodePosition(leafIndex);
-                let localPeakPosition = MMR.localPeakPosition(leafIndex, leafLength);
-                let localPeakValue = yield this._getNodeValue(localPeakPosition);
-                leafValue = yield this._verifyPath(localPeakPosition, localPeakValue, leafPosition);
-            }
-            finally {
-                this.lock.release();
-            }
-            return leafValue;
-        });
+    HashObj(obj, onbjR) {
+        if (!onbjR)
+            return this.digest(obj);
+        else
+            return this.digest(Buffer.concat([obj, onbjR]));
     }
-    _get(nodePosition) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let nodeValue;
-            yield this.lock.acquire();
-            try {
-                let nodeLength = yield this.getNodeLength();
-                let leafLength = yield this.getLeafLength();
-                if (nodePosition.i >= nodeLength) {
-                    throw new Error('Node not in tree');
+    // add a right to this left and create a parent node
+    CreateParentNode(nRight) {
+        return new CMMRNode(this.digest(Buffer.concat([this.hash, nRight.hash])));
+    }
+    GetProofHash(opposite) {
+        return [this.hash];
+    }
+    // leaf nodes that track additional data, such as block power, may need a hash added to the path
+    // at the very beginning
+    GetLeafHash() { return []; }
+    GetExtraHashCount() {
+        // how many extra proof hashes per layer are added with this node
+        return 0;
+    }
+}
+exports.CMMRNode = CMMRNode;
+;
+function loggingIdentity(arg) {
+    console.log(arg.length);
+    return arg;
+}
+//template <typename NODE_TYPE=CDefaultMMRNode, typename LAYER_TYPE=CChunkedLayer<NODE_TYPE>, typename LAYER0_TYPE=LAYER_TYPE>
+class CMerkleMountainRange {
+    constructor() {
+        this.layer0 = new CLayer();
+        this.vSize = 0;
+        this.upperNodes = new Array();
+        this._leafLength = 0;
+    }
+    getbyteLength() {
+        return 1;
+    }
+    toBuffer() {
+        return Buffer.from([]);
+    }
+    fromBuffer(bufferIn) {
+        return new CMerkleMountainRange();
+    }
+    add(leaf) {
+        this.layer0.push_back(leaf);
+        let height = 0;
+        let layerSize;
+        for (layerSize = this.layer0.size(); height <= this.upperNodes.length && layerSize > 1; height++) {
+            let newSizeAbove = layerSize >> 1;
+            // expand vector of vectors if we are adding a new layer
+            if (height == this.upperNodes.length) {
+                this.upperNodes.push(new CLayer());
+            }
+            let curSizeAbove = this.upperNodes[height].size();
+            // if we need to add an element to the vector above us, do it
+            if (!(layerSize & 1) && newSizeAbove > curSizeAbove) {
+                let idx = layerSize - 2;
+                if (height > 0) {
+                    this.upperNodes[height].push_back(this.upperNodes[height - 1].getIndex(idx).CreateParentNode(this.upperNodes[height - 1].getIndex(idx + 1)));
                 }
-                let peakPositions = MMR.peakPositions(leafLength - 1);
-                let localPeakPosition;
-                for (let i = 0; i < peakPositions.length; i++) {
-                    if (peakPositions[i].i >= nodePosition.i) {
-                        localPeakPosition = peakPositions[i];
+                else {
+                    this.upperNodes[height].push_back(this.layer0.getIndex(idx).CreateParentNode(this.layer0.getIndex(idx + 1)));
+                }
+            }
+            layerSize = newSizeAbove;
+        }
+        // return new index
+        return this.layer0.size() - 1;
+    }
+    size() {
+        return this.layer0.size();
+    }
+    height() {
+        return this.layer0.size() > 0 ? this.upperNodes.length + 1 : 0;
+    }
+    getNode(Height, Index) {
+        let layers = this.height();
+        if (Height < layers) {
+            if (Height) {
+                if (Index < this.upperNodes[Height - 1].size()) {
+                    return this.upperNodes[Height - 1].getIndex(Index);
+                }
+            }
+            else {
+                if (Index < this.layer0.size()) {
+                    return this.layer0.getIndex(Index);
+                }
+            }
+        }
+        return null;
+    }
+}
+exports.CMerkleMountainRange = CMerkleMountainRange;
+class CMMRBranch {
+    constructor(branchType = BRANCH_MMRBLAKE_NODE, nIndex = 0, nSize = 0, branch = new Array()) {
+        this.branchType = branchType;
+        this.nIndex = nIndex;
+        this.nSize = nSize;
+        this.branch = branch;
+    }
+    dataByteLength() {
+        let length = 0;
+        length += varuint_1.default.encodingLength(this.branchType);
+        length += varuint_1.default.encodingLength(this.nIndex);
+        length += varuint_1.default.encodingLength(this.nSize);
+        length += varuint_1.default.encodingLength(this.branch.length);
+        for (let i = 0; i < this.branch.length; i++) {
+            length += this.branch[i].length;
+        }
+        return length;
+    }
+    toBuffer() {
+        const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
+        bufferWriter.writeCompactSize(this.branchType);
+        bufferWriter.writeCompactSize(this.nIndex);
+        bufferWriter.writeCompactSize(this.nSize);
+        bufferWriter.writeCompactSize(this.branch.length);
+        for (let i = 0; i < this.branch.length; i++) {
+            bufferWriter.writeSlice(this.branch[i]);
+        }
+        return bufferWriter.buffer;
+    }
+    fromBuffer(buffer, offset) {
+        const reader = new bufferutils_1.default.BufferReader(buffer, offset);
+        this.branchType = reader.readCompactSize();
+        this.nIndex = reader.readCompactSize();
+        this.nSize = reader.readCompactSize();
+        let branchLength = reader.readCompactSize();
+        this.branch = new Array();
+        for (let i = 0; i < branchLength; i++) {
+            this.branch.push(reader.readSlice(32));
+        }
+        return reader.offset;
+    }
+    digest(input) {
+        var out = Buffer.allocUnsafe(32);
+        return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(input).digest(out);
+    }
+    safeCheck(hash) {
+        let index = GetMMRProofIndex(this.nIndex, this.nSize, 0);
+        let joined = Buffer.allocUnsafe(64);
+        let hashInProgress = hash;
+        for (let i = 0; i < this.branch.length; i++) {
+            if (index.and(new bn_js_1.BN(1)).gt(new bn_js_1.BN(0))) {
+                if (this.branch[i] === hashInProgress)
+                    throw new Error("Value can be equal to node but never on the right");
+                joined = Buffer.concat([this.branch[i], hashInProgress]);
+            }
+            else {
+                joined = Buffer.concat([hashInProgress, this.branch[i]]);
+            }
+            hashInProgress = this.digest(joined);
+            index = index.shrn(1);
+        }
+        return hashInProgress;
+    }
+}
+exports.CMMRBranch = CMMRBranch;
+class CMMRProof {
+    setProof(proof) {
+        if (!this.proofSequence) {
+            this.proofSequence = new Array();
+        }
+        this.proofSequence.push(proof);
+    }
+    dataByteLength() {
+        let length = 0;
+        length += varuint_1.default.encodingLength(this.proofSequence.length);
+        for (let i = 0; i < this.proofSequence.length; i++) {
+            length += this.proofSequence[i].dataByteLength();
+        }
+        return length;
+    }
+    toBuffer() {
+        const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
+        bufferWriter.writeCompactSize(this.proofSequence.length);
+        for (let i = 0; i < this.proofSequence.length; i++) {
+            bufferWriter.writeSlice(this.proofSequence[i].toBuffer());
+        }
+        return bufferWriter.buffer;
+    }
+    fromDataBuffer(buffer, offset) {
+        const reader = new bufferutils_1.default.BufferReader(buffer, offset);
+        let proofSequenceLength = reader.readCompactSize();
+        this.proofSequence = new Array();
+        for (let i = 0; i < proofSequenceLength; i++) {
+            let proof = new CMMRBranch();
+            reader.offset = proof.fromBuffer(reader.buffer, reader.offset);
+            this.setProof(proof);
+        }
+        return reader.offset;
+    }
+}
+exports.CMMRProof = CMMRProof;
+//template <typename NODE_TYPE, typename LAYER_TYPE=CChunkedLayer<NODE_TYPE>, typename LAYER0_TYPE=LAYER_TYPE, typename HASHALGOWRITER=CBLAKE2bWriter>
+class CMerkleMountainView {
+    constructor(mountainRange, viewSize = 0) {
+        this.mmr = mountainRange;
+        let maxSize = this.mmr.size();
+        if (viewSize > maxSize || viewSize == 0) {
+            viewSize = maxSize;
+        }
+        this.sizes = new Array();
+        this.sizes.push(viewSize);
+        for (viewSize >>= 1; viewSize; viewSize >>= 1) {
+            this.sizes.push(viewSize);
+        }
+        this.peakMerkle = new Array();
+        this.peaks = new Array();
+    }
+    // how many elements are stored in this view
+    size() {
+        // zero if empty or the size of the zeroeth layer
+        return this.sizes.length == 0 ? 0 : this.sizes[0];
+    }
+    CalcPeaks(force = false) {
+        // if we don't yet have calculated peaks, calculate them
+        if (force || (this.peaks.length == 0 && this.size() != 0)) {
+            // reset the peak merkle tree, in case this is forced
+            this.peaks = new Array;
+            this.peakMerkle = new Array;
+            for (let ht = 0; ht < this.sizes.length; ht++) {
+                // if we're at the top or the layer above us is smaller than 1/2 the size of this layer, rounded up, we are a peak
+                if (ht == (this.sizes.length - 1) || this.sizes[ht + 1] < ((this.sizes[ht] + 1) >> 1)) {
+                    this.peaks.splice(0, 0, this.mmr.getNode(ht, this.sizes[ht] - 1));
+                }
+            }
+        }
+    }
+    resize(newSize) {
+        if (newSize != this.size()) {
+            this.sizes = new Array;
+            this.peaks = new Array;
+            this.peakMerkle = new Array;
+            let maxSize = this.mmr.size();
+            if (newSize > maxSize) {
+                newSize = maxSize;
+            }
+            this.sizes.push(newSize);
+            newSize >>= 1;
+            while (newSize) {
+                this.sizes.push(newSize);
+                newSize >>= 1;
+            }
+        }
+        return this.size();
+    }
+    maxsize() {
+        return this.mmr.size() - 1;
+    }
+    GetPeaks() {
+        this.CalcPeaks();
+        return this.peaks;
+    }
+    GetRoot() {
+        let rootHash = Buffer.allocUnsafe(32);
+        if (this.size() > 0 && this.peakMerkle.length == 0) {
+            // get peaks and hash to a root
+            this.CalcPeaks();
+            let layerNum = 0, layerSize = this.peaks.length;
+            // with an odd number of elements below, the edge passes through
+            for (let passThrough = !!(layerSize & 1); layerNum == 0 || layerSize > 1; passThrough = !!(layerSize & 1), layerNum++) {
+                this.peakMerkle.push(Array());
+                let i;
+                let layerIndex = layerNum ? layerNum - 1 : 0; // layerNum is base 1
+                for (i = 0; i < (layerSize >> 1); i++) {
+                    if (layerNum > 0) {
+                        this.peakMerkle[this.peakMerkle.length - 1].push(this.peakMerkle[layerIndex][i << 1].CreateParentNode(this.peakMerkle[layerIndex][(i << 1) + 1]));
+                    }
+                    else {
+                        this.peakMerkle[this.peakMerkle.length - 1].push(this.peaks[i << 1].CreateParentNode(this.peaks[(i << 1) + 1]));
+                    }
+                }
+                if (passThrough) {
+                    if (layerNum > 0) {
+                        // pass the end of the prior layer through
+                        this.peakMerkle[this.peakMerkle.length - 1].push(this.peakMerkle[layerIndex][this.peakMerkle[layerIndex].length - 1]);
+                    }
+                    else {
+                        this.peakMerkle[this.peakMerkle.length].push(this.peaks[this.peaks.length - 1]);
+                    }
+                }
+                // each entry in the next layer should be either combined two of the prior layer, or a duplicate of the prior layer's end
+                layerSize = this.peakMerkle[this.peakMerkle.length - 1].length;
+            }
+            rootHash = this.peakMerkle[this.peakMerkle.length - 1][0].hash;
+        }
+        else if (this.peakMerkle.length > 0) {
+            rootHash = this.peakMerkle[this.peakMerkle.length - 1][0].hash;
+        }
+        return rootHash;
+    }
+    GetRootNode() {
+        // ensure merkle tree is calculated
+        let root = this.GetRoot();
+        if (root.length > 0) {
+            return this.peakMerkle[this.peakMerkle.length - 1][0];
+        }
+        else {
+            return null;
+        }
+    }
+    // return hash of the element at "index"
+    GetHash(index) {
+        if (index < this.size()) {
+            return this.mmr.layer0[index].hash;
+        }
+        else {
+            return Buffer.allocUnsafe(32);
+        }
+    }
+    GetBranchType() {
+        return BRANCH_MMRBLAKE_NODE;
+    }
+    // return a proof of the element at "pos"
+    GetProof(retProof, pos) {
+        // find a path from the indicated position to the root in the current view
+        let retBranch = new CMMRBranch();
+        if (pos < this.size()) {
+            // just make sure the peakMerkle tree is calculated
+            this.GetRoot();
+            // if we have leaf information, add it
+            let toAdd = this.mmr.layer0.getIndex(pos).GetLeafHash();
+            if (toAdd.length > 0) {
+                retBranch.branch.splice(retBranch.branch.length, 0, toAdd[0]);
+            }
+            let p = pos;
+            for (let l = 0; l < this.sizes.length; l++) {
+                if ((p & 1) === 1) {
+                    let proofHashes = this.mmr.getNode(l, p - 1).hash;
+                    retBranch.branch = retBranch.branch.concat(proofHashes);
+                    p >>= 1;
+                }
+                else {
+                    // make sure there is one after us to hash with or we are a peak and should be hashed with the rest of the peaks
+                    if (this.sizes[l] > (p + 1)) {
+                        let proofHashes = this.mmr.getNode(l, p + 1).hash;
+                        retBranch.branch = retBranch.branch.concat(proofHashes);
+                        p >>= 1;
+                    }
+                    else {
+                        /* for (auto &oneNode : peaks)
+                        {
+                            printf("peaknode: ");
+                            for (auto oneHash : oneNode.GetProofHash(oneNode))
+                            {
+                                printf("%s:", oneHash.GetHex().c_str());
+                            }
+                            printf("\n");
+                        } */
+                        // we are at a peak, the alternate peak to us, or the next thing we should be hashed with, if there is one, is next on our path
+                        let peakHash = this.mmr.getNode(l, p).hash;
+                        // linear search to find out which peak we are in the base of the peakMerkle
+                        for (p = 0; p < this.peaks.length; p++) {
+                            if (this.peaks[p].hash == peakHash) {
+                                break;
+                            }
+                        }
+                        // p is the position in the merkle tree of peaks
+                        if (p > this.peaks.length)
+                            throw new Error("peak not found");
+                        // move up to the top, which is always a peak of size 1
+                        let layerNum, layerSize;
+                        for (layerNum = 0, layerSize = this.peaks.length; layerNum == 0 || layerSize > 1; layerSize = this.peakMerkle[layerNum++].length) {
+                            let layerIndex = layerNum ? layerNum - 1 : 0; // layerNum is base 1
+                            // we are an odd member on the end (even index) and will not hash with the next layer above, we will propagate to its end
+                            if ((p < layerSize - 1) || (p & 1)) {
+                                if (p & 1) {
+                                    // hash with the one before us
+                                    if (layerNum > 0) {
+                                        let proofHashes = this.peakMerkle[layerIndex][p - 1].hash;
+                                        retBranch.branch = retBranch.branch.concat(proofHashes);
+                                    }
+                                    else {
+                                        let proofHashes = this.peaks[p - 1].hash;
+                                        retBranch.branch = retBranch.branch.concat(proofHashes);
+                                    }
+                                }
+                                else {
+                                    // hash with the one in front of us
+                                    if (layerNum > 0) {
+                                        let proofHashes = this.peakMerkle[layerIndex][p + 1].hash;
+                                        retBranch.branch = retBranch.branch.concat(proofHashes);
+                                    }
+                                    else {
+                                        let proofHashes = this.peaks[p + 1].hash;
+                                        retBranch.branch = retBranch.branch.concat(proofHashes);
+                                    }
+                                }
+                            }
+                            p >>= 1;
+                        }
+                        // finished
                         break;
                     }
                 }
-                let localPeakValue = yield this._getNodeValue(localPeakPosition);
-                nodeValue = yield this._verifyPath(localPeakPosition, localPeakValue, nodePosition);
             }
-            finally {
-                this.lock.release();
-            }
-            return nodeValue;
-        });
-    }
-    append(value, leafIndex) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.lock.acquire();
-            try {
-                let leafLength = yield this.getLeafLength();
-                if (leafIndex == undefined || leafIndex == leafLength) {
-                    let nodePosition = MMR.getNodePosition(leafLength);
-                    let mountainPositions = MMR.mountainPositions(MMR.localPeakPosition(leafLength, leafLength), nodePosition.i);
-                    yield this.db.set(value, nodePosition.i);
-                    yield this._hashUp(mountainPositions);
-                    yield this._setLeafLength(leafLength + 1);
-                }
-                else {
-                    throw new Error('Can only append to end of MMR (leaf ' + leafLength + '). Index ' + leafIndex + ' given.');
-                }
-            }
-            finally {
-                this.lock.release();
-            }
-        });
-    }
-    appendMany(values, startLeafIndex) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (startLeafIndex == undefined) {
-                startLeafIndex = yield this.getLeafLength();
-            }
-            for (let i = 0; i < values.length; i++) {
-                yield this.append(values[i], startLeafIndex + i);
-            }
-        });
-    }
-    getRoot(leafIndex) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let peakValues = [];
-            yield this.lock.acquire();
-            try {
-                if (!leafIndex) {
-                    leafIndex = (yield this.getLeafLength()) - 1;
-                }
-                let peakPositions = MMR.peakPositions(leafIndex);
-                for (let i = 0; i < peakPositions.length; i++) {
-                    peakValues.push(yield this._getNodeValue(peakPositions[i]));
-                }
-            }
-            finally {
-                this.lock.release();
-            }
-            // note: a single peak differs from its MMR root in that it gets hashed a second time
-            return this.digest([...peakValues]);
-        });
-    }
-    getNodeLength() {
-        return __awaiter(this, void 0, void 0, function* () { return MMR.getNodePosition(yield this.getLeafLength()).i; });
-    }
-    getLeafLength() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this._leafLength == undefined) { // dirty length
-                this._leafLength = yield this.db.getLeafLength();
-            }
-            return this._leafLength;
-        });
-    }
-    delete(leafIndex) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.lock.acquire();
-            try {
-                let leafLength = yield this.getLeafLength();
-                if (leafIndex < leafLength) {
-                    yield this._setLeafLength(leafIndex);
-                }
-            }
-            finally {
-                this.lock.release();
-            }
-        });
-    }
-    getProof(leafIndexes, referenceTreeLength) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let proofMmr;
-            yield this.lock.acquire();
-            try {
-                referenceTreeLength = referenceTreeLength || (yield this.getLeafLength());
-                let positions = MMR.proofPositions(leafIndexes, referenceTreeLength);
-                let nodes = {};
-                let nodeIndexes = Object.keys(positions);
-                yield Promise.all(nodeIndexes.map((i) => __awaiter(this, void 0, void 0, function* () {
-                    let nodeValue = yield this._getNodeValue(positions[i]);
-                    nodes[i] = nodeValue;
-                })));
-                proofMmr = new MMR(new MemoryBasedDb(referenceTreeLength, nodes));
-            }
-            finally {
-                this.lock.release();
-                return proofMmr;
-            }
-        });
-    }
-    _getNodeValue(position) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // caller's responsibility to request a position within leafLength
-            let nodeValue = yield this.db.get(position.i);
-            if (nodeValue) {
-                return nodeValue;
-            }
-            else if (position.h > 0) { // implied node
-                let leftChildValue = yield this._getNodeValue(MMR.leftChildPosition(position));
-                let rightChildValue = yield this._getNodeValue(MMR.rightChildPosition(position));
-                return this.digest([leftChildValue, rightChildValue]);
-            }
-            else {
-                throw new Error('Missing node in db');
-            }
-        });
-    }
-    _verifyPath(currentPosition, currentValue, destinationPosition) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (currentPosition.i == destinationPosition.i) { // base case
-                return currentValue;
-            }
-            else {
-                let leftChildPosition = MMR.leftChildPosition(currentPosition);
-                let rightChildPosition = MMR.rightChildPosition(currentPosition);
-                let leftValue = yield this._getNodeValue(leftChildPosition);
-                let rightValue = yield this._getNodeValue(rightChildPosition);
-                if (!currentValue.equals(this.digest([leftValue, rightValue]))) {
-                    throw new Error('Hash mismatch of node #' + currentPosition.i + ' and its children');
-                }
-                if (destinationPosition.i > currentPosition.i - Math.pow(2, currentPosition.h) - currentPosition.h + 1) { //umm yeah, check this line
-                    return this._verifyPath(rightChildPosition, rightValue, destinationPosition);
-                }
-                else {
-                    return this._verifyPath(leftChildPosition, leftValue, destinationPosition);
-                }
-            }
-        });
-    }
-    _setLeafLength(leafLength) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.db.setLeafLength(leafLength);
-            this._leafLength = leafLength;
-        });
-    }
-    _hashUp(positionPairs) {
-        return __awaiter(this, void 0, void 0, function* () {
-            for (let i = positionPairs.length - 1; i >= 0; i--) {
-                let leftValue = yield this._getNodeValue(positionPairs[i][0]);
-                let rightValue = yield this._getNodeValue(positionPairs[i][1]);
-                let writeIndex = MMR.parentIndex(positionPairs[i][0]);
-                yield this.db.set(this.digest([leftValue, rightValue]), writeIndex);
-            }
-        });
-    }
-    static leftChildPosition(position) {
-        if (position.h <= 0) {
-            throw new Error('Height 0 does not have child');
+            retBranch.branchType = this.GetBranchType();
+            retBranch.nSize = this.size();
+            retBranch.nIndex = pos;
+            retProof.setProof(retBranch);
+            return true;
         }
-        return new Position(position.i - Math.pow(2, position.h), position.h - 1, false);
+        return false;
     }
-    static rightChildPosition(position) {
-        if (position.h <= 0) {
-            throw new Error('Height 0 does not have child');
+    // return a vector of the bits, either 1 or 0 in each byte, to represent both the size
+    // of the proof by the size of the vector, and the expected bit in each position for the given
+    // position in a Merkle Mountain View of the specified size
+    GetProofBits(pos, mmvSize) {
+        //NOTE: Not implmented.
+    }
+    ;
+}
+exports.CMerkleMountainView = CMerkleMountainView;
+const GetMMRProofIndex = (pos, mmvSize, extraHashes) => {
+    let index = new bn_js_1.BN(0);
+    let layerSizes = [];
+    let merkleSizes = [];
+    let peakIndexes = [];
+    let bitPos = 0;
+    //start at the beginning
+    //create a simulation of a mmr based on size
+    if (!(pos > 0 && pos < mmvSize))
+        return new bn_js_1.BN(0);
+    //create an array of all the sizes
+    while (mmvSize) {
+        layerSizes.push(mmvSize);
+        mmvSize = mmvSize >> 1;
+    }
+    for (let height = 0; height < layerSizes.length; height++) {
+        if (height == layerSizes.length - 1 || layerSizes[height] & 1) {
+            peakIndexes.push(height);
         }
-        return new Position(position.i - 1, position.h - 1, true);
     }
-    static siblingPosition(position) {
-        let multiplier = position.r ? -1 : 1;
-        return new Position(position.i + multiplier * (Math.pow(2, (position.h + 1)) - 1), position.h, !position.r);
+    //array flip peak indexes
+    peakIndexes.reverse();
+    let layerNum = 0;
+    let layerSize = peakIndexes.length;
+    for (let passThrough = (layerSize & 1); layerNum == 0 || layerSize > 1; passThrough = (layerSize & 1), layerNum++) {
+        layerSize = (layerSize >> 1) + passThrough;
+        if (layerSize) {
+            merkleSizes.push(layerSize);
+        }
     }
-    static parentIndex(position) {
-        if (position.r) {
-            return position.i + 1;
+    //flip the merklesizes
+    for (let i = 0; i < extraHashes; i++) {
+        bitPos++;
+    }
+    let p = pos;
+    for (let l = 0; l < layerSizes.length; l++) {
+        if (p & 1) {
+            index = index.or(new bn_js_1.BN(1).shln(bitPos++));
+            p >>= 1;
+            for (let i = 0; i < extraHashes; i++) {
+                bitPos++;
+            }
         }
         else {
-            return position.i + Math.pow(2, (position.h + 1));
-        }
-    }
-    static peakPositions(leafIndex) {
-        let currentPosition = this.godPeakFromLeafIndex(leafIndex);
-        let peakPositions = [];
-        while (leafIndex >= 0) {
-            currentPosition = this.leftChildPosition(currentPosition);
-            if (leafIndex >= Math.pow(2, currentPosition.h) - 1) {
-                peakPositions.push(currentPosition);
-                currentPosition = this.siblingPosition(currentPosition);
-                leafIndex -= Math.pow(2, currentPosition.h); // leafIndex becomes a kindof accumulator
-            }
-        }
-        return peakPositions;
-    }
-    static localPeakPosition(leafIndex, leafLength) {
-        let lastLeafIndex = leafLength <= leafIndex ? leafIndex : leafLength - 1;
-        return MMR._localPeakPosition(leafIndex, MMR.peakPositions(lastLeafIndex));
-    }
-    static _localPeakPosition(leafIndex, peakPositions) {
-        for (let i = 0; i < peakPositions.length; i++) {
-            let currentRange = Math.pow(2, (peakPositions[i].h));
-            if (leafIndex < currentRange) {
-                return peakPositions[i];
-            }
-            else {
-                leafIndex -= currentRange;
-            }
-        }
-    }
-    static mountainPositions(currentPosition, targetNodeIndex) {
-        let mountainPositions = [];
-        while (currentPosition.h > 0) {
-            let children = [this.leftChildPosition(currentPosition), this.rightChildPosition(currentPosition)];
-            mountainPositions.push(children);
-            if (targetNodeIndex > currentPosition.i - Math.pow(2, currentPosition.h) - currentPosition.h + 1) {
-                currentPosition = children[1];
-            }
-            else {
-                currentPosition = children[0];
-            }
-        }
-        return mountainPositions;
-    }
-    static godPeakFromLeafIndex(leafIndex) {
-        let peakHeight = 0;
-        while (Math.pow(2, peakHeight) <= leafIndex + 1) {
-            peakHeight++;
-        }
-        return new Position(Math.pow(2, (peakHeight + 1)) - 2, peakHeight, false);
-    }
-    static getNodePosition(leafIndex) {
-        let currentPosition = this.godPeakFromLeafIndex(leafIndex);
-        let accumulator = 0;
-        while (currentPosition.h > 0) {
-            let serviceRange = Math.pow(2, (currentPosition.h - 1));
-            if (leafIndex >= accumulator + serviceRange) {
-                currentPosition = this.rightChildPosition(currentPosition);
-                accumulator += serviceRange;
-            }
-            else {
-                currentPosition = this.leftChildPosition(currentPosition);
-            }
-        }
-        return currentPosition;
-    }
-    static proofPositions(leafIndexes, referenceTreeLength) {
-        let positions = {};
-        let finalPeakPositions = MMR.peakPositions(referenceTreeLength - 1);
-        // add peak positions
-        for (let i = 0; i < finalPeakPositions.length; i++) { // log(n)/2
-            positions[finalPeakPositions[i].i] = finalPeakPositions[i];
-        }
-        //add local mountain proof positions for each leaf
-        for (let i = 0; i < leafIndexes.length; i++) { // k*2log(n)
-            let nodePosition = MMR.getNodePosition(leafIndexes[i]);
-            let finalLocalPeak = MMR._localPeakPosition(leafIndexes[i], finalPeakPositions);
-            // positions[finalLocalPeak.i] = finalLocalPeak // ?? should already have all peaks
-            let mountainPositions = MMR.mountainPositions(finalLocalPeak, nodePosition.i);
-            for (let j = 0; j < mountainPositions.length; j++) {
-                positions[mountainPositions[j][0].i] = mountainPositions[j][0];
-                positions[mountainPositions[j][1].i] = mountainPositions[j][1];
-            }
-        }
-        // find implied positions (ones which can be calculated based on child positions that are present)
-        let positionIndexes = Object.keys(positions);
-        let impliedIndexes = [];
-        for (let j = 0; j < positionIndexes.length; j++) { // k*log(n)
-            if (positions[positionIndexes[j]].h > 0) {
-                let hasLeftChild = MMR._hasPosition(positions, MMR.leftChildPosition(positions[positionIndexes[j]]));
-                let hasRightChild = MMR._hasPosition(positions, MMR.rightChildPosition(positions[positionIndexes[j]]));
-                if (hasLeftChild && hasRightChild) {
-                    impliedIndexes.push(positionIndexes[j]); // don't remove them yet because recursion will be slower
+            if (layerSizes[l] > (p + 1)) {
+                bitPos++;
+                p >>= 1;
+                for (let i = 0; i < extraHashes; i++) {
+                    bitPos++;
                 }
             }
-        }
-        // finally remove implied nodes
-        for (var i = 0; i < impliedIndexes.length; i++) { // k*log(n)
-            impliedIndexes[i];
-            delete positions[impliedIndexes[i]];
-        }
-        return positions;
-    }
-    static _hasPosition(nodes, position) {
-        let has = !!nodes[position.i];
-        if (!has && position.h > 0) {
-            if (MMR._hasPosition(nodes, MMR.leftChildPosition(position))
-                && MMR._hasPosition(nodes, MMR.rightChildPosition(position))) {
-                has = true;
+            else {
+                for (p = 0; p < peakIndexes.length; p++) {
+                    if (peakIndexes[p] == l) {
+                        break;
+                    }
+                }
+                for (let layerNum = -1, layerSize = peakIndexes.length; layerNum == -1 || layerSize > 1; layerSize = merkleSizes[++layerNum]) {
+                    if (p < (layerSize - 1) || (p & 1)) {
+                        if (p & 1) {
+                            // hash with the one before us
+                            index = index.or(new bn_js_1.BN(1).shln(bitPos++));
+                            for (let i = 0; i < extraHashes; i++) {
+                                bitPos++;
+                            }
+                        }
+                        else {
+                            // hash with the one in front of us
+                            bitPos++;
+                            for (let i = 0; i < extraHashes; i++) {
+                                bitPos++;
+                            }
+                        }
+                    }
+                    p >>= 1;
+                }
+                break;
             }
         }
-        return has;
     }
-}
-exports.MMR = MMR;
-class MemoryBasedDb {
-    constructor(...args) {
-        if (args[0] == undefined || typeof args[0] == 'number') {
-            this.leafLength = args[0] || 0;
-            this.nodes = args[1] || {};
-        }
-    }
-    get(index) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.nodes[index];
-        });
-    }
-    set(value, index) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.nodes[index] = value;
-        });
-    }
-    getLeafLength() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.leafLength;
-        });
-    }
-    setLeafLength(leafLength) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.leafLength = leafLength;
-        });
-    }
-    getNodes() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.nodes;
-        });
-    }
-}
-exports.MemoryBasedDb = MemoryBasedDb;
+    return index;
+};

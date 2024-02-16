@@ -292,21 +292,28 @@ function VectorEncodeVDXFUni(obj) {
     const values = keys.map((item) => obj[item]);
     var bufsize = 0;
     for (var i = 0; i < keys.length; i++) {
-        if (vdxf_2.CVDXF_Data[keys[i]]) {
-            bufsize += vdxf_2.CVDXF_Data[keys[i]].getbytes(values[i]);
+        if (keys[i] == vdxf_2.DATA_TYPE_STRING.vdxfid) {
+            bufsize += vdxf_1.HASH160_BYTE_LENGTH;
+            bufsize += 1; // varint length 1
+            bufsize += 2; // ss type + ver (lengths)
+            bufsize += varuint_1.default.encodingLength(Buffer.from(values[i], 'utf8').length);
+            bufsize += Buffer.from(values[i], 'utf8').length;
         }
         else {
             throw new Error("VDXF key not found: " + keys[i]);
         }
+        // TODO: add alltypes
     }
     const bufferWriter = new BufferWriter(Buffer.alloc(bufsize));
     for (var i = 0; i < keys.length; i++) {
-        if (vdxf_2.CVDXF_Data[keys[i]] && vdxf_2.CVDXF_Data[keys[i]].qualifiedname.name === "vrsc::data.type.string") {
-            bufferWriter.writeSlice((0, address_1.fromBase58Check)(vdxf_2.CVDXF_Data[keys[i]].vdxfid).hash);
+        if (keys[i] === vdxf_2.DATA_TYPE_STRING.vdxfid) {
+            bufferWriter.writeSlice((0, address_1.fromBase58Check)(keys[i]).hash);
             bufferWriter.writeVarInt(new bn_js_1.BN(1));
             bufferWriter.writeVarInt(new bn_js_1.BN(Buffer.from(values[i], 'utf8').length + 3)); //NOTE 3 is from ss type + ver + vdxfidver 
-            bufferWriter.writeCompactSize(Buffer.from(values[i], 'utf8').length);
-            bufferWriter.writeSlice(Buffer.from(values[i], 'utf8'));
+            bufferWriter.writeVarSlice(Buffer.from(values[i], 'utf8'));
+        }
+        else {
+            throw new Error("VDXF key not found: " + keys[i]);
         }
         // TODO: add alltypes
     }

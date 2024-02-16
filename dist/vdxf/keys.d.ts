@@ -5,6 +5,10 @@ export interface VDXFKeyInterface {
         name: string;
         namespace: string;
     };
+    bounddata?: {
+        vdxfkey: string;
+    };
+    indexid?: string;
 }
 export declare const VERUSPAY_INVOICE_VDXF_KEY: VDXFKeyInterface;
 export declare const IDENTITY_AUTH_SIG_VDXF_KEY: VDXFKeyInterface;
@@ -44,12 +48,7 @@ export declare const SIGNED_SESSION_OBJECT_DATA: VDXFKeyInterface;
 export declare const SIGNED_SESSION_OBJECT: VDXFKeyInterface;
 export declare const CURRENCY_ADDRESS: VDXFKeyInterface;
 export declare const ATTESTATION_RECIPIENT: VDXFKeyInterface;
-interface VDXFIdentityData extends VDXFKeyInterface {
-    detail: string;
-    name: string;
-}
-export declare const ATTESTATION_IDENTITY_DATA: {
-    [vdxfid: string]: VDXFIdentityData;
-};
-export declare const CVDXF_Data: {};
-export {};
+export declare const ATTESTATION_OBJECT: VDXFKeyInterface;
+export declare const ATTESTATION_VIEW_RESPONSE: VDXFKeyInterface;
+export declare const ATTESTATION_TYPE: VDXFKeyInterface;
+export declare const DATA_TYPE_STRING: VDXFKeyInterface;

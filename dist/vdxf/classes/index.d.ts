@@ -23,5 +23,6 @@ export { ProvisioningResultInterface as LoginConsentProvisioningResultInterface 
 export { Hash160 } from './Hash160';
 export { RedirectUri, Subject, ProvisioningInfo, RequestedPermission, Audience, AltAuthFactor, } from "./Challenge";
 export { Attestation } from './Attestation';
+export { AttestationData, AttestationDataType } from './attestationData';
 export { ProvisioningTxid } from './provisioning/ProvisioningResult';
 export { Context } from './Context';

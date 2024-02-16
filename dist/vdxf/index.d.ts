@@ -3,6 +3,8 @@ import { VDXFKeyInterface } from './keys';
 import { BigNumber } from "../utils/types/BigNumber";
 export * from './keys';
 export * from './scopes';
+export * from './keymap';
+export * from './identityDataKeys';
 export interface VDXFObjectInterface {
     vdxfkey: string;
     toString: () => string;
@@ -80,4 +82,7 @@ export declare class VerusIDSignature extends VDXFObject {
     fromDataBuffer(buffer: Buffer, offset?: number): number;
     static fromJson(data: VerusIDSignatureJson): VerusIDSignature;
     toJson(): VerusIDSignatureJson;
+}
+export declare class PNGImageVdxfObject extends BufferDataVdxfObject {
+    constructor(data?: string, vdxfkey?: string);
 }

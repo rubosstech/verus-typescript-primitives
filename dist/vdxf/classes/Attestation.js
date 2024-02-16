@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Attestation = void 0;
+exports.CPartialAttestationProof = exports.Attestation = void 0;
 const varuint_1 = require("../../utils/varuint");
 const bufferutils_1 = require("../../utils/bufferutils");
 const createHash = require("create-hash");
@@ -17,44 +17,34 @@ const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
 const __1 = require("../");
 const MMR_1 = require("./MMR");
+const keys_1 = require("../keys");
+const Hash160_1 = require("./Hash160");
+const attestationData_1 = require("./attestationData");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class Attestation extends __1.VDXFObject {
-    constructor(vdxfkey = "", data) {
+    constructor(data, vdxfkey = keys_1.ATTESTATION_OBJECT.vdxfid) {
         super(vdxfkey);
         if (data) {
-            this.components = data.components || null;
-            this.signatures = data.signatures || null;
-            this.mmr = data.mmr || null;
+            this.data = data.data;
+            this.signature = data.signature;
+            this.mmr = data.mmr;
+            this.system_id = data.system_id;
+            this.signing_id = data.signing_id;
         }
     }
     dataByteLength() {
         let byteLength = 0;
-        byteLength += varuint_1.default.encodingLength(this.components.size);
-        for (const [key, item] of this.components) {
-            byteLength += varuint_1.default.encodingLength(key);
-            byteLength += 20; //key
-            byteLength += 32; //salt
-            byteLength += varuint_1.default.encodingLength(Buffer.from(item.value, "utf8").length);
-            byteLength += Buffer.from(item.value, "utf8").length;
-        }
-        const sigKeys = Object.keys(this.signatures);
-        byteLength += varuint_1.default.encodingLength(sigKeys.length);
-        for (const item of sigKeys) {
-            byteLength += 20; //Attestor
-            byteLength += 20; //System
-            byteLength += varuint_1.default.encodingLength(Buffer.from(this.signatures[item].signature, "base64").length);
-            byteLength += Buffer.from(this.signatures[item].signature, "base64").length;
-        }
+        byteLength += this.data.dataByteLength();
+        const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
+        const _signing_id = Hash160_1.Hash160.fromAddress(this.signing_id);
+        const _signature = this.signature
+            ? this.signature
+            : new __1.VerusIDSignature({ signature: "" });
+        byteLength += _system_id.byteLength();
+        byteLength += _signing_id.byteLength();
+        byteLength += _signature.byteLength();
         if (this.mmr) {
-            const nodes = this.mmr.db.nodes;
-            const mmrKeys = Object.keys(nodes);
-            byteLength += varuint_1.default.encodingLength(this.mmr.db.leafLength);
-            byteLength += varuint_1.default.encodingLength(mmrKeys.length);
-            for (const item of mmrKeys) {
-                byteLength += varuint_1.default.encodingLength(parseInt(item));
-                byteLength += varuint_1.default.encodingLength(nodes[item].length);
-                byteLength += nodes[item].length;
-            }
+            byteLength += this.mmr.getbyteLength();
         }
         else {
             byteLength += varuint_1.default.encodingLength(0);
@@ -63,29 +53,17 @@ class Attestation extends __1.VDXFObject {
     }
     toDataBuffer() {
         const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
-        bufferWriter.writeCompactSize(this.components.size);
-        for (const [key, item] of this.components) {
-            bufferWriter.writeCompactSize(key);
-            bufferWriter.writeSlice((0, address_1.fromBase58Check)(item.attestationKey).hash);
-            bufferWriter.writeSlice(Buffer.from(item.salt, "hex"));
-            bufferWriter.writeVarSlice(Buffer.from(item.value, "utf8"));
-        }
-        const objKeys = Object.keys(this.signatures);
-        bufferWriter.writeCompactSize(objKeys.length);
-        for (const item of objKeys) {
-            bufferWriter.writeSlice((0, address_1.fromBase58Check)(item).hash);
-            bufferWriter.writeSlice((0, address_1.fromBase58Check)(this.signatures[item].system).hash);
-            bufferWriter.writeVarSlice(Buffer.from(this.signatures[item].signature, "base64"));
-        }
+        bufferWriter.writeSlice(this.data.toDataBuffer());
+        const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
+        const _signing_id = Hash160_1.Hash160.fromAddress(this.signing_id);
+        const _signature = this.signature
+            ? this.signature
+            : new __1.VerusIDSignature({ signature: "" });
+        bufferWriter.writeSlice(_system_id.toBuffer());
+        bufferWriter.writeSlice(_signing_id.toBuffer());
+        bufferWriter.writeSlice(_signature.toBuffer());
         if (this.mmr) {
-            bufferWriter.writeCompactSize(this.mmr.db.leafLength);
-            const nodes = this.mmr.db.nodes;
-            const mmrKeys = Object.keys(nodes);
-            bufferWriter.writeCompactSize(mmrKeys.length);
-            for (const item of mmrKeys) {
-                bufferWriter.writeCompactSize(parseInt(item));
-                bufferWriter.writeVarSlice(nodes[item]);
-            }
+            bufferWriter.writeVarSlice(this.mmr.toBuffer());
         }
         else {
             bufferWriter.writeCompactSize(0);
@@ -95,23 +73,15 @@ class Attestation extends __1.VDXFObject {
     fromDataBuffer(buffer, offset) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         const attestationsByteLength = reader.readCompactSize(); //dummy read
-        const componentsLength = reader.readCompactSize();
-        this.components = new Map();
-        for (var i = 0; i < componentsLength; i++) {
-            const key = reader.readCompactSize();
-            const attestationKey = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
-            const salt = Buffer.from(reader.readSlice(32)).toString('hex');
-            const value = Buffer.from(reader.readVarSlice()).toString('utf8');
-            this.components.set(key, { attestationKey, salt, value });
+        if (!this.data) {
+            this.data = new attestationData_1.AttestationData();
         }
-        const signaturesSize = reader.readCompactSize();
-        this.signatures = {};
-        for (var i = 0; i < signaturesSize; i++) {
-            const attestor = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
-            const system = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
-            const signature = reader.readVarSlice().toString('base64');
-            this.signatures[attestor] = { signature, system };
-        }
+        reader.offset = this.data.fromDataBuffer(reader.buffer, reader.offset);
+        this.system_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
+        this.signing_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
+        const _sig = new __1.VerusIDSignature();
+        reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
+        this.signature = _sig;
         const leafLength = reader.readCompactSize();
         if (leafLength > 0) {
             const referenceTreeLength = reader.readCompactSize();
@@ -122,48 +92,53 @@ class Attestation extends __1.VDXFObject {
                 nodes[nodeIndex] = signature;
             }
             if (Object.keys(nodes).length > 0) {
-                this.mmr = new MMR_1.MMR(new MMR_1.MemoryBasedDb(leafLength, nodes));
+                this.mmr = new MMR_1.CMerkleMountainRange().fromBuffer(reader.buffer);
             }
         }
         return reader.offset;
     }
     createMMR() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.mmr) {
-                this.mmr = new MMR_1.MMR();
-            }
-            else {
-                return this.mmr;
-            }
-            for (const [key, item] of this.components) {
-                yield this.mmr.append(this.getHash(key), key);
-            }
+        if (!this.mmr) {
+            this.mmr = new MMR_1.CMerkleMountainRange();
+        }
+        else {
             return this.mmr;
-        });
+        }
+        for (const [key, item] of this.data.components) {
+            this.mmr.add(new MMR_1.CMMRNode(this.getHash(key)));
+        }
+        return this.mmr;
     }
     rootHash() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.mmr) {
-                yield this.createMMR();
-            }
-            return yield this.mmr.getRoot();
-        });
+        if (!this.mmr) {
+            this.createMMR();
+        }
+        const view = new MMR_1.CMerkleMountainView(this.mmr);
+        return view.GetRoot();
     }
     // returns an attestation with a sparse MMR containing the leaves specified
     getProof(keys) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const itemMaps = new Map();
-            keys.forEach((key, index) => { itemMaps.set(index, this.components.get(key)); });
-            const reply = new Attestation(this.vdxfkey, { components: itemMaps, mmr: yield this.mmr.getProof(keys, null), signatures: this.signatures });
-            return reply;
+        const view = new MMR_1.CMerkleMountainView(this.mmr);
+        const attestationItems = new attestationData_1.AttestationData();
+        const localCMMR = new MMR_1.CMMRProof();
+        keys.forEach((key, index) => {
+            view.GetProof(localCMMR, key);
+            attestationItems.components.set(key, this.data.components.get(key));
         });
+        const attestationAndProof = new CPartialAttestationProof({
+            proof: localCMMR,
+            componentsArray: attestationItems,
+            system_id: this.system_id,
+            signing_id: this.signing_id,
+        });
+        return attestationAndProof;
     }
     checkProof() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                for (const [key, item] of this.components) {
+                for (const [key, item] of this.data.components) {
                     const hash = this.getHash(key);
-                    const proof = yield this.mmr.getProof([key], null);
+                    const proof = null; //await this.mmr.getProof([key], null);
                     if (hash !== proof) {
                         throw new Error("Attestation not found in MMR");
                     }
@@ -175,15 +150,88 @@ class Attestation extends __1.VDXFObject {
         });
     }
     getHash(key) {
-        const bufferWriter = new BufferWriter(Buffer.alloc(20 +
-            32 +
-            varuint_1.default.encodingLength(Buffer.from(this.components.get(key).value, "utf8").length) +
-            Buffer.from(this.components.get(key).value, "utf8").length));
-        bufferWriter.writeSlice((0, address_1.fromBase58Check)(this.components.get(key).attestationKey).hash);
-        bufferWriter.writeSlice(Buffer.from(this.components.get(key).salt, "hex"));
-        bufferWriter.writeCompactSize(Buffer.from(this.components.get(key).value, "utf8").length);
-        bufferWriter.writeSlice(Buffer.from(this.components.get(key).value, "utf8"));
-        return createHash("sha256").update(bufferWriter.buffer).digest();
+        let returnBuffer;
+        returnBuffer = this.data.components.get(key).toBuffer();
+        return createHash("sha256").update(returnBuffer).digest();
     }
 }
 exports.Attestation = Attestation;
+Attestation.TYPE_STRING = 1;
+Attestation.TYPE_BYTES = 2;
+Attestation.TYPE_BASE64 = 3;
+Attestation.TYPE_URL = 4;
+class CPartialAttestationProof extends __1.VDXFObject {
+    constructor(data, vdxfkey = keys_1.ATTESTATION_VIEW_RESPONSE.vdxfid) {
+        super(vdxfkey);
+        this.EType = {
+            TYPE_INVALID: 0,
+            TYPE_ATTESTATION: 1,
+            TYPE_LAST: 1
+        };
+        this.type = this.EType.TYPE_ATTESTATION;
+        if (data) {
+            this.proof = data.proof || new MMR_1.CMMRProof();
+            this.componentsArray = data.componentsArray || new attestationData_1.AttestationData();
+            this.system_id = data.system_id;
+            this.signing_id = data.signing_id;
+        }
+    }
+    dataByteLength() {
+        let byteLength = 0;
+        byteLength += varuint_1.default.encodingLength(this.type);
+        byteLength += this.proof.dataByteLength();
+        byteLength += this.componentsArray.dataByteLength();
+        const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
+        const _signing_id = Hash160_1.Hash160.fromAddress(this.signing_id);
+        const _signature = this.signature
+            ? this.signature
+            : new __1.VerusIDSignature({ signature: "" });
+        byteLength += _system_id.byteLength();
+        byteLength += _signing_id.byteLength();
+        byteLength += _signature.byteLength();
+        return byteLength;
+    }
+    toDataBuffer() {
+        const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()));
+        bufferWriter.writeCompactSize(this.type);
+        bufferWriter.writeSlice(this.proof.toBuffer());
+        bufferWriter.writeSlice(this.componentsArray.toDataBuffer());
+        const _system_id = Hash160_1.Hash160.fromAddress(this.system_id);
+        const _signing_id = Hash160_1.Hash160.fromAddress(this.signing_id);
+        const _signature = this.signature
+            ? this.signature
+            : new __1.VerusIDSignature({ signature: "" });
+        bufferWriter.writeSlice(_system_id.toBuffer());
+        bufferWriter.writeSlice(_signing_id.toBuffer());
+        bufferWriter.writeSlice(_signature.toBuffer());
+        return bufferWriter.buffer;
+    }
+    fromDataBuffer(buffer, offset) {
+        const reader = new bufferutils_1.default.BufferReader(buffer, offset);
+        const lengthOfBuffer = reader.readCompactSize(); //dummy read
+        this.type = reader.readCompactSize();
+        this.proof = new MMR_1.CMMRProof();
+        reader.offset = this.proof.fromDataBuffer(reader.buffer, reader.offset);
+        this.componentsArray = new attestationData_1.AttestationData();
+        reader.offset = this.componentsArray.fromDataBuffer(reader.buffer, reader.offset);
+        this.system_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
+        this.signing_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
+        const _sig = new __1.VerusIDSignature();
+        reader.offset = _sig.fromBuffer(reader.buffer, reader.offset);
+        this.signature = _sig;
+        return reader.offset;
+    }
+    checkProof(item) {
+        const dataHash = this.componentsArray.getHash(item);
+        let currentIndex = 0;
+        const component = this.componentsArray.components.get(item);
+        for (let value of this.componentsArray.components.values()) {
+            if (component == value) {
+                return this.proof.proofSequence[currentIndex].safeCheck(dataHash);
+            }
+            currentIndex++;
+        }
+        return Buffer.allocUnsafe(32);
+    }
+}
+exports.CPartialAttestationProof = CPartialAttestationProof;
