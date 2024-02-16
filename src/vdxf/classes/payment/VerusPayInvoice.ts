@@ -22,6 +22,7 @@ export const VERUSPAY_VERSION_CURRENT = new BN(3, 10)
 export const VERUSPAY_VERSION_FIRSTVALID = new BN(3, 10)
 export const VERUSPAY_VERSION_LASTVALID = new BN(3, 10)
 export const VERUSPAY_VERSION_SIGNED = new BN('80000000', 16)
+export const VERUSPAY_VERSION_MASK = VERUSPAY_VERSION_SIGNED;
 
 export interface VerusPayInvoiceInterface {
   details: VerusPayInvoiceDetails;
@@ -66,6 +67,14 @@ export class VerusPayInvoice extends VDXFObject {
 
     if (request.version) this.version = request.version;
     else this.version = VERUSPAY_VERSION_CURRENT;
+  }
+
+  getVersionNoFlags(): BigNumber {
+    return this.version.and(VERUSPAY_VERSION_MASK.notn(VERUSPAY_VERSION_MASK.bitLength()))
+  }
+
+  isValidVersion(): boolean {
+    return this.getVersionNoFlags().gte(VERUSPAY_VERSION_FIRSTVALID) && this.getVersionNoFlags().lte(VERUSPAY_VERSION_LASTVALID);
   }
 
   isSigned() {

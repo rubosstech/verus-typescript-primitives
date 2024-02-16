@@ -1,4 +1,5 @@
 /// <reference types="node" />
+/// <reference types="bn.js" />
 import { VDXFKeyInterface } from './keys';
 import { BigNumber } from "../utils/types/BigNumber";
 export * from './keys';
@@ -17,6 +18,7 @@ export interface VDXFObjectInterface {
     fromBuffer: (buffer: Buffer, offset: number) => number;
     dataByteLength: () => number;
     byteLength: () => number;
+    getVersionNoFlags: () => BigNumber;
 }
 export interface VerusIDSignatureInterface {
     signature: string;
@@ -31,11 +33,13 @@ export declare class VDXFObject implements VDXFObjectInterface {
     version: BigNumber;
     serializekey: boolean;
     constructor(key?: string, serializekey?: boolean);
+    getVersionNoFlags(): import("bn.js");
     toJson(): {};
     toString(includeKey?: boolean): string;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
+    isValidVersion(): boolean;
     fromBuffer(buffer: Buffer, offset?: number, vdxfkey?: string): number;
     byteLength(includeKey?: boolean): number;
     toBuffer(includeKey?: boolean): Buffer;

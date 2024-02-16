@@ -2,8 +2,47 @@ import { BN } from "bn.js";
 import { VerusPayInvoice, VerusPayInvoiceDetails } from "../../vdxf/classes";
 import { DEST_PKH, TransferDestination } from "../../pbaas/TransferDestination";
 import { fromBase58Check } from "../../utils/address";
+import { VERUSPAY_VERSION_FIRSTVALID, VERUSPAY_VERSION_LASTVALID } from "../../vdxf/classes/payment/VerusPayInvoice";
 
 describe('Serializes and deserializes VerusPay invoice', () => {
+  test('basic verus pay invoice with invalid version', async () => {
+    const details = new VerusPayInvoiceDetails({
+      amount: new BN(10000000000, 10),
+      destination: new TransferDestination({
+        type: DEST_PKH,
+        destination_bytes: fromBase58Check("R9J8E2no2HVjQmzX6Ntes2ShSGcn7WiRcx").hash
+      }),
+      requestedcurrencyid: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq"
+    })
+
+    const inv = new VerusPayInvoice({
+      details,
+      version: VERUSPAY_VERSION_FIRSTVALID.sub(new BN(1))
+    })
+
+    const invbuf = inv.toBuffer()
+    const _inv = new VerusPayInvoice()
+    expect(() => _inv.fromBuffer(invbuf)).toThrow("Unsupported version for vdxf object.")
+
+    const details2 = new VerusPayInvoiceDetails({
+      amount: new BN(10000000000, 10),
+      destination: new TransferDestination({
+        type: DEST_PKH,
+        destination_bytes: fromBase58Check("R9J8E2no2HVjQmzX6Ntes2ShSGcn7WiRcx").hash
+      }),
+      requestedcurrencyid: "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq"
+    })
+
+    const inv2 = new VerusPayInvoice({
+      details: details2,
+      version: VERUSPAY_VERSION_LASTVALID.add(new BN(1))
+    })
+
+    const invbuf2 = inv2.toBuffer()
+    const _inv2 = new VerusPayInvoice()
+    expect(() => _inv2.fromBuffer(invbuf2)).toThrow("Unsupported version for vdxf object.")
+  });
+
   test('basic verus pay invoice without signature', async () => {
     const details = new VerusPayInvoiceDetails({
       amount: new BN(10000000000, 10),

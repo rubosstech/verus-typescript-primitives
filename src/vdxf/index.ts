@@ -24,6 +24,7 @@ export interface VDXFObjectInterface {
   fromBuffer: (buffer: Buffer, offset: number) => number;
   dataByteLength: () => number;
   byteLength: () => number;
+  getVersionNoFlags: () => BigNumber;
 }
 
 export interface VerusIDSignatureInterface {
@@ -47,6 +48,10 @@ export class VDXFObject implements VDXFObjectInterface {
     this.serializekey = serializekey;
   }
 
+  getVersionNoFlags() {
+    return this.version;
+  }
+
   toJson() {
     return {};
   }
@@ -64,7 +69,11 @@ export class VDXFObject implements VDXFObjectInterface {
   }
 
   fromDataBuffer(buffer: Buffer, offset: number = 0) {
-    return offset + 1
+    return offset + 1;
+  }
+
+  isValidVersion() {
+    return true;
   }
 
   fromBuffer(buffer: Buffer, offset: number = 0, vdxfkey?: string) {
@@ -78,6 +87,8 @@ export class VDXFObject implements VDXFObjectInterface {
     const version = reader.readVarInt();
     
     this.version = version;
+
+    if (!this.isValidVersion()) throw new Error("Unsupported version for vdxf object.")
 
     if (offset < buffer.length - 1) {
       reader.offset = this.fromDataBuffer(reader.buffer, reader.offset)
