@@ -4,7 +4,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CMerkleMountainView = exports.CMMRProof = exports.CMMRBranch = exports.CMerkleMountainRange = exports.CMMRNode = void 0;
 var blake2b = require('blake2b');
-const { Lock } = require('semaphore-async-await');
 const bn_js_1 = require("bn.js");
 const varuint_1 = require("../../utils/varuint");
 const bufferutils_1 = require("../../utils/bufferutils");

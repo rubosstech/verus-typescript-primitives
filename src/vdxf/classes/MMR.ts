@@ -2,7 +2,7 @@
 // Adapted to Verus Blake2b MMR. 
 
 var blake2b = require('blake2b')
-const { Lock } = require('semaphore-async-await')
+
 import { BN } from 'bn.js';
 import { VDXFObject } from "../";
 import varuint from '../../utils/varuint'
