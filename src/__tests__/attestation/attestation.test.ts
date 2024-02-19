@@ -70,11 +70,11 @@ describe('Serializes and deserializes attestation request', () => {
     for (let i = 0; i < 5; i++) {
 
       const rootOfItem = proofOfAll.checkProof(i);
-      expect(rootOfItem.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
+      expect(rootOfItem.toString('hex')).toStrictEqual("8a91a7f15b24e9e75fc5b02ae2131b0b08a540ebb9e9e1a859132f9879366eb5");
     }
 
-    expect(proofResponseRoot.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
-    expect(rootOfItemZero.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
+    expect(proofResponseRoot.toString('hex')).toStrictEqual("8a91a7f15b24e9e75fc5b02ae2131b0b08a540ebb9e9e1a859132f9879366eb5");
+    expect(rootOfItemZero.toString('hex')).toStrictEqual("8a91a7f15b24e9e75fc5b02ae2131b0b08a540ebb9e9e1a859132f9879366eb5");
 
     // check attestation serializes and deserializes correctly
 
@@ -84,7 +84,7 @@ describe('Serializes and deserializes attestation request', () => {
     attestationFromBuffer.fromBuffer(attestationResponseBuffer);
 
     const proofResponseRootFromBuffer = attestationResponse.rootHash();
-    expect(proofResponseRootFromBuffer.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
+    expect(proofResponseRootFromBuffer.toString('hex')).toStrictEqual("8a91a7f15b24e9e75fc5b02ae2131b0b08a540ebb9e9e1a859132f9879366eb5");
 
     //check the partialproofs serialize and desserialize
 
@@ -96,7 +96,7 @@ describe('Serializes and deserializes attestation request', () => {
 
     const rootOfItemZerofromBuffer = proofOfItemZero.checkProof(0);
 
-    expect(rootOfItemZerofromBuffer.toString('hex')).toStrictEqual("bfa5d560098bcc51df0341b18922db0987907febe4eb44958866c015c36919f0");
+    expect(rootOfItemZerofromBuffer.toString('hex')).toStrictEqual("8a91a7f15b24e9e75fc5b02ae2131b0b08a540ebb9e9e1a859132f9879366eb5");
   });
   test('no duplicate keys', async () => {
 

@@ -2456,3 +2456,72 @@ export const IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED: VDXFKeyInterf
     }
 }
 
+export const IDENTITYDATA_NAME: VDXFKeyInterface = {
+"vdxfid": "iNtCaMhqbpwGubHkaepi9mhVFg8jPj2Sk4",
+  "indexid": "xTiK3A8vT99wXmAnSLUs8AE2HL9kKfRmzC",
+  "hash160result": "272c6f542e769f1006ee6db29be51ddbbaa1e4d4",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identitydata.name"
+  }
+}
+
+export const IDENTITYDATA_PERSONAL_DETAILS: VDXFKeyInterface = {
+    "vdxfid": "iDeQpqFQNNxQaTGDJd762poXE9eCBNEELD",
+    "indexid": "xJUXHdgVDhB5Cd9FAJmF1DL4FofD5W44Wa",
+    "hash160result": "78d7089e964a3f6e6ae0233346554555d3e68f6f",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::identitydata.personaldetails"
+    }
+}
+
+export const IDENTITYDATA_CONTACT: VDXFKeyInterface = {
+    "vdxfid": "iPHGUT7FpBbUjBKoPiuwTCzVFtcbQfkrs4",
+    "indexid": "xU7NwFYLfVp9MMCqFQa6RbX2HYdcGVBu6v",
+    "hash160result": "cef7d037aa9c9342008cc13ea0173610f17341d9",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::identitydata.contactdetails"
+    }  
+}
+
+export const IDENTITYDATA_LOCATIONS: VDXFKeyInterface = {
+    "vdxfid": "iREAoeQFDuJA751i86EBWmDthRuZoGEKBi",
+    "indexid": "xW4HGSqL5DWpjEtjymtLV9kRj5vaeyFTX7",
+    "hash160result": "e89b7bc01f7fececa737c5451a6889006bb99bee",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::identitydata.locationdetails"
+    }
+}
+
+export const IDENTITYDATA_BANKING_INFORMATION: VDXFKeyInterface = {
+    "vdxfid": "iJPS5WjFmKhjJjNxA2m2CJUus8swyBSTWy",
+    "indexid": "xPDYYKALcdvPvuFz1iRBAh1StntxrcEUeM",
+    "hash160result": "1a79f042ce08168d0dcaf4b1062eb1e3525693a3",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::identitydata.bankingdetails"
+    }
+}
+
+export const IDENTITYDATA_DOCUMENTS_AND_IMAGES: VDXFKeyInterface = {
+    "vdxfid": "iDqUNrjpcHvenVoJUzkWxeo93txZJLRMsY",
+    "indexid": "xJfaqfAuTc9KQfgLLgQfw3Kg5Yya97dwwF",
+    "hash160result": "b93a86e345efacfa4cdd5ab1a07f41da4371a771",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::identitydata.documents"
+    }  
+}
+
+export const PERSONAL_INFO_OBJECT: VDXFKeyInterface = {
+    "vdxfid": "i6BFmbneE8TJHego8AkeX1iYMbQ4KXHLr9",
+    "indexid": "xB1NEQDj5SfxupZpyrQoVQF5PFR5Foqja6",
+    "hash160result": "50b7fa643e4b024ffbcaabd40403d22e1a3ba41d",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::identitydata.personalinfo"
+    }
+}

@@ -239,11 +239,19 @@ export const AttestationVdxfidMap = {
 export class AttestationDataType {
 
   dataItem: Utf8DataVdxfObject | HexDataVdxfObject | BufferDataVdxfObject | PNGImageVdxfObject | VDXFObject;
-  salt: Buffer;
+  salt: Buffer = Buffer.alloc(0);
 
-  constructor(data: any, vdxfkey: string, salt?: string) {
+  constructor(data?: any, vdxfkey?: string, salt?: string) {
 
-    switch (AttestationVdxfidMap[vdxfkey].type) {
+    this.getDataItem(vdxfkey, data);
+
+    if (salt) {
+      this.salt = Buffer.from(salt, "hex");
+    }
+  }
+
+  getDataItem(vdxfkey, data): any {
+    switch (vdxfkey && AttestationVdxfidMap[vdxfkey].type || null) {
       case AttestationClassTypes.BUFFER_DATA_STRING:
         this.dataItem = new Utf8DataVdxfObject(data, vdxfkey);
         break;
@@ -269,10 +277,6 @@ export class AttestationDataType {
         this.dataItem = new HexDataVdxfObject(data, vdxfkey);
         break;
     }
-
-    if (salt) {
-      this.salt = Buffer.from(salt, "hex");
-    }
   }
 
   dataBytelength(): number {
@@ -280,6 +284,7 @@ export class AttestationDataType {
     let length = 0;
 
     length += this.dataItem.byteLength();
+    length += varuint.encodingLength(this.salt.length);
     length += this.salt.length;
 
     return length;
@@ -290,7 +295,7 @@ export class AttestationDataType {
     const buffer = Buffer.alloc(this.dataBytelength());
     const writer = new bufferutils.BufferWriter(buffer);
     writer.writeSlice(this.dataItem.toBuffer());
-    writer.writeSlice(this.salt);
+    writer.writeVarSlice(this.salt);
 
     return writer.buffer;
   }
@@ -299,7 +304,7 @@ export class AttestationDataType {
 
     const reader = new bufferutils.BufferReader(buffer, offset);
     reader.offset = this.dataItem.fromBuffer(reader.buffer, reader.offset, vdxfkey);
-    this.salt = reader.readSlice(32);
+    this.salt = reader.readVarSlice();
 
     return reader.offset;
   }

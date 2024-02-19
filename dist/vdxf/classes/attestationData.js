@@ -223,7 +223,14 @@ exports.AttestationVdxfidMap = {
 };
 class AttestationDataType {
     constructor(data, vdxfkey, salt) {
-        switch (exports.AttestationVdxfidMap[vdxfkey].type) {
+        this.salt = Buffer.alloc(0);
+        this.getDataItem(vdxfkey, data);
+        if (salt) {
+            this.salt = Buffer.from(salt, "hex");
+        }
+    }
+    getDataItem(vdxfkey, data) {
+        switch (vdxfkey && exports.AttestationVdxfidMap[vdxfkey].type || null) {
             case 1 /* AttestationClassTypes.BUFFER_DATA_STRING */:
                 this.dataItem = new __1.Utf8DataVdxfObject(data, vdxfkey);
                 break;
@@ -249,13 +256,11 @@ class AttestationDataType {
                 this.dataItem = new __1.HexDataVdxfObject(data, vdxfkey);
                 break;
         }
-        if (salt) {
-            this.salt = Buffer.from(salt, "hex");
-        }
     }
     dataBytelength() {
         let length = 0;
         length += this.dataItem.byteLength();
+        length += varuint_1.default.encodingLength(this.salt.length);
         length += this.salt.length;
         return length;
     }
@@ -263,13 +268,13 @@ class AttestationDataType {
         const buffer = Buffer.alloc(this.dataBytelength());
         const writer = new bufferutils_1.default.BufferWriter(buffer);
         writer.writeSlice(this.dataItem.toBuffer());
-        writer.writeSlice(this.salt);
+        writer.writeVarSlice(this.salt);
         return writer.buffer;
     }
     fromDataBuffer(buffer, offset = 0, vdxfkey) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         reader.offset = this.dataItem.fromBuffer(reader.buffer, reader.offset, vdxfkey);
-        this.salt = reader.readSlice(32);
+        this.salt = reader.readVarSlice();
         return reader.offset;
     }
 }

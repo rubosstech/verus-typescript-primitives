@@ -18,7 +18,8 @@ export declare const AttestationVdxfidMap: {
 export declare class AttestationDataType {
     dataItem: Utf8DataVdxfObject | HexDataVdxfObject | BufferDataVdxfObject | PNGImageVdxfObject | VDXFObject;
     salt: Buffer;
-    constructor(data: any, vdxfkey: string, salt?: string);
+    constructor(data?: any, vdxfkey?: string, salt?: string);
+    getDataItem(vdxfkey: any, data: any): any;
     dataBytelength(): number;
     toBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number, vdxfkey?: string): number;
