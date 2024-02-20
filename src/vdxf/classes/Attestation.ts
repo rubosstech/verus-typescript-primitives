@@ -7,7 +7,7 @@ import { VDXFObject, VerusIDSignature } from "../";
 import { CMerkleMountainRange, CMMRNode, CMerkleMountainView, CMMRProof } from "./MMR"
 import { ATTESTATION_OBJECT, ATTESTATION_VIEW_RESPONSE } from '../keys';
 import { Hash160 } from "./Hash160";
-import { AttestationData } from './attestationData';
+import { AttestationData } from './AttestationData';
 
 const { BufferReader, BufferWriter } = bufferutils;
 

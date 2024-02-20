@@ -38,9 +38,9 @@ Object.defineProperty(exports, "Audience", { enumerable: true, get: function () 
 Object.defineProperty(exports, "AltAuthFactor", { enumerable: true, get: function () { return Challenge_2.AltAuthFactor; } });
 var Attestation_1 = require("./Attestation");
 Object.defineProperty(exports, "Attestation", { enumerable: true, get: function () { return Attestation_1.Attestation; } });
-var attestationData_1 = require("./attestationData");
-Object.defineProperty(exports, "AttestationData", { enumerable: true, get: function () { return attestationData_1.AttestationData; } });
-Object.defineProperty(exports, "AttestationDataType", { enumerable: true, get: function () { return attestationData_1.AttestationDataType; } });
+var AttestationData_1 = require("./AttestationData");
+Object.defineProperty(exports, "AttestationData", { enumerable: true, get: function () { return AttestationData_1.AttestationData; } });
+Object.defineProperty(exports, "AttestationDataType", { enumerable: true, get: function () { return AttestationData_1.AttestationDataType; } });
 var ProvisioningResult_2 = require("./provisioning/ProvisioningResult");
 Object.defineProperty(exports, "ProvisioningTxid", { enumerable: true, get: function () { return ProvisioningResult_2.ProvisioningTxid; } });
 var Context_1 = require("./Context");

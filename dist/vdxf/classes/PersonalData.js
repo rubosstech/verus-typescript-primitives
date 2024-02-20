@@ -6,11 +6,11 @@ const bufferutils_1 = require("../../utils/bufferutils");
 const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
 const __1 = require("..");
-const identityDataKeys_1 = require("../identityDataKeys");
-const attestationData_1 = require("./attestationData");
+const identitydatakeys_1 = require("../identitydatakeys");
+const AttestationData_1 = require("./AttestationData");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class PersonalData extends __1.VDXFObject {
-    constructor(data, vdxfkey = identityDataKeys_1.PERSONAL_INFO_OBJECT.vdxfid) {
+    constructor(data, vdxfkey = identitydatakeys_1.PERSONAL_INFO_OBJECT.vdxfid) {
         super(vdxfkey);
         this.id = '';
         this.linkedAttestation = '';
@@ -63,7 +63,7 @@ class PersonalData extends __1.VDXFObject {
             const attestationLength = reader.readCompactSize();
             const attestations = [];
             for (var j = 0; j < attestationLength; j++) {
-                const attestation = new attestationData_1.AttestationDataType(null, (0, address_1.toBase58Check)(reader.buffer.slice(reader.offset, reader.offset + vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION));
+                const attestation = new AttestationData_1.AttestationDataType(null, (0, address_1.toBase58Check)(reader.buffer.slice(reader.offset, reader.offset + vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION));
                 reader.offset = attestation.fromDataBuffer(reader.buffer, reader.offset);
                 attestations.push(attestation);
             }

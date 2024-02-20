@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { VDXFObject } from "..";
-import { AttestationDataType } from './attestationData';
+import { AttestationDataType } from './AttestationData';
 export declare class PersonalData extends VDXFObject {
     type: PersonalData.TYPE;
     id: string;

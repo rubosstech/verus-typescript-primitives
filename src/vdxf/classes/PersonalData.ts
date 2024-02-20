@@ -5,9 +5,9 @@ import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION, HASH160_BYTE_LENGTH } from '../../constants/vdxf';
 import { VDXFObject, VerusIDSignature } from "..";
 import { CMerkleMountainRange, CMMRNode, CMerkleMountainView, CMMRProof } from "./MMR"
-import { PERSONAL_INFO_OBJECT } from '../identityDataKeys';
+import { PERSONAL_INFO_OBJECT } from '../identitydatakeys';
 import { Hash160 } from "./Hash160";
-import { AttestationDataType } from './attestationData';
+import { AttestationDataType } from './AttestationData';
 
 const { BufferReader, BufferWriter } = bufferutils;
 

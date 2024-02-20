@@ -1,4 +1,4 @@
-import * as AttestationData from './classes/attestationData';
+import * as AttestationData from './classes/AttestationData';
 export declare const keymap: {
     [key: string]: any;
 };

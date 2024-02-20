@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "base64url": "3.0.1",
-    "bech32": "0.0.3",
+    "bech32": "^2.0.0",
     "blake2b": "https://github.com/VerusCoin/blake2b",
     "bn.js": "5.2.1",
     "bs58check": "https://github.com/bitcoinjs/bs58check",

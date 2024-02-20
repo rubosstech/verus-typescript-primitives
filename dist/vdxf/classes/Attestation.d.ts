@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { VDXFObject, VerusIDSignature } from "../";
 import { CMerkleMountainRange, CMMRProof } from "./MMR";
-import { AttestationData } from './attestationData';
+import { AttestationData } from './AttestationData';
 export declare class Attestation extends VDXFObject {
     static TYPE_STRING: number;
     static TYPE_BYTES: number;

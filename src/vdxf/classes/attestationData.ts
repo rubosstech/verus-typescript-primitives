@@ -5,7 +5,7 @@ import {
   PNGImageVdxfObject,
   VDXFObject
 } from "..";
-import * as identitykeys from '../identityDataKeys';
+import * as identitykeys from '../identitydatakeys';
 import * as keylist from '../keys';
 import bufferutils from '../../utils/bufferutils';
 import createHash = require("create-hash");

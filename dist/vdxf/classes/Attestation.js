@@ -19,7 +19,7 @@ const __1 = require("../");
 const MMR_1 = require("./MMR");
 const keys_1 = require("../keys");
 const Hash160_1 = require("./Hash160");
-const attestationData_1 = require("./attestationData");
+const AttestationData_1 = require("./AttestationData");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class Attestation extends __1.VDXFObject {
     constructor(data, vdxfkey = keys_1.ATTESTATION_OBJECT.vdxfid) {
@@ -74,7 +74,7 @@ class Attestation extends __1.VDXFObject {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
         const attestationsByteLength = reader.readCompactSize(); //dummy read
         if (!this.data) {
-            this.data = new attestationData_1.AttestationData();
+            this.data = new AttestationData_1.AttestationData();
         }
         reader.offset = this.data.fromDataBuffer(reader.buffer, reader.offset);
         this.system_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
@@ -119,7 +119,7 @@ class Attestation extends __1.VDXFObject {
     // returns an attestation with a sparse MMR containing the leaves specified
     getProof(keys) {
         const view = new MMR_1.CMerkleMountainView(this.mmr);
-        const attestationItems = new attestationData_1.AttestationData();
+        const attestationItems = new AttestationData_1.AttestationData();
         const localCMMR = new MMR_1.CMMRProof();
         keys.forEach((key, index) => {
             view.GetProof(localCMMR, key);
@@ -171,7 +171,7 @@ class CPartialAttestationProof extends __1.VDXFObject {
         this.type = this.EType.TYPE_ATTESTATION;
         if (data) {
             this.proof = data.proof || new MMR_1.CMMRProof();
-            this.componentsArray = data.componentsArray || new attestationData_1.AttestationData();
+            this.componentsArray = data.componentsArray || new AttestationData_1.AttestationData();
             this.system_id = data.system_id;
             this.signing_id = data.signing_id;
         }
@@ -212,7 +212,7 @@ class CPartialAttestationProof extends __1.VDXFObject {
         this.type = reader.readCompactSize();
         this.proof = new MMR_1.CMMRProof();
         reader.offset = this.proof.fromDataBuffer(reader.buffer, reader.offset);
-        this.componentsArray = new attestationData_1.AttestationData();
+        this.componentsArray = new AttestationData_1.AttestationData();
         reader.offset = this.componentsArray.fromDataBuffer(reader.buffer, reader.offset);
         this.system_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
         this.signing_id = (0, address_1.toBase58Check)(reader.readSlice(vdxf_1.HASH160_BYTE_LENGTH), vdxf_1.I_ADDR_VERSION);
