@@ -13,7 +13,7 @@ export declare const DEST_NESTEDTRANSFER: import("bn.js");
 export declare const DEST_ETH: import("bn.js");
 export declare const DEST_ETHNFT: import("bn.js");
 export declare const DEST_RAW: import("bn.js");
-export declare const AST_VALID_TYPE_NO_FLAGS: import("bn.js");
+export declare const LAST_VALID_TYPE_NO_FLAGS: import("bn.js");
 export declare const FLAG_DEST_AUX: import("bn.js");
 export declare const FLAG_DEST_GATEWAY: import("bn.js");
 export declare const FLAG_MASK: import("bn.js");
