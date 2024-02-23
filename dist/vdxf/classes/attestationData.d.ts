@@ -20,7 +20,7 @@ export declare class AttestationDataType {
     salt: Buffer;
     constructor(data?: any, vdxfkey?: string, salt?: string);
     getDataItem(vdxfkey: any, data: any): any;
-    dataBytelength(): number;
+    dataByteLength(): number;
     toBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number, vdxfkey?: string): number;
 }

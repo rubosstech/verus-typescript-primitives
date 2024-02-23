@@ -257,7 +257,7 @@ class AttestationDataType {
                 break;
         }
     }
-    dataBytelength() {
+    dataByteLength() {
         let length = 0;
         length += this.dataItem.byteLength();
         length += varuint_1.default.encodingLength(this.salt.length);
@@ -265,7 +265,7 @@ class AttestationDataType {
         return length;
     }
     toBuffer() {
-        const buffer = Buffer.alloc(this.dataBytelength());
+        const buffer = Buffer.alloc(this.dataByteLength());
         const writer = new bufferutils_1.default.BufferWriter(buffer);
         writer.writeSlice(this.dataItem.toBuffer());
         writer.writeVarSlice(this.salt);
@@ -297,7 +297,7 @@ class AttestationData {
         byteLength += varuint_1.default.encodingLength(this.components.size);
         for (const [key, item] of this.components) {
             byteLength += varuint_1.default.encodingLength(key);
-            byteLength += item.dataBytelength();
+            byteLength += item.dataByteLength();
         }
         return byteLength;
     }

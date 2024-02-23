@@ -28,7 +28,7 @@ class PersonalData extends __1.VDXFObject {
             byteLength += vdxf_1.HASH160_BYTE_LENGTH; // category
             byteLength += varuint_1.default.encodingLength(value.length);
             for (const attestation of value) {
-                byteLength += attestation.dataBytelength();
+                byteLength += attestation.dataByteLength();
             }
         }
         byteLength += varuint_1.default.encodingLength(this.linkedAttestation.length);

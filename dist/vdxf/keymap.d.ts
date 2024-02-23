@@ -1,13 +1,14 @@
-import * as AttestationData from './classes/AttestationData';
+import * as keylist from './keys';
+import * as AttestationData from './classes/IdentityData';
 export declare const keymap: {
-    [key: string]: any;
+    [key: string]: keylist.VDXFKeyInterface;
 };
 export declare const attestationDataKeys: {
-    [key: string]: any;
+    [key: string]: keylist.VDXFKeyInterface;
 };
-export declare const AttestationDataVdxfidMap: {
+export declare const IdentityVdxfidMap: {
     [x: string]: {
         name: string;
-        type: AttestationData.AttestationClassTypes;
+        type: AttestationData.IdentityDataClassTypes;
     };
 };

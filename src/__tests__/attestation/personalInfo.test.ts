@@ -1,42 +1,45 @@
-import { ATTESTATION_READ_REQUEST, IDENTITYDATA_NAME, IDENTITYDATA_FIRSTNAME, IDENTITYDATA_PERSONAL_DETAILS, IDENTITYDATA_LASTNAME, IDENTITYDATA_ATTESTOR, IDENTITYDATA_IDENTITY, ATTESTATION_TYPE } from "../../vdxf";
-import { Attestation, LoginConsentRequest } from "../../vdxf/classes";
-import { RedirectUri, RequestedPermission } from "../../vdxf/classes/Challenge";
-import { Context } from "../../vdxf/classes/Context";
-import { CPartialAttestationProof } from "../../vdxf/classes/Attestation";
-import { AttestationData, AttestationDataType } from "../../vdxf/classes/AttestationData";
-import * as idkeys  from "../../vdxf/identitydatakeys";
-import { PersonalData } from "../../vdxf/classes/PersonalData";
+import * as identitykeys from "../../vdxf";
+import {AttestationDataType } from "../../vdxf/classes/Attestation";
+import { PersonalProfileDataStore, DataCategory } from "../../vdxf/classes/PersonalProfile";
 
 describe('Create a personal info request', () => {
   test('attestation request with reply', async () => {
 
 
-    let nameMap = new Array<AttestationDataType>();
+    const profileData = new PersonalProfileDataStore();
     // requested data from user.
-    nameMap.push(new AttestationDataType("", IDENTITYDATA_FIRSTNAME.vdxfid, ""));
-    nameMap.push(new AttestationDataType("", IDENTITYDATA_LASTNAME.vdxfid, ""));
-    nameMap.push(new AttestationDataType("", IDENTITYDATA_IDENTITY.vdxfid, ""));
+    const personalDataCategory = new DataCategory([
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_FIRSTNAME.vdxfid, "Fred"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_LASTNAME.vdxfid, "Stones"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_HOMEADDRESS_COUNTRY.vdxfid, "USA"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_DATEOFBIRTH.vdxfid, "01/01/1950"),
+    ], "personal", identitykeys.IDENTITYDATA_PERSONAL_DETAILS.vdxfid);
 
-    let personalMap = new Array<AttestationDataType>();
-    personalMap.push(new AttestationDataType("", IDENTITYDATA_ATTESTOR.vdxfid, ""));
-    personalMap.push(new AttestationDataType("", ATTESTATION_TYPE.vdxfid, ""));
+    profileData.data.personal = personalDataCategory;
 
-    const personalData = new PersonalData({
-      type: PersonalData.TYPE.REQUEST,
-      id: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      data: {
-        [IDENTITYDATA_NAME.vdxfid]: nameMap,
-        [IDENTITYDATA_PERSONAL_DETAILS.vdxfid]: personalMap
-      },
-      linkedAttestation: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV"
-    });
+    const contractDataCategory = profileData.data.contact;
 
-    const personalDataBuffer = personalData.toDataBuffer();
+    contractDataCategory.data = [
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_EMAIL.vdxfid, "abc@def.com"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_PHONENUMBER.vdxfid, "123-456-7890")
+    ];
 
-    const personalData2 = new PersonalData();
+    const LocationDataCategory = profileData.data.locations;
+
+    LocationDataCategory.data = [
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_HOMEADDRESS_STREET1.vdxfid, "123 Main St"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_HOMEADDRESS_STREET2.vdxfid, "Cobham"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_HOMEADDRESS_CITY.vdxfid, "Anytown"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_HOMEADDRESS_REGION.vdxfid, "AnyState"),
+      AttestationDataType.getDataItem(identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE.vdxfid, "12345")
+    ];
+
+    const personalDataBuffer = profileData.toDataBuffer();
+
+    const personalData2 = new PersonalProfileDataStore();
     personalData2.fromDataBuffer(personalDataBuffer);
 
-    expect(personalData2.toBuffer().toString('hex')).toEqual(personalData.toBuffer().toString('hex'));
+    expect(personalData2.toBuffer().toString('hex')).toEqual(profileData.toBuffer().toString('hex'));
   });
 
 });

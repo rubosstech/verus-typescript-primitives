@@ -34,7 +34,7 @@ export {
   AltAuthFactor,
 } from "./Challenge";
 export  {Attestation} from './Attestation'
-export  {AttestationData, AttestationDataType} from './AttestationData'
+export  {AttestationData, AttestationDataType} from './Attestation'
 export {
   ProvisioningTxid
 } from './provisioning/ProvisioningResult'

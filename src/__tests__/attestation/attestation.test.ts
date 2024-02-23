@@ -3,8 +3,8 @@ import { Attestation, LoginConsentRequest } from "../../vdxf/classes";
 import { RedirectUri, RequestedPermission } from "../../vdxf/classes/Challenge";
 import { Context } from "../../vdxf/classes/Context";
 import { CPartialAttestationProof } from "../../vdxf/classes/Attestation";
-import { AttestationData, AttestationDataType } from "../../vdxf/classes/attestationData";
-import * as idkeys  from "../../vdxf/identityDataKeys";
+import { AttestationData, AttestationDataType } from "../../vdxf/classes/Attestation";
+import * as idkeys  from "../../vdxf/identitydatakeys";
 
 describe('Serializes and deserializes attestation request', () => {
   test('attestation request with reply', async () => {
