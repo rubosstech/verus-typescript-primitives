@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentityVdxfidMap = void 0;
 const identitykeys = require("../identityDataKeys");
 const keylist = require("../keys");
-const bufferutils_1 = require("../../utils/bufferutils");
-const { BufferReader, BufferWriter } = bufferutils_1.default;
 exports.IdentityVdxfidMap = {
     [identitykeys.IDENTITYDATA_FIRSTNAME.vdxfid]: { name: "First Name", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_LASTNAME.vdxfid]: { name: "Last Name", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },

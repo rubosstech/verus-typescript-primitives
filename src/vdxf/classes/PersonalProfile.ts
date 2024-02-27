@@ -1,14 +1,10 @@
 import varuint from '../../utils/varuint'
 import bufferutils from '../../utils/bufferutils'
-import createHash = require("create-hash");
 import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION, HASH160_BYTE_LENGTH } from '../../constants/vdxf';
-import { BufferDataVdxfObject, HexDataVdxfObject, PNGImageVdxfObject, Utf8DataVdxfObject, VDXFObject, VerusIDSignature } from "..";
-import { CMerkleMountainRange, CMMRNode, CMerkleMountainView, CMMRProof } from "./MMR"
-import { Hash160 } from "./Hash160";
+import { VDXFObject } from "..";
 import { AttestationDataType } from './Attestation';
 import * as identitykeys from '../identityDataKeys';
-import { attestationDataKeys } from '../keymap';
 const { BufferReader, BufferWriter } = bufferutils;
 
 export class DataCategory {

@@ -1,18 +1,6 @@
-import {
-  Utf8DataVdxfObject,
-  HexDataVdxfObject,
-  BufferDataVdxfObject,
-  PNGImageVdxfObject,
-  VDXFObject
-} from "..";
+
 import * as identitykeys from '../identityDataKeys';
 import * as keylist from '../keys';
-import bufferutils from '../../utils/bufferutils';
-import createHash = require("create-hash");
-import { fromBase58Check, toBase58Check } from '../../utils/address';
-import varuint from '../../utils/varuint'
-import { I_ADDR_VERSION, HASH160_BYTE_LENGTH } from '../../constants/vdxf';
-const { BufferReader, BufferWriter } = bufferutils;
 
 export const enum IdentityDataClassTypes {
   BUFFER_DATA_STRING = 1,
