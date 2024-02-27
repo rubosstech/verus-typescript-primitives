@@ -7,7 +7,7 @@ import { BufferDataVdxfObject, HexDataVdxfObject, PNGImageVdxfObject, Utf8DataVd
 import { CMerkleMountainRange, CMMRNode, CMerkleMountainView, CMMRProof } from "./MMR"
 import { Hash160 } from "./Hash160";
 import { AttestationDataType } from './Attestation';
-import * as identitykeys from '../identitydatakeys';
+import * as identitykeys from '../identityDataKeys';
 import { attestationDataKeys } from '../keymap';
 const { BufferReader, BufferWriter } = bufferutils;
 

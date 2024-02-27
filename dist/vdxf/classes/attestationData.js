@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttestationData = exports.friendlyNames = exports.AttestationDataType = exports.AttestationVdxfidMap = void 0;
 const __1 = require("..");
-const identitykeys = require("../identitydatakeys");
+const identitykeys = require("../identityDataKeys");
 const keylist = require("../keys");
 const bufferutils_1 = require("../../utils/bufferutils");
 const createHash = require("create-hash");

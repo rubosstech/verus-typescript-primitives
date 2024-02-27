@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentityVdxfidMap = void 0;
-const identitykeys = require("../identitydatakeys");
+const identitykeys = require("../identityDataKeys");
 const keylist = require("../keys");
 const bufferutils_1 = require("../../utils/bufferutils");
 const { BufferReader, BufferWriter } = bufferutils_1.default;

@@ -6,11 +6,11 @@ const bufferutils_1 = require("../../utils/bufferutils");
 const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
 const __1 = require("..");
-const identitydatakeys_1 = require("../identitydatakeys");
+const identityDataKeys_1 = require("../identityDataKeys");
 const AttestationData_1 = require("./AttestationData");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class PersonalData extends __1.VDXFObject {
-    constructor(data, vdxfkey = identitydatakeys_1.PERSONAL_INFO_OBJECT.vdxfid) {
+    constructor(data, vdxfkey = identityDataKeys_1.PERSONAL_INFO_OBJECT.vdxfid) {
         super(vdxfkey);
         this.id = '';
         this.linkedAttestation = '';

@@ -7,7 +7,7 @@ const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
 const __1 = require("..");
 const Attestation_1 = require("./Attestation");
-const identitykeys = require("../identitydatakeys");
+const identitykeys = require("../identityDataKeys");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class DataCategory {
     constructor(data, category, vdxfid) {
