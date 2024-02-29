@@ -9,6 +9,7 @@ import {
   ATTESTATION_READ_REQUEST,
   IDENTITY_VIEW,
   IDENTITY_AGREEMENT,
+  PROFILE_DATA_VIEW_REQUEST,
 } from "../";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
@@ -445,6 +446,11 @@ export class RequestedPermission extends VDXFObject {
         this.data = data;
         this.encoding = "utf-8";
         break;
+      case PROFILE_DATA_VIEW_REQUEST.vdxfid:
+          classType = BufferDataVdxfObject;
+          this.data = data;
+          this.encoding = "utf-8";
+          break;
       default:
         throw new Error("Invalid vdxfkey")
     }

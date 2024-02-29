@@ -283,6 +283,11 @@ class RequestedPermission extends __1.VDXFObject {
                 this.data = data;
                 this.encoding = "utf-8";
                 break;
+            case __1.PROFILE_DATA_VIEW_REQUEST.vdxfid:
+                classType = index_1.BufferDataVdxfObject;
+                this.data = data;
+                this.encoding = "utf-8";
+                break;
             default:
                 throw new Error("Invalid vdxfkey");
         }
