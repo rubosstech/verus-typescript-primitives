@@ -89,7 +89,7 @@ export class Identity extends Principal {
 
     length += varuint.encodingLength(this.content_map.size);
 
-    for (const m in this.content_map) {
+    for (const m of this.content_map.entries()) {
       length += 20;   //uint160 key
       length += 32;   //uint256 hash
     }
@@ -150,7 +150,7 @@ export class Identity extends Principal {
     writer.writeSlice(this.recovery_authority.toBuffer());
 
     // privateaddresses
-    writer.writeCompactSize(this.private_addresses.length);
+    writer.writeCompactSize(this.private_addresses ? this.private_addresses.length : 0);
 
     if (this.private_addresses) {
       for (const n of this.private_addresses) {
@@ -167,7 +167,7 @@ export class Identity extends Principal {
     return writer.buffer
   }
 
-  fromBuffer(buffer, offset: number = 0) {
+  fromBuffer(buffer: Buffer, offset: number = 0) {
     const reader = new BufferReader(buffer, offset);
 
     reader.offset = super.fromBuffer(reader.buffer, reader.offset);
