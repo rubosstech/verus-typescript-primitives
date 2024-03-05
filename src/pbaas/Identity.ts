@@ -3,412 +3,252 @@ import bufferutils from '../utils/bufferutils'
 import { BigNumber } from '../utils/types/BigNumber';
 import { Principal } from './Principal';
 import { fromBase58Check, toBase58Check } from '../utils/address';
-import { I_ADDR_VERSION, HASH160_BYTE_LENGTH } from '../constants/vdxf';
-import { DATA_TYPE_STRING } from "../vdxf";
-import { R_ADDR_VERSION } from '../constants/vdxf';
+import { I_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
-const bech32 = require('bech32')
+import { IdentityID } from './IdentityID';
+import { SaplingPaymentAddress } from './SaplingPaymentAddress';
+import { TxDestination } from './TxDestination';
+import { ContentMultiMap } from './ContentMultiMap';
 
-const VERSION_PBAAS = 3;
-const VERSION_INVALID = 0;
+export const IDENTITY_VERSION_PBAAS = new BN(3, 10);
+export const IDENITTY_VERSION_INVALID = new BN(0, 10);
+
+export const IDENTITY_FLAG_REVOKED = new BN(8000, 16);          // set when this identity is revoked
+export const IDENTITY_FLAG_ACTIVECURRENCY = new BN(1, 16);      // flag that is set when this ID is being used as an active currency name
+export const IDENTITY_FLAG_LOCKED = new BN(2, 16);              // set when this identity is locked
+export const IDENTITY_FLAG_TOKENIZED_CONTROL = new BN(4, 16);   // set when revocation/recovery over this identity can be performed by anyone who controls its token
+export const IDENTITY_MAX_UNLOCK_DELAY = new BN(60).mul(new BN(24)).mul(new BN(22)).mul(new BN(365));        // 21+ year maximum unlock time for an ID w/1 minute blocks, not adjusted for avg blocktime in first PBaaS
+export const IDENTITY_MAX_NAME_LEN = new BN(64);
 
 const { BufferReader, BufferWriter } = bufferutils
 
-function fromBech32(address: string): { version: number, prefix: string, data: Buffer } {
-  var result = bech32.decode(address)
-  var data = bech32.fromWords(result.words.slice(1))
-
-  return {
-    version: result.words[0],
-    prefix: result.prefix,
-    data: Buffer.from(data)
-  }
-}
-
-function convertBits(data: Buffer, from: number, to: number, strictMode: boolean): Buffer {
-  const length = strictMode
-    ? Math.floor((data.length * from) / to)
-    : Math.ceil((data.length * from) / to);
-  const mask = (1 << to) - 1;
-  const result = Buffer.alloc(length);
-  let index = 0;
-  let accumulator = 0;
-  let bits = 0;
-  for (const value of data) {
-    accumulator = (accumulator << from) | value;
-    bits += from;
-    while (bits >= to) {
-      bits -= to;
-      result[index] = (accumulator >> bits) & mask;
-      ++index;
-    }
-  }
-  if (!strictMode) {
-    if (bits > 0) {
-      result[index] = (accumulator << (to - bits)) & mask;
-      ++index;
-    }
-  } else {
-    throw new Error("Input cannot be converted")
-  }
-  return result;
-}
-
-function decodeSaplingAddress(address: string): { d: Buffer, pk_d: Buffer } {
-
-  const result = fromBech32(address)
-  const data = convertBits(result.data, 5, 8, false);
-
-  return { d: data.slice(0, 10), pk_d: data.slice(10) }
-
-}
+export type Hashes = Map<string, Buffer>;
+export type KvContent =  Map<string, Array<Buffer>>;
 
 export class Identity extends Principal {
-
-  parent: string;
-  system_id: string;
+  parent: IdentityID;
+  system_id: IdentityID;
   name: string;
-  contentmap: Map<string, Buffer>;
-  contentmultimap: Map<string, Array<Buffer>>;
-  revocation_authority: string;
-  recovery_authority: string;
-  private_addresses: Array<{ d: Buffer, pk_d: Buffer }>;
-  timelock: number;
+  content_map: Hashes;
+  content_multimap: ContentMultiMap;
+  revocation_authority: IdentityID;
+  recovery_authority: IdentityID;
+  private_addresses: Array<SaplingPaymentAddress>;
+  unlock_after: BigNumber;
 
   constructor(data?: {
-    version?: BigNumber | number,
-    flags?: BigNumber | number,
-    primaryaddresses?: Array<string>,
-    minimumsignatures?: BigNumber | number,
-    parent?: string,
-    systemid?: string,
-    name?: string,
-    contentmap?: Map<string, Buffer>;
-    contentmultimap?: Map<string, Array<Buffer>> | { [name: string]: Array<{ [name: string]: string }> };
-    revocationauthority?: string;
-    recoveryauthority?: string;
-    private_addresses?: Array<{ d: Buffer, pk_d: Buffer }> | [];
-    timelock?: number;
-    identityaddress?: string;
-
+    version?: BigNumber;
+    flags?: BigNumber;
+    min_sigs?: BigNumber;
+    primary_addresses?: Array<TxDestination>;
+    parent?: IdentityID;
+    system_id?: IdentityID;
+    name?: string;
+    content_map?: Hashes;
+    content_multimap?: ContentMultiMap;
+    revocation_authority?: IdentityID;
+    recovery_authority?: IdentityID;
+    private_addresses?: Array<SaplingPaymentAddress>;
+    unlock_after?: BigNumber;
   }) {
-
     super(data)
 
     if (data?.parent) this.parent = data.parent;
+    if (data?.system_id) this.system_id = data.system_id;
     if (data?.name) this.name = data.name;
-    if (data?.systemid) this.system_id = data.systemid;
-    this.contentmap = data?.contentmap ? new Map(data.contentmap) : new Map();
-    if (data?.contentmultimap) {
-
-      if (typeof data.contentmultimap == "object") {
-
-        this.contentmultimap = contentmultimapFromObject(data.contentmultimap);
-
-      }
-      else {
-        throw new Error("multimap root not an object")
-      }
-
-    }
-    if (data?.revocationauthority) this.revocation_authority = data.revocationauthority
-    if (data?.recoveryauthority) this.recovery_authority = data.recoveryauthority
-    if (data?.timelock) this.timelock = data.timelock
-
-    this.private_addresses = data?.private_addresses?.map((addr) => { return decodeSaplingAddress(addr) }) || new Array();
+    if (data?.content_map) this.content_map = data.content_map;
+    if (data?.content_multimap) this.content_multimap = data.content_multimap;
+    if (data?.revocation_authority) this.revocation_authority = data.revocation_authority;
+    if (data?.recovery_authority) this.recovery_authority = data.recovery_authority;
+    if (data?.private_addresses) this.private_addresses = data.private_addresses;
+    if (data?.unlock_after) this.unlock_after = data.unlock_after;
   }
 
-  dataByteLength() {
-    let byteLength = 0;
+  getByteLength() {
+    let length = 0;
 
-    byteLength += this._dataByteLength(); //get the principal byte length
-    byteLength += 20;   //uint160 parent
-    byteLength += varuint.encodingLength(Buffer.from(this.name, "utf8").length); // name compact size
-    byteLength += Buffer.from(this.name, "utf8").length; // name_in_utf8_bytes
+    length += super.getByteLength();
+    length += this.parent.byteLength();
 
-    // contentmultimap
-    if (this.version.toNumber() >= VERSION_PBAAS) {
+    const nameLength = Buffer.from(this.name, "utf8").length;
+    length += varuint.encodingLength(nameLength);
+    length += nameLength;
 
-      byteLength += this.contentmultimap ? varuint.encodingLength(this.contentmultimap.size) : 0
+    if (this.version.gte(IDENTITY_VERSION_PBAAS) && this.content_multimap) {
+      length += this.content_multimap.getByteLength();
+    }
 
-      if (this.contentmultimap) {
-        for (const [key, value] of this.contentmultimap.entries()) {
-          byteLength += 20;   //uint160 key
-          byteLength += varuint.encodingLength(value.length)
-          for (const n of value) {
-            byteLength += varuint.encodingLength(n.length);
-            byteLength += n.length;
-          }
-        }
+    if (this.version.lt(IDENTITY_VERSION_PBAAS)) {
+      length += varuint.encodingLength(this.content_map.size);
+
+      for (const m in this.content_map) {
+        length += 20;   //uint160 key
+        length += 32;   //uint256 hash
       }
     }
 
-    //contentmap
-    if (this.version.toNumber() < VERSION_PBAAS) {
-      byteLength += varuint.encodingLength(this.contentmap.size)
-      for (const m in this.contentmap) {
-        byteLength += 20;   //uint160 key
-        byteLength += 32;   //uint256 hash
-      }
-    }
-    //contentmap2
-    byteLength += varuint.encodingLength(this.contentmap.size)
-    for (const m in this.contentmap) {
-      byteLength += 20;   //uint160 key
-      byteLength += 32;   //uint256 hash
+    length += varuint.encodingLength(this.content_map.size);
+
+    for (const m in this.content_map) {
+      length += 20;   //uint160 key
+      length += 32;   //uint256 hash
     }
 
-    byteLength += 20;   //uint160 revocation authority
-    byteLength += 20;   //uint160 recovery authority
+    length += this.revocation_authority.byteLength();   //uint160 revocation authority
+    length += this.recovery_authority.byteLength();   //uint160 recovery authority
 
     // privateaddresses
-    byteLength += varuint.encodingLength(this.private_addresses.length | 0);
+    length += varuint.encodingLength(this.private_addresses ? this.private_addresses.length : 0);
 
-    for (const n of this.private_addresses) {
-      byteLength += varuint.encodingLength(n.d.length);
-      byteLength += n.d.length;  // const 11
-      byteLength += 32;   //pk_d hash
+    if (this.private_addresses) {
+      for (const n of this.private_addresses) {
+        n.getByteLength();
+      }
     }
 
     // post PBAAS
-    if (this.version.toNumber() >= VERSION_PBAAS) {
-      byteLength += 20;   //uint160 systemid
-      byteLength += 4;    //uint32 unlockafter
+    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
+      length += this.system_id.byteLength();   //uint160 systemid
+      length += 4;                             //uint32 unlockafter
     }
 
-    return byteLength
+    return length;
   }
 
   toBuffer() {
-    const bufferWriter = new BufferWriter(Buffer.alloc(this.dataByteLength()))
+    const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
 
-    bufferWriter.writeSlice(this._toBuffer());
-    bufferWriter.writeSlice(fromBase58Check(this.parent).hash);
-    bufferWriter.writeCompactSize(Buffer.from(this.name, "utf8").length)
-    bufferWriter.writeSlice(Buffer.from(this.name, "utf8"));
+    writer.writeSlice(super.toBuffer());
+    writer.writeSlice(this.parent.toBuffer());
+
+    writer.writeVarSlice(Buffer.from(this.name, "utf8"));
 
     //contentmultimap
-    if (this.version.toNumber() >= VERSION_PBAAS) {
-
-      bufferWriter.writeCompactSize(this.contentmultimap.size)
-
-      for (const [key, value] of this.contentmultimap.entries()) {
-
-        bufferWriter.writeSlice(fromBase58Check(key).hash)
-        bufferWriter.writeCompactSize(value.length)
-
-        for (const n of value) {
-          bufferWriter.writeCompactSize(n.length)
-          bufferWriter.writeSlice(n);
-
-        }
-      }
+    if (this.version.gte(IDENTITY_VERSION_PBAAS) && this.content_multimap) {
+      writer.writeSlice(this.content_multimap.toBuffer());
     }
 
     //contentmap
-    if (this.version.toNumber() < VERSION_PBAAS) {
-      bufferWriter.writeCompactSize(this.contentmap.size)
-      for (const [key, value] of this.contentmap.entries()) {
-        bufferWriter.writeSlice(value);
+    if (this.version.lt(IDENTITY_VERSION_PBAAS)) {
+      writer.writeCompactSize(this.content_map.size);
+
+      for (const [key, value] of this.content_map.entries()) {
+        writer.writeSlice(fromBase58Check(key).hash);
+        writer.writeSlice(value);
       }
     }
 
     //contentmap2
-    bufferWriter.writeCompactSize(this.contentmap.size)
-    for (const [key, value] of this.contentmap.entries()) {
-      bufferWriter.writeSlice(value);
+    writer.writeCompactSize(this.content_map.size);
+
+    for (const [key, value] of this.content_map.entries()) {
+      writer.writeSlice(fromBase58Check(key).hash);
+      writer.writeSlice(value);
     }
 
-    bufferWriter.writeSlice(fromBase58Check(this.revocation_authority).hash)
-    bufferWriter.writeSlice(fromBase58Check(this.recovery_authority).hash)
+    writer.writeSlice(this.revocation_authority.toBuffer());
+    writer.writeSlice(this.recovery_authority.toBuffer());
 
     // privateaddresses
-    bufferWriter.writeCompactSize(this.private_addresses.length);
+    writer.writeCompactSize(this.private_addresses.length);
 
-    for (const n of this.private_addresses) {
-      bufferWriter.writeCompactSize(n.d.length);
-      bufferWriter.writeSlice(n.d);
-      bufferWriter.writeSlice(n.pk_d);
+    if (this.private_addresses) {
+      for (const n of this.private_addresses) {
+        writer.writeSlice(n.toBuffer());
+      }
     }
-
+    
     // post PBAAS
-    if (this.version.toNumber() >= VERSION_PBAAS) {
-      bufferWriter.writeSlice(fromBase58Check(this.system_id).hash)
-      bufferWriter.writeUInt32(this.timelock)
+    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
+      writer.writeSlice(this.system_id.toBuffer())
+      writer.writeUInt32(this.unlock_after.toNumber())
     }
-    return bufferWriter.buffer
+
+    return writer.buffer
   }
 
   fromBuffer(buffer, offset: number = 0) {
     const reader = new BufferReader(buffer, offset);
 
-    reader.offset = this._fromBuffer(reader.buffer, reader.offset);
+    reader.offset = super.fromBuffer(reader.buffer, reader.offset);
 
-    this.parent = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
+    const _parent = new IdentityID();
+    reader.offset = _parent.fromBuffer(
+      reader.buffer,
+      false,
+      reader.offset
+    );
+    this.parent = _parent;
 
     this.name = Buffer.from(reader.readVarSlice()).toString('utf8')
 
     //contentmultimap
-    if (this.version.toNumber() >= VERSION_PBAAS) {
+    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
+      const multimap = new ContentMultiMap();
 
-      const contentMapSize = reader.readVarInt();
-      this.contentmultimap = new Map();
+      reader.offset = multimap.fromBuffer(reader.buffer, reader.offset);
 
-      for (var i = 0; i < contentMapSize.toNumber(); i++) {
-
-        const contentMapKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
-        var innervector = reader.readVector();
-
-        this.contentmultimap.set(contentMapKey, innervector);
-
-      }
+      this.content_multimap = multimap;
     }
 
     // contentmap
-    if (this.version.toNumber() < VERSION_PBAAS) {
+    if (this.version.lt(IDENTITY_VERSION_PBAAS)) {
+      const contentMapSize = reader.readVarInt();
+      this.content_map = new Map();
 
-      const contentMultiMapSize = reader.readVarInt();
-      this.contentmap = new Map();
-
-      for (var i = 0; i < contentMultiMapSize.toNumber(); i++) {
-
+      for (var i = 0; i < contentMapSize.toNumber(); i++) {
         const contentMapKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
-        const hash = reader.readSlice(32);
-        this.contentmap.set(contentMapKey, hash);
+        this.content_map.set(contentMapKey, reader.readSlice(32));
       }
     }
 
     const contentMapSize = reader.readVarInt();
-    this.contentmap = new Map();
+    this.content_map = new Map();
 
     for (var i = 0; i < contentMapSize.toNumber(); i++) {
       const contentMapKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION)
-      const hash = reader.readSlice(32);
-      this.contentmap.set(contentMapKey, hash);
+      this.content_map.set(contentMapKey, reader.readSlice(32));
     }
 
-    this.revocation_authority = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
-    this.recovery_authority = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+    const _revocation = new IdentityID();
+    reader.offset = _revocation.fromBuffer(
+      reader.buffer,
+      false,
+      reader.offset
+    );
+    this.revocation_authority = _revocation;
+
+    const _recovery = new IdentityID();
+    reader.offset = _recovery.fromBuffer(
+      reader.buffer,
+      false,
+      reader.offset
+    );
+    this.recovery_authority = _recovery;
 
     const numPrivateAddresses = reader.readVarInt();
 
     for (var i = 0; i < numPrivateAddresses.toNumber(); i++) {
-      this.private_addresses.push({ d: Buffer.from(reader.readVector()), pk_d: reader.readSlice(20) })
+      const saplingAddr = new SaplingPaymentAddress();
+      reader.offset = saplingAddr.fromBuffer(
+        reader.buffer,
+        reader.offset
+      );
+      this.private_addresses.push(saplingAddr);
     }
 
-    if (this.version.toNumber() >= VERSION_PBAAS) {
-      this.system_id = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
-      this.timelock = reader.readUInt32();
+    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
+      const _system = new IdentityID();
+      reader.offset = _system.fromBuffer(
+        reader.buffer,
+        false,
+        reader.offset
+      );
+      this.system_id = _system;
+
+      this.unlock_after = new BN(reader.readUInt32(), 10);
     }
 
     return reader.offset;
   }
-}
-
-function contentmultimapFromObject(input) {
-
-  var contentmultimap = new Map;
-  var nVersion = 1;
-  const keys = Object.keys(input);
-  const values = keys.map((item) => input[item]);
-
-  for (var i = 0; i < keys.length; i++) {
-    try {
-      const key = fromBase58Check(keys[i]).hash;
-      if (key != null) {
-        if (Array.isArray(values[i])) {
-          for (var j = 0; j < values[i].length; j++) {
-            const oneValue = values[i][j];
-            var items = [];
-            if (typeof oneValue == "string") {
-              items.push(Buffer.from(oneValue, 'hex'));
-            }
-            else if (typeof oneValue == "object") {
-              const mapBytesValue = VectorEncodeVDXFUni(oneValue);
-              if (mapBytesValue.length === 0 || nVersion == VERSION_INVALID) {
-                nVersion = VERSION_INVALID;
-                throw new Error("object not as expected")
-              }
-              items.push(mapBytesValue);
-            }
-          }
-          contentmultimap.set(keys[i], items);
-        }
-        else if (typeof values[i] === "string") {
-          if (isHexByteString(values[i])) {
-            contentmultimap.set(keys[i], Buffer.from(items));
-          }
-          else {
-            nVersion = VERSION_INVALID;
-            throw new Error("string not formatted as hex")
-
-          }
-        }
-        else if (typeof values[i] === "object") {
-          const mapBytesValue = VectorEncodeVDXFUni(values[i]);
-          var item = [];
-          if (mapBytesValue.length === 0 || nVersion == VERSION_INVALID) {
-            nVersion = VERSION_INVALID;
-            throw new Error("object not as expected")
-          }
-          item.push(mapBytesValue);
-          contentmultimap.set(keys[i], item);
-        }
-        else {
-          nVersion = VERSION_INVALID;
-          throw new Error("not valid content multimap sub type")
-        }
-      }
-      else {
-        nVersion = VERSION_INVALID;
-        throw new Error("key in multimap == null")
-      }
-    }
-    catch (e) {
-      nVersion = VERSION_INVALID;
-      throw new Error(e.message)
-    }
-  }
-  return contentmultimap;
-}
-
-
-function VectorEncodeVDXFUni(obj) {
-
-  const keys = Object.keys(obj);
-  const values = keys.map((item) => obj[item]);
-  var bufsize = 0;
-
-  for (var i = 0; i < keys.length; i++) {
-    if (keys[i] == DATA_TYPE_STRING.vdxfid) {
-      bufsize += HASH160_BYTE_LENGTH;
-      bufsize += varuint.encodingLength(1); // varint length 1
-      bufsize += varuint.encodingLength(bufsize + 2); // ss length so far (lengths)
-      bufsize += varuint.encodingLength(Buffer.from(values[i], 'utf8').length);
-      bufsize += Buffer.from(values[i], 'utf8').length;
-    } else {
-      throw new Error("VDXF key not found: " + keys[i])
-    }
-    // TODO: add alltypes
-  }
-  const bufferWriter = new BufferWriter(Buffer.alloc(bufsize))
-
-  for (var i = 0; i < keys.length; i++) {
-    if (keys[i] === DATA_TYPE_STRING.vdxfid) {
-      bufferWriter.writeSlice(fromBase58Check(keys[i]).hash)
-      bufferWriter.writeVarInt(new BN(1));
-      bufferWriter.writeVarInt(new BN(Buffer.from(values[i], 'utf8').length + 3)) //NOTE 3 is from ss type + ver + vdxfidver 
-      bufferWriter.writeVarSlice(Buffer.from(values[i], 'utf8'));
-    }
-    else {
-      throw new Error("VDXF key not found: " + keys[i])
-    }
-    // TODO: add alltypes
-  }
-  return bufferWriter.buffer;
-}
-
-function isHexByteString(str: string): boolean {
-  const hexByteRegex = /^[0-9a-fA-F]{2}$/;
-  return hexByteRegex.test(str);
 }
