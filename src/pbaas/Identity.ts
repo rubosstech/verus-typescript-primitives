@@ -57,7 +57,9 @@ export class Identity extends Principal {
     if (data?.system_id) this.system_id = data.system_id;
     if (data?.name) this.name = data.name;
     if (data?.content_map) this.content_map = data.content_map;
+    else this.content_map = new Map();
     if (data?.content_multimap) this.content_multimap = data.content_multimap;
+    else this.content_multimap = new ContentMultiMap({ kv_content: new Map() });
     if (data?.revocation_authority) this.revocation_authority = data.revocation_authority;
     if (data?.recovery_authority) this.recovery_authority = data.recovery_authority;
     if (data?.private_addresses) this.private_addresses = data.private_addresses;
@@ -74,7 +76,7 @@ export class Identity extends Principal {
     length += varuint.encodingLength(nameLength);
     length += nameLength;
 
-    if (this.version.gte(IDENTITY_VERSION_PBAAS) && this.content_multimap) {
+    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
       length += this.content_multimap.getByteLength();
     }
 
@@ -124,7 +126,7 @@ export class Identity extends Principal {
     writer.writeVarSlice(Buffer.from(this.name, "utf8"));
 
     //contentmultimap
-    if (this.version.gte(IDENTITY_VERSION_PBAAS) && this.content_multimap) {
+    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
       writer.writeSlice(this.content_multimap.toBuffer());
     }
 
@@ -167,7 +169,7 @@ export class Identity extends Principal {
     return writer.buffer
   }
 
-  fromBuffer(buffer: Buffer, offset: number = 0) {
+  fromBuffer(buffer: Buffer, offset: number = 0, multimapKeylists: Array<Array<string> | null> = []) {
     const reader = new BufferReader(buffer, offset);
 
     reader.offset = super.fromBuffer(reader.buffer, reader.offset);
@@ -186,7 +188,7 @@ export class Identity extends Principal {
     if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
       const multimap = new ContentMultiMap();
 
-      reader.offset = multimap.fromBuffer(reader.buffer, reader.offset);
+      reader.offset = multimap.fromBuffer(reader.buffer, reader.offset, multimapKeylists);
 
       this.content_multimap = multimap;
     }

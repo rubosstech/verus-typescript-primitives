@@ -104,14 +104,25 @@ class ContentMultiMap {
         }
         return writer.buffer;
     }
-    fromBuffer(buffer, offset = 0) {
+    fromBuffer(buffer, offset = 0, keylists = []) {
         const reader = new BufferReader(buffer, offset);
         const contentMultiMapSize = reader.readVarInt();
         this.kv_content = new Map();
         for (var i = 0; i < contentMultiMapSize.toNumber(); i++) {
+            const keylist = i < keylists.length ? keylists[i] : null;
             const contentMapKey = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
-            const vectorData = reader.readVector();
-            this.kv_content.set(contentMapKey, vectorData);
+            const vector = [];
+            const count = reader.readCompactSize();
+            for (let j = 0; j < count; j++) {
+                if (keylist) {
+                    const unival = new VdxfUniValue_1.VdxfUniValue();
+                    unival.fromBuffer(reader.readVarSlice(), 0, keylist);
+                    vector.push(unival);
+                }
+                else
+                    vector.push(reader.readVarSlice());
+            }
+            this.kv_content.set(contentMapKey, vector.length === 1 ? vector[0] : vector);
         }
         return reader.offset;
     }

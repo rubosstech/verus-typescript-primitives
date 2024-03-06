@@ -19,7 +19,7 @@ export declare class ContentMultiMap {
     });
     getByteLength(): number;
     toBuffer(): Buffer;
-    fromBuffer(buffer: Buffer, offset?: number): number;
+    fromBuffer(buffer: Buffer, offset?: number, keylists?: Array<Array<string> | null>): number;
     static fromJson(obj: {
         [key: string]: ContentMultiMapJsonValue;
     }): ContentMultiMap;

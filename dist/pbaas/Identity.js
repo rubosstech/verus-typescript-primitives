@@ -30,8 +30,12 @@ class Identity extends Principal_1.Principal {
             this.name = data.name;
         if (data === null || data === void 0 ? void 0 : data.content_map)
             this.content_map = data.content_map;
+        else
+            this.content_map = new Map();
         if (data === null || data === void 0 ? void 0 : data.content_multimap)
             this.content_multimap = data.content_multimap;
+        else
+            this.content_multimap = new ContentMultiMap_1.ContentMultiMap({ kv_content: new Map() });
         if (data === null || data === void 0 ? void 0 : data.revocation_authority)
             this.revocation_authority = data.revocation_authority;
         if (data === null || data === void 0 ? void 0 : data.recovery_authority)
@@ -48,7 +52,7 @@ class Identity extends Principal_1.Principal {
         const nameLength = Buffer.from(this.name, "utf8").length;
         length += varuint_1.default.encodingLength(nameLength);
         length += nameLength;
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS) && this.content_multimap) {
+        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
             length += this.content_multimap.getByteLength();
         }
         if (this.version.lt(exports.IDENTITY_VERSION_PBAAS)) {
@@ -59,7 +63,7 @@ class Identity extends Principal_1.Principal {
             }
         }
         length += varuint_1.default.encodingLength(this.content_map.size);
-        for (const m in this.content_map) {
+        for (const m of this.content_map.entries()) {
             length += 20; //uint160 key
             length += 32; //uint256 hash
         }
@@ -85,7 +89,7 @@ class Identity extends Principal_1.Principal {
         writer.writeSlice(this.parent.toBuffer());
         writer.writeVarSlice(Buffer.from(this.name, "utf8"));
         //contentmultimap
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS) && this.content_multimap) {
+        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
             writer.writeSlice(this.content_multimap.toBuffer());
         }
         //contentmap
@@ -105,7 +109,7 @@ class Identity extends Principal_1.Principal {
         writer.writeSlice(this.revocation_authority.toBuffer());
         writer.writeSlice(this.recovery_authority.toBuffer());
         // privateaddresses
-        writer.writeCompactSize(this.private_addresses.length);
+        writer.writeCompactSize(this.private_addresses ? this.private_addresses.length : 0);
         if (this.private_addresses) {
             for (const n of this.private_addresses) {
                 writer.writeSlice(n.toBuffer());
@@ -118,7 +122,7 @@ class Identity extends Principal_1.Principal {
         }
         return writer.buffer;
     }
-    fromBuffer(buffer, offset = 0) {
+    fromBuffer(buffer, offset = 0, multimapKeylists = []) {
         const reader = new BufferReader(buffer, offset);
         reader.offset = super.fromBuffer(reader.buffer, reader.offset);
         const _parent = new IdentityID_1.IdentityID();
@@ -128,7 +132,7 @@ class Identity extends Principal_1.Principal {
         //contentmultimap
         if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
             const multimap = new ContentMultiMap_1.ContentMultiMap();
-            reader.offset = multimap.fromBuffer(reader.buffer, reader.offset);
+            reader.offset = multimap.fromBuffer(reader.buffer, reader.offset, multimapKeylists);
             this.content_multimap = multimap;
         }
         // contentmap

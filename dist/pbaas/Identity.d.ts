@@ -43,5 +43,5 @@ export declare class Identity extends Principal {
     });
     getByteLength(): number;
     toBuffer(): Buffer;
-    fromBuffer(buffer: any, offset?: number): number;
+    fromBuffer(buffer: Buffer, offset?: number, multimapKeylists?: Array<Array<string> | null>): number;
 }
