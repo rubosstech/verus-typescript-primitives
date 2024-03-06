@@ -110,7 +110,7 @@ describe('Serializes and deserializes identity properly', () => {
       unlock_after: new BN(0)
     })
 
-     expect(identity_tobuf.toBuffer().toString('hex')).toBe(serializedIdentity)
+    expect(identity_tobuf.toBuffer().toString('hex')).toBe(serializedIdentity)
   });
 
   test('deserialize a daemon generated VerusID with a contentmultimap with private addr', async () => {

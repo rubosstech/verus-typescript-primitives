@@ -172,5 +172,65 @@ class Identity extends Principal_1.Principal {
         }
         return reader.offset;
     }
+    toJson() {
+        const contentmap = {};
+        for (const [key, value] of this.content_map.entries()) {
+            contentmap[key] = value.toString('hex');
+        }
+        const multimapJson = this.content_multimap.toJson();
+        const contentmultimap = {};
+        for (const key in multimapJson) {
+            const value = multimapJson[key];
+            const items = [];
+            if (Array.isArray(value)) {
+                for (const x of value) {
+                    if ((0, ContentMultiMap_1.isKvValueArrayItemVdxfUniValueJson)(x)) {
+                        const _x = Object.assign({}, x);
+                        for (const key of Object.keys(x)) {
+                            if (Buffer.isBuffer(x[key]))
+                                _x[key] = x[key].toString('hex');
+                            else
+                                _x[key] = x[key];
+                        }
+                        items.push(_x);
+                    }
+                    else
+                        items.push(x);
+                }
+            }
+            else if ((0, ContentMultiMap_1.isKvValueArrayItemVdxfUniValueJson)(value)) {
+                const _x = Object.assign({}, value);
+                for (const key of Object.keys(value)) {
+                    if (Buffer.isBuffer(value[key]))
+                        _x[key] = value[key].toString('hex');
+                    else
+                        _x[key] = value[key];
+                }
+                items.push(_x);
+            }
+            else if (typeof value === 'string') {
+                items.push(value);
+            }
+            else
+                throw new Error("Invalid multimap value");
+            contentmultimap[key] = items;
+        }
+        return {
+            contentmap,
+            contentmultimap,
+            flags: this.flags.toNumber(),
+            minimumsignatures: this.min_sigs.toNumber(),
+            name: this.name,
+            parent: this.parent.toAddress(),
+            primaryaddresses: this.primary_addresses.map(x => x.toAddress()),
+            // privateaddress: this.private_addresses, TODO: Implement SaplingPaymentAddr decoding
+            recoveryauthority: this.recovery_authority.toAddress(),
+            revocationauthority: this.revocation_authority.toAddress(),
+            systemid: this.system_id.toAddress(),
+            timelock: this.unlock_after.toNumber(),
+            version: this.unlock_after.toNumber(),
+            identityaddress: (0, address_1.nameAndParentAddrToIAddr)(this.name, this.parent.toAddress())
+        };
+    }
 }
 exports.Identity = Identity;
