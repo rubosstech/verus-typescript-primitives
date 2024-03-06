@@ -104,7 +104,7 @@ export class Identity extends Principal {
 
     if (this.private_addresses) {
       for (const n of this.private_addresses) {
-        n.getByteLength();
+        length += n.getByteLength();
       }
     }
 
@@ -229,6 +229,8 @@ export class Identity extends Principal {
     this.recovery_authority = _recovery;
 
     const numPrivateAddresses = reader.readVarInt();
+
+    if (numPrivateAddresses.gt(new BN(0))) this.private_addresses = [];
 
     for (var i = 0; i < numPrivateAddresses.toNumber(); i++) {
       const saplingAddr = new SaplingPaymentAddress();

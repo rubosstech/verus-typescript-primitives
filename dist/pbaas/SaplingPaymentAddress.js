@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaplingPaymentAddress = void 0;
 const bufferutils_1 = require("../utils/bufferutils");
-const varuint_1 = require("../utils/varuint");
 const sapling_1 = require("../utils/sapling");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class SaplingPaymentAddress {
@@ -16,20 +15,19 @@ class SaplingPaymentAddress {
     }
     getByteLength() {
         let length = 0;
-        length += varuint_1.default.encodingLength(this.d.length);
         length += this.d.length;
         length += this.pk_d.length;
         return length;
     }
     toBuffer() {
         const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
-        writer.writeVarSlice(this.d);
+        writer.writeSlice(this.d);
         writer.writeSlice(this.pk_d);
         return writer.buffer;
     }
     fromBuffer(buffer, offset = 0) {
         const reader = new BufferReader(buffer, offset);
-        this.d = reader.readVarSlice();
+        this.d = reader.readSlice(11);
         this.pk_d = reader.readSlice(32);
         return reader.offset;
     }

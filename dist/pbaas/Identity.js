@@ -73,7 +73,7 @@ class Identity extends Principal_1.Principal {
         length += varuint_1.default.encodingLength(this.private_addresses ? this.private_addresses.length : 0);
         if (this.private_addresses) {
             for (const n of this.private_addresses) {
-                n.getByteLength();
+                length += n.getByteLength();
             }
         }
         // post PBAAS
@@ -157,6 +157,8 @@ class Identity extends Principal_1.Principal {
         reader.offset = _recovery.fromBuffer(reader.buffer, false, reader.offset);
         this.recovery_authority = _recovery;
         const numPrivateAddresses = reader.readVarInt();
+        if (numPrivateAddresses.gt(new bn_js_1.BN(0)))
+            this.private_addresses = [];
         for (var i = 0; i < numPrivateAddresses.toNumber(); i++) {
             const saplingAddr = new SaplingPaymentAddress_1.SaplingPaymentAddress();
             reader.offset = saplingAddr.fromBuffer(reader.buffer, reader.offset);

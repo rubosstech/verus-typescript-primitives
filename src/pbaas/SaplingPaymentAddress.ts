@@ -1,5 +1,4 @@
 import bufferutils from '../utils/bufferutils';
-import varuint from '../utils/varuint';
 import { decodeSaplingAddress } from '../utils/sapling';
 
 const { BufferReader, BufferWriter } = bufferutils
@@ -21,7 +20,6 @@ export class SaplingPaymentAddress {
   getByteLength() {
     let length = 0;
 
-    length += varuint.encodingLength(this.d.length);
     length += this.d.length;
     length += this.pk_d.length;
 
@@ -31,7 +29,7 @@ export class SaplingPaymentAddress {
   toBuffer() {
     const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
 
-    writer.writeVarSlice(this.d);
+    writer.writeSlice(this.d);
     writer.writeSlice(this.pk_d);
 
     return writer.buffer;
@@ -40,7 +38,7 @@ export class SaplingPaymentAddress {
   fromBuffer(buffer: Buffer, offset: number = 0) {
     const reader = new BufferReader(buffer, offset);
 
-    this.d = reader.readVarSlice();
+    this.d = reader.readSlice(11);
     this.pk_d = reader.readSlice(32);
 
     return reader.offset;
