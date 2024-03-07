@@ -15,6 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./CurrencyValueMap"), exports);
+__exportStar(require("./Identity"), exports);
 __exportStar(require("./ReserveTransfer"), exports);
 __exportStar(require("./TokenOutput"), exports);
 __exportStar(require("./TransferDestination"), exports);

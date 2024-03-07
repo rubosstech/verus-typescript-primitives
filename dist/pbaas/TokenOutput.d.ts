@@ -2,11 +2,11 @@
 /// <reference types="node" />
 import { CurrencyValueMap } from './CurrencyValueMap';
 import { BigNumber } from '../utils/types/BigNumber';
-export declare const VERSION_INVALID: import("bn.js");
-export declare const VERSION_CURRENT: import("bn.js");
-export declare const VERSION_FIRSTVALID: import("bn.js");
-export declare const VERSION_LASTVALID: import("bn.js");
-export declare const VERSION_MULTIVALUE: import("bn.js");
+export declare const TOKEN_OUTPUT_VERSION_INVALID: import("bn.js");
+export declare const TOKEN_OUTPUT_VERSION_CURRENT: import("bn.js");
+export declare const TOKEN_OUTPUT_VERSION_FIRSTVALID: import("bn.js");
+export declare const TOKEN_OUTPUT_VERSION_LASTVALID: import("bn.js");
+export declare const TOKEN_OUTPUT_VERSION_MULTIVALUE: import("bn.js");
 export declare class TokenOutput {
     version: BigNumber;
     reserve_values: CurrencyValueMap;
