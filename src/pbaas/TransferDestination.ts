@@ -4,6 +4,7 @@ import { BigNumber } from '../utils/types/BigNumber';
 import varuint from '../utils/varuint';
 import { fromBase58Check, toBase58Check } from '../utils/address';
 import { I_ADDR_VERSION, R_ADDR_VERSION } from '../constants/vdxf';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 const { BufferReader, BufferWriter } = bufferutils
 
 export const DEST_INVALID = new BN(0, 10)
@@ -32,7 +33,7 @@ export type TransferDestinationJson = {
   aux_dests: Array<TransferDestinationJson>
 }
 
-export class TransferDestination {
+export class TransferDestination implements SerializableEntity {
   type: BigNumber;
   destination_bytes: Buffer;
   gateway_id: string;

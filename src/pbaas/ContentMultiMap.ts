@@ -6,6 +6,7 @@ import { BN } from 'bn.js';
 import { DATA_TYPE_STRING } from '../vdxf';
 import { VdxfUniType, VdxfUniValue, VdxfUniValueJson } from './VdxfUniValue';
 import { isHexString } from '../utils/string';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 
 export const IDENTITY_VERSION_PBAAS = new BN(3, 10);
 export const VERSION_INVALID = new BN(0, 10);
@@ -33,7 +34,7 @@ export function isKvValueArrayItemVdxfUniValueJson(x: ContentMultiMapJsonValue):
 
 export type KvContent =  Map<string, Array<ContentMultiMapPrimitive>>;
 
-export class ContentMultiMap {
+export class ContentMultiMap implements SerializableEntity {
   kv_content: KvContent;
 
   constructor(data?: { kv_content: KvContent }) {

@@ -4,8 +4,9 @@ import { BigNumber } from '../utils/types/BigNumber';
 import { Principal } from './Principal';
 import { IdentityID } from './IdentityID';
 import { SaplingPaymentAddress } from './SaplingPaymentAddress';
-import { TxDestination } from './TxDestination';
 import { ContentMultiMap } from './ContentMultiMap';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
+import { KeyID } from './KeyID';
 export declare const IDENTITY_VERSION_PBAAS: import("bn.js");
 export declare const IDENITTY_VERSION_INVALID: import("bn.js");
 export declare const IDENTITY_FLAG_REVOKED: import("bn.js");
@@ -38,7 +39,7 @@ export declare type VerusCLIVerusIDJson = {
     timelock: number;
     version: number;
 };
-export declare class Identity extends Principal {
+export declare class Identity extends Principal implements SerializableEntity {
     parent: IdentityID;
     system_id: IdentityID;
     name: string;
@@ -52,7 +53,7 @@ export declare class Identity extends Principal {
         version?: BigNumber;
         flags?: BigNumber;
         min_sigs?: BigNumber;
-        primary_addresses?: Array<TxDestination>;
+        primary_addresses?: Array<KeyID>;
         parent?: IdentityID;
         system_id?: IdentityID;
         name?: string;

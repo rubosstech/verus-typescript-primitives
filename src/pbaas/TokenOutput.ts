@@ -3,6 +3,7 @@ import varint from '../utils/varint'
 import bufferutils from '../utils/bufferutils'
 import { BN } from 'bn.js';
 import { BigNumber } from '../utils/types/BigNumber';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 const { BufferReader, BufferWriter } = bufferutils
 
 export const TOKEN_OUTPUT_VERSION_INVALID = new BN(0, 10)
@@ -11,7 +12,7 @@ export const TOKEN_OUTPUT_VERSION_FIRSTVALID = new BN(1, 10)
 export const TOKEN_OUTPUT_VERSION_LASTVALID = new BN(1, 10)
 export const TOKEN_OUTPUT_VERSION_MULTIVALUE = new BN('80000000', 16)
 
-export class TokenOutput {
+export class TokenOutput implements SerializableEntity {
   version: BigNumber;
   reserve_values: CurrencyValueMap;
 

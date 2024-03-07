@@ -1,18 +1,23 @@
 import { R_ADDR_VERSION } from '../constants/vdxf';
-import { Hash160 } from '../vdxf/classes';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
+import { Hash160, Hash160SerEnt } from '../vdxf/classes/Hash160';
 
-export class KeyID extends Hash160 {
+export class KeyID extends Hash160SerEnt implements SerializableEntity {
   constructor(
     hash: Buffer = Buffer.alloc(0)
   ) {
     super(hash, R_ADDR_VERSION, false);
   }
 
-  fromBuffer(buffer: Buffer, varlength?: boolean, offset?: number): number {
-    const ret = super.fromBuffer(buffer, varlength, offset);
+  fromBuffer(buffer: Buffer, offset: number = 0): number {
+    const ret = super.fromBuffer(buffer, offset, false);
 
     this.version = R_ADDR_VERSION;
     
     return ret;
+  }
+
+  static fromAddress(address: string, varlength?: boolean): Hash160SerEnt {
+    return new KeyID(Hash160SerEnt.fromAddress(address, false).hash);
   }
 }

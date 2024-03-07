@@ -1,11 +1,10 @@
 import bufferutils from '../utils/bufferutils'
 import { BigNumber } from '../utils/types/BigNumber';
 import { BN } from 'bn.js';
-import { TxDestination } from './TxDestination';
 import varuint from '../utils/varuint';
 import { KeyID } from './KeyID';
-import { IdentityID } from './IdentityID';
 import { NoDestination } from './NoDestination';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 
 export const PRINCIPAL_DEFAULT_FLAGS = new BN(0, 10)
 
@@ -14,17 +13,17 @@ export const PRINCIPAL_VERSION_CURRENT = new BN(1, 10)
 
 const { BufferReader, BufferWriter } = bufferutils
 
-export class Principal {
+export class Principal implements SerializableEntity{
   flags: BigNumber;
   version: BigNumber;
   min_sigs: BigNumber;
-  primary_addresses?: Array<TxDestination>;
+  primary_addresses?: Array<KeyID>;
 
   constructor(data?: {
     version?: BigNumber,
     flags?: BigNumber,
     min_sigs?: BigNumber,
-    primary_addresses?: Array<TxDestination>;
+    primary_addresses?: Array<KeyID>;
   }) {
     this.flags = PRINCIPAL_DEFAULT_FLAGS;
     this.version = PRINCIPAL_VERSION_INVALID;
@@ -46,8 +45,8 @@ export class Principal {
     byteLength += varuint.encodingLength(this.primary_addresses.length);
 
     for (const addr of this.primary_addresses) {
-      byteLength += varuint.encodingLength(addr.byteLength());
-      byteLength += addr.byteLength();
+      byteLength += varuint.encodingLength(addr.getByteLength());
+      byteLength += addr.getByteLength();
     }
 
     byteLength += 4; //uint32 minimum signatures size

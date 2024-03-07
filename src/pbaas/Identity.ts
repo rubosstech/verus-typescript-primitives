@@ -7,9 +7,10 @@ import { I_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
 import { IdentityID } from './IdentityID';
 import { SaplingPaymentAddress } from './SaplingPaymentAddress';
-import { TxDestination } from './TxDestination';
 import { ContentMultiMap, isKvValueArrayItemVdxfUniValueJson } from './ContentMultiMap';
 import { VdxfUniType } from './VdxfUniValue';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
+import { KeyID } from './KeyID';
 
 export const IDENTITY_VERSION_PBAAS = new BN(3, 10);
 export const IDENITTY_VERSION_INVALID = new BN(0, 10);
@@ -43,7 +44,7 @@ export type VerusCLIVerusIDJson = {
   version: number
 }
 
-export class Identity extends Principal {
+export class Identity extends Principal implements SerializableEntity {
   parent: IdentityID;
   system_id: IdentityID;
   name: string;
@@ -58,7 +59,7 @@ export class Identity extends Principal {
     version?: BigNumber;
     flags?: BigNumber;
     min_sigs?: BigNumber;
-    primary_addresses?: Array<TxDestination>;
+    primary_addresses?: Array<KeyID>;
     parent?: IdentityID;
     system_id?: IdentityID;
     name?: string;
@@ -88,7 +89,7 @@ export class Identity extends Principal {
     let length = 0;
 
     length += super.getByteLength();
-    length += this.parent.byteLength();
+    length += this.parent.getByteLength();
 
     const nameLength = Buffer.from(this.name, "utf8").length;
     length += varuint.encodingLength(nameLength);
@@ -114,8 +115,8 @@ export class Identity extends Principal {
       length += 32;   //uint256 hash
     }
 
-    length += this.revocation_authority.byteLength();   //uint160 revocation authority
-    length += this.recovery_authority.byteLength();   //uint160 recovery authority
+    length += this.revocation_authority.getByteLength();   //uint160 revocation authority
+    length += this.recovery_authority.getByteLength();   //uint160 recovery authority
 
     // privateaddresses
     length += varuint.encodingLength(this.private_addresses ? this.private_addresses.length : 0);
@@ -128,7 +129,7 @@ export class Identity extends Principal {
 
     // post PBAAS
     if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
-      length += this.system_id.byteLength();   //uint160 systemid
+      length += this.system_id.getByteLength();   //uint160 systemid
       length += 4;                             //uint32 unlockafter
     }
 
@@ -195,7 +196,6 @@ export class Identity extends Principal {
     const _parent = new IdentityID();
     reader.offset = _parent.fromBuffer(
       reader.buffer,
-      false,
       reader.offset
     );
     this.parent = _parent;
@@ -233,7 +233,6 @@ export class Identity extends Principal {
     const _revocation = new IdentityID();
     reader.offset = _revocation.fromBuffer(
       reader.buffer,
-      false,
       reader.offset
     );
     this.revocation_authority = _revocation;
@@ -241,7 +240,6 @@ export class Identity extends Principal {
     const _recovery = new IdentityID();
     reader.offset = _recovery.fromBuffer(
       reader.buffer,
-      false,
       reader.offset
     );
     this.recovery_authority = _recovery;
@@ -263,7 +261,6 @@ export class Identity extends Principal {
       const _system = new IdentityID();
       reader.offset = _system.fromBuffer(
         reader.buffer,
-        false,
         reader.offset
       );
       this.system_id = _system;

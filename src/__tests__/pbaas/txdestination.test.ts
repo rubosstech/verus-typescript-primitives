@@ -1,11 +1,16 @@
 import { IdentityID } from "../../pbaas/IdentityID";
 import { KeyID } from "../../pbaas/KeyID";
 import { NoDestination } from "../../pbaas/NoDestination";
-import { TxDestinationInterface } from "../../pbaas/TxDestination";
+import { PubKey } from "../../pbaas/PubKey";
+import { TxDestinationVariantInterface } from "../../pbaas/TxDestination";
 import { fromBase58Check, toIAddress } from "../../utils/address";
 
-describe('Serializes and deserializes TxDestination(s)', () => {
-  function testTxDestinationType(TxDestClass: TxDestinationInterface, addr?: string) {
+describe('Serializes and deserializes TxDestination variants', () => {
+  interface AddressInterface {
+    new (hash?: Buffer): IdentityID | KeyID | NoDestination;
+  }
+
+  function testTxDestinationTypeAddr(TxDestClass: AddressInterface, addr?: string) {
     const hash = addr ? fromBase58Check(addr).hash : undefined;
 
     const id = new TxDestClass(hash);
@@ -22,14 +27,25 @@ describe('Serializes and deserializes TxDestination(s)', () => {
     const vrsctest = "VRSCTEST";
     const addr = toIAddress(vrsctest);
 
-    testTxDestinationType(IdentityID, addr)
+    testTxDestinationTypeAddr(IdentityID, addr)
   });
 
   test('(de)serialize a KeyID', () => {
-    testTxDestinationType(KeyID, "RQVsJRf98iq8YmRQdehzRcbLGHEx6YfjdH")
+    testTxDestinationTypeAddr(KeyID, "RQVsJRf98iq8YmRQdehzRcbLGHEx6YfjdH")
   });
 
   test('(de)serialize a NoDestination', () => {
-    testTxDestinationType(NoDestination, "")
+    testTxDestinationTypeAddr(NoDestination, "")
+  });
+
+  test('(de)serialize a compressed PubKey', () => {
+    const pub = "024efec1ac0175cbfc54f1461c9670e9c4a6b4e3e0ac8ba85c4b2003e67b1b41d8";
+
+    const key = new PubKey(Buffer.from(pub, 'hex'), true);
+    const keyFromBuf = new PubKey();
+    keyFromBuf.fromBuffer(key.toBuffer());
+
+    expect(key.toBuffer().toString('hex')).toBe(pub);
+    expect(keyFromBuf.toBuffer().toString('hex')).toBe(key.toBuffer().toString('hex'));
   });
 });

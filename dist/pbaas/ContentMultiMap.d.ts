@@ -1,6 +1,7 @@
 /// <reference types="bn.js" />
 /// <reference types="node" />
 import { VdxfUniValue, VdxfUniValueJson } from './VdxfUniValue';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 export declare const IDENTITY_VERSION_PBAAS: import("bn.js");
 export declare const VERSION_INVALID: import("bn.js");
 export declare type ContentMultiMapPrimitive = VdxfUniValue | Buffer;
@@ -12,7 +13,7 @@ export declare type ContentMultiMapJson = {
 export declare type KvValueArrayItem = Buffer | ContentMultiMapJson;
 export declare function isKvValueArrayItemVdxfUniValueJson(x: ContentMultiMapJsonValue): x is VdxfUniValueJson;
 export declare type KvContent = Map<string, Array<ContentMultiMapPrimitive>>;
-export declare class ContentMultiMap {
+export declare class ContentMultiMap implements SerializableEntity {
     kv_content: KvContent;
     constructor(data?: {
         kv_content: KvContent;

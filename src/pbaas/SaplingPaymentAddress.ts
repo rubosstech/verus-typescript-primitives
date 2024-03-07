@@ -1,9 +1,10 @@
 import bufferutils from '../utils/bufferutils';
 import { decodeSaplingAddress } from '../utils/sapling';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 
 const { BufferReader, BufferWriter } = bufferutils
 
-export class SaplingPaymentAddress {
+export class SaplingPaymentAddress implements SerializableEntity {
   d: Buffer;
   pk_d: Buffer
 
