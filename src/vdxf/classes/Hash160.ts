@@ -10,7 +10,7 @@ export class Hash160 {
   varlength: boolean;
 
   constructor(
-    hash: Buffer = Buffer.alloc(0),
+    hash: Buffer = Buffer.alloc(20),
     version: number = I_ADDR_VERSION,
     varlength: boolean = false
   ) {
@@ -97,7 +97,7 @@ export class Hash160 {
 
 export class Hash160SerEnt extends Hash160 implements SerializableEntity {
   constructor(
-    hash: Buffer = Buffer.alloc(0),
+    hash: Buffer = Buffer.alloc(20),
     version: number = I_ADDR_VERSION,
     varlength: boolean = false
   ) {

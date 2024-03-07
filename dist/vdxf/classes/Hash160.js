@@ -6,7 +6,7 @@ const address_1 = require("../../utils/address");
 const bufferutils_1 = require("../../utils/bufferutils");
 const varuint_1 = require("../../utils/varuint");
 class Hash160 {
-    constructor(hash = Buffer.alloc(0), version = vdxf_1.I_ADDR_VERSION, varlength = false) {
+    constructor(hash = Buffer.alloc(20), version = vdxf_1.I_ADDR_VERSION, varlength = false) {
         this.hash = hash;
         this.version = version;
         this.varlength = varlength;
@@ -74,7 +74,7 @@ class Hash160 {
 }
 exports.Hash160 = Hash160;
 class Hash160SerEnt extends Hash160 {
-    constructor(hash = Buffer.alloc(0), version = vdxf_1.I_ADDR_VERSION, varlength = false) {
+    constructor(hash = Buffer.alloc(20), version = vdxf_1.I_ADDR_VERSION, varlength = false) {
         super(hash, version, varlength);
     }
     fromBuffer(buffer, offset, varlength) {

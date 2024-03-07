@@ -5,11 +5,13 @@ import { IdentityID } from './IdentityID';
 import { KeyID } from './KeyID';
 import { NoDestination } from './NoDestination';
 import { PubKey } from './PubKey';
+import { UnknownID } from './UnknownID';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 export interface TxDestinationVariantInterface {
     new (hash?: Buffer): TxDestinationVariant;
 }
-export declare type TxDestinationVariant = IdentityID | KeyID | NoDestination | PubKey;
-export declare class TxDestination {
+export declare type TxDestinationVariant = IdentityID | KeyID | NoDestination | PubKey | UnknownID;
+export declare class TxDestination implements SerializableEntity {
     type: BigNumber;
     data: TxDestinationVariant;
     static TYPE_INVALID: import("bn.js");
@@ -21,5 +23,10 @@ export declare class TxDestination {
     static TYPE_QUANTUM: import("bn.js");
     static TYPE_LAST: import("bn.js");
     constructor(data?: TxDestinationVariant, type?: BigNumber);
+    static getTxDestinationVariantType(variant: TxDestinationVariant): import("bn.js");
     getByteLength(): number;
+    fromBuffer(buffer: Buffer, offset?: number): number;
+    toBuffer(): Buffer;
+    static fromChunk(chunk: Buffer): TxDestination;
+    toChunk(): Buffer;
 }

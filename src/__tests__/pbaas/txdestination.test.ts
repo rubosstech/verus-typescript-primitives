@@ -2,7 +2,7 @@ import { IdentityID } from "../../pbaas/IdentityID";
 import { KeyID } from "../../pbaas/KeyID";
 import { NoDestination } from "../../pbaas/NoDestination";
 import { PubKey } from "../../pbaas/PubKey";
-import { TxDestinationVariantInterface } from "../../pbaas/TxDestination";
+import { TxDestination, TxDestinationVariantInterface } from "../../pbaas/TxDestination";
 import { fromBase58Check, toIAddress } from "../../utils/address";
 
 describe('Serializes and deserializes TxDestination variants', () => {
@@ -47,5 +47,15 @@ describe('Serializes and deserializes TxDestination variants', () => {
 
     expect(key.toBuffer().toString('hex')).toBe(pub);
     expect(keyFromBuf.toBuffer().toString('hex')).toBe(key.toBuffer().toString('hex'));
+  });
+
+  test('(de)serialize a basic TxDestination class with type PKH', () => {
+    const addr = "RQVsJRf98iq8YmRQdehzRcbLGHEx6YfjdH";
+
+    const dest = new TxDestination(KeyID.fromAddress(addr));
+    const destFromBuf = new TxDestination();
+    destFromBuf.fromBuffer(dest.toBuffer());
+
+    expect(destFromBuf.toBuffer().toString('hex')).toBe(dest.toBuffer().toString('hex'));
   });
 });

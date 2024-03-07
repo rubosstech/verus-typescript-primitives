@@ -7,6 +7,8 @@ import varuint from '../utils/varuint';
 
 import bufferutils from '../utils/bufferutils';
 import { PubKey } from './PubKey';
+import { UnknownID } from './UnknownID';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 const { BufferReader, BufferWriter } = bufferutils;
 
 export interface TxDestinationVariantInterface {
@@ -14,9 +16,9 @@ export interface TxDestinationVariantInterface {
 }
 
 // Add support for CNoDestination, CPubKey, CScriptID, CIndexID, CQuantumID
-export type TxDestinationVariant = IdentityID | KeyID | NoDestination | PubKey;
+export type TxDestinationVariant = IdentityID | KeyID | NoDestination | PubKey | UnknownID;
 
-export class TxDestination {
+export class TxDestination implements SerializableEntity {
   type: BigNumber;
   data: TxDestinationVariant;
 
@@ -29,9 +31,19 @@ export class TxDestination {
   static TYPE_QUANTUM = new BN(6, 10);
   static TYPE_LAST = new BN(6, 10);
 
-  constructor(data: TxDestinationVariant = new NoDestination(), type: BigNumber = TxDestination.TYPE_PKH) {
+  constructor(data: TxDestinationVariant = new NoDestination(), type?: BigNumber) {
     this.data = data;
-    this.type = type;
+
+    if (!type) {
+      this.type = TxDestination.getTxDestinationVariantType(data);
+    } else this.type = type;
+  }
+
+  static getTxDestinationVariantType(variant: TxDestinationVariant) {
+    if (variant instanceof PubKey) return TxDestination.TYPE_PK;
+    else if (variant instanceof KeyID) return TxDestination.TYPE_PKH;
+    else if (variant instanceof IdentityID) return TxDestination.TYPE_ID;
+    else return TxDestination.TYPE_INVALID
   }
   
   getByteLength(): number {
@@ -44,21 +56,57 @@ export class TxDestination {
     }
   }
 
-  // fromBuffer(buffer: Buffer, offset: number = 0): number {
-  //   const reader = new BufferReader(buffer, offset);
+  fromBuffer(buffer: Buffer, offset: number = 0): number {
+    const reader = new BufferReader(buffer, offset);
 
-  //   const destBytes = reader.readVarSlice();
+    const destBytes = reader.readVarSlice();
 
-  //   if (destBytes.length === 20) {
-  //     this.type = TxDestination.TYPE_PKH;
-  //     this.data = new KeyID(destBytes);
-  //   } else if (destBytes.length === 33) {
-  //     this.type = TxDestination.TYPE_PK;
-  //     this.data = new KeyID(destBytes);
-  //   }
-  // }
+    if (destBytes.length === 20) {
+      this.type = TxDestination.TYPE_PKH;
+      this.data = new KeyID(destBytes);
+    } else if (destBytes.length === 33) {
+      this.type = TxDestination.TYPE_PK;
+      this.data = new KeyID(destBytes);
+    } else {
+      const subReader = new BufferReader(destBytes, 0);
 
-  // toBuffer(): Buffer {
-    
-  // }
+      this.type = new BN(subReader.readUInt8(), 10);
+      this.data = new UnknownID(subReader.readSlice(destBytes.length - offset));
+    }
+
+    return reader.offset;
+  }
+
+  toBuffer(): Buffer {
+    const buffer = Buffer.alloc(this.getByteLength());
+    const writer = new BufferWriter(buffer);
+
+    if (this.type.eq(TxDestination.TYPE_PKH) || this.type.eq(TxDestination.TYPE_PK)) {
+      writer.writeVarSlice(this.data.toBuffer());
+    } else {
+      const subWriter = new BufferWriter(buffer);
+
+      subWriter.writeUInt8(this.type.toNumber());
+      subWriter.writeSlice(this.data.toBuffer());
+
+      writer.writeVarSlice(subWriter.buffer);
+    }
+
+    return writer.buffer;
+  }
+
+  static fromChunk(chunk: Buffer): TxDestination {
+    const writer = new BufferWriter(Buffer.alloc(varuint.encodingLength(chunk.length)));
+    writer.writeCompactSize(chunk.length)
+
+    const dest = new TxDestination()
+
+    dest.fromBuffer(Buffer.concat([writer.buffer, chunk]))
+
+    return dest
+  }
+
+  toChunk() {
+    return this.toBuffer().subarray(varuint.encodingLength(this.data.toBuffer().length))
+  }
 }
