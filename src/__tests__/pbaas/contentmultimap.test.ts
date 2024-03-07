@@ -26,16 +26,16 @@ describe('Serializes and deserializes ContentMultiMap', () => {
 
   test('test CMM with vdxfunivalue content', () => {
     const kvcontent: KvContent = new Map();
-    kvcontent.set("iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j", vdxfunivalue);
+    kvcontent.set("iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j", [vdxfunivalue]);
     testContentMultimapWithKvContent(kvcontent);
   });
 
   test('test CMM with array of vdxfunivalue content', () => {
     const kvcontent: KvContent = new Map();
     kvcontent.set("iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j", [vdxfunivalue, vdxfunivalue, vdxfunivalue, vdxfunivalue]);
-    kvcontent.set("iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq", Buffer.alloc(20).fill("h"));
+    kvcontent.set("iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq", [Buffer.alloc(20).fill("h")]);
     kvcontent.set("i5v3h9FWVdRFbNHU7DfcpGykQjRaHtMqu7", [Buffer.alloc(20).fill("h"), Buffer.alloc(20).fill("h"), Buffer.alloc(20).fill("h")]);
-    kvcontent.set("i81XL8ZpuCo9jmWLv5L5ikdxrGuHrrpQLz", vdxfunivalue);
+    kvcontent.set("i81XL8ZpuCo9jmWLv5L5ikdxrGuHrrpQLz", [vdxfunivalue]);
     testContentMultimapWithKvContent(kvcontent);
   });
 });

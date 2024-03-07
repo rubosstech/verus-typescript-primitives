@@ -31,7 +31,7 @@ export function isKvValueArrayItemVdxfUniValueJson(x: ContentMultiMapJsonValue):
   })
 }
 
-export type KvContent =  Map<string, Array<ContentMultiMapPrimitive> | ContentMultiMapPrimitive>;
+export type KvContent =  Map<string, Array<ContentMultiMapPrimitive>>;
 
 export class ContentMultiMap {
   kv_content: KvContent;
@@ -65,20 +65,6 @@ export class ContentMultiMap {
             length += nBuf.length;
           } else throw new Error("Unknown ContentMultiMap data, can't calculate ByteLength")
         }
-      } else if (value instanceof VdxfUniValue) {
-        const valCMMNOLength = value.getByteLength();
-
-        length += varuint.encodingLength(1);
-
-        length += varuint.encodingLength(valCMMNOLength);
-        length += valCMMNOLength;
-      } else if (Buffer.isBuffer(value)) {
-        const valBuf = value as Buffer;
-
-        length += varuint.encodingLength(1);
-
-        length += varuint.encodingLength(valBuf.length);
-        length += valBuf.length;
       } else throw new Error("Unknown ContentMultiMap data, can't calculate ByteLength")
     }
 
@@ -107,16 +93,6 @@ export class ContentMultiMap {
             writer.writeVarSlice(nBuf);
           } else throw new Error("Unknown ContentMultiMap data, can't toBuffer");
         }
-      } else if (value instanceof VdxfUniValue) {
-        const valCMMNOBuf = value.toBuffer();
-
-        writer.writeCompactSize(1);
-        writer.writeVarSlice(valCMMNOBuf);
-      } else if (Buffer.isBuffer(value)) {
-        const valBuf = value as Buffer;
-
-        writer.writeCompactSize(1);
-        writer.writeVarSlice(valBuf);
       } else throw new Error("Unknown ContentMultiMap data, can't toBuffer")
     }
 
@@ -134,7 +110,7 @@ export class ContentMultiMap {
 
       const contentMapKey = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
 
-      const vector = [];
+      const vector: Array<ContentMultiMapPrimitive> = [];
       const count = reader.readCompactSize();
 
       for (let j = 0; j < count; j++) {
@@ -146,7 +122,7 @@ export class ContentMultiMap {
         } else vector.push(reader.readVarSlice());
       }
 
-      this.kv_content.set(contentMapKey, vector.length === 1 ? vector[0] : vector);
+      this.kv_content.set(contentMapKey, vector);
     }
 
     return reader.offset;
@@ -177,9 +153,9 @@ export class ContentMultiMap {
 
           content.set(key, items);
         } else if (typeof value === 'string' && isHexString(value)) {
-          content.set(key, Buffer.from(value, 'hex'));
+          content.set(key, [Buffer.from(value, 'hex')]);
         } else if (isKvValueArrayItemVdxfUniValueJson(value)) {
-          content.set(key, VdxfUniValue.fromJson(value as VdxfUniValueJson));
+          content.set(key, [VdxfUniValue.fromJson(value as VdxfUniValueJson)]);
         } else {
           throw new Error("Invalid data in multimap")
         }
@@ -205,10 +181,6 @@ export class ContentMultiMap {
         }
 
         ret[key] = items;
-      } else if (value instanceof VdxfUniValue) {
-        ret[key] = value.toJson();
-      } else if (Buffer.isBuffer(value)) {
-        ret[key] = value.toString('hex');
       } else throw new Error("Unknown ContentMultiMap data, can't toBuffer")
     }
 

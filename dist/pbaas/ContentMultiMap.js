@@ -52,18 +52,6 @@ class ContentMultiMap {
                         throw new Error("Unknown ContentMultiMap data, can't calculate ByteLength");
                 }
             }
-            else if (value instanceof VdxfUniValue_1.VdxfUniValue) {
-                const valCMMNOLength = value.getByteLength();
-                length += varuint_1.default.encodingLength(1);
-                length += varuint_1.default.encodingLength(valCMMNOLength);
-                length += valCMMNOLength;
-            }
-            else if (Buffer.isBuffer(value)) {
-                const valBuf = value;
-                length += varuint_1.default.encodingLength(1);
-                length += varuint_1.default.encodingLength(valBuf.length);
-                length += valBuf.length;
-            }
             else
                 throw new Error("Unknown ContentMultiMap data, can't calculate ByteLength");
         }
@@ -89,16 +77,6 @@ class ContentMultiMap {
                         throw new Error("Unknown ContentMultiMap data, can't toBuffer");
                 }
             }
-            else if (value instanceof VdxfUniValue_1.VdxfUniValue) {
-                const valCMMNOBuf = value.toBuffer();
-                writer.writeCompactSize(1);
-                writer.writeVarSlice(valCMMNOBuf);
-            }
-            else if (Buffer.isBuffer(value)) {
-                const valBuf = value;
-                writer.writeCompactSize(1);
-                writer.writeVarSlice(valBuf);
-            }
             else
                 throw new Error("Unknown ContentMultiMap data, can't toBuffer");
         }
@@ -122,7 +100,7 @@ class ContentMultiMap {
                 else
                     vector.push(reader.readVarSlice());
             }
-            this.kv_content.set(contentMapKey, vector.length === 1 ? vector[0] : vector);
+            this.kv_content.set(contentMapKey, vector);
         }
         return reader.offset;
     }
@@ -148,10 +126,10 @@ class ContentMultiMap {
                     content.set(key, items);
                 }
                 else if (typeof value === 'string' && (0, string_1.isHexString)(value)) {
-                    content.set(key, Buffer.from(value, 'hex'));
+                    content.set(key, [Buffer.from(value, 'hex')]);
                 }
                 else if (isKvValueArrayItemVdxfUniValueJson(value)) {
-                    content.set(key, VdxfUniValue_1.VdxfUniValue.fromJson(value));
+                    content.set(key, [VdxfUniValue_1.VdxfUniValue.fromJson(value)]);
                 }
                 else {
                     throw new Error("Invalid data in multimap");
@@ -176,12 +154,6 @@ class ContentMultiMap {
                         throw new Error("Unknown ContentMultiMap data, can't toBuffer");
                 }
                 ret[key] = items;
-            }
-            else if (value instanceof VdxfUniValue_1.VdxfUniValue) {
-                ret[key] = value.toJson();
-            }
-            else if (Buffer.isBuffer(value)) {
-                ret[key] = value.toString('hex');
             }
             else
                 throw new Error("Unknown ContentMultiMap data, can't toBuffer");
