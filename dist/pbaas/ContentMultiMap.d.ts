@@ -11,7 +11,7 @@ export declare type ContentMultiMapJson = {
 };
 export declare type KvValueArrayItem = Buffer | ContentMultiMapJson;
 export declare function isKvValueArrayItemVdxfUniValueJson(x: ContentMultiMapJsonValue): x is VdxfUniValueJson;
-export declare type KvContent = Map<string, Array<ContentMultiMapPrimitive> | ContentMultiMapPrimitive>;
+export declare type KvContent = Map<string, Array<ContentMultiMapPrimitive>>;
 export declare class ContentMultiMap {
     kv_content: KvContent;
     constructor(data?: {
