@@ -39,3 +39,4 @@ export {
   ProvisioningTxid
 } from './provisioning/ProvisioningResult'
 export { Context } from './Context'
+export { defaultPersonalProfileDataTemplate, DataCategory, PersonalProfileDataStore } from './PersonalProfile'

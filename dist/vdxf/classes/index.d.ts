@@ -26,3 +26,4 @@ export { Attestation } from './Attestation';
 export { AttestationData, AttestationDataType } from './Attestation';
 export { ProvisioningTxid } from './provisioning/ProvisioningResult';
 export { Context } from './Context';
+export { defaultPersonalProfileDataTemplate, DataCategory, PersonalProfileDataStore } from './PersonalProfile';
