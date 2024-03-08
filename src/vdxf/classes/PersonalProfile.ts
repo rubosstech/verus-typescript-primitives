@@ -29,7 +29,7 @@ class PersonalDataCategory extends DataCategory {
       identitykeys.IDENTITYDATA_LASTNAME,
       identitykeys.IDENTITYDATA_DATEOFBIRTH,
       identitykeys.IDENTITYDATA_HOMEADDRESS_COUNTRY
-    ], "personal",
+    ], "Personal Details",
     identitykeys.IDENTITYDATA_PERSONAL_DETAILS.vdxfid);
   }
 }
@@ -39,7 +39,7 @@ class ContactDataCategory extends DataCategory {
     super([
       identitykeys.IDENTITYDATA_EMAIL,
       identitykeys.IDENTITYDATA_PHONENUMBER
-    ], "contact",
+    ], "Contact",
     identitykeys.IDENTITYDATA_CONTACT.vdxfid);
   }
 }
@@ -52,12 +52,12 @@ class LocationDataCategory extends DataCategory {
       identitykeys.IDENTITYDATA_HOMEADDRESS_CITY,
       identitykeys.IDENTITYDATA_HOMEADDRESS_REGION,
       identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE
-    ], "locations",
+    ], "Locations",
     identitykeys.IDENTITYDATA_LOCATIONS.vdxfid);
   }
 }
 
-const defaultPersonalProfileDataTemplate = [
+export const defaultPersonalProfileDataTemplate = [
   new PersonalDataCategory(),
   new ContactDataCategory(),
   new LocationDataCategory()

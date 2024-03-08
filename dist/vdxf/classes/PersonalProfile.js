@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PersonalProfileDataStore = exports.DataCategory = void 0;
+exports.PersonalProfileDataStore = exports.defaultPersonalProfileDataTemplate = exports.DataCategory = void 0;
 const varuint_1 = require("../../utils/varuint");
 const bufferutils_1 = require("../../utils/bufferutils");
 const address_1 = require("../../utils/address");
@@ -29,7 +29,7 @@ class PersonalDataCategory extends DataCategory {
             identitykeys.IDENTITYDATA_LASTNAME,
             identitykeys.IDENTITYDATA_DATEOFBIRTH,
             identitykeys.IDENTITYDATA_HOMEADDRESS_COUNTRY
-        ], "personal", identitykeys.IDENTITYDATA_PERSONAL_DETAILS.vdxfid);
+        ], "Personal Details", identitykeys.IDENTITYDATA_PERSONAL_DETAILS.vdxfid);
     }
 }
 class ContactDataCategory extends DataCategory {
@@ -37,7 +37,7 @@ class ContactDataCategory extends DataCategory {
         super([
             identitykeys.IDENTITYDATA_EMAIL,
             identitykeys.IDENTITYDATA_PHONENUMBER
-        ], "contact", identitykeys.IDENTITYDATA_CONTACT.vdxfid);
+        ], "Contact", identitykeys.IDENTITYDATA_CONTACT.vdxfid);
     }
 }
 class LocationDataCategory extends DataCategory {
@@ -48,10 +48,10 @@ class LocationDataCategory extends DataCategory {
             identitykeys.IDENTITYDATA_HOMEADDRESS_CITY,
             identitykeys.IDENTITYDATA_HOMEADDRESS_REGION,
             identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE
-        ], "locations", identitykeys.IDENTITYDATA_LOCATIONS.vdxfid);
+        ], "Locations", identitykeys.IDENTITYDATA_LOCATIONS.vdxfid);
     }
 }
-const defaultPersonalProfileDataTemplate = [
+exports.defaultPersonalProfileDataTemplate = [
     new PersonalDataCategory(),
     new ContactDataCategory(),
     new LocationDataCategory()
@@ -67,7 +67,7 @@ class PersonalProfileDataStore extends __1.VDXFObject {
         }
         else {
             this.data = {};
-            for (const item of defaultPersonalProfileDataTemplate) {
+            for (const item of exports.defaultPersonalProfileDataTemplate) {
                 this.data[item.category] = item;
             }
         }
