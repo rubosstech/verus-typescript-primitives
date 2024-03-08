@@ -1,9 +1,6 @@
-/// <reference types="bn.js" />
 /// <reference types="node" />
 import { VdxfUniValue, VdxfUniValueJson } from './VdxfUniValue';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
-export declare const IDENTITY_VERSION_PBAAS: import("bn.js");
-export declare const VERSION_INVALID: import("bn.js");
 export declare type ContentMultiMapPrimitive = VdxfUniValue | Buffer;
 export declare type ContentMultiMapPrimitiveJson = VdxfUniValueJson | string;
 export declare type ContentMultiMapJsonValue = ContentMultiMapPrimitiveJson | Array<ContentMultiMapPrimitiveJson>;

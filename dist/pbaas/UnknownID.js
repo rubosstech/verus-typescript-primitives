@@ -9,15 +9,15 @@ class UnknownID {
     getByteLength() {
         return this.bytes.length;
     }
-    fromBuffer(buffer, offset) {
+    fromBuffer(buffer, offset, length = 0) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
-        this.bytes = reader.readVarSlice();
+        this.bytes = reader.readSlice(length);
         return reader.offset;
     }
     toBuffer() {
         const buffer = Buffer.alloc(this.getByteLength());
         const writer = new bufferutils_1.default.BufferWriter(buffer);
-        writer.writeVarSlice(this.bytes);
+        writer.writeSlice(this.bytes);
         return writer.buffer;
     }
 }

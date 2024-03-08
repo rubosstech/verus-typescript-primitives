@@ -25,7 +25,6 @@ export const IDENTITY_MAX_NAME_LEN = new BN(64);
 const { BufferReader, BufferWriter } = bufferutils
 
 export type Hashes = Map<string, Buffer>;
-export type KvContent =  Map<string, Array<Buffer>>;
 
 export type VerusCLIVerusIDJson = {
   contentmap?: { [key: string]: string },

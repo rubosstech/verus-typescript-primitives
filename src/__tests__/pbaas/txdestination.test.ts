@@ -58,4 +58,24 @@ describe('Serializes and deserializes TxDestination variants', () => {
 
     expect(destFromBuf.toBuffer().toString('hex')).toBe(dest.toBuffer().toString('hex'));
   });
+
+  test('(de)serialize a basic TxDestination class with type PKH (toChunk)', () => {
+    const addr = "RQVsJRf98iq8YmRQdehzRcbLGHEx6YfjdH";
+
+    const dest = new TxDestination(KeyID.fromAddress(addr));
+    const destFromChunk = TxDestination.fromChunk(dest.toChunk());
+
+    expect(destFromChunk.toBuffer().toString('hex')).toBe(dest.toBuffer().toString('hex'));
+  });
+
+  test('(de)serialize a basic TxDestination class with type Identity (toChunk)', () => {
+    const addr = "iQa13cLx5a4bB9nnd8EZPigrqLTsn75VrF";
+
+    const dest = new TxDestination(IdentityID.fromAddress(addr));
+    const destFromChunk = TxDestination.fromChunk(dest.toChunk());
+
+    expect(destFromChunk.data instanceof IdentityID).toBe(true);
+    expect(destFromChunk.type.toNumber()).toBe(TxDestination.TYPE_ID.toNumber());
+    expect(destFromChunk.toBuffer().toString('hex')).toBe(dest.toBuffer().toString('hex'));
+  });
 });

@@ -29,13 +29,29 @@ class TxDestination {
         else
             return TxDestination.TYPE_INVALID;
     }
+    static getTxDestinationVariant(type) {
+        if (type.eq(this.TYPE_PK))
+            return PubKey_1.PubKey;
+        else if (type.eq(this.TYPE_PKH))
+            return KeyID_1.KeyID;
+        else if (type.eq(this.TYPE_ID))
+            return IdentityID_1.IdentityID;
+        else
+            return UnknownID_1.UnknownID;
+    }
+    toAddress() {
+        if (this.data instanceof IdentityID_1.IdentityID || this.data instanceof KeyID_1.KeyID)
+            return this.data.toAddress();
+        else
+            throw new Error("Can't get address for TxDestination type " + this.type.toNumber());
+    }
     getByteLength() {
         if (this.type.eq(TxDestination.TYPE_PKH))
             return 21;
         else if (this.type.eq(TxDestination.TYPE_PK))
             return 34;
         else {
-            const datalen = this.data.getByteLength();
+            const datalen = this.data.getByteLength() + 1;
             return varuint_1.default.encodingLength(datalen) + datalen;
         }
     }
@@ -53,7 +69,8 @@ class TxDestination {
         else {
             const subReader = new BufferReader(destBytes, 0);
             this.type = new bn_js_1.BN(subReader.readUInt8(), 10);
-            this.data = new UnknownID_1.UnknownID(subReader.readSlice(destBytes.length - offset));
+            const DestVariant = TxDestination.getTxDestinationVariant(this.type);
+            this.data = new DestVariant(subReader.readSlice(destBytes.length - subReader.offset));
         }
         return reader.offset;
     }
@@ -64,7 +81,7 @@ class TxDestination {
             writer.writeVarSlice(this.data.toBuffer());
         }
         else {
-            const subWriter = new BufferWriter(buffer);
+            const subWriter = new BufferWriter(Buffer.alloc(1 + this.data.getByteLength()));
             subWriter.writeUInt8(this.type.toNumber());
             subWriter.writeSlice(this.data.toBuffer());
             writer.writeVarSlice(subWriter.buffer);

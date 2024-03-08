@@ -39,18 +39,30 @@ export class TxDestination implements SerializableEntity {
     } else this.type = type;
   }
 
-  static getTxDestinationVariantType(variant: TxDestinationVariant) {
+  static getTxDestinationVariantType(variant: TxDestinationVariant): BigNumber {
     if (variant instanceof PubKey) return TxDestination.TYPE_PK;
     else if (variant instanceof KeyID) return TxDestination.TYPE_PKH;
     else if (variant instanceof IdentityID) return TxDestination.TYPE_ID;
     else return TxDestination.TYPE_INVALID
+  }
+
+  static getTxDestinationVariant(type: BigNumber): TxDestinationVariantInterface {
+    if (type.eq(this.TYPE_PK)) return PubKey;
+    else if (type.eq(this.TYPE_PKH)) return KeyID;
+    else if (type.eq(this.TYPE_ID)) return IdentityID;
+    else return UnknownID;
+  }
+
+  toAddress(): string {
+    if (this.data instanceof IdentityID || this.data instanceof KeyID) return this.data.toAddress();
+    else throw new Error("Can't get address for TxDestination type " + this.type.toNumber())
   }
   
   getByteLength(): number {
     if (this.type.eq(TxDestination.TYPE_PKH)) return 21
     else if (this.type.eq(TxDestination.TYPE_PK)) return 34
     else {
-      const datalen = this.data.getByteLength();
+      const datalen = this.data.getByteLength() + 1;
 
       return varuint.encodingLength(datalen) + datalen;
     }
@@ -71,7 +83,10 @@ export class TxDestination implements SerializableEntity {
       const subReader = new BufferReader(destBytes, 0);
 
       this.type = new BN(subReader.readUInt8(), 10);
-      this.data = new UnknownID(subReader.readSlice(destBytes.length - offset));
+
+      const DestVariant = TxDestination.getTxDestinationVariant(this.type);
+
+      this.data = new DestVariant(subReader.readSlice(destBytes.length - subReader.offset));
     }
 
     return reader.offset;
@@ -84,7 +99,7 @@ export class TxDestination implements SerializableEntity {
     if (this.type.eq(TxDestination.TYPE_PKH) || this.type.eq(TxDestination.TYPE_PK)) {
       writer.writeVarSlice(this.data.toBuffer());
     } else {
-      const subWriter = new BufferWriter(buffer);
+      const subWriter = new BufferWriter(Buffer.alloc(1 + this.data.getByteLength()));
 
       subWriter.writeUInt8(this.type.toNumber());
       subWriter.writeSlice(this.data.toBuffer());

@@ -16,7 +16,6 @@ export declare const IDENTITY_FLAG_TOKENIZED_CONTROL: import("bn.js");
 export declare const IDENTITY_MAX_UNLOCK_DELAY: import("bn.js");
 export declare const IDENTITY_MAX_NAME_LEN: import("bn.js");
 export declare type Hashes = Map<string, Buffer>;
-export declare type KvContent = Map<string, Array<Buffer>>;
 export declare type VerusCLIVerusIDJson = {
     contentmap?: {
         [key: string]: string;

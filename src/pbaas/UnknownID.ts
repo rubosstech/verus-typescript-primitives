@@ -16,11 +16,12 @@ export class UnknownID implements SerializableEntity {
 
   fromBuffer(
     buffer: Buffer,
-    offset: number
+    offset?: number,
+    length: number = 0
   ): number {
     const reader = new bufferutils.BufferReader(buffer, offset);
 
-    this.bytes = reader.readVarSlice();
+    this.bytes = reader.readSlice(length);
 
     return reader.offset;
   }
@@ -29,7 +30,7 @@ export class UnknownID implements SerializableEntity {
     const buffer = Buffer.alloc(this.getByteLength());
     const writer = new bufferutils.BufferWriter(buffer);
 
-    writer.writeVarSlice(this.bytes);
+    writer.writeSlice(this.bytes);
 
     return writer.buffer;
   }

@@ -1,15 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContentMultiMap = exports.isKvValueArrayItemVdxfUniValueJson = exports.VERSION_INVALID = exports.IDENTITY_VERSION_PBAAS = void 0;
+exports.ContentMultiMap = exports.isKvValueArrayItemVdxfUniValueJson = void 0;
 const varuint_1 = require("../utils/varuint");
 const bufferutils_1 = require("../utils/bufferutils");
 const address_1 = require("../utils/address");
 const vdxf_1 = require("../constants/vdxf");
-const bn_js_1 = require("bn.js");
 const VdxfUniValue_1 = require("./VdxfUniValue");
 const string_1 = require("../utils/string");
-exports.IDENTITY_VERSION_PBAAS = new bn_js_1.BN(3, 10);
-exports.VERSION_INVALID = new bn_js_1.BN(0, 10);
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 function isKvValueArrayItemVdxfUniValueJson(x) {
     return x != null && typeof x === 'object' && !Array.isArray(x) && Object.keys(x).every((key) => {

@@ -23,7 +23,9 @@ export declare class TxDestination implements SerializableEntity {
     static TYPE_QUANTUM: import("bn.js");
     static TYPE_LAST: import("bn.js");
     constructor(data?: TxDestinationVariant, type?: BigNumber);
-    static getTxDestinationVariantType(variant: TxDestinationVariant): import("bn.js");
+    static getTxDestinationVariantType(variant: TxDestinationVariant): BigNumber;
+    static getTxDestinationVariant(type: BigNumber): TxDestinationVariantInterface;
+    toAddress(): string;
     getByteLength(): number;
     fromBuffer(buffer: Buffer, offset?: number): number;
     toBuffer(): Buffer;

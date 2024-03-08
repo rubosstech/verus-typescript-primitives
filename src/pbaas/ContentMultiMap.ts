@@ -8,9 +8,6 @@ import { VdxfUniType, VdxfUniValue, VdxfUniValueJson } from './VdxfUniValue';
 import { isHexString } from '../utils/string';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 
-export const IDENTITY_VERSION_PBAAS = new BN(3, 10);
-export const VERSION_INVALID = new BN(0, 10);
-
 const { BufferReader, BufferWriter } = bufferutils
 
 export type ContentMultiMapPrimitive = VdxfUniValue | Buffer;
