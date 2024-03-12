@@ -10,7 +10,7 @@ const Attestation_1 = require("./Attestation");
 const identitykeys = require("../identityDataKeys");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class DataCategory {
-    constructor(data, category, vdxfid) {
+    constructor(data, category, vdxfid, details) {
         if (data && data[0] instanceof __1.VDXFObject) {
             this.data = data;
         }
@@ -19,6 +19,7 @@ class DataCategory {
         }
         this.category = category;
         this.vdxfid = vdxfid;
+        this.details = details;
     }
 }
 exports.DataCategory = DataCategory;
@@ -29,7 +30,7 @@ class PersonalDataCategory extends DataCategory {
             identitykeys.IDENTITYDATA_LASTNAME,
             identitykeys.IDENTITYDATA_DATEOFBIRTH,
             identitykeys.IDENTITYDATA_HOMEADDRESS_COUNTRY
-        ], "Personal Details", identitykeys.IDENTITYDATA_PERSONAL_DETAILS.vdxfid);
+        ], "Personal Details", identitykeys.IDENTITYDATA_PERSONAL_DETAILS.vdxfid, "Name, birthday, nationality");
     }
 }
 class ContactDataCategory extends DataCategory {
@@ -37,7 +38,7 @@ class ContactDataCategory extends DataCategory {
         super([
             identitykeys.IDENTITYDATA_EMAIL,
             identitykeys.IDENTITYDATA_PHONENUMBER
-        ], "Contact", identitykeys.IDENTITYDATA_CONTACT.vdxfid);
+        ], "Contact", identitykeys.IDENTITYDATA_CONTACT.vdxfid, "Email, phone number");
     }
 }
 class LocationDataCategory extends DataCategory {
@@ -48,13 +49,39 @@ class LocationDataCategory extends DataCategory {
             identitykeys.IDENTITYDATA_HOMEADDRESS_CITY,
             identitykeys.IDENTITYDATA_HOMEADDRESS_REGION,
             identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE
-        ], "Locations", identitykeys.IDENTITYDATA_LOCATIONS.vdxfid);
+        ], "Locations", identitykeys.IDENTITYDATA_LOCATIONS.vdxfid, "Tax residency, home address");
+    }
+}
+class BankingDataCategory extends DataCategory {
+    constructor() {
+        super([
+            identitykeys.IDENTITYDATA_HOMEADDRESS_STREET1,
+            identitykeys.IDENTITYDATA_HOMEADDRESS_STREET2,
+            identitykeys.IDENTITYDATA_HOMEADDRESS_CITY,
+            identitykeys.IDENTITYDATA_HOMEADDRESS_REGION,
+            identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE
+        ], "Banking Information", identitykeys.IDENTITYDATA_BANKING_INFORMATION.vdxfid, "Bank accounts");
+    }
+}
+class DocumentsCategory extends DataCategory {
+    constructor() {
+        super([
+            identitykeys.IDENTITYDATA_PASSPORT,
+            identitykeys.IDENTITYDATA_DRIVINGLICENCE,
+            identitykeys.IDENTITYDATA_RESIDENCEPERMIT,
+            identitykeys.IDENTITYDATA_RESIDENTCARD,
+            identitykeys.IDENTITYDATA_VISA,
+            identitykeys.IDENTITYDATA_IDCARD,
+            identitykeys.IDENTITYDATA_SELFIECHECK_IMAGE,
+        ], "Documents", identitykeys.IDENTITYDATA_DOCUMENTS_AND_IMAGES.vdxfid, "Passport, ID, driving license");
     }
 }
 exports.defaultPersonalProfileDataTemplate = [
     new PersonalDataCategory(),
     new ContactDataCategory(),
-    new LocationDataCategory()
+    new LocationDataCategory(),
+    new BankingDataCategory(),
+    new DocumentsCategory()
 ];
 class PersonalProfileDataStore extends __1.VDXFObject {
     constructor(data) {

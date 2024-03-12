@@ -2457,13 +2457,13 @@ export const IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED: VDXFKeyInterf
 }
 
 export const IDENTITYDATA_NAME: VDXFKeyInterface = {
-"vdxfid": "iNtCaMhqbpwGubHkaepi9mhVFg8jPj2Sk4",
-  "indexid": "xTiK3A8vT99wXmAnSLUs8AE2HL9kKfRmzC",
-  "hash160result": "272c6f542e769f1006ee6db29be51ddbbaa1e4d4",
-  "qualifiedname": {
-    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::identitydata.name"
-  }
+    "vdxfid": "iNtCaMhqbpwGubHkaepi9mhVFg8jPj2Sk4",
+    "indexid": "xTiK3A8vT99wXmAnSLUs8AE2HL9kKfRmzC",
+    "hash160result": "272c6f542e769f1006ee6db29be51ddbbaa1e4d4",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.name"
+    }
 }
 
 export const IDENTITYDATA_PERSONAL_DETAILS: VDXFKeyInterface = {
@@ -2471,8 +2471,8 @@ export const IDENTITYDATA_PERSONAL_DETAILS: VDXFKeyInterface = {
     "indexid": "xJUXHdgVDhB5Cd9FAJmF1DL4FofD5W44Wa",
     "hash160result": "78d7089e964a3f6e6ae0233346554555d3e68f6f",
     "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.personaldetails"
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.personaldetails"
     }
 }
 
@@ -2481,9 +2481,9 @@ export const IDENTITYDATA_CONTACT: VDXFKeyInterface = {
     "indexid": "xU7NwFYLfVp9MMCqFQa6RbX2HYdcGVBu6v",
     "hash160result": "cef7d037aa9c9342008cc13ea0173610f17341d9",
     "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.contactdetails"
-    }  
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.contactdetails"
+    }
 }
 
 export const IDENTITYDATA_LOCATIONS: VDXFKeyInterface = {
@@ -2491,8 +2491,8 @@ export const IDENTITYDATA_LOCATIONS: VDXFKeyInterface = {
     "indexid": "xW4HGSqL5DWpjEtjymtLV9kRj5vaeyFTX7",
     "hash160result": "e89b7bc01f7fececa737c5451a6889006bb99bee",
     "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.locationdetails"
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.locationdetails"
     }
 }
 
@@ -2501,8 +2501,8 @@ export const IDENTITYDATA_BANKING_INFORMATION: VDXFKeyInterface = {
     "indexid": "xPDYYKALcdvPvuFz1iRBAh1StntxrcEUeM",
     "hash160result": "1a79f042ce08168d0dcaf4b1062eb1e3525693a3",
     "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.bankingdetails"
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankingdetails"
     }
 }
 
@@ -2511,9 +2511,9 @@ export const IDENTITYDATA_DOCUMENTS_AND_IMAGES: VDXFKeyInterface = {
     "indexid": "xJfaqfAuTc9KQfgLLgQfw3Kg5Yya97dwwF",
     "hash160result": "b93a86e345efacfa4cdd5ab1a07f41da4371a771",
     "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.documents"
-    }  
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.documents"
+    }
 }
 
 export const PERSONAL_INFO_OBJECT: VDXFKeyInterface = {
@@ -2521,7 +2521,228 @@ export const PERSONAL_INFO_OBJECT: VDXFKeyInterface = {
     "indexid": "xB1NEQDj5SfxupZpyrQoVQF5PFR5Foqja6",
     "hash160result": "50b7fa643e4b024ffbcaabd40403d22e1a3ba41d",
     "qualifiedname": {
-      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-      "name": "vrsc::identitydata.personalinfo"
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.personalinfo"
     }
 }
+
+export const FIAT_CURRENCEY: VDXFKeyInterface = {
+    "vdxfid": "i8sgE4s24ZZE9ts4MiYbWpng419T8a5yfW",
+    "indexid": "xDhngsJ6usmtn4k6DQCkVDKD5fATwqdYBr",
+    "hash160result": "f24235e62affcb4c57faecc6d0e3b3893889393b",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.fiatcurrency"
+    }
+}
+
+
+export const BANK_ACCOUNT: VDXFKeyInterface = {
+    "vdxfid": "i7QCof7PM8unmLKefzRKokd6oHtkRN5NK4",
+    "indexid": "xCEKGTYUCT8TPWCgXg5Un99dpwumKZ9uek",
+    "hash160result": "c34f89a8cd8b6a32848632597ea0bd111c4a0f2b",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    }
+}
+
+export const BANK_ACCOUNT_CURRENCY: VDXFKeyInterface =
+{
+    "vdxfid": "iJdQpLtdyAgiRfoJstY8utsY5wEQZdM91y",
+    "indexid": "xPTXH9KipUuP3qgLjaCHtHQ57bFRREieor",
+    "hash160result": "2d60e910979af52ce62167b5ec5224858a1b38a6",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "i8sgE4s24ZZE9ts4MiYbWpng419T8a5yfW"
+    }
+}
+
+export const BANK_ACCOUNT_COUNTRY: VDXFKeyInterface = {
+    "vdxfid": "iLcX5aezEdeeX63ZAk1fzh1qBVc5gr3hyT",
+    "indexid": "xRSdYP655wsK9Fvb2Rfpy5YND9d6Z9EL9o",
+    "hash160result": "0939ad4a2dcb7c1030a2f4efd046a818c92bfdbb",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
+    }
+}
+
+export const BANK_ACCOUNT_STREET1: VDXFKeyInterface = {
+    "vdxfid": "iDzy4tzp8CQqG4fh4qwyhjeM1EDgZvauwy",
+    "indexid": "xJq5XhRtyWdVtEYivXc8g8At2tEhSpargH",
+    "hash160result": "93a2d4461521cffba345fe384c86561fb5227373",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+    }
+}
+
+export const BANK_ACCOUNT_STREET2: VDXFKeyInterface =
+{
+    "vdxfid": "iMf5baQkrp6EuacyScGu3vQ7EHt4vSiUsz",
+    "indexid": "xSVC4Nqqi8JuXkW1JHw42JveFwu5qj1Gkv",
+    "hash160result": "d3da8b39e046268d93d25d6b9f780950d04571c7",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "i3h8D5kGtn6DCVCwPFvbypbFCqfzAhXiD2"
+    }
+}
+
+export const BANK_ACCOUNT_CITY: VDXFKeyInterface = {
+    "vdxfid": "iBgQ4ev7sBd1FodofzgyfEriHWQw6phnwm",
+    "indexid": "xGWWXTMCiVqfsyWqXgM8ddPFKARx1ok9eq",
+    "hash160result": "aad5a1798ce03abfbe5166989f9bade19fd8ff59",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+    }
+}
+
+export const BANK_ACCOUNT_REGION: VDXFKeyInterface = {
+    "vdxfid": "iE2HNu3NkhUpFanwjq7z3K14pSKCVh2Yku",
+    "indexid": "xJrPqhUTc1hUskfybWn91hXbr6LDLwguv5",
+    "hash160result": "f8b4b7681f399f4ce6f77b16a3034cd014d6b273",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
+    }
+}
+
+export const BANK_ACCOUNT_POSTALCODE: VDXFKeyInterface = {
+    "vdxfid": "iEnvTt4zt1iXttDpDCcqvfNYhbReBSeGoa",
+    "indexid": "xKd2vgW5jKwCX46r4tGzu3u5jFSf33Qv7t",
+    "hash160result": "23439436b34068051f5dfdaf133ae7ada918247c",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
+    }
+}
+
+export const BANK_ACCOUNT_TAXNUMBER: VDXFKeyInterface = {
+    "vdxfid": "iLZMhFEyg2BysiG8eQabdeGYLpNRzWUvVG",
+    "indexid": "xRPUA3g4XLQeVt9AW6Ekc2o5NUPSxw2wvq",
+    "hash160result": "fa32239bcdc55780096b55ce3e7ae9ddc01664bb",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.taxnumber"
+    }
+}
+
+export const BANK_ACCOUNT_TAXCOUNTRY: VDXFKeyInterface = {
+    "vdxfid": "iNfhYoUGzruHxihV5dYSYnsruD4STZaKvF",
+    "indexid": "xTVp1buMrB7xataWwKCbXBQPvs5TN85VEX",
+    "hash160result": "c0728dd8a0644b69a990c7cddc133a8aeb6887d2",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.taxcountry"
+    }
+}
+
+export const BANK_ACCOUNT_FIRSTNAME: VDXFKeyInterface =
+{
+    "vdxfid": "iLaKzdEJgoztyM5f9YnLoGBPQYpq3d6FxF",
+    "indexid": "xRQSTRfPY8DZbWxh1ESVmehvSCqqw8EGSr",
+    "hash160result": "25041a54186ca5d8c277e7a1a498c33fe01593bb",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "i4GqsotHGa4czCdtg2d8FVHKfJFzVyBPrM"
+    }
+}
+
+export const BANK_ACCOUNT_LASTNAME: VDXFKeyInterface = {
+    "vdxfid": "iR2fNBYnQDAgfU2BxvC7c4CJQPRY7LXAzm",
+    "indexid": "xVrmpyysFXPMHduDpbrGaSiqS3SYznwXmR",
+    "hash160result": "c4b8f6772ae63a6265c814ebf1637f6902936eec",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z"
+    }
+}
+
+export const BANK_ACCOUNT_PHONENUMBER: VDXFKeyInterface =
+{
+    "vdxfid": "iNNkwqvht83J1HZyopGaqVXKMAzTQkj9zM",
+    "indexid": "xTCsQeMnjSFxdTT1fVvjot3rNq1UHrb19r",
+    "hash160result": "95d0bc46ca38214dcca8220507da3295a52c53cf",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "i9ZQ5degEh3wQg5vNm8Tod88bcJBrLs5p3"
+    }
+}
+
+export const ACCOUNT_NUMBER: VDXFKeyInterface = {
+    "vdxfid": "iS6TbNSaquK5uDZemFF9DLP6K6ZciN6TBd",
+    "indexid": "xWva4AsfhDXkXPSgcvuJBiudLkadg3ZHt5",
+    "hash160result": "8b15e73e57238a3dc6bcb31b368328495e891ef8",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.accountnumber"
+    }
+}
+export const ACCOUNT_TYPE: VDXFKeyInterface = {
+    "vdxfid": "iNdRtUasuiojMC2sw35Nbs4W6hq7o8bWqY",
+    "indexid": "xTTYMH1xm32PyMuunijXaFb38Mr8ipmsky",
+    "hash160result": "b1d14abf13ce26753676953ec88c00ad448119d2",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.accounttype"
+    }
+}
+
+export const BANK_ACCOUNT_NUMBER: VDXFKeyInterface = {
+    "vdxfid": "i64P8QWcucELMgrq1uxY7uKCq3eymRcwaQ",
+    "indexid": "xAtVbCwhkvSzyrjrsbch6Hqjrhfzdz82YM",
+    "hash160result": "240b1dd30e88528bc9307d3158ccb5fb3d76571c",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "iS6TbNSaquK5uDZemFF9DLP6K6ZciN6TBd"
+    }
+}
+
+export const BANK_ACCOUNT_TYPE: VDXFKeyInterface = {
+    "vdxfid": "iLMsPy8GhsGSNDzXDpZ8SEcymJfgGrLUVj",
+    "indexid": "xRByrmZMZBV6zPsZ5WDHQd9Wnxgh8bD1RJ",
+    "hash160result": "faf99925bc81dc052b9deb8c3321965633e437b9",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identitydata.bankaccount"
+    },
+    "bounddata": {
+        "vdxfkey": "iNdRtUasuiojMC2sw35Nbs4W6hq7o8bWqY"
+    }
+}
+
