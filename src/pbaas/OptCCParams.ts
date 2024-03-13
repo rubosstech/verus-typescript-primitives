@@ -116,18 +116,18 @@ export class OptCCParams implements SerializableEntity {
   }
 
   static fromChunk(chunk: Buffer): OptCCParams {
-    var prefix = Buffer.alloc(1)
-    prefix.writeUInt8(chunk.length, 0)
+    const writer = new bufferutils.BufferWriter(Buffer.alloc(varuint.encodingLength(chunk.length)), 0);
+    writer.writeCompactSize(chunk.length);
 
     const params = new OptCCParams()
 
-    params.fromBuffer(Buffer.concat([prefix, chunk]))
+    params.fromBuffer(Buffer.concat([writer.buffer, chunk]))
 
     return params
   }
 
   toChunk(): Buffer {
-    return this.toBuffer().subarray(1)
+    return this.internalToBuffer(true);
   }
 
   fromBuffer(buffer: Buffer, offset = 0): number {
@@ -188,7 +188,7 @@ export class OptCCParams implements SerializableEntity {
     return offset;
   }
 
-  getByteLength(): number {
+  internalGetByteLength(asChunk: boolean): number {
     const chunks = [Buffer.alloc(4)];
     chunks[0][0] = this.version.toNumber();
     chunks[0][1] = this.eval_code.toNumber();
@@ -205,10 +205,14 @@ export class OptCCParams implements SerializableEntity {
 
     const buf = bscript.compile(chunks);
     
-    return varuint.encodingLength(buf.length) + buf.length;
+    return asChunk ? buf.length : (varuint.encodingLength(buf.length) + buf.length);
   }
 
-  toBuffer(): Buffer {
+  getByteLength(): number {
+    return this.internalGetByteLength(false);
+  }
+
+  private internalToBuffer(asChunk: boolean): Buffer {
     const chunks = [Buffer.alloc(4)];
     chunks[0][0] = this.version.toNumber();
     chunks[0][1] = this.eval_code.toNumber();
@@ -225,13 +229,21 @@ export class OptCCParams implements SerializableEntity {
 
     const scriptStore = bscript.compile(chunks);
     const buf = bscript.compile(chunks);
-    const len = varuint.encodingLength(buf.length) + buf.length;
+    const len = asChunk ? buf.length : varuint.encodingLength(buf.length) + buf.length;
 
     const buffer = Buffer.alloc(len);
     const writer = new bufferutils.BufferWriter(buffer);
 
-    writer.writeVarSlice(scriptStore)
+    if (asChunk) {
+      writer.writeSlice(scriptStore)
+    } else {
+      writer.writeVarSlice(scriptStore)
+    }
 
     return writer.buffer;
+  }
+
+  toBuffer(): Buffer {
+    return this.internalToBuffer(false);
   }
 }

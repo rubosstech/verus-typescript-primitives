@@ -12,6 +12,7 @@ import { VdxfUniType } from './VdxfUniValue';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 import { KeyID } from './KeyID';
 
+export const IDENTITY_VERSION_VAULT = new BN(2, 10);
 export const IDENTITY_VERSION_PBAAS = new BN(3, 10);
 export const IDENITTY_VERSION_INVALID = new BN(0, 10);
 
@@ -101,7 +102,7 @@ export class Identity extends Principal implements SerializableEntity {
     if (this.version.lt(IDENTITY_VERSION_PBAAS)) {
       length += varuint.encodingLength(this.content_map.size);
 
-      for (const m in this.content_map) {
+      for (const m of this.content_map.entries()) {
         length += 20;   //uint160 key
         length += 32;   //uint256 hash
       }
@@ -127,7 +128,7 @@ export class Identity extends Principal implements SerializableEntity {
     }
 
     // post PBAAS
-    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
+    if (this.version.gte(IDENTITY_VERSION_VAULT)) {
       length += this.system_id.getByteLength();   //uint160 systemid
       length += 4;                             //uint32 unlockafter
     }
@@ -139,6 +140,7 @@ export class Identity extends Principal implements SerializableEntity {
     const writer = new BufferWriter(Buffer.alloc(this.getByteLength()));
 
     writer.writeSlice(super.toBuffer());
+
     writer.writeSlice(this.parent.toBuffer());
 
     writer.writeVarSlice(Buffer.from(this.name, "utf8"));
@@ -179,7 +181,7 @@ export class Identity extends Principal implements SerializableEntity {
     }
     
     // post PBAAS
-    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
+    if (this.version.gte(IDENTITY_VERSION_VAULT)) {
       writer.writeSlice(this.system_id.toBuffer())
       writer.writeUInt32(this.unlock_after.toNumber())
     }
@@ -256,7 +258,7 @@ export class Identity extends Principal implements SerializableEntity {
       this.private_addresses.push(saplingAddr);
     }
 
-    if (this.version.gte(IDENTITY_VERSION_PBAAS)) {
+    if (this.version.gte(IDENTITY_VERSION_VAULT)) {
       const _system = new IdentityID();
       reader.offset = _system.fromBuffer(
         reader.buffer,

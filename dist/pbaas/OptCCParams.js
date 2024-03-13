@@ -101,14 +101,14 @@ class OptCCParams {
                 (this.eval_code.lte(new bn_js_1.BN(26)) && this.m.lte(this.n))));
     }
     static fromChunk(chunk) {
-        var prefix = Buffer.alloc(1);
-        prefix.writeUInt8(chunk.length, 0);
+        const writer = new bufferutils_1.default.BufferWriter(Buffer.alloc(varuint_1.default.encodingLength(chunk.length)), 0);
+        writer.writeCompactSize(chunk.length);
         const params = new OptCCParams();
-        params.fromBuffer(Buffer.concat([prefix, chunk]));
+        params.fromBuffer(Buffer.concat([writer.buffer, chunk]));
         return params;
     }
     toChunk() {
-        return this.toBuffer().subarray(1);
+        return this.internalToBuffer(true);
     }
     fromBuffer(buffer, offset = 0) {
         const reader = new bufferutils_1.default.BufferReader(buffer, offset);
@@ -156,7 +156,7 @@ class OptCCParams {
         }
         return offset;
     }
-    getByteLength() {
+    internalGetByteLength(asChunk) {
         const chunks = [Buffer.alloc(4)];
         chunks[0][0] = this.version.toNumber();
         chunks[0][1] = this.eval_code.toNumber();
@@ -169,9 +169,12 @@ class OptCCParams {
             chunks.push(x);
         });
         const buf = bscript.compile(chunks);
-        return varuint_1.default.encodingLength(buf.length) + buf.length;
+        return asChunk ? buf.length : (varuint_1.default.encodingLength(buf.length) + buf.length);
     }
-    toBuffer() {
+    getByteLength() {
+        return this.internalGetByteLength(false);
+    }
+    internalToBuffer(asChunk) {
         const chunks = [Buffer.alloc(4)];
         chunks[0][0] = this.version.toNumber();
         chunks[0][1] = this.eval_code.toNumber();
@@ -185,11 +188,19 @@ class OptCCParams {
         });
         const scriptStore = bscript.compile(chunks);
         const buf = bscript.compile(chunks);
-        const len = varuint_1.default.encodingLength(buf.length) + buf.length;
+        const len = asChunk ? buf.length : varuint_1.default.encodingLength(buf.length) + buf.length;
         const buffer = Buffer.alloc(len);
         const writer = new bufferutils_1.default.BufferWriter(buffer);
-        writer.writeVarSlice(scriptStore);
+        if (asChunk) {
+            writer.writeSlice(scriptStore);
+        }
+        else {
+            writer.writeVarSlice(scriptStore);
+        }
         return writer.buffer;
+    }
+    toBuffer() {
+        return this.internalToBuffer(false);
     }
 }
 exports.OptCCParams = OptCCParams;

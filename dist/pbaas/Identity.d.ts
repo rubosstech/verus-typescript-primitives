@@ -7,6 +7,7 @@ import { SaplingPaymentAddress } from './SaplingPaymentAddress';
 import { ContentMultiMap } from './ContentMultiMap';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 import { KeyID } from './KeyID';
+export declare const IDENTITY_VERSION_VAULT: import("bn.js");
 export declare const IDENTITY_VERSION_PBAAS: import("bn.js");
 export declare const IDENITTY_VERSION_INVALID: import("bn.js");
 export declare const IDENTITY_FLAG_REVOKED: import("bn.js");

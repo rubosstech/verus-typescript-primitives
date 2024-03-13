@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Identity = exports.IDENTITY_MAX_NAME_LEN = exports.IDENTITY_MAX_UNLOCK_DELAY = exports.IDENTITY_FLAG_TOKENIZED_CONTROL = exports.IDENTITY_FLAG_LOCKED = exports.IDENTITY_FLAG_ACTIVECURRENCY = exports.IDENTITY_FLAG_REVOKED = exports.IDENITTY_VERSION_INVALID = exports.IDENTITY_VERSION_PBAAS = void 0;
+exports.Identity = exports.IDENTITY_MAX_NAME_LEN = exports.IDENTITY_MAX_UNLOCK_DELAY = exports.IDENTITY_FLAG_TOKENIZED_CONTROL = exports.IDENTITY_FLAG_LOCKED = exports.IDENTITY_FLAG_ACTIVECURRENCY = exports.IDENTITY_FLAG_REVOKED = exports.IDENITTY_VERSION_INVALID = exports.IDENTITY_VERSION_PBAAS = exports.IDENTITY_VERSION_VAULT = void 0;
 const varuint_1 = require("../utils/varuint");
 const bufferutils_1 = require("../utils/bufferutils");
 const Principal_1 = require("./Principal");
@@ -10,6 +10,7 @@ const bn_js_1 = require("bn.js");
 const IdentityID_1 = require("./IdentityID");
 const SaplingPaymentAddress_1 = require("./SaplingPaymentAddress");
 const ContentMultiMap_1 = require("./ContentMultiMap");
+exports.IDENTITY_VERSION_VAULT = new bn_js_1.BN(2, 10);
 exports.IDENTITY_VERSION_PBAAS = new bn_js_1.BN(3, 10);
 exports.IDENITTY_VERSION_INVALID = new bn_js_1.BN(0, 10);
 exports.IDENTITY_FLAG_REVOKED = new bn_js_1.BN(8000, 16); // set when this identity is revoked
@@ -57,7 +58,7 @@ class Identity extends Principal_1.Principal {
         }
         if (this.version.lt(exports.IDENTITY_VERSION_PBAAS)) {
             length += varuint_1.default.encodingLength(this.content_map.size);
-            for (const m in this.content_map) {
+            for (const m of this.content_map.entries()) {
                 length += 20; //uint160 key
                 length += 32; //uint256 hash
             }
@@ -77,7 +78,7 @@ class Identity extends Principal_1.Principal {
             }
         }
         // post PBAAS
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
+        if (this.version.gte(exports.IDENTITY_VERSION_VAULT)) {
             length += this.system_id.getByteLength(); //uint160 systemid
             length += 4; //uint32 unlockafter
         }
@@ -116,7 +117,7 @@ class Identity extends Principal_1.Principal {
             }
         }
         // post PBAAS
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
+        if (this.version.gte(exports.IDENTITY_VERSION_VAULT)) {
             writer.writeSlice(this.system_id.toBuffer());
             writer.writeUInt32(this.unlock_after.toNumber());
         }
@@ -164,7 +165,7 @@ class Identity extends Principal_1.Principal {
             reader.offset = saplingAddr.fromBuffer(reader.buffer, reader.offset);
             this.private_addresses.push(saplingAddr);
         }
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
+        if (this.version.gte(exports.IDENTITY_VERSION_VAULT)) {
             const _system = new IdentityID_1.IdentityID();
             reader.offset = _system.fromBuffer(reader.buffer, reader.offset);
             this.system_id = _system;

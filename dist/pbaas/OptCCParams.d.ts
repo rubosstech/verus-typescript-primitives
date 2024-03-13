@@ -23,6 +23,8 @@ export declare class OptCCParams implements SerializableEntity {
     static fromChunk(chunk: Buffer): OptCCParams;
     toChunk(): Buffer;
     fromBuffer(buffer: Buffer, offset?: number): number;
+    internalGetByteLength(asChunk: boolean): number;
     getByteLength(): number;
+    private internalToBuffer;
     toBuffer(): Buffer;
 }
