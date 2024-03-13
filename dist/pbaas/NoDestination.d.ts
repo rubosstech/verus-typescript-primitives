@@ -1,6 +1,7 @@
 /// <reference types="node" />
-import { Hash160 } from "../vdxf/classes";
-export declare class NoDestination extends Hash160 {
+import { SerializableEntity } from "../utils/types/SerializableEntity";
+import { Hash160SerEnt } from "../vdxf/classes/Hash160";
+export declare class NoDestination extends Hash160SerEnt implements SerializableEntity {
     constructor();
-    fromBuffer(buffer: Buffer, varlength?: boolean, offset?: number): number;
+    fromBuffer(buffer: Buffer, offset?: number): number;
 }

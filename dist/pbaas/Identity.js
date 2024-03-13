@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Identity = exports.IDENTITY_MAX_NAME_LEN = exports.IDENTITY_MAX_UNLOCK_DELAY = exports.IDENTITY_FLAG_TOKENIZED_CONTROL = exports.IDENTITY_FLAG_LOCKED = exports.IDENTITY_FLAG_ACTIVECURRENCY = exports.IDENTITY_FLAG_REVOKED = exports.IDENITTY_VERSION_INVALID = exports.IDENTITY_VERSION_PBAAS = void 0;
+exports.Identity = exports.IDENTITY_MAX_NAME_LEN = exports.IDENTITY_MAX_UNLOCK_DELAY = exports.IDENTITY_FLAG_TOKENIZED_CONTROL = exports.IDENTITY_FLAG_LOCKED = exports.IDENTITY_FLAG_ACTIVECURRENCY = exports.IDENTITY_FLAG_REVOKED = exports.IDENITTY_VERSION_INVALID = exports.IDENTITY_VERSION_PBAAS = exports.IDENTITY_VERSION_VAULT = void 0;
 const varuint_1 = require("../utils/varuint");
 const bufferutils_1 = require("../utils/bufferutils");
 const Principal_1 = require("./Principal");
@@ -10,6 +10,7 @@ const bn_js_1 = require("bn.js");
 const IdentityID_1 = require("./IdentityID");
 const SaplingPaymentAddress_1 = require("./SaplingPaymentAddress");
 const ContentMultiMap_1 = require("./ContentMultiMap");
+exports.IDENTITY_VERSION_VAULT = new bn_js_1.BN(2, 10);
 exports.IDENTITY_VERSION_PBAAS = new bn_js_1.BN(3, 10);
 exports.IDENITTY_VERSION_INVALID = new bn_js_1.BN(0, 10);
 exports.IDENTITY_FLAG_REVOKED = new bn_js_1.BN(8000, 16); // set when this identity is revoked
@@ -48,7 +49,7 @@ class Identity extends Principal_1.Principal {
     getByteLength() {
         let length = 0;
         length += super.getByteLength();
-        length += this.parent.byteLength();
+        length += this.parent.getByteLength();
         const nameLength = Buffer.from(this.name, "utf8").length;
         length += varuint_1.default.encodingLength(nameLength);
         length += nameLength;
@@ -57,7 +58,7 @@ class Identity extends Principal_1.Principal {
         }
         if (this.version.lt(exports.IDENTITY_VERSION_PBAAS)) {
             length += varuint_1.default.encodingLength(this.content_map.size);
-            for (const m in this.content_map) {
+            for (const m of this.content_map.entries()) {
                 length += 20; //uint160 key
                 length += 32; //uint256 hash
             }
@@ -67,8 +68,8 @@ class Identity extends Principal_1.Principal {
             length += 20; //uint160 key
             length += 32; //uint256 hash
         }
-        length += this.revocation_authority.byteLength(); //uint160 revocation authority
-        length += this.recovery_authority.byteLength(); //uint160 recovery authority
+        length += this.revocation_authority.getByteLength(); //uint160 revocation authority
+        length += this.recovery_authority.getByteLength(); //uint160 recovery authority
         // privateaddresses
         length += varuint_1.default.encodingLength(this.private_addresses ? this.private_addresses.length : 0);
         if (this.private_addresses) {
@@ -77,8 +78,8 @@ class Identity extends Principal_1.Principal {
             }
         }
         // post PBAAS
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
-            length += this.system_id.byteLength(); //uint160 systemid
+        if (this.version.gte(exports.IDENTITY_VERSION_VAULT)) {
+            length += this.system_id.getByteLength(); //uint160 systemid
             length += 4; //uint32 unlockafter
         }
         return length;
@@ -116,7 +117,7 @@ class Identity extends Principal_1.Principal {
             }
         }
         // post PBAAS
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
+        if (this.version.gte(exports.IDENTITY_VERSION_VAULT)) {
             writer.writeSlice(this.system_id.toBuffer());
             writer.writeUInt32(this.unlock_after.toNumber());
         }
@@ -126,7 +127,7 @@ class Identity extends Principal_1.Principal {
         const reader = new BufferReader(buffer, offset);
         reader.offset = super.fromBuffer(reader.buffer, reader.offset);
         const _parent = new IdentityID_1.IdentityID();
-        reader.offset = _parent.fromBuffer(reader.buffer, false, reader.offset);
+        reader.offset = _parent.fromBuffer(reader.buffer, reader.offset);
         this.parent = _parent;
         this.name = Buffer.from(reader.readVarSlice()).toString('utf8');
         //contentmultimap
@@ -151,10 +152,10 @@ class Identity extends Principal_1.Principal {
             this.content_map.set(contentMapKey, reader.readSlice(32));
         }
         const _revocation = new IdentityID_1.IdentityID();
-        reader.offset = _revocation.fromBuffer(reader.buffer, false, reader.offset);
+        reader.offset = _revocation.fromBuffer(reader.buffer, reader.offset);
         this.revocation_authority = _revocation;
         const _recovery = new IdentityID_1.IdentityID();
-        reader.offset = _recovery.fromBuffer(reader.buffer, false, reader.offset);
+        reader.offset = _recovery.fromBuffer(reader.buffer, reader.offset);
         this.recovery_authority = _recovery;
         const numPrivateAddresses = reader.readVarInt();
         if (numPrivateAddresses.gt(new bn_js_1.BN(0)))
@@ -164,9 +165,9 @@ class Identity extends Principal_1.Principal {
             reader.offset = saplingAddr.fromBuffer(reader.buffer, reader.offset);
             this.private_addresses.push(saplingAddr);
         }
-        if (this.version.gte(exports.IDENTITY_VERSION_PBAAS)) {
+        if (this.version.gte(exports.IDENTITY_VERSION_VAULT)) {
             const _system = new IdentityID_1.IdentityID();
-            reader.offset = _system.fromBuffer(reader.buffer, false, reader.offset);
+            reader.offset = _system.fromBuffer(reader.buffer, reader.offset);
             this.system_id = _system;
             this.unlock_after = new bn_js_1.BN(reader.readUInt32(), 10);
         }

@@ -5,6 +5,7 @@ import { fromBase58Check, toBase58Check } from '../utils/address';
 import { HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
 import { DATA_TYPE_STRING } from '../vdxf';
+import { SerializableEntity } from '../utils/types/SerializableEntity';
 
 export const VDXF_UNI_VALUE_VERSION_INVALID = new BN(0, 10);
 export const VDXF_UNI_VALUE_VERSION_CURRENT = new BN(1, 10);
@@ -17,7 +18,7 @@ export type VdxfUniValueJson = { [key: string]: VdxfUniType };
 
 // This UniValue class was adapted from C++ code for encoding JSON objects into bytes. It is not serialization and
 // therefore doesn't have a fromBuffer function, as you can't reliably decode it, only encode.
-export class VdxfUniValue {
+export class VdxfUniValue implements SerializableEntity {
   values: Map<string, VdxfUniType>;
   version: BigNumber;
 

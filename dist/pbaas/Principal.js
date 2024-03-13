@@ -31,8 +31,8 @@ class Principal {
         byteLength += 4; //uint32 flags size
         byteLength += varuint_1.default.encodingLength(this.primary_addresses.length);
         for (const addr of this.primary_addresses) {
-            byteLength += varuint_1.default.encodingLength(addr.byteLength());
-            byteLength += addr.byteLength();
+            byteLength += varuint_1.default.encodingLength(addr.getByteLength());
+            byteLength += addr.getByteLength();
         }
         byteLength += 4; //uint32 minimum signatures size
         return byteLength;

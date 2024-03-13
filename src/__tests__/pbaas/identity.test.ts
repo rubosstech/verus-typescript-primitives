@@ -1,6 +1,6 @@
 import { BN } from "bn.js";
-import { ContentMultiMap, IDENTITY_VERSION_PBAAS } from "../../pbaas/ContentMultiMap";
-import { Identity } from "../../pbaas/Identity";
+import { ContentMultiMap } from "../../pbaas/ContentMultiMap";
+import { IDENTITY_VERSION_PBAAS, Identity } from "../../pbaas/Identity";
 import { KeyID } from "../../pbaas/KeyID";
 import { IdentityID } from "../../pbaas/IdentityID";
 import { DATA_TYPE_STRING } from "../../vdxf";

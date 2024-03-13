@@ -1,5 +1,6 @@
 /// <reference types="node" />
-export declare class SaplingPaymentAddress {
+import { SerializableEntity } from '../utils/types/SerializableEntity';
+export declare class SaplingPaymentAddress implements SerializableEntity {
     d: Buffer;
     pk_d: Buffer;
     constructor(data?: {
