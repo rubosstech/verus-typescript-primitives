@@ -178,6 +178,16 @@ export const IDENTITYDATA_FIRSTNAME: VDXFKeyInterface = {
     }
 }
 
+export const IDENTITYDATA_MIDDLENAME: VDXFKeyInterface = {
+    "vdxfid": "iB8d3HBPEr3tsxsNoCGxDwfr9teVwugeyK",
+    "indexid": "xFxjW5cU6AGZW8kQesw7CLCPBYfWtK6d9G",
+    "hash160result": "2044d9008acd28b1795ff04788289d24135efd53",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::identitydata.middlename"
+    }
+  } 
+
 export const IDENTITYDATA_LASTNAME: VDXFKeyInterface = {
     "vdxfid": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z",
     "indexid": "xNohveoFs4k6UukEjzBn54SiMcfqhV66Vg",
@@ -2425,6 +2435,17 @@ export const IDENTITYDATA_ADDRESS_COUNTRY: VDXFKeyInterface = {
         "name": "vrsc::identitydata.address.country"
     }
 }
+
+export const IDENTITYDATA_NATIONALITY: VDXFKeyInterface = {
+  "vdxfid": "iDKfQZ4c568VzuikNenCNKffhx3f5pMNvi",
+  "indexid": "xJ9msMVgvQMAd5bnELSMLiCCjc4g2ZP2rB",
+  "hash160result": "a44ddb762301e0b405741f9b50dae55a9a2b046c",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identitydata.nationality"
+  }
+}
+
 
 export const IDENTITYDATA_DOCUMENTVERIFICATION_MATCHED: VDXFKeyInterface = {
     "vdxfid": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk",

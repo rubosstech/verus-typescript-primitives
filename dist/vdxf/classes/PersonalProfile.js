@@ -28,8 +28,9 @@ class PersonalDataCategory extends DataCategory {
         super([
             identitykeys.IDENTITYDATA_FIRSTNAME,
             identitykeys.IDENTITYDATA_LASTNAME,
+            identitykeys.IDENTITYDATA_MIDDLENAME,
             identitykeys.IDENTITYDATA_DATEOFBIRTH,
-            identitykeys.IDENTITYDATA_HOMEADDRESS_COUNTRY
+            identitykeys.IDENTITYDATA_NATIONALITY
         ], "Personal Details", identitykeys.IDENTITYDATA_PERSONAL_DETAILS.vdxfid, "Name, birthday, nationality");
     }
 }
@@ -48,18 +49,29 @@ class LocationDataCategory extends DataCategory {
             identitykeys.IDENTITYDATA_HOMEADDRESS_STREET2,
             identitykeys.IDENTITYDATA_HOMEADDRESS_CITY,
             identitykeys.IDENTITYDATA_HOMEADDRESS_REGION,
-            identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE
+            identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE,
+            identitykeys.IDENTITYDATA_HOMEADDRESS_COUNTRY,
         ], "Locations", identitykeys.IDENTITYDATA_LOCATIONS.vdxfid, "Tax residency, home address");
     }
 }
 class BankingDataCategory extends DataCategory {
     constructor() {
         super([
-            identitykeys.IDENTITYDATA_HOMEADDRESS_STREET1,
-            identitykeys.IDENTITYDATA_HOMEADDRESS_STREET2,
-            identitykeys.IDENTITYDATA_HOMEADDRESS_CITY,
-            identitykeys.IDENTITYDATA_HOMEADDRESS_REGION,
-            identitykeys.IDENTITYDATA_HOMEADDRESS_POSTCODE
+            identitykeys.BANK_ACCOUNT,
+            identitykeys.BANK_ACCOUNT_CURRENCY,
+            identitykeys.BANK_ACCOUNT_COUNTRY,
+            identitykeys.BANK_ACCOUNT_STREET1,
+            identitykeys.BANK_ACCOUNT_STREET2,
+            identitykeys.BANK_ACCOUNT_CITY,
+            identitykeys.BANK_ACCOUNT_REGION,
+            identitykeys.BANK_ACCOUNT_POSTALCODE,
+            identitykeys.BANK_ACCOUNT_TAXNUMBER,
+            identitykeys.BANK_ACCOUNT_TAXCOUNTRY,
+            identitykeys.BANK_ACCOUNT_FIRSTNAME,
+            identitykeys.BANK_ACCOUNT_LASTNAME,
+            identitykeys.BANK_ACCOUNT_PHONENUMBER,
+            identitykeys.BANK_ACCOUNT_NUMBER,
+            identitykeys.BANK_ACCOUNT_TYPE
         ], "Banking Information", identitykeys.IDENTITYDATA_BANKING_INFORMATION.vdxfid, "Bank accounts");
     }
 }
