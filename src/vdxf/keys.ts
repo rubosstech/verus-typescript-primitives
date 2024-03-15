@@ -339,3 +339,13 @@ export const CURRENCY_ADDRESS: VDXFKeyInterface = {
     "name":"vrsc::currency.address"
   }
 }
+
+export const DATA_TYPE_STRING: VDXFKeyInterface = 
+  {
+    "vdxfid": "iK7a5JNJnbeuYWVHCDRpJosj3irGJ5Qa8c",
+    "hash160result": "e5c061641228a399169211e666de18448b7b8bab",
+    "qualifiedname": {
+      "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+      "name": "vrsc::data.type.string"
+    },
+};
