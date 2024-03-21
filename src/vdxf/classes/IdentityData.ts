@@ -221,6 +221,8 @@ export const IdentityVdxfidMap = {
   [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_MATCHED.vdxfid]: { name: "Document Matched", type: IdentityDataClassTypes.BOOLEAN },
   [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_NAME_MATCHED.vdxfid]: { name: "Name Matched", type: IdentityDataClassTypes.BOOLEAN },
   [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED.vdxfid]: { name: "Date of Birth Matched", type: IdentityDataClassTypes.BOOLEAN },
+  [identitykeys.BANK_ACCOUNT.vdxfid]: { name: "Bank Account", type: IdentityDataClassTypes.KEY_ONLY },
+  [identitykeys.IDENTITYDATA_DOCUMENTS_AND_IMAGES.vdxfid]: { name: "Offical ID Documents", type: IdentityDataClassTypes.KEY_ONLY },
   [keylist.ATTESTATION_TYPE.vdxfid]: { name: "Attestation Type", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
 };
 

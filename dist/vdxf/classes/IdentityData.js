@@ -212,5 +212,7 @@ exports.IdentityVdxfidMap = {
     [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_MATCHED.vdxfid]: { name: "Document Matched", type: 7 /* IdentityDataClassTypes.BOOLEAN */ },
     [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_NAME_MATCHED.vdxfid]: { name: "Name Matched", type: 7 /* IdentityDataClassTypes.BOOLEAN */ },
     [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED.vdxfid]: { name: "Date of Birth Matched", type: 7 /* IdentityDataClassTypes.BOOLEAN */ },
+    [identitykeys.BANK_ACCOUNT.vdxfid]: { name: "Bank Account", type: 6 /* IdentityDataClassTypes.KEY_ONLY */ },
+    [identitykeys.IDENTITYDATA_DOCUMENTS_AND_IMAGES.vdxfid]: { name: "Offical ID Documents", type: 6 /* IdentityDataClassTypes.KEY_ONLY */ },
     [keylist.ATTESTATION_TYPE.vdxfid]: { name: "Attestation Type", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
 };
