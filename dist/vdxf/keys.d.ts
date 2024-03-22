@@ -21,6 +21,7 @@ export declare const WALLET_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_REDIRECT_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_ATTESTATION_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
+export declare const LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface;
 export declare const LOGIN_CONSENT_ID_PROVISIONING_WEBHOOK_VDXF_KEY: VDXFKeyInterface;
 export declare const ID_ADDRESS_VDXF_KEY: VDXFKeyInterface;

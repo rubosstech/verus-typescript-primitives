@@ -110,6 +110,16 @@ export const LOGIN_CONSENT_ATTESTATION_WEBHOOK_VDXF_KEY: VDXFKeyInterface = {
   },
 };
 
+export const LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY: VDXFKeyInterface ={
+  vdxfid: "i8RW9fcZHh1oaAqR2fWWLCB99mfNW6Q2mQ",
+  indexid: "xDFccU3e91EUCLiStMAfJahgBRgPHfYq74",
+  hash160result: "fe40712687cd6f9f288e535ced75b653624f4636",
+  qualifiedname: {
+    namespace: "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    name: "vrsc::identity.identitydata.webhook"
+  }
+}
+
 export const LOGIN_CONSENT_CONTEXT_VDXF_KEY: VDXFKeyInterface = {
   vdxfid: "iBMochrKPSQfua5yZYWyd6p4QnREakqU44",
   hash160result: "3b605d4ace1e19dd0bddb2eef63171b1879a7b56",
