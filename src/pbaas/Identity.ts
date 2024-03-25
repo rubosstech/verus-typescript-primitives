@@ -323,13 +323,37 @@ export class Identity extends Principal implements SerializableEntity {
       name: this.name,
       parent: this.parent.toAddress(),
       primaryaddresses: this.primary_addresses.map(x => x.toAddress()),
-      // privateaddress: this.private_addresses, TODO: Implement SaplingPaymentAddr decoding
+      privateaddress: this.private_addresses[0].toAddressString(),
       recoveryauthority: this.recovery_authority.toAddress(),
       revocationauthority: this.revocation_authority.toAddress(),
       systemid: this.system_id.toAddress(),
       timelock: this.unlock_after.toNumber(),
-      version: this.unlock_after.toNumber(),
+      version: this.version.toNumber(),
       identityaddress: nameAndParentAddrToIAddr(this.name, this.parent.toAddress())
     }
+  }
+
+  static fromJson(json: VerusCLIVerusIDJson): Identity {
+    const contentmap = new Map<string, Buffer>();
+
+    for (const key in json.contentmap) {
+      contentmap.set(key, Buffer.from(json.contentmap[key], 'hex'));
+    }
+
+    return new Identity({
+      version: new BN(json.version, 10),
+      flags: new BN(json.flags, 10),
+      min_sigs: new BN(json.minimumsignatures, 10),
+      primary_addresses: json.primaryaddresses.map(x => KeyID.fromAddress(x)),
+      parent: IdentityID.fromAddress(json.parent),
+      system_id: IdentityID.fromAddress(json.systemid),
+      name: json.name,
+      content_map: contentmap,
+      content_multimap: ContentMultiMap.fromJson(json.contentmultimap),
+      revocation_authority: IdentityID.fromAddress(json.revocationauthority),
+      recovery_authority: IdentityID.fromAddress(json.recoveryauthority),
+      private_addresses: json.privateaddress == null ? [] : [SaplingPaymentAddress.fromAddressString(json.privateaddress)],
+      unlock_after: new BN(json.timelock, 10)
+    });
   }
 }

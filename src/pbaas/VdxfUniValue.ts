@@ -6,6 +6,7 @@ import { HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
 import { DATA_TYPE_STRING } from '../vdxf';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
+import varint from '../utils/varint';
 
 export const VDXF_UNI_VALUE_VERSION_INVALID = new BN(0, 10);
 export const VDXF_UNI_VALUE_VERSION_CURRENT = new BN(1, 10);
@@ -33,13 +34,18 @@ export class VdxfUniValue implements SerializableEntity {
 
     for (const key of this.values.keys()) {
       const value = this.values.get(key);
+      length += HASH160_BYTE_LENGTH;
+      length += varint.encodingLength(this.version);
 
       if (key == DATA_TYPE_STRING.vdxfid) {
-        length += HASH160_BYTE_LENGTH;
-        length += 1; // varint length 1
-        length += 2; // ss type + ver (lengths)
-        length += varuint.encodingLength(value.length);
-        length += value.length;
+        const valueString = (value as string);
+        const valBuf = Buffer.from(valueString, 'utf8');
+
+        //NOTE 3 is from ss type + ver + vdxfidver 
+        length += varint.encodingLength(new BN(valBuf.length + 3));
+
+        length += varuint.encodingLength(valBuf.length);
+        length += valBuf.length;
       } else throw new Error("Invalid or unrecognized vdxf key for object type")
     }
 
@@ -56,9 +62,12 @@ export class VdxfUniValue implements SerializableEntity {
 
       if (key == DATA_TYPE_STRING.vdxfid) {
         const valueString = value as string;
+        const valBuf = Buffer.from(valueString, 'utf8');
 
-        writer.writeVarInt(new BN(Buffer.from(valueString, 'utf8').length + 3)) //NOTE 3 is from ss type + ver + vdxfidver 
-        writer.writeVarSlice(Buffer.from(valueString, 'utf8'));
+        //NOTE 3 is from ss type + ver + vdxfidver 
+        writer.writeVarInt(new BN(valBuf.length + 3));
+
+        writer.writeVarSlice(valBuf);
       } else throw new Error("Invalid or unrecognized vdxf key for object type")
     }
 
