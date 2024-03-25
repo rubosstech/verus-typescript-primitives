@@ -1,5 +1,5 @@
 import bufferutils from '../utils/bufferutils';
-import { decodeSaplingAddress } from '../utils/sapling';
+import { decodeSaplingAddress, encodeSaplingAddress } from '../utils/sapling';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 
 const { BufferReader, BufferWriter } = bufferutils
@@ -46,10 +46,12 @@ export class SaplingPaymentAddress implements SerializableEntity {
   }
 
   static fromAddressString(address: string) {
-    throw new Error("Sapling payment addresses not decodable yet")
-
     const { d, pk_d } = decodeSaplingAddress(address);
 
     return new SaplingPaymentAddress({ d, pk_d });
+  }
+
+  toAddressString(): string {
+    return encodeSaplingAddress({ d: this.d, pk_d: this.pk_d });
   }
 }
