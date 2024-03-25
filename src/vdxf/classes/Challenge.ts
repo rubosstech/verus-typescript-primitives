@@ -10,6 +10,7 @@ import {
   IDENTITY_VIEW,
   IDENTITY_AGREEMENT,
   PROFILE_DATA_VIEW_REQUEST,
+  LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY
 } from "../";
 import bufferutils from "../../utils/bufferutils";
 import varuint from "../../utils/varuint";
@@ -447,10 +448,15 @@ export class RequestedPermission extends VDXFObject {
         this.encoding = "utf-8";
         break;
       case PROFILE_DATA_VIEW_REQUEST.vdxfid:
-          classType = BufferDataVdxfObject;
-          this.data = data;
-          this.encoding = "utf-8";
-          break;
+        classType = BufferDataVdxfObject;
+        this.data = data;
+        this.encoding = "utf-8";
+        break;
+      case LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY.vdxfid:
+        classType = BufferDataVdxfObject;
+        this.data = data;
+        this.encoding = "utf-8";
+        break;
       default:
         throw new Error("Invalid vdxfkey")
     }
