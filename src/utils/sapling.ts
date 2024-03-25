@@ -1,6 +1,5 @@
 import { bech32 } from "bech32";
 
-// TODO: Fix this function, it doesn't decode sapling addrs
 export const fromBech32 = (address: string): { version: number, prefix: string, data: Buffer } => {
   var result = bech32.decode(address);
   var data = bech32.fromWords(result.words);
@@ -10,6 +9,13 @@ export const fromBech32 = (address: string): { version: number, prefix: string, 
     prefix: result.prefix,
     data: Buffer.from(data)
   }
+}
+
+export const toBech32 = (prefix: string, data: Buffer): string => {
+  const words = bech32.toWords(data);
+  var result = bech32.encode(prefix, words);
+
+  return result;
 }
 
 export const convertBits = (data: Buffer, from: number, to: number, strictMode: boolean): Buffer => {
@@ -45,8 +51,21 @@ export const convertBits = (data: Buffer, from: number, to: number, strictMode: 
 }
 
 export const decodeSaplingAddress = (address: string): { d: Buffer, pk_d: Buffer } => {
-  const result = fromBech32(address)
-  const data = convertBits(result.data, 5, 8, false);
+  const result = fromBech32(address);
 
-  return { d: data.subarray(0, 10), pk_d: data.subarray(10) }
+  //const data = convertBits(result.data, 5, 8, false);
+
+  if (result.data.length !== 43) {
+    throw new Error('Invalid sapling address');
+  }
+
+  return { d: result.data.subarray(0, 11), pk_d: result.data.subarray(11) };
+}
+
+export const encodeSaplingAddress = (data: { d: Buffer, pk_d: Buffer }): string => {
+  const buffer = Buffer.concat([data.d, data.pk_d]);
+
+  //const data = convertBits(buffer, 8, 5, false);
+
+  return toBech32('zs', buffer);
 }
