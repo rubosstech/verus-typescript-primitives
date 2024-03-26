@@ -257,10 +257,10 @@ class Identity extends Principal_1.Principal {
     }
 }
 exports.Identity = Identity;
-Identity.VERSION_INVALID = 0;
-Identity.VERSION_VERUSID = 1;
-Identity.VERSION_VAULT = 2;
-Identity.VERSION_PBAAS = 3;
+Identity.VERSION_INVALID = new bn_js_1.BN(0);
+Identity.VERSION_VERUSID = new bn_js_1.BN(1);
+Identity.VERSION_VAULT = new bn_js_1.BN(2);
+Identity.VERSION_PBAAS = new bn_js_1.BN(3);
 Identity.VERSION_CURRENT = Identity.VERSION_PBAAS;
-Identity.VERSION_FIRSTVALID = 1;
-Identity.VERSION_LASTVALID = 3;
+Identity.VERSION_FIRSTVALID = new bn_js_1.BN(1);
+Identity.VERSION_LASTVALID = new bn_js_1.BN(3);

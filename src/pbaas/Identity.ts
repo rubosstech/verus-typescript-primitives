@@ -55,13 +55,13 @@ export class Identity extends Principal implements SerializableEntity {
   private_addresses: Array<SaplingPaymentAddress>;
   unlock_after: BigNumber;
 
-  static VERSION_INVALID = 0;
-  static VERSION_VERUSID = 1;
-  static VERSION_VAULT = 2;
-  static VERSION_PBAAS = 3;
+  static VERSION_INVALID = new BN(0);
+  static VERSION_VERUSID = new BN(1);
+  static VERSION_VAULT = new BN(2);
+  static VERSION_PBAAS = new BN(3);
   static VERSION_CURRENT = Identity.VERSION_PBAAS;
-  static VERSION_FIRSTVALID = 1;
-  static VERSION_LASTVALID = 3;
+  static VERSION_FIRSTVALID = new BN(1);
+  static VERSION_LASTVALID = new BN(3);
 
   constructor(data?: {
     version?: BigNumber;

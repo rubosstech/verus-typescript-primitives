@@ -49,13 +49,13 @@ export declare class Identity extends Principal implements SerializableEntity {
     recovery_authority: IdentityID;
     private_addresses: Array<SaplingPaymentAddress>;
     unlock_after: BigNumber;
-    static VERSION_INVALID: number;
-    static VERSION_VERUSID: number;
-    static VERSION_VAULT: number;
-    static VERSION_PBAAS: number;
-    static VERSION_CURRENT: number;
-    static VERSION_FIRSTVALID: number;
-    static VERSION_LASTVALID: number;
+    static VERSION_INVALID: import("bn.js");
+    static VERSION_VERUSID: import("bn.js");
+    static VERSION_VAULT: import("bn.js");
+    static VERSION_PBAAS: import("bn.js");
+    static VERSION_CURRENT: import("bn.js");
+    static VERSION_FIRSTVALID: import("bn.js");
+    static VERSION_LASTVALID: import("bn.js");
     constructor(data?: {
         version?: BigNumber;
         flags?: BigNumber;
