@@ -49,6 +49,13 @@ export declare class Identity extends Principal implements SerializableEntity {
     recovery_authority: IdentityID;
     private_addresses: Array<SaplingPaymentAddress>;
     unlock_after: BigNumber;
+    static VERSION_INVALID: number;
+    static VERSION_VERUSID: number;
+    static VERSION_VAULT: number;
+    static VERSION_PBAAS: number;
+    static VERSION_CURRENT: number;
+    static VERSION_FIRSTVALID: number;
+    static VERSION_LASTVALID: number;
     constructor(data?: {
         version?: BigNumber;
         flags?: BigNumber;
@@ -68,4 +75,5 @@ export declare class Identity extends Principal implements SerializableEntity {
     toBuffer(): Buffer;
     fromBuffer(buffer: Buffer, offset?: number, multimapKeylists?: Array<Array<string> | null>): number;
     toJson(): VerusCLIVerusIDJson;
+    static fromJson(json: VerusCLIVerusIDJson): Identity;
 }

@@ -10,6 +10,7 @@ const bn_js_1 = require("bn.js");
 const IdentityID_1 = require("./IdentityID");
 const SaplingPaymentAddress_1 = require("./SaplingPaymentAddress");
 const ContentMultiMap_1 = require("./ContentMultiMap");
+const KeyID_1 = require("./KeyID");
 exports.IDENTITY_VERSION_VAULT = new bn_js_1.BN(2, 10);
 exports.IDENTITY_VERSION_PBAAS = new bn_js_1.BN(3, 10);
 exports.IDENITTY_VERSION_INVALID = new bn_js_1.BN(0, 10);
@@ -224,14 +225,42 @@ class Identity extends Principal_1.Principal {
             name: this.name,
             parent: this.parent.toAddress(),
             primaryaddresses: this.primary_addresses.map(x => x.toAddress()),
-            // privateaddress: this.private_addresses, TODO: Implement SaplingPaymentAddr decoding
+            privateaddress: this.private_addresses[0].toAddressString(),
             recoveryauthority: this.recovery_authority.toAddress(),
             revocationauthority: this.revocation_authority.toAddress(),
             systemid: this.system_id.toAddress(),
             timelock: this.unlock_after.toNumber(),
-            version: this.unlock_after.toNumber(),
+            version: this.version.toNumber(),
             identityaddress: (0, address_1.nameAndParentAddrToIAddr)(this.name, this.parent.toAddress())
         };
     }
+    static fromJson(json) {
+        const contentmap = new Map();
+        for (const key in json.contentmap) {
+            contentmap.set(key, Buffer.from(json.contentmap[key], 'hex'));
+        }
+        return new Identity({
+            version: new bn_js_1.BN(json.version, 10),
+            flags: new bn_js_1.BN(json.flags, 10),
+            min_sigs: new bn_js_1.BN(json.minimumsignatures, 10),
+            primary_addresses: json.primaryaddresses.map(x => KeyID_1.KeyID.fromAddress(x)),
+            parent: IdentityID_1.IdentityID.fromAddress(json.parent),
+            system_id: IdentityID_1.IdentityID.fromAddress(json.systemid),
+            name: json.name,
+            content_map: contentmap,
+            content_multimap: ContentMultiMap_1.ContentMultiMap.fromJson(json.contentmultimap),
+            revocation_authority: IdentityID_1.IdentityID.fromAddress(json.revocationauthority),
+            recovery_authority: IdentityID_1.IdentityID.fromAddress(json.recoveryauthority),
+            private_addresses: json.privateaddress == null ? [] : [SaplingPaymentAddress_1.SaplingPaymentAddress.fromAddressString(json.privateaddress)],
+            unlock_after: new bn_js_1.BN(json.timelock, 10)
+        });
+    }
 }
 exports.Identity = Identity;
+Identity.VERSION_INVALID = 0;
+Identity.VERSION_VERUSID = 1;
+Identity.VERSION_VAULT = 2;
+Identity.VERSION_PBAAS = 3;
+Identity.VERSION_CURRENT = Identity.VERSION_PBAAS;
+Identity.VERSION_FIRSTVALID = 1;
+Identity.VERSION_LASTVALID = 3;

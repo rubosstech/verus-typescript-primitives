@@ -32,9 +32,11 @@ class SaplingPaymentAddress {
         return reader.offset;
     }
     static fromAddressString(address) {
-        throw new Error("Sapling payment addresses not decodable yet");
         const { d, pk_d } = (0, sapling_1.decodeSaplingAddress)(address);
         return new SaplingPaymentAddress({ d, pk_d });
+    }
+    toAddressString() {
+        return (0, sapling_1.encodeSaplingAddress)({ d: this.d, pk_d: this.pk_d });
     }
 }
 exports.SaplingPaymentAddress = SaplingPaymentAddress;

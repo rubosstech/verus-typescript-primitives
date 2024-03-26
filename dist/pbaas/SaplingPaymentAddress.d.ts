@@ -11,4 +11,5 @@ export declare class SaplingPaymentAddress implements SerializableEntity {
     toBuffer(): Buffer;
     fromBuffer(buffer: Buffer, offset?: number): number;
     static fromAddressString(address: string): SaplingPaymentAddress;
+    toAddressString(): string;
 }
