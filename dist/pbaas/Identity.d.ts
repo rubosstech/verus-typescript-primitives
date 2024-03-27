@@ -4,7 +4,7 @@ import { BigNumber } from '../utils/types/BigNumber';
 import { Principal } from './Principal';
 import { IdentityID } from './IdentityID';
 import { SaplingPaymentAddress } from './SaplingPaymentAddress';
-import { ContentMultiMap } from './ContentMultiMap';
+import { ContentMultiMap, ContentMultiMapJson } from './ContentMultiMap';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 import { KeyID } from './KeyID';
 export declare const IDENTITY_VERSION_VAULT: import("bn.js");
@@ -21,11 +21,7 @@ export declare type VerusCLIVerusIDJson = {
     contentmap?: {
         [key: string]: string;
     };
-    contentmultimap?: {
-        [key: string]: Array<{
-            [key: string]: string;
-        } | string>;
-    };
+    contentmultimap?: ContentMultiMapJson;
     flags: number;
     identityaddress: string;
     minimumsignatures: number;
@@ -75,5 +71,6 @@ export declare class Identity extends Principal implements SerializableEntity {
     toBuffer(): Buffer;
     fromBuffer(buffer: Buffer, offset?: number, multimapKeylists?: Array<Array<string> | null>): number;
     toJson(): VerusCLIVerusIDJson;
+    getIdentityAddress(): string;
     static fromJson(json: VerusCLIVerusIDJson): Identity;
 }

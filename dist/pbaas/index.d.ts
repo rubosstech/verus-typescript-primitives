@@ -15,3 +15,6 @@ export * from './SaplingPaymentAddress';
 export * from './TxDestination';
 export * from './UnknownID';
 export * from './VdxfUniValue';
+export * from './transaction/VerusScript';
+export * from './transaction/SmartTransactionScript';
+export * from './transaction/IdentityScript';
