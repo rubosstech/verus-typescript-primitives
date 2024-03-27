@@ -1,14 +1,8 @@
 import { BN } from "bn.js";
 import { IdentityID } from "../../../pbaas/IdentityID";
-import { Identity } from "../../../pbaas/Identity";
 import { SmartTransactionScript } from "../../../pbaas/transaction/SmartTransactionScript";
 import { OptCCParams } from "../../../pbaas/OptCCParams";
 import { TxDestination } from "../../../pbaas/TxDestination";
-import { compile, decompile } from "../../../utils/script";
-import { OPS } from "../../../utils/ops";
-import { EVALS } from "../../../utils/evals";
-import { KeyID } from "../../../pbaas/KeyID";
-import { toIAddress } from "../../../utils/address";
 
 describe('Serializes and deserializes SmartTransactionScripts', () => {
   test('(de)serialize a basic identity registration outscript (v2) from daemon', () => {
