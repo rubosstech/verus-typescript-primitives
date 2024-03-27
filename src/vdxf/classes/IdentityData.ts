@@ -15,6 +15,7 @@ export const enum IdentityDataClassTypes {
 export const IdentityVdxfidMap = {
   [identitykeys.IDENTITYDATA_FIRSTNAME.vdxfid]: { name: "First Name", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_LASTNAME.vdxfid]: { name: "Last Name", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
+  [identitykeys.IDENTITYDATA_NATIONALITY.vdxfid]: { name: "Nationality", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_ATTESTOR.vdxfid]: { name: "Attestor ID", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_IDENTITY.vdxfid]: { name: "Identity", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_ID.vdxfid]: { name: "ID", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
@@ -59,7 +60,7 @@ export const IdentityVdxfidMap = {
   [identitykeys.IDENTITYDATA_DRIVINGLICENCE_CATEGORY.vdxfid]: { name: "Driving Licence Catagory", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_DRIVINGLICENCE_EXPIRATIONDATE.vdxfid]: { name: "Driving Licence expiry date", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ISSUING_COUNTRY_MATCHED.vdxfid]: { name: "Driving Licence matches country", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
-  [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ISSUING_REGION.vdxfid]: { name: "Driving Licence issuing reigon", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
+  [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ISSUING_REGION.vdxfid]: { name: "Driving Licence issuing region", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_DRIVINGLICENCE_DATEOFBIRTH.vdxfid]: { name: "Driving Licence Date of Birth", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ADDRESS.vdxfid]: { name: "Driving Licence Address", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
   [identitykeys.IDENTITYDATA_DRIVINGLICENCE_STREET1.vdxfid]: { name: "Driving Licence Street 1", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
@@ -222,7 +223,7 @@ export const IdentityVdxfidMap = {
   [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_NAME_MATCHED.vdxfid]: { name: "Name Matched", type: IdentityDataClassTypes.BOOLEAN },
   [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED.vdxfid]: { name: "Date of Birth Matched", type: IdentityDataClassTypes.BOOLEAN },
   [identitykeys.BANK_ACCOUNT.vdxfid]: { name: "Bank Account", type: IdentityDataClassTypes.KEY_ONLY },
-  [identitykeys.IDENTITYDATA_DOCUMENTS_AND_IMAGES.vdxfid]: { name: "Offical ID Documents", type: IdentityDataClassTypes.KEY_ONLY },
+  [identitykeys.IDENTITYDATA_DOCUMENTS_AND_IMAGES.vdxfid]: { name: "Official ID Documents", type: IdentityDataClassTypes.KEY_ONLY },
   [keylist.ATTESTATION_TYPE.vdxfid]: { name: "Attestation Type", type: IdentityDataClassTypes.BUFFER_DATA_STRING },
 };
 
