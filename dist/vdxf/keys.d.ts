@@ -54,4 +54,3 @@ export declare const ATTESTATION_VIEW_RESPONSE: VDXFKeyInterface;
 export declare const ATTESTATION_TYPE: VDXFKeyInterface;
 export declare const DATA_TYPE_STRING: VDXFKeyInterface;
 export declare const PROFILE_DATA_VIEW_REQUEST: VDXFKeyInterface;
-export declare const PROFILE_DATA_VIEW_RESPONSE: VDXFKeyInterface;

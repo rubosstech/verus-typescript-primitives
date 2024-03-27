@@ -6,6 +6,7 @@ const keylist = require("../keys");
 exports.IdentityVdxfidMap = {
     [identitykeys.IDENTITYDATA_FIRSTNAME.vdxfid]: { name: "First Name", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_LASTNAME.vdxfid]: { name: "Last Name", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
+    [identitykeys.IDENTITYDATA_NATIONALITY.vdxfid]: { name: "Nationality", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_ATTESTOR.vdxfid]: { name: "Attestor ID", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_IDENTITY.vdxfid]: { name: "Identity", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_ID.vdxfid]: { name: "ID", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
@@ -50,7 +51,7 @@ exports.IdentityVdxfidMap = {
     [identitykeys.IDENTITYDATA_DRIVINGLICENCE_CATEGORY.vdxfid]: { name: "Driving Licence Catagory", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_DRIVINGLICENCE_EXPIRATIONDATE.vdxfid]: { name: "Driving Licence expiry date", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ISSUING_COUNTRY_MATCHED.vdxfid]: { name: "Driving Licence matches country", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
-    [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ISSUING_REGION.vdxfid]: { name: "Driving Licence issuing reigon", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
+    [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ISSUING_REGION.vdxfid]: { name: "Driving Licence issuing region", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_DRIVINGLICENCE_DATEOFBIRTH.vdxfid]: { name: "Driving Licence Date of Birth", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_DRIVINGLICENCE_ADDRESS.vdxfid]: { name: "Driving Licence Address", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
     [identitykeys.IDENTITYDATA_DRIVINGLICENCE_STREET1.vdxfid]: { name: "Driving Licence Street 1", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
@@ -213,6 +214,6 @@ exports.IdentityVdxfidMap = {
     [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_NAME_MATCHED.vdxfid]: { name: "Name Matched", type: 7 /* IdentityDataClassTypes.BOOLEAN */ },
     [identitykeys.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED.vdxfid]: { name: "Date of Birth Matched", type: 7 /* IdentityDataClassTypes.BOOLEAN */ },
     [identitykeys.BANK_ACCOUNT.vdxfid]: { name: "Bank Account", type: 6 /* IdentityDataClassTypes.KEY_ONLY */ },
-    [identitykeys.IDENTITYDATA_DOCUMENTS_AND_IMAGES.vdxfid]: { name: "Offical ID Documents", type: 6 /* IdentityDataClassTypes.KEY_ONLY */ },
+    [identitykeys.IDENTITYDATA_DOCUMENTS_AND_IMAGES.vdxfid]: { name: "Official ID Documents", type: 6 /* IdentityDataClassTypes.KEY_ONLY */ },
     [keylist.ATTESTATION_TYPE.vdxfid]: { name: "Attestation Type", type: 1 /* IdentityDataClassTypes.BUFFER_DATA_STRING */ },
 };
