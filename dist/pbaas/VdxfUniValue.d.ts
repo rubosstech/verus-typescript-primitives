@@ -6,7 +6,7 @@ export declare const VDXF_UNI_VALUE_VERSION_INVALID: import("bn.js");
 export declare const VDXF_UNI_VALUE_VERSION_CURRENT: import("bn.js");
 export declare type VdxfUniType = string | Buffer;
 export declare type VdxfUniValueJson = {
-    [key: string]: VdxfUniType;
+    [key: string]: string;
 };
 export declare class VdxfUniValue implements SerializableEntity {
     values: Map<string, VdxfUniType>;

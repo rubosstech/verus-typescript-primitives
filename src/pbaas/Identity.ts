@@ -7,8 +7,8 @@ import { I_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
 import { IdentityID } from './IdentityID';
 import { SaplingPaymentAddress } from './SaplingPaymentAddress';
-import { ContentMultiMap, isKvValueArrayItemVdxfUniValueJson } from './ContentMultiMap';
-import { VdxfUniType } from './VdxfUniValue';
+import { ContentMultiMap, ContentMultiMapJson, isKvValueArrayItemVdxfUniValueJson } from './ContentMultiMap';
+import { VdxfUniType, VdxfUniValueJson } from './VdxfUniValue';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 import { KeyID } from './KeyID';
 
@@ -29,7 +29,7 @@ export type Hashes = Map<string, Buffer>;
 
 export type VerusCLIVerusIDJson = {
   contentmap?: { [key: string]: string },
-  contentmultimap?: { [key: string]: Array<{ [key: string]: string } | string> },
+  contentmultimap?: ContentMultiMapJson,
   flags: number,
   identityaddress: string,
   minimumsignatures: number,
@@ -275,6 +275,9 @@ export class Identity extends Principal implements SerializableEntity {
       this.system_id = _system;
 
       this.unlock_after = new BN(reader.readUInt32(), 10);
+    } else {
+      this.system_id = _parent;
+      this.unlock_after = new BN(0);
     }
 
     return reader.offset;
@@ -283,69 +286,46 @@ export class Identity extends Principal implements SerializableEntity {
   toJson(): VerusCLIVerusIDJson {
     const contentmap = {};
 
-    for (const [key, value] of this.content_map.entries()) {
-      contentmap[key] = value.toString('hex');
+    for (const [key, value] of this.content_map.entries()) { 
+      const valueCopy = Buffer.from(value);
+      contentmap[fromBase58Check(key).hash.reverse().toString('hex')] = valueCopy.reverse().toString('hex');
     }
 
-    const multimapJson = this.content_multimap.toJson();
-    const contentmultimap: { [key: string]: Array<{ [key: string]: string } | string> } = {};
-
-    for (const key in multimapJson) {
-      const value = multimapJson[key];
-      const items: Array<{ [key: string]: string } | string> = [];
-
-      if (Array.isArray(value)) {
-        for (const x of value) {
-          if (isKvValueArrayItemVdxfUniValueJson(x)) {
-            const _x: { [key: string]: VdxfUniType } = { ...x }
-
-            for (const key of Object.keys(x)) {
-              if (Buffer.isBuffer(x[key])) _x[key] = x[key].toString('hex');
-              else _x[key] = x[key] as string;
-            }
-
-            items.push(_x as { [key: string]: string })
-          } else items.push(x);
-        }
-      } else if (isKvValueArrayItemVdxfUniValueJson(value)) {
-        const _x = { ...value }
-
-        for (const key of Object.keys(value)) {
-          if (Buffer.isBuffer(value[key])) _x[key] = value[key].toString('hex');
-          else _x[key] = value[key] as string;
-        }
-
-        items.push(_x as { [key: string]: string })
-      } else if (typeof value === 'string') {
-        items.push(value)
-      } else throw new Error("Invalid multimap value");
-
-      contentmultimap[key] = items;
-    }
-
-    return {
+    const ret: VerusCLIVerusIDJson = {
       contentmap,
-      contentmultimap,
+      contentmultimap: this.content_multimap.toJson(),
       flags: this.flags.toNumber(),
       minimumsignatures: this.min_sigs.toNumber(),
       name: this.name,
       parent: this.parent.toAddress(),
       primaryaddresses: this.primary_addresses.map(x => x.toAddress()),
-      privateaddress: this.private_addresses[0].toAddressString(),
       recoveryauthority: this.recovery_authority.toAddress(),
       revocationauthority: this.revocation_authority.toAddress(),
       systemid: this.system_id.toAddress(),
       timelock: this.unlock_after.toNumber(),
       version: this.version.toNumber(),
-      identityaddress: nameAndParentAddrToIAddr(this.name, this.parent.toAddress())
+      identityaddress: this.getIdentityAddress()
+    };
+
+    if (this.private_addresses != null && this.private_addresses.length > 0) {
+      ret.privateaddress = this.private_addresses[0].toAddressString();
     }
+
+    return ret;
+  }
+
+  getIdentityAddress() {
+    return nameAndParentAddrToIAddr(this.name, this.parent.toAddress());
   }
 
   static fromJson(json: VerusCLIVerusIDJson): Identity {
     const contentmap = new Map<string, Buffer>();
 
     for (const key in json.contentmap) {
-      contentmap.set(key, Buffer.from(json.contentmap[key], 'hex'));
+      const reverseKey = Buffer.from(key, 'hex').reverse();
+      const iAddrKey = toBase58Check(reverseKey, I_ADDR_VERSION);
+      
+      contentmap.set(iAddrKey, Buffer.from(json.contentmap[key], 'hex').reverse());
     }
 
     return new Identity({

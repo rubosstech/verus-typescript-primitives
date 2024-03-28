@@ -79,7 +79,8 @@ class VdxfUniValue {
                 throw new Error("Unknown VDXFUniValue version");
             if (dataTypeKey == vdxf_2.DATA_TYPE_STRING.vdxfid) {
                 reader.readVarInt();
-                this.values.set(dataTypeKey, reader.readVarSlice().toString('utf8'));
+                const slice = reader.readVarSlice();
+                this.values.set(dataTypeKey, slice.toString('utf8'));
             }
             else {
                 throw new Error("Invalid or unrecognized vdxf key for object type");

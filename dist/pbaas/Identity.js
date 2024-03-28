@@ -172,72 +172,47 @@ class Identity extends Principal_1.Principal {
             this.system_id = _system;
             this.unlock_after = new bn_js_1.BN(reader.readUInt32(), 10);
         }
+        else {
+            this.system_id = _parent;
+            this.unlock_after = new bn_js_1.BN(0);
+        }
         return reader.offset;
     }
     toJson() {
         const contentmap = {};
         for (const [key, value] of this.content_map.entries()) {
-            contentmap[key] = value.toString('hex');
+            const valueCopy = Buffer.from(value);
+            contentmap[(0, address_1.fromBase58Check)(key).hash.reverse().toString('hex')] = valueCopy.reverse().toString('hex');
         }
-        const multimapJson = this.content_multimap.toJson();
-        const contentmultimap = {};
-        for (const key in multimapJson) {
-            const value = multimapJson[key];
-            const items = [];
-            if (Array.isArray(value)) {
-                for (const x of value) {
-                    if ((0, ContentMultiMap_1.isKvValueArrayItemVdxfUniValueJson)(x)) {
-                        const _x = Object.assign({}, x);
-                        for (const key of Object.keys(x)) {
-                            if (Buffer.isBuffer(x[key]))
-                                _x[key] = x[key].toString('hex');
-                            else
-                                _x[key] = x[key];
-                        }
-                        items.push(_x);
-                    }
-                    else
-                        items.push(x);
-                }
-            }
-            else if ((0, ContentMultiMap_1.isKvValueArrayItemVdxfUniValueJson)(value)) {
-                const _x = Object.assign({}, value);
-                for (const key of Object.keys(value)) {
-                    if (Buffer.isBuffer(value[key]))
-                        _x[key] = value[key].toString('hex');
-                    else
-                        _x[key] = value[key];
-                }
-                items.push(_x);
-            }
-            else if (typeof value === 'string') {
-                items.push(value);
-            }
-            else
-                throw new Error("Invalid multimap value");
-            contentmultimap[key] = items;
-        }
-        return {
+        const ret = {
             contentmap,
-            contentmultimap,
+            contentmultimap: this.content_multimap.toJson(),
             flags: this.flags.toNumber(),
             minimumsignatures: this.min_sigs.toNumber(),
             name: this.name,
             parent: this.parent.toAddress(),
             primaryaddresses: this.primary_addresses.map(x => x.toAddress()),
-            privateaddress: this.private_addresses[0].toAddressString(),
             recoveryauthority: this.recovery_authority.toAddress(),
             revocationauthority: this.revocation_authority.toAddress(),
             systemid: this.system_id.toAddress(),
             timelock: this.unlock_after.toNumber(),
             version: this.version.toNumber(),
-            identityaddress: (0, address_1.nameAndParentAddrToIAddr)(this.name, this.parent.toAddress())
+            identityaddress: this.getIdentityAddress()
         };
+        if (this.private_addresses != null && this.private_addresses.length > 0) {
+            ret.privateaddress = this.private_addresses[0].toAddressString();
+        }
+        return ret;
+    }
+    getIdentityAddress() {
+        return (0, address_1.nameAndParentAddrToIAddr)(this.name, this.parent.toAddress());
     }
     static fromJson(json) {
         const contentmap = new Map();
         for (const key in json.contentmap) {
-            contentmap.set(key, Buffer.from(json.contentmap[key], 'hex'));
+            const reverseKey = Buffer.from(key, 'hex').reverse();
+            const iAddrKey = (0, address_1.toBase58Check)(reverseKey, vdxf_1.I_ADDR_VERSION);
+            contentmap.set(iAddrKey, Buffer.from(json.contentmap[key], 'hex').reverse());
         }
         return new Identity({
             version: new bn_js_1.BN(json.version, 10),
