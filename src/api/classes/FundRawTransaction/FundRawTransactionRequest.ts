@@ -3,21 +3,9 @@ import { ApiPrimitiveJson, RequestParams } from "../../ApiPrimitive";
 import { FUND_RAW_TRANSACTION } from "../../../constants/cmds";
 
 type Utxo = {
-  address: string;
-  txid: string;
-  outputIndex: number;
-  script: string;
-  currencyvalues?: {
-    [key: string]: number;
-  };
-  currencynames?: {
-    [key: string]: string;
-  };
-  satoshis: number;
-  height: number;
-  isspendable: number;
-  blocktime: number;
-}
+  voutnum: number,
+  txid: string,
+};
 
 export class FundRawTransactionRequest extends ApiRequest {
   txhex: string;
