@@ -6,6 +6,13 @@ import varint from '../../utils/varint'
 import varuint from '../../utils/varuint'
 import bufferutils from '../../utils/bufferutils'
 const { BufferReader, BufferWriter } = bufferutils
+import { isHexString } from '../../utils/string';
+import { fromBase58Check, toBase58Check } from '../../utils/address';
+import {CurrencyValueMap} from '../../pbaas/CurrencyValueMap';
+import { Rating } from '../../pbaas/Rating';
+import { TransferDestination } from '../../pbaas/TransferDestination';
+import { ContentMultiMapRemove } from '../../pbaas/ContentMultiMapRemove';
+import { CrossChainDataRef } from './CrossChainDataRef';
 
 export class CDataDescriptor {
 
@@ -30,7 +37,6 @@ export class CDataDescriptor {
             CDataDescriptor.FLAG_LABEL_PRESENT).add(
               CDataDescriptor.FLAG_MIME_TYPE_PRESENT));
 
-
   version: BigNumber;
   flags: BigNumber;
   objectData: Buffer; // either direct data or serialized UTXORef +offset, length, and/or other type of info for different links
@@ -44,7 +50,7 @@ export class CDataDescriptor {
   constructor(data?: {
     version?: BigNumber,
     flags?: BigNumber,
-    objectData?: Buffer,
+    objectData?: Buffer | ,
     label?: string,
     mimeType?: string,
     salt?: Buffer,
@@ -87,38 +93,38 @@ export class CDataDescriptor {
     length += varuint.encodingLength(this.objectData.length);
     length += this.objectData.length;
 
-    if(this.HasLabel()) {
-      if(this.label.length > 64) {
+    if (this.HasLabel()) {
+      if (this.label.length > 64) {
         throw new Error("Label too long");
       }
       length += varuint.encodingLength(this.label.length);
       length += this.label.length;
     }
 
-    if(this.HasMIME()) {
-      if(this.mimeType.length > 128) {
+    if (this.HasMIME()) {
+      if (this.mimeType.length > 128) {
         throw new Error("MIME type too long");
       }
       length += varuint.encodingLength(this.mimeType.length);
       length += this.mimeType.length;
     }
 
-    if(this.HasSalt()) {
+    if (this.HasSalt()) {
       length += varuint.encodingLength(this.salt.length);
       length += this.salt.length;
     }
 
-    if(this.HasEPK()) {
+    if (this.HasEPK()) {
       length += varuint.encodingLength(this.epk.length);
       length += this.epk.length;
     }
 
-    if(this.HasIVK()) {
+    if (this.HasIVK()) {
       length += varuint.encodingLength(this.ivk.length);
       length += this.ivk.length;
     }
 
-    if(this.HasSSK()) {
+    if (this.HasSSK()) {
       length += varuint.encodingLength(this.ssk.length);
       length += this.ssk.length;
     }
@@ -127,32 +133,32 @@ export class CDataDescriptor {
 
   toBuffer(): Buffer {
     const writer = new BufferWriter(Buffer.alloc(this.byteLength()));
-    
+
     writer.writeVarInt(this.version);
     writer.writeVarInt(this.flags);
     writer.writeVarSlice(this.objectData);
 
-    if(this.HasLabel()) {
+    if (this.HasLabel()) {
       writer.writeVarSlice(Buffer.from(this.label));
     }
 
-    if(this.HasMIME()) {
+    if (this.HasMIME()) {
       writer.writeVarSlice(Buffer.from(this.mimeType));
     }
 
-    if(this.HasSalt()) {
+    if (this.HasSalt()) {
       writer.writeVarSlice(this.salt);
     }
 
-    if(this.HasEPK()) {
+    if (this.HasEPK()) {
       writer.writeVarSlice(this.epk);
     }
 
-    if(this.HasIVK()) {
+    if (this.HasIVK()) {
       writer.writeVarSlice(this.ivk);
     }
 
-    if(this.HasSSK()) {
+    if (this.HasSSK()) {
       writer.writeVarSlice(this.ssk);
     }
 
@@ -160,33 +166,33 @@ export class CDataDescriptor {
   }
 
 
-  fromBuffer(buffer: Buffer):number {
+  fromBuffer(buffer: Buffer): number {
     const reader = new BufferReader(buffer);
     this.version = reader.readVarInt();
     this.flags = reader.readVarInt();
     this.objectData = reader.readVarSlice();
 
-    if(this.HasLabel()) {
+    if (this.HasLabel()) {
       this.label = reader.readVarSlice().toString();
     }
 
-    if(this.HasMIME()) {
+    if (this.HasMIME()) {
       this.mimeType = reader.readVarSlice().toString();
     }
 
-    if(this.HasSalt()) {
+    if (this.HasSalt()) {
       this.salt = reader.readVarSlice();
     }
 
-    if(this.HasEPK()) {
+    if (this.HasEPK()) {
       this.epk = reader.readVarSlice();
     }
 
-    if(this.HasIVK()) {
+    if (this.HasIVK()) {
       this.ivk = reader.readVarSlice();
     }
 
-    if(this.HasSSK()) {
+    if (this.HasSSK()) {
       this.ssk = reader.readVarSlice();
     }
     return reader.offset;
@@ -788,7 +794,7 @@ export class CVDXF_Data extends BufferDataVdxfObject {
     }
   }
 
-  GetHash(){};
+  GetHash() { };
 };
 
 export class CVDXFDataDescriptor extends BufferDataVdxfObject {
@@ -817,7 +823,7 @@ export class CVDXFDataDescriptor extends BufferDataVdxfObject {
   }
 
   toDataBuffer(): Buffer {
-    
+
     return this.dataDescriptor.toBuffer();
   }
 
@@ -883,60 +889,58 @@ export class CVDXFDataDescriptor extends BufferDataVdxfObject {
     return this.dataDescriptor.SetFlags();
   }
 
-//   CVDXFDataDescriptor(const std:: vector<unsigned char > & ObjectData,
-//                         const std:: string & Label=std:: string(),
-//                         const std:: string & MimeType=std:: string(),
-//                         const std:: vector<unsigned char > & Salt=std:: vector < unsigned char > (),
-//                         const std:: vector<unsigned char > & EPK=std:: vector < unsigned char > (),
-//                         const std:: vector<unsigned char > & IVK=std:: vector < unsigned char > (),
-//                         const std:: vector<unsigned char > & SSK=std:: vector < unsigned char > (),
-//   uint32_t Flags = 0,
-//     uint32_t Version = DEFAULT_VERSION) :
-// dataDescriptor(ObjectData, Label, MimeType, Salt, EPK, IVK, SSK, Flags, Version), CVDXF_Data(CVDXF_Data:: DataDescriptorKey(), std:: vector < unsigned char > (), Version)
-// {
-// }
+  //   CVDXFDataDescriptor(const std:: vector<unsigned char > & ObjectData,
+  //                         const std:: string & Label=std:: string(),
+  //                         const std:: string & MimeType=std:: string(),
+  //                         const std:: vector<unsigned char > & Salt=std:: vector < unsigned char > (),
+  //                         const std:: vector<unsigned char > & EPK=std:: vector < unsigned char > (),
+  //                         const std:: vector<unsigned char > & IVK=std:: vector < unsigned char > (),
+  //                         const std:: vector<unsigned char > & SSK=std:: vector < unsigned char > (),
+  //   uint32_t Flags = 0,
+  //     uint32_t Version = DEFAULT_VERSION) :
+  // dataDescriptor(ObjectData, Label, MimeType, Salt, EPK, IVK, SSK, Flags, Version), CVDXF_Data(CVDXF_Data:: DataDescriptorKey(), std:: vector < unsigned char > (), Version)
+  // {
+  // }
 
-// ADD_SERIALIZE_METHODS;
+  // ADD_SERIALIZE_METHODS;
 
-// template < typename Stream, typename Operation >
-//   inline void SerializationOp(Stream & s, Operation ser_action) {
-//   READWRITE(* (CVDXF *)this);
+  // template < typename Stream, typename Operation >
+  //   inline void SerializationOp(Stream & s, Operation ser_action) {
+  //   READWRITE(* (CVDXF *)this);
 
-//   if (ser_action.ForRead()) {
-//     if (IsValid()) {
-//       READWRITE(data);
-//                 CDataStream readData(data, SER_DISK, PROTOCOL_VERSION);
-//       data.clear();
-//       readData >> dataDescriptor;
-//     }
-//   }
-//   else {
-//     if (IsValid()) {
-//                 CDataStream writeData(SER_DISK, PROTOCOL_VERSION);
-//       writeData << dataDescriptor;
-//       std:: vector < unsigned char > vch(writeData.begin(), writeData.end());
-//       READWRITE(vch);
-//     }
-//   }
-// }
+  //   if (ser_action.ForRead()) {
+  //     if (IsValid()) {
+  //       READWRITE(data);
+  //                 CDataStream readData(data, SER_DISK, PROTOCOL_VERSION);
+  //       data.clear();
+  //       readData >> dataDescriptor;
+  //     }
+  //   }
+  //   else {
+  //     if (IsValid()) {
+  //                 CDataStream writeData(SER_DISK, PROTOCOL_VERSION);
+  //       writeData << dataDescriptor;
+  //       std:: vector < unsigned char > vch(writeData.begin(), writeData.end());
+  //       READWRITE(vch);
+  //     }
+  //   }
+  // }
 
- 
+
 };
 
-export enum EHashTypes
-{
-    HASH_INVALID = 0,
-    HASH_BLAKE2BMMR = 1,
-    HASH_BLAKE2BMMR2 = 2,
-    HASH_KECCAK = 3,
-    HASH_SHA256D = 4,
-    HASH_SHA256 = 5,
-    HASH_LASTTYPE = 5
+export enum EHashTypes {
+  HASH_INVALID = 0,
+  HASH_BLAKE2BMMR = 1,
+  HASH_BLAKE2BMMR2 = 2,
+  HASH_KECCAK = 3,
+  HASH_SHA256D = 4,
+  HASH_SHA256 = 5,
+  HASH_LASTTYPE = 5
 };
 
 
-export class CMMRDescriptor
-{
+export class CMMRDescriptor {
   static VERSION_INVALID = new BN(0);
   static FIRST_VERSION = new BN(1);
   static LAST_VERSION = new BN(1);
@@ -944,109 +948,387 @@ export class CMMRDescriptor
 
   version: BigNumber;
   objectHashType: EHashTypes;
-  mmrHashType: EHashTypes;  
+  mmrHashType: EHashTypes;
   mmrRoot: CDataDescriptor;
   mmrHashes: CDataDescriptor;
   dataDescriptors: CDataDescriptor[];
 
-  constructor(data?:{ version: BigNumber, 
-    objectHashType: EHashTypes, 
-    mmrHashType: EHashTypes, 
+  constructor(data?: {
+    version: BigNumber,
+    objectHashType: EHashTypes,
+    mmrHashType: EHashTypes,
     mmrRoot: CDataDescriptor,
-    mmrHashes: CDataDescriptor, 
-    dataDescriptors: CDataDescriptor[] }) {
+    mmrHashes: CDataDescriptor,
+    dataDescriptors: CDataDescriptor[]
+  }) {
 
-      if (data) {
-        if (data.version) this.version = data.version;
-        if (data.objectHashType) this.objectHashType = data.objectHashType;
-        if (data.mmrHashType) this.mmrHashType = data.mmrHashType;
-        if (data.mmrRoot) this.mmrRoot = data.mmrRoot;
-        if (data.mmrHashes) this.mmrHashes = data.mmrHashes;
-        if (data.dataDescriptors) this.dataDescriptors = data.dataDescriptors;
-      } else {
-        this.version = CMMRDescriptor.DEFAULT_VERSION;
-      }
+    if (data) {
+      if (data.version) this.version = data.version;
+      if (data.objectHashType) this.objectHashType = data.objectHashType;
+      if (data.mmrHashType) this.mmrHashType = data.mmrHashType;
+      if (data.mmrRoot) this.mmrRoot = data.mmrRoot;
+      if (data.mmrHashes) this.mmrHashes = data.mmrHashes;
+      if (data.dataDescriptors) this.dataDescriptors = data.dataDescriptors;
+    } else {
+      this.version = CMMRDescriptor.DEFAULT_VERSION;
     }
+  }
 
-    byteLength(): number {
-      let length = 0;
+  byteLength(): number {
+    let length = 0;
 
-      length += varint.encodingLength(this.version);
-      length += varint.encodingLength(new BN(this.objectHashType));
-      length += varint.encodingLength(new BN(this.mmrHashType));
-      length += this.mmrRoot.byteLength();
-      length += this.mmrHashes.byteLength();
-      length += varuint.encodingLength(this.dataDescriptors.length);
-      this.dataDescriptors.forEach((dataDescriptor) => {
-        length += dataDescriptor.byteLength();
-      });
+    length += varint.encodingLength(this.version);
+    length += varint.encodingLength(new BN(this.objectHashType));
+    length += varint.encodingLength(new BN(this.mmrHashType));
+    length += this.mmrRoot.byteLength();
+    length += this.mmrHashes.byteLength();
+    length += varuint.encodingLength(this.dataDescriptors.length);
+    this.dataDescriptors.forEach((dataDescriptor) => {
+      length += dataDescriptor.byteLength();
+    });
 
-      return length;
+    return length;
+  }
+
+  toBuffer(): Buffer {
+
+    const writer = new BufferWriter(Buffer.alloc(this.byteLength()));
+
+    writer.writeVarInt(this.version);
+    writer.writeVarInt(new BN(this.objectHashType));
+    writer.writeVarInt(new BN(this.mmrHashType));
+    writer.writeSlice(this.mmrRoot.toBuffer());
+    writer.writeSlice(this.mmrHashes.toBuffer());
+    writer.writeCompactSize(this.dataDescriptors.length);
+
+    this.dataDescriptors.forEach((dataDescriptor) => {
+      writer.writeSlice(dataDescriptor.toBuffer());
+    });
+    return writer.buffer;
+  }
+
+  fromBuffer(buffer: Buffer, offset?: number): number {
+    const reader = new BufferReader(buffer, offset);
+    this.version = reader.readVarInt();
+    this.objectHashType = reader.readVarInt().toNumber();
+    this.mmrHashType = reader.readVarInt().toNumber();
+    this.mmrRoot = new CDataDescriptor();
+    this.mmrRoot.fromBuffer(reader.readVarSlice());
+    this.mmrHashes = new CDataDescriptor();
+    this.mmrHashes.fromBuffer(reader.readVarSlice());
+    const dataDescriptorsLength = reader.readCompactSize();
+    this.dataDescriptors = [];
+    for (let i = 0; i < dataDescriptorsLength; i++) {
+      const dataDescriptor = new CDataDescriptor();
+      dataDescriptor.fromBuffer(reader.readVarSlice());
+      this.dataDescriptors.push(dataDescriptor);
     }
+    return reader.offset;
+  }
 
-    toBuffer(): Buffer {
-      
-      const writer = new BufferWriter(Buffer.alloc(this.byteLength()));
-    
-      writer.writeVarInt(this.version);
-      writer.writeVarInt(new BN(this.objectHashType));
-      writer.writeVarInt(new BN(this.mmrHashType));
-      writer.writeSlice(this.mmrRoot.toBuffer());
-      writer.writeSlice(this.mmrHashes.toBuffer());
-      writer.writeCompactSize(this.dataDescriptors.length);
+  // CMMRDescriptor Encrypt(const libzcash::SaplingPaymentAddress &saplingAddress, bool includeSSKs=false) const;
+  // bool WrapEncrypted(const libzcash::SaplingPaymentAddress &saplingAddress, bool includeSSKs=false);
 
-      this.dataDescriptors.forEach((dataDescriptor) => {
-        writer.writeSlice(dataDescriptor.toBuffer());
-      });
-      return writer.buffer;
-    }
+  // CMMRDescriptor Decrypt() const;
+  // CMMRDescriptor Decrypt(const libzcash::SaplingIncomingViewingKey &ivk) const;
+  // uint256 DecryptMMRRoot(const libzcash::SaplingIncomingViewingKey &ivk) const;
+  // uint256 DecryptMMRRoot(const std::vector<unsigned char> &Ssk) const;
+  // uint256 GetMMRRoot() const;
+  // std::vector<uint256> DecryptMMRHashes(const libzcash::SaplingIncomingViewingKey &ivk) const;
+  // std::vector<uint256> DecryptMMRHashes(const std::vector<unsigned char> &Ssk) const;
+  // std::vector<uint256> GetMMRHashes() const;
+  // std::vector<CDataDescriptor> DecryptDataDescriptors(const libzcash::SaplingIncomingViewingKey &ivk) const;
+  // std::vector<CDataDescriptor> GetDataDescriptors() const;
+  // CDataDescriptor DecryptDataDescriptor(int idx, const std::vector<unsigned char> &ssk) const;
+  // CDataDescriptor DecryptDataDescriptor(int idx, const libzcash::SaplingIncomingViewingKey &ivk) const;
+  // CDataDescriptor GetDataDescriptor(int idx) const;
+  // CMMRDescriptor AddSymmetricKeys(const libzcash::SaplingIncomingViewingKey &ivk) const;
+  // CMMRDescriptor AddSymmetricKeys(const std::vector<std::pair<int, std::vector<unsigned char>>> &ssks) const;
+  // std::vector<std::pair<int, std::vector<unsigned char>>> GetSymmetricKeys(const libzcash::SaplingIncomingViewingKey &ivk) const;
 
-    fromBuffer(buffer: Buffer, offset?: number): number {
-      const reader = new BufferReader(buffer, offset);
-      this.version = reader.readVarInt();
-      this.objectHashType = reader.readVarInt().toNumber();
-      this.mmrHashType = reader.readVarInt().toNumber();
-      this.mmrRoot = new CDataDescriptor();
-      this.mmrRoot.fromBuffer(reader.readVarSlice());
-      this.mmrHashes = new CDataDescriptor();
-      this.mmrHashes.fromBuffer(reader.readVarSlice());
-      const dataDescriptorsLength = reader.readCompactSize();
-      this.dataDescriptors = [];
-      for (let i = 0; i < dataDescriptorsLength; i++) {
-        const dataDescriptor = new CDataDescriptor();
-        dataDescriptor.fromBuffer(reader.readVarSlice());
-        this.dataDescriptors.push(dataDescriptor);
-      }
-      return reader.offset;
-    }
+  HasData(): boolean {
+    return !!(this.mmrHashes.objectData && this.dataDescriptors);
+  }
 
-    // CMMRDescriptor Encrypt(const libzcash::SaplingPaymentAddress &saplingAddress, bool includeSSKs=false) const;
-    // bool WrapEncrypted(const libzcash::SaplingPaymentAddress &saplingAddress, bool includeSSKs=false);
-
-    // CMMRDescriptor Decrypt() const;
-    // CMMRDescriptor Decrypt(const libzcash::SaplingIncomingViewingKey &ivk) const;
-    // uint256 DecryptMMRRoot(const libzcash::SaplingIncomingViewingKey &ivk) const;
-    // uint256 DecryptMMRRoot(const std::vector<unsigned char> &Ssk) const;
-    // uint256 GetMMRRoot() const;
-    // std::vector<uint256> DecryptMMRHashes(const libzcash::SaplingIncomingViewingKey &ivk) const;
-    // std::vector<uint256> DecryptMMRHashes(const std::vector<unsigned char> &Ssk) const;
-    // std::vector<uint256> GetMMRHashes() const;
-    // std::vector<CDataDescriptor> DecryptDataDescriptors(const libzcash::SaplingIncomingViewingKey &ivk) const;
-    // std::vector<CDataDescriptor> GetDataDescriptors() const;
-    // CDataDescriptor DecryptDataDescriptor(int idx, const std::vector<unsigned char> &ssk) const;
-    // CDataDescriptor DecryptDataDescriptor(int idx, const libzcash::SaplingIncomingViewingKey &ivk) const;
-    // CDataDescriptor GetDataDescriptor(int idx) const;
-    // CMMRDescriptor AddSymmetricKeys(const libzcash::SaplingIncomingViewingKey &ivk) const;
-    // CMMRDescriptor AddSymmetricKeys(const std::vector<std::pair<int, std::vector<unsigned char>>> &ssks) const;
-    // std::vector<std::pair<int, std::vector<unsigned char>>> GetSymmetricKeys(const libzcash::SaplingIncomingViewingKey &ivk) const;
-
-    HasData(): boolean
-    {
-        return !!(this.mmrHashes.objectData && this.dataDescriptors);
-    }
-
-    IsValid(): boolean
-    {
-        return this.version >= CMMRDescriptor.FIRST_VERSION && this.version <= CMMRDescriptor.LAST_VERSION;
-    }
+  IsValid(): boolean {
+    return this.version >= CMMRDescriptor.FIRST_VERSION && this.version <= CMMRDescriptor.LAST_VERSION;
+  }
 };
+
+const VectorEncodeVDXFUni = (obj): Buffer => {
+  let ss = Buffer.from('');
+
+  if (typeof (obj) != 'object') {
+    if (typeof (obj) != 'string') throw new Error('VectorEncodeVDXFUni: not JSON string as expected');
+    if (isHexString(obj)) {
+      return Buffer.from(obj, "hex");
+    }
+    return Buffer.from(obj, "utf-8");
+  }
+
+  if (obj.serializedHex) {
+    if (!isHexString(obj.serializedHex)) {
+      throw new Error("contentmap: If the \"serializedhex\" key is present, it's data must be only valid hex and complete");
+    }
+    return Buffer.from(obj.serializedHex);
+  }
+
+  if (obj.serializedBase64) {
+    try {
+      return Buffer.from(obj.serializedBase64, 'base64');
+    } catch (e) {
+      throw new Error("contentmap: If the \"serializedBase64\" key is present, it's data must be only valid base64 and complete");
+    }
+  }
+
+  if (obj.message) {
+    return Buffer.from(obj, "utf-8");
+  }
+
+  // this should be an object with "vdxfkey" as the key and {object} as the json object to serialize
+  const oneValKeys = Object.keys(obj);
+  const oneValValues = Object.values(obj);
+
+  // TODO: change if / else to a map lookup
+
+  for (let k = 0; k < oneValKeys.length; k++) {
+    const objTypeKey = oneValKeys[k];
+    if (objTypeKey == CVDXF_Data.DataByteKey().vdxfid) {
+      const oneByte = Buffer.from(oneValValues[k] as string, "hex");
+      if (oneByte.length != 1) {
+        throw new Error("contentmap: byte data must be exactly one byte");
+      }
+      ss = Buffer.concat([ss, oneByte]);
+    }
+    else if (objTypeKey == CVDXF_Data.DataInt16Key().vdxfid) {
+      const oneShort = Buffer.alloc(2);
+      oneShort.writeInt16LE(oneValValues[k] as number);
+      ss = Buffer.concat([ss, oneShort]);
+    }
+    else if (objTypeKey == CVDXF_Data.DataUint16Key().vdxfid) {
+      const oneUShort = Buffer.alloc(2);
+      oneUShort.writeUInt16LE(oneValValues[k] as number);
+      ss = Buffer.concat([ss, oneUShort]);
+    }
+    else if (objTypeKey == CVDXF_Data.DataInt32Key().vdxfid) {
+      const oneInt = Buffer.alloc(4);
+      oneInt.writeInt32LE(oneValValues[k] as number);
+      ss = Buffer.concat([ss, oneInt]);
+
+    }
+    else if (objTypeKey == CVDXF_Data.DataUint32Key().vdxfid) {
+      const oneUInt = Buffer.alloc(4);
+      oneUInt.writeUInt32LE(oneValValues[k] as number);
+      ss = Buffer.concat([ss, oneUInt]);
+    }
+    else if (objTypeKey == CVDXF_Data.DataInt64Key().vdxfid) {
+      const oneInt64 = Buffer.alloc(8);
+      oneInt64.writeIntLE(oneValValues[k] as number, 0, 8);
+      ss = Buffer.concat([ss, oneInt64]);
+    }
+    else if (objTypeKey == CVDXF_Data.DataUint160Key().vdxfid) {
+      const oneKey = fromBase58Check(oneValValues[k] as string).hash;
+      ss = Buffer.concat([ss, oneKey]);
+    }
+    else if (objTypeKey == CVDXF_Data.DataUint256Key().vdxfid) {
+      const oneHash = Buffer.from(oneValValues[k] as string, "hex");
+      if (oneHash.length != 32) {
+        throw new Error("contentmap: hash data must be exactly 32 bytes");
+      }
+      ss = Buffer.concat([ss, oneHash.reverse()]);
+    }
+    else if (objTypeKey == CVDXF_Data.DataStringKey().vdxfid) {
+
+      let length = 20;
+      length += 1;
+      length += varuint.encodingLength((oneValValues[k] as string).length) + Buffer.from(oneValValues[k] as string, "utf-8").length;
+      length += varuint.encodingLength((oneValValues[k] as string).length);
+      length += Buffer.from(oneValValues[k] as string, "utf-8").length;
+      
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(new BN(1));
+      writer.writeCompactSize((oneValValues[k] as string).length + Buffer.from(oneValValues[k] as string, "utf-8").length);
+      writer.writeCompactSize((oneValValues[k] as string).length);
+      writer.writeSlice(Buffer.from(oneValValues[k] as string, "utf-8"));
+
+      ss = Buffer.concat([ss, writer.buffer]);
+
+      // ss << objTypeKey;
+      // ss << VARINT(1);
+      // std::string stringVal = uni_get_str(oneValValues[k]);
+      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, stringVal).vdxfid);
+      // ss << stringVal;
+    }
+    else if (objTypeKey == CVDXF_Data.DataByteVectorKey().vdxfid) {
+
+      let length = 20;
+      length += 1;
+      length += varuint.encodingLength(Buffer.from(oneValValues[k] as string, "hex").length) + Buffer.from(oneValValues[k] as string, "hex").length;
+      length += varuint.encodingLength(Buffer.from(oneValValues[k] as string, "hex").length);
+      length += Buffer.from(oneValValues[k] as string, "hex").length;
+      
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(new BN(1));
+      writer.writeCompactSize(Buffer.from(oneValValues[k] as string, "hex").length + Buffer.from(oneValValues[k] as string, "hex").length);
+      writer.writeCompactSize(Buffer.from(oneValValues[k] as string, "hex").length);
+      writer.writeSlice(Buffer.from(oneValValues[k] as string, "hex"));
+
+      ss = Buffer.concat([ss, writer.buffer]);
+
+      // ss << objTypeKey;
+      // ss << VARINT(1);
+      // std:: vector < unsigned char > byteVec = ParseHex(uni_get_str(oneValValues[k]));
+      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, byteVec));
+      // ss << byteVec;
+    }
+    else if (objTypeKey == CVDXF_Data.DataCurrencyMapKey().vdxfid) {
+
+      const destinations = Object.keys(oneValValues[k]);
+      const values = Object.values(oneValValues[k]);
+
+      const oneCurMap = new CurrencyValueMap({value_map: new Map(destinations.map((key, index) => [key, new BN(values[index])])) , multivalue: true});
+      
+      let length = 20;
+      length += 1;
+      length += varuint.encodingLength(oneCurMap.getByteLength());
+      length += oneCurMap.getByteLength();
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(new BN(1));
+      writer.writeCompactSize(oneCurMap.getByteLength());
+      writer.writeSlice(oneCurMap.toBuffer());
+
+      // CCurrencyValueMap oneCurMap(oneValValues[k]);
+      // ss << objTypeKey;
+      // ss << VARINT(1);
+      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, oneCurMap));
+      // ss << oneCurMap;
+    }
+    else if (objTypeKey == CVDXF_Data.DataRatingsKey().vdxfid) {
+
+      const version = new BN((oneValValues[k] as {version: number}).version);
+      const trustLevel = new BN((oneValValues[k] as {trustLevel: number}).trustLevel);
+
+      const destinations = Object.keys((oneValValues[k] as {rating: BigNumber}).rating);
+      const values = Object.values(oneValValues[k]);
+
+      const oneRatingMap = new Rating({ratings: new Map(destinations.map((key, index) => [key, Buffer.from(values[index], 'hex')])), version, trustLevel});
+      
+      let length = 20;
+      length += varint.encodingLength(oneRatingMap.version);
+      length += varuint.encodingLength(oneRatingMap.getByteLength());
+      length += oneRatingMap.getByteLength(); 
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(oneRatingMap.version);
+      writer.writeCompactSize(oneRatingMap.getByteLength());
+      writer.writeSlice(oneRatingMap.toBuffer());
+
+      //       CRating oneRatingObj(oneValValues[k]);
+      // ss << objTypeKey;
+      // ss << VARINT(oneRatingObj.version);
+      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, oneRatingObj));
+      // ss << oneRatingObj;
+    }
+    else if (objTypeKey == CVDXF_Data.DataTransferDestinationKey().vdxfid) {
+
+      const transferDest = new TransferDestination(oneValValues[k]);
+      
+      let length = 20;
+      length += varint.encodingLength(transferDest.typeNoFlags());
+      length += varuint.encodingLength(transferDest.getByteLength());
+      length += transferDest.getByteLength(); 
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(transferDest.typeNoFlags());
+      writer.writeCompactSize(transferDest.getByteLength());
+      writer.writeSlice(transferDest.toBuffer());
+
+
+      //       CTransferDestination oneTransferDest(oneValValues[k]);
+      // ss << objTypeKey;
+      // ss << VARINT(oneTransferDest.TypeNoFlags());
+      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, oneTransferDest));
+      // ss << oneTransferDest;
+    }
+    else if (objTypeKey == CVDXF_Data.ContentMultiMapRemoveKey().vdxfid) {
+      
+      const transferDest = new ContentMultiMapRemove(oneValValues[k]);
+      
+      let length = 20;
+      length += varint.encodingLength(transferDest.version);
+      length += varuint.encodingLength(transferDest.getByteLength());
+      length += transferDest.getByteLength(); 
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(transferDest.version);
+      writer.writeCompactSize(transferDest.getByteLength());
+      writer.writeSlice(transferDest.toBuffer());
+
+      //       CContentMultiMapRemove contentRemove(oneValValues[k]);
+      // ss << objTypeKey;
+      // ss << VARINT(contentRemove.version);
+      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, contentRemove));
+      // ss << contentRemove;
+    }
+    else if (objTypeKey == CVDXF_Data.CrossChainDataRefKey().vdxfid) {
+
+      const transferDest = new CrossChainDataRef(oneValValues[k]);
+      
+      let length = 20;
+      length += varint.encodingLength(transferDest.version);
+      length += varuint.encodingLength(transferDest.getByteLength());
+      length += transferDest.getByteLength(); 
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(transferDest.version);
+      writer.writeCompactSize(transferDest.getByteLength());
+      writer.writeSlice(transferDest.toBuffer());
+
+            CCrossChainDataRef dataRef(oneValValues[k]);
+      ss << objTypeKey;
+      ss << VARINT((int32_t)CVDXF_Data.DEFAULT_VERSION);
+      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, dataRef));
+      ss << dataRef;
+    }
+    else if (objTypeKey == CVDXF_Data.DataDescriptorKey().vdxfid) {
+            CDataDescriptor descr(oneValValues[k]);
+      ss << objTypeKey;
+      ss << VARINT(descr.version);
+      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, descr));
+      ss << descr;
+    }
+    else if (objTypeKey == CVDXF_Data.MMRDescriptorKey().vdxfid) {
+            CMMRDescriptor descr(oneValValues[k]);
+      ss << objTypeKey;
+      ss << VARINT(descr.version);
+      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, descr));
+      ss << descr;
+    }
+    else if (objTypeKey == CVDXF_Data.SignatureDataKey().vdxfid) {
+            CSignatureData sigData(oneValValues[k]);
+      ss << objTypeKey;
+      ss << VARINT(sigData.version);
+      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, sigData));
+      ss << sigData;
+    }
+    else {
+      throw new Error("contentmap invalid or unrecognized vdxfkey for object type: " + oneValValues[k]);
+    }
+  }
+  return ss;
+}
