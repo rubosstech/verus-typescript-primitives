@@ -7,10 +7,10 @@ export class GetAddressUtxosResponse extends ApiResponse {
     outputIndex: number;
     script: string;
     currencyvalues?: {
-      [key: string]: number;
+      [key: string]: number | undefined;
     };
     currencynames?: {
-      [key: string]: string;
+      [key: string]: string | undefined;
     };
     satoshis: number;
     height: number;
