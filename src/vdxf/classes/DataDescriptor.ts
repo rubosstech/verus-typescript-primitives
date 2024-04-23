@@ -8,11 +8,13 @@ import bufferutils from '../../utils/bufferutils'
 const { BufferReader, BufferWriter } = bufferutils
 import { isHexString } from '../../utils/string';
 import { fromBase58Check, toBase58Check } from '../../utils/address';
-import {CurrencyValueMap} from '../../pbaas/CurrencyValueMap';
+import { CurrencyValueMap } from '../../pbaas/CurrencyValueMap';
 import { Rating } from '../../pbaas/Rating';
 import { TransferDestination } from '../../pbaas/TransferDestination';
 import { ContentMultiMapRemove } from '../../pbaas/ContentMultiMapRemove';
 import { CrossChainDataRef } from './CrossChainDataRef';
+import { VDXF_OBJECT_DEFAULT_VERSION, HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../../constants/vdxf';
+import { SignatureData } from './SignatureData';
 
 export class CDataDescriptor {
 
@@ -954,12 +956,12 @@ export class CMMRDescriptor {
   dataDescriptors: CDataDescriptor[];
 
   constructor(data?: {
-    version: BigNumber,
-    objectHashType: EHashTypes,
-    mmrHashType: EHashTypes,
-    mmrRoot: CDataDescriptor,
-    mmrHashes: CDataDescriptor,
-    dataDescriptors: CDataDescriptor[]
+    version?: BigNumber,
+    objectHashType?: EHashTypes,
+    mmrHashType?: EHashTypes,
+    mmrRoot?: CDataDescriptor,
+    mmrHashes?: CDataDescriptor,
+    dataDescriptors?: CDataDescriptor[]
   }) {
 
     if (data) {
@@ -1141,57 +1143,46 @@ const VectorEncodeVDXFUni = (obj): Buffer => {
 
       let length = 20;
       length += 1;
-      length += varuint.encodingLength((oneValValues[k] as string).length) + Buffer.from(oneValValues[k] as string, "utf-8").length;
-      length += varuint.encodingLength((oneValValues[k] as string).length);
+      const encodedLength = varuint.encodingLength(Buffer.from(oneValValues[k] as string, "utf-8").length)
+      length += varuint.encodingLength(encodedLength + Buffer.from(oneValValues[k] as string, "utf-8").length);
+      length += encodedLength;
       length += Buffer.from(oneValValues[k] as string, "utf-8").length;
-      
+
       const writer = new BufferWriter(Buffer.alloc(length));
 
       writer.writeSlice(fromBase58Check(objTypeKey).hash);
       writer.writeVarInt(new BN(1));
-      writer.writeCompactSize((oneValValues[k] as string).length + Buffer.from(oneValValues[k] as string, "utf-8").length);
-      writer.writeCompactSize((oneValValues[k] as string).length);
-      writer.writeSlice(Buffer.from(oneValValues[k] as string, "utf-8"));
+      writer.writeCompactSize(encodedLength + Buffer.from(oneValValues[k] as string, "utf-8").length);
+      writer.writeVarSlice(Buffer.from(oneValValues[k] as string, "utf-8"));
 
       ss = Buffer.concat([ss, writer.buffer]);
-
-      // ss << objTypeKey;
-      // ss << VARINT(1);
-      // std::string stringVal = uni_get_str(oneValValues[k]);
-      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, stringVal).vdxfid);
-      // ss << stringVal;
     }
     else if (objTypeKey == CVDXF_Data.DataByteVectorKey().vdxfid) {
 
       let length = 20;
       length += 1;
-      length += varuint.encodingLength(Buffer.from(oneValValues[k] as string, "hex").length) + Buffer.from(oneValValues[k] as string, "hex").length;
-      length += varuint.encodingLength(Buffer.from(oneValValues[k] as string, "hex").length);
+      const encodedLength = varuint.encodingLength(Buffer.from(oneValValues[k] as string, "hex").length)
+      length += varuint.encodingLength(encodedLength + Buffer.from(oneValValues[k] as string, "hex").length);
+      length += encodedLength;
       length += Buffer.from(oneValValues[k] as string, "hex").length;
-      
+
       const writer = new BufferWriter(Buffer.alloc(length));
 
       writer.writeSlice(fromBase58Check(objTypeKey).hash);
       writer.writeVarInt(new BN(1));
-      writer.writeCompactSize(Buffer.from(oneValValues[k] as string, "hex").length + Buffer.from(oneValValues[k] as string, "hex").length);
-      writer.writeCompactSize(Buffer.from(oneValValues[k] as string, "hex").length);
-      writer.writeSlice(Buffer.from(oneValValues[k] as string, "hex"));
+      writer.writeCompactSize(encodedLength + Buffer.from(oneValValues[k] as string, "hex").length);
+      writer.writeVarSlice(Buffer.from(oneValValues[k] as string, "hex"));
 
       ss = Buffer.concat([ss, writer.buffer]);
 
-      // ss << objTypeKey;
-      // ss << VARINT(1);
-      // std:: vector < unsigned char > byteVec = ParseHex(uni_get_str(oneValValues[k]));
-      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, byteVec));
-      // ss << byteVec;
     }
     else if (objTypeKey == CVDXF_Data.DataCurrencyMapKey().vdxfid) {
 
       const destinations = Object.keys(oneValValues[k]);
       const values = Object.values(oneValValues[k]);
 
-      const oneCurMap = new CurrencyValueMap({value_map: new Map(destinations.map((key, index) => [key, new BN(values[index])])) , multivalue: true});
-      
+      const oneCurMap = new CurrencyValueMap({ value_map: new Map(destinations.map((key, index) => [key, new BN(values[index])])), multivalue: true });
+
       let length = 20;
       length += 1;
       length += varuint.encodingLength(oneCurMap.getByteLength());
@@ -1204,26 +1195,23 @@ const VectorEncodeVDXFUni = (obj): Buffer => {
       writer.writeCompactSize(oneCurMap.getByteLength());
       writer.writeSlice(oneCurMap.toBuffer());
 
-      // CCurrencyValueMap oneCurMap(oneValValues[k]);
-      // ss << objTypeKey;
-      // ss << VARINT(1);
-      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, oneCurMap));
-      // ss << oneCurMap;
+      ss = Buffer.concat([ss, writer.buffer]);
+
     }
     else if (objTypeKey == CVDXF_Data.DataRatingsKey().vdxfid) {
 
-      const version = new BN((oneValValues[k] as {version: number}).version);
-      const trustLevel = new BN((oneValValues[k] as {trustLevel: number}).trustLevel);
+      const version = new BN((oneValValues[k] as { version: number }).version);
+      const trustLevel = new BN((oneValValues[k] as { trustLevel: number }).trustLevel);
 
-      const destinations = Object.keys((oneValValues[k] as {rating: BigNumber}).rating);
+      const destinations = Object.keys((oneValValues[k] as { rating: BigNumber }).rating);
       const values = Object.values(oneValValues[k]);
 
-      const oneRatingMap = new Rating({ratings: new Map(destinations.map((key, index) => [key, Buffer.from(values[index], 'hex')])), version, trustLevel});
-      
+      const oneRatingMap = new Rating({ ratings: new Map(destinations.map((key, index) => [key, Buffer.from(values[index], 'hex')])), version, trustLevel });
+
       let length = 20;
       length += varint.encodingLength(oneRatingMap.version);
       length += varuint.encodingLength(oneRatingMap.getByteLength());
-      length += oneRatingMap.getByteLength(); 
+      length += oneRatingMap.getByteLength();
 
       const writer = new BufferWriter(Buffer.alloc(length));
 
@@ -1232,20 +1220,17 @@ const VectorEncodeVDXFUni = (obj): Buffer => {
       writer.writeCompactSize(oneRatingMap.getByteLength());
       writer.writeSlice(oneRatingMap.toBuffer());
 
-      //       CRating oneRatingObj(oneValValues[k]);
-      // ss << objTypeKey;
-      // ss << VARINT(oneRatingObj.version);
-      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, oneRatingObj));
-      // ss << oneRatingObj;
+      ss = Buffer.concat([ss, writer.buffer]);
+
     }
     else if (objTypeKey == CVDXF_Data.DataTransferDestinationKey().vdxfid) {
 
       const transferDest = new TransferDestination(oneValValues[k]);
-      
+
       let length = 20;
       length += varint.encodingLength(transferDest.typeNoFlags());
       length += varuint.encodingLength(transferDest.getByteLength());
-      length += transferDest.getByteLength(); 
+      length += transferDest.getByteLength();
 
       const writer = new BufferWriter(Buffer.alloc(length));
 
@@ -1254,21 +1239,17 @@ const VectorEncodeVDXFUni = (obj): Buffer => {
       writer.writeCompactSize(transferDest.getByteLength());
       writer.writeSlice(transferDest.toBuffer());
 
+      ss = Buffer.concat([ss, writer.buffer]);
 
-      //       CTransferDestination oneTransferDest(oneValValues[k]);
-      // ss << objTypeKey;
-      // ss << VARINT(oneTransferDest.TypeNoFlags());
-      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, oneTransferDest));
-      // ss << oneTransferDest;
     }
     else if (objTypeKey == CVDXF_Data.ContentMultiMapRemoveKey().vdxfid) {
-      
+
       const transferDest = new ContentMultiMapRemove(oneValValues[k]);
-      
+
       let length = 20;
       length += varint.encodingLength(transferDest.version);
       length += varuint.encodingLength(transferDest.getByteLength());
-      length += transferDest.getByteLength(); 
+      length += transferDest.getByteLength();
 
       const writer = new BufferWriter(Buffer.alloc(length));
 
@@ -1277,54 +1258,83 @@ const VectorEncodeVDXFUni = (obj): Buffer => {
       writer.writeCompactSize(transferDest.getByteLength());
       writer.writeSlice(transferDest.toBuffer());
 
-      //       CContentMultiMapRemove contentRemove(oneValValues[k]);
-      // ss << objTypeKey;
-      // ss << VARINT(contentRemove.version);
-      // ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, contentRemove));
-      // ss << contentRemove;
+      ss = Buffer.concat([ss, writer.buffer]);
+
     }
     else if (objTypeKey == CVDXF_Data.CrossChainDataRefKey().vdxfid) {
 
       const transferDest = new CrossChainDataRef(oneValValues[k]);
-      
+
       let length = 20;
-      length += varint.encodingLength(transferDest.version);
+      length += varint.encodingLength(VDXF_OBJECT_DEFAULT_VERSION);
       length += varuint.encodingLength(transferDest.getByteLength());
-      length += transferDest.getByteLength(); 
+      length += transferDest.getByteLength();
 
       const writer = new BufferWriter(Buffer.alloc(length));
 
       writer.writeSlice(fromBase58Check(objTypeKey).hash);
-      writer.writeVarInt(transferDest.version);
+      writer.writeVarInt(VDXF_OBJECT_DEFAULT_VERSION);
       writer.writeCompactSize(transferDest.getByteLength());
       writer.writeSlice(transferDest.toBuffer());
 
-            CCrossChainDataRef dataRef(oneValValues[k]);
-      ss << objTypeKey;
-      ss << VARINT((int32_t)CVDXF_Data.DEFAULT_VERSION);
-      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, dataRef));
-      ss << dataRef;
+      ss = Buffer.concat([ss, writer.buffer]);
+
     }
     else if (objTypeKey == CVDXF_Data.DataDescriptorKey().vdxfid) {
-            CDataDescriptor descr(oneValValues[k]);
-      ss << objTypeKey;
-      ss << VARINT(descr.version);
-      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, descr));
-      ss << descr;
+
+      const descr = new CDataDescriptor(oneValValues[k]);
+
+      let length = 20;
+      length += varint.encodingLength(descr.version);
+      length += varuint.encodingLength(descr.byteLength());
+      length += descr.byteLength();
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(descr.version);
+      writer.writeCompactSize(descr.byteLength());
+      writer.writeSlice(descr.toBuffer());
+
+      ss = Buffer.concat([ss, writer.buffer]);
+
     }
     else if (objTypeKey == CVDXF_Data.MMRDescriptorKey().vdxfid) {
-            CMMRDescriptor descr(oneValValues[k]);
-      ss << objTypeKey;
-      ss << VARINT(descr.version);
-      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, descr));
-      ss << descr;
+
+      const descr = new CMMRDescriptor(oneValValues[k]);
+
+      let length = 20;
+      length += varint.encodingLength(descr.version);
+      length += varuint.encodingLength(descr.byteLength());
+      length += descr.byteLength();
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(descr.version);
+      writer.writeCompactSize(descr.byteLength());
+      writer.writeSlice(descr.toBuffer());
+
+      ss = Buffer.concat([ss, writer.buffer]);
+
     }
     else if (objTypeKey == CVDXF_Data.SignatureDataKey().vdxfid) {
-            CSignatureData sigData(oneValValues[k]);
-      ss << objTypeKey;
-      ss << VARINT(sigData.version);
-      ss << COMPACTSIZE((uint64_t)GetSerializeSize(ss, sigData));
-      ss << sigData;
+
+      const sigData = new SignatureData(oneValValues[k]);
+
+      let length = 20;
+      length += varint.encodingLength(sigData.version);
+      length += varuint.encodingLength(sigData.getByteLength());
+      length += sigData.getByteLength();
+
+      const writer = new BufferWriter(Buffer.alloc(length));
+      writer.writeSlice(fromBase58Check(objTypeKey).hash);
+      writer.writeVarInt(sigData.version);
+      writer.writeCompactSize(sigData.getByteLength());
+      writer.writeSlice(sigData.toBuffer());
+
+      ss = Buffer.concat([ss, writer.buffer]);
+
     }
     else {
       throw new Error("contentmap invalid or unrecognized vdxfkey for object type: " + oneValValues[k]);
