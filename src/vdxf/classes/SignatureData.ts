@@ -6,7 +6,7 @@ import { BN } from 'bn.js';
 import { BigNumber } from '../../utils/types/BigNumber';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
 import { SerializableEntity } from '../../utils/types/SerializableEntity';
-import { read } from 'fs';
+import { EHashTypes } from './DataDescriptor';
 const { BufferReader, BufferWriter } = bufferutils
 
 export class SignatureData implements SerializableEntity {
@@ -32,6 +32,36 @@ export class SignatureData implements SerializableEntity {
     if (data) {
       Object.assign(this, data)
     }
+  }
+
+  static fromJson(data: any) {
+
+    const signatureData = new SignatureData();
+
+    if (data) {
+      if (data.version) signatureData.version = new BN(data.version);
+      if (data.systemid) signatureData.systemID = data.systemid;
+      if (data.hashtype) signatureData.hashType = new BN(data.hashtype);
+
+      if (signatureData.hashType == new BN(EHashTypes.HASH_SHA256)){
+        signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex').reverse();
+      } else {
+        signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex');
+      }
+
+      if (data.signaturehash) signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex');
+      if (data.identityid) signatureData.identityID = data.identityid;
+      if (data.sigtype) signatureData.sigType = new BN(data.sigtype);
+      signatureData.vdxfKeys = data.vdxfkeys || [];
+      signatureData.vdxfKeyNames = data.vdxfkeynames || [];
+      signatureData.boundHashes = data.boundhashes || [];
+      signatureData.signatureAsVch = Buffer.from(data.signatureasvch, 'base64');
+
+
+    }
+
+
+    return new SignatureData(data)
   }
 
   getByteLength() {
