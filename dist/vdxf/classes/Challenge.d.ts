@@ -2,7 +2,6 @@
 import { Utf8DataVdxfObject, VDXFObject, Utf8OrBase58Object } from "../";
 import { Context } from "./Context";
 import { Attestation } from "./Attestation";
-import { AttestationRequestInterfaceDataInterface } from './Attestation';
 export declare class RedirectUri extends VDXFObject {
     uri: string;
     constructor(uri?: string, vdxfkey?: string);
@@ -78,9 +77,9 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     };
 }
 export declare class RequestedPermission extends VDXFObject {
-    data: string | AttestationRequestInterfaceDataInterface;
+    data: string;
     encoding?: BufferEncoding;
-    constructor(data?: string | AttestationRequestInterfaceDataInterface, vdxfkey?: string);
-    addPrototypes(data: string | AttestationRequestInterfaceDataInterface): void;
+    constructor(data: string, vdxfkey?: string);
+    addPrototypes(data: string): void;
     fromDataBuffer(buffer: Buffer, offset?: number): number;
 }

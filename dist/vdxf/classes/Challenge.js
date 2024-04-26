@@ -10,7 +10,6 @@ const Attestation_1 = require("./Attestation");
 const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
 const index_1 = require("../index");
-const Attestation_2 = require("./Attestation");
 class RedirectUri extends __1.VDXFObject {
     constructor(uri = "", vdxfkey = "") {
         super(vdxfkey);
@@ -220,7 +219,7 @@ class Challenge extends __1.VDXFObject {
                 this.attestations = [];
                 const attestationsLength = reader.readCompactSize();
                 for (let i = 0; i < attestationsLength; i++) {
-                    const _att = new Attestation_1.Attestation();
+                    const _att = new Attestation_1.Attestation("", "");
                     reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
                     this.attestations.push(_att);
                 }
@@ -261,7 +260,7 @@ class Challenge extends __1.VDXFObject {
 }
 exports.Challenge = Challenge;
 class RequestedPermission extends __1.VDXFObject {
-    constructor(data = "", vdxfkey = "") {
+    constructor(data, vdxfkey = "") {
         super(vdxfkey);
         if (vdxfkey)
             this.addPrototypes(data);
@@ -269,10 +268,6 @@ class RequestedPermission extends __1.VDXFObject {
     addPrototypes(data) {
         var classType;
         switch (this.vdxfkey) {
-            case __1.ATTESTATION_READ_REQUEST.vdxfid:
-                classType = Attestation_2.AttestationRequest;
-                this.data = Attestation_2.AttestationRequest.initializeData(data);
-                break;
             case __1.IDENTITY_AGREEMENT.vdxfid:
                 classType = index_1.BufferDataVdxfObject;
                 this.data = data;

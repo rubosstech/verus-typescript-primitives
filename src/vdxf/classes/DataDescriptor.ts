@@ -116,6 +116,23 @@ export class DataDescriptor {
 
   }
 
+  DecodeHashVector(): Array<Buffer> {
+
+    const vdxfData = new VDXF_Data("","");
+    vdxfData.fromBuffer(this.objectdata);
+    const hashes = [];
+
+    if (vdxfData.vdxfkey == VDXF_Data.VectorUint256Key().vdxfid) {
+      const reader = new BufferReader(Buffer.from(vdxfData.data, 'hex'));
+      const count = reader.readVarInt();
+      for (let i = 0; i < count.toNumber(); i++) {
+        hashes.push(reader.readSlice(32));
+      }
+    }
+    return hashes;
+
+  }
+
   byteLength(): number {
 
     let length = 0;
@@ -197,8 +214,8 @@ export class DataDescriptor {
     return writer.buffer;
   }
 
-  fromBuffer(buffer: Buffer): number {
-    const reader = new BufferReader(buffer);
+  fromBuffer(buffer: Buffer, offset: number = 0): number {
+    const reader = new BufferReader(buffer, offset);
     this.version = reader.readVarInt();
     this.flags = reader.readVarInt();
     this.objectdata = reader.readVarSlice();
@@ -277,7 +294,6 @@ export class DataDescriptor {
   }
 
 };
-
 
 // VDXF data that describes an encrypted chunk of data
 export class VDXF_Data extends BufferDataVdxfObject {

@@ -43,25 +43,22 @@ export class SignatureData implements SerializableEntity {
       if (data.systemid) signatureData.systemID = data.systemid;
       if (data.hashtype) signatureData.hashType = new BN(data.hashtype);
 
-      if (signatureData.hashType == new BN(EHashTypes.HASH_SHA256)){
+      if (signatureData.hashType == new BN(EHashTypes.HASH_SHA256)) {
         signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex').reverse();
       } else {
         signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex');
       }
 
-      if (data.signaturehash) signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex');
       if (data.identityid) signatureData.identityID = data.identityid;
-      if (data.sigtype) signatureData.sigType = new BN(data.sigtype);
+      if (data.signaturetype) signatureData.sigType = new BN(data.signaturetype);
       signatureData.vdxfKeys = data.vdxfkeys || [];
       signatureData.vdxfKeyNames = data.vdxfkeynames || [];
       signatureData.boundHashes = data.boundhashes || [];
-      signatureData.signatureAsVch = Buffer.from(data.signatureasvch, 'base64');
-
+      signatureData.signatureAsVch = Buffer.from(data.signature, 'base64');
 
     }
 
-
-    return new SignatureData(data)
+    return signatureData;
   }
 
   getByteLength() {
@@ -101,11 +98,11 @@ export class SignatureData implements SerializableEntity {
     bufferWriter.writeSlice(fromBase58Check(this.identityID).hash);
     bufferWriter.writeVarInt(this.sigType);
     bufferWriter.writeCompactSize(this.vdxfKeys.length);
-    
+
     for (const key of this.vdxfKeys) {
       bufferWriter.writeSlice(fromBase58Check(key).hash);
     }
-    
+
     bufferWriter.writeCompactSize(this.vdxfKeyNames.length);
     for (const keyName of this.vdxfKeyNames) {
       bufferWriter.writeVarSlice(Buffer.from(keyName, 'utf8'));
@@ -148,9 +145,9 @@ export class SignatureData implements SerializableEntity {
     for (let i = 0; i < boundHashesLength; i++) {
       this.boundHashes.push(reader.readSlice(32));
     }
-    
+
     this.signatureAsVch = reader.readVarSlice();
-    
+
     return reader.offset;
   }
 }

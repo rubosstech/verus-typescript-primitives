@@ -23,7 +23,6 @@ export { ProvisioningResultInterface as LoginConsentProvisioningResultInterface 
 export { Hash160 } from './Hash160';
 export { RedirectUri, Subject, ProvisioningInfo, RequestedPermission, Audience, AltAuthFactor, } from "./Challenge";
 export { Attestation } from './Attestation';
-export { AttestationData, AttestationDataType } from './Attestation';
 export { ProvisioningTxid } from './provisioning/ProvisioningResult';
 export { Context } from './Context';
-export { defaultPersonalProfileDataTemplate, DataCategory, PersonalProfileDataStore } from './PersonalProfile';
+export { defaultPersonalProfileDataTemplate, DataCategory } from './PersonalProfile';

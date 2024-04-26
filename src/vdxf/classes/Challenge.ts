@@ -20,7 +20,7 @@ import { Attestation } from "./Attestation";
 import { fromBase58Check, toBase58Check } from '../../utils/address';
 import { HASH160_BYTE_LENGTH, I_ADDR_VERSION } from '../../constants/vdxf';
 import { BufferDataVdxfObject } from '../index'
-import { AttestationRequest, AttestationRequestInterfaceDataInterface } from './Attestation';
+
 export class RedirectUri extends VDXFObject {
   uri: string;
 
@@ -374,7 +374,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
         const attestationsLength = reader.readCompactSize();
 
         for (let i = 0; i < attestationsLength; i++) {
-          const _att = new Attestation();
+          const _att = new Attestation("","");
           reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
           this.attestations.push(_att);
         }
@@ -423,20 +423,16 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
 }
 
 export class RequestedPermission extends VDXFObject {
-  data: string | AttestationRequestInterfaceDataInterface;
+  data: string;
   encoding?: BufferEncoding;
-  constructor(data: string | AttestationRequestInterfaceDataInterface = "", vdxfkey: string = "") {
+  constructor(data: string, vdxfkey: string = "") {
     super(vdxfkey);
     if (vdxfkey) this.addPrototypes(data);
   }
 
- addPrototypes(data: string | AttestationRequestInterfaceDataInterface): void {
+ addPrototypes(data: string): void {
     var classType;
     switch (this.vdxfkey) {
-      case ATTESTATION_READ_REQUEST.vdxfid:
-        classType = AttestationRequest;
-        this.data = AttestationRequest.initializeData(data)
-        break;
       case IDENTITY_AGREEMENT.vdxfid:
         classType = BufferDataVdxfObject;
         this.data = data;

@@ -363,21 +363,32 @@ export const CURRENCY_ADDRESS: VDXFKeyInterface = {
   }
 }
 
-export const ATTESTATION_RECIPIENT: VDXFKeyInterface = {
-  "vdxfid": "iF9W7VBoeB1qooRBhZnbx1edN45oT6N3T1",
-  "hash160result": "fd9b77f956447beae6e9eba1de71d855fa800880",
+export const ATTESTATION_PROVISION_URL: VDXFKeyInterface = {
+  "vdxfid": "iD9J9aQ6vsRYvqZbBs9QpKmCcgUynee7mT",
+  "indexid": "xHyQcNqBnBeDZ1Sd3YoZniHjeLVzgLK5ka",
+  "hash160result": "e1059d2a03500749f86ed9c49137b86de6430e6a",
   "qualifiedname": {
     "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::attestation.recipient"
+    "name": "vrsc::attestation.provision.url"
   }
 };
 
-export const ATTESTATION_OBJECT: VDXFKeyInterface = {
-  "vdxfid": "iKzefmmS3nMXjLTsrQ1emigirJBTK7rBTP",
-  "hash160result": "5d57536b22b79ea267ae71852779db21258834b5",
+export const ATTESTATION_PROVISION_TYPE: VDXFKeyInterface = {
+  "vdxfid": "i7VGPAp3q2h4U4njZ556b9eG3Jts2gmzHn",
+  "indexid": "xCKNqyF8gLuj6EfmQkjFZYAo4xuswrB6X9",
+  "hash160result": "5f922c9d09e0160b7c3bc5f31588dfc11b5b042c",
   "qualifiedname": {
     "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::attestation.object"
+    "name": "vrsc::attestation.provision.type"
+  }
+};
+
+export const ATTESTATION_VIEW_REQUEST: VDXFKeyInterface = {
+  "vdxfid": "i5R9p3V1sxZ9p1NDV7nPkz1wvmQTUvuByY",
+  "hash160result": "872923256c56f6bda8256c5bb6a4c98d85f44c15",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.view.request"
   }
 };
 
@@ -390,14 +401,24 @@ export const ATTESTATION_VIEW_RESPONSE: VDXFKeyInterface = {
   }
 };
 
-export const ATTESTATION_TYPE: VDXFKeyInterface = {
-  "vdxfid": "iAJUD5mgT6MHz8ymF49XUtBDRS7uvYqNWZ",
-  "hash160result": "e56544849c038b7cfadb0a1074ac51df9207e24a",
+export const ATTESTATION_ID: VDXFKeyInterface = {
+  "vdxfid": "i87ZC3B5EFiKtLW9fCUkw9yoMVmh2i2bZ3",
+  "hash160result": "f540229f88da9e3a9f40f99ce5a22afe765ce132",
   "qualifiedname": {
     "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::attestation.type"
+    "name": "vrsc::attestation.id"
   }
 };
+
+export const PROFILE_DATA_VIEW_REQUEST: VDXFKeyInterface = {
+  "vdxfid": "iEocxePWah2zp5Hn4ujeoQpc4UVYeJeQ2g",
+  "indexid": "xKdjRSpbS1FfSFAovbPomoM968WZVsmW1E",
+  "hash160result": "b1778ef367dbf00e7b9ad15eea2ef17490e6457c",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::profile.data.view.request"
+  }
+}
 
 // DATA TYPES
 export const DATA_TYPE_STRING: VDXFKeyInterface = 
@@ -410,12 +431,3 @@ export const DATA_TYPE_STRING: VDXFKeyInterface =
     },
 };
 
-export const PROFILE_DATA_VIEW_REQUEST: VDXFKeyInterface = {
-  "vdxfid": "iFYznrRxyHaoJZ91cFDSYGT4szETf4RLRV",
-  "indexid": "xLP7Fes3pboTvj23TvsbWeybueFUatbQQh",
-  "hash160result": "d3f2168aad438c6c6eab8f3384458cbebf027a84",
-  "qualifiedname": {
-    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-    "name": "vrsc::profile.data.view"
-  }
-}

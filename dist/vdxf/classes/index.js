@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PersonalProfileDataStore = exports.DataCategory = exports.defaultPersonalProfileDataTemplate = exports.Context = exports.ProvisioningTxid = exports.AttestationDataType = exports.AttestationData = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.VerusPayInvoice = exports.VerusPayInvoiceDetails = exports.SignedSessionObjectData = exports.SignedSessionObject = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
+exports.DataCategory = exports.defaultPersonalProfileDataTemplate = exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.VerusPayInvoice = exports.VerusPayInvoiceDetails = exports.SignedSessionObjectData = exports.SignedSessionObject = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
 var Challenge_1 = require("./Challenge");
 Object.defineProperty(exports, "LoginConsentChallenge", { enumerable: true, get: function () { return Challenge_1.Challenge; } });
 var Decision_1 = require("./Decision");
@@ -38,9 +38,6 @@ Object.defineProperty(exports, "Audience", { enumerable: true, get: function () 
 Object.defineProperty(exports, "AltAuthFactor", { enumerable: true, get: function () { return Challenge_2.AltAuthFactor; } });
 var Attestation_1 = require("./Attestation");
 Object.defineProperty(exports, "Attestation", { enumerable: true, get: function () { return Attestation_1.Attestation; } });
-var Attestation_2 = require("./Attestation");
-Object.defineProperty(exports, "AttestationData", { enumerable: true, get: function () { return Attestation_2.AttestationData; } });
-Object.defineProperty(exports, "AttestationDataType", { enumerable: true, get: function () { return Attestation_2.AttestationDataType; } });
 var ProvisioningResult_2 = require("./provisioning/ProvisioningResult");
 Object.defineProperty(exports, "ProvisioningTxid", { enumerable: true, get: function () { return ProvisioningResult_2.ProvisioningTxid; } });
 var Context_1 = require("./Context");
@@ -48,4 +45,3 @@ Object.defineProperty(exports, "Context", { enumerable: true, get: function () {
 var PersonalProfile_1 = require("./PersonalProfile");
 Object.defineProperty(exports, "defaultPersonalProfileDataTemplate", { enumerable: true, get: function () { return PersonalProfile_1.defaultPersonalProfileDataTemplate; } });
 Object.defineProperty(exports, "DataCategory", { enumerable: true, get: function () { return PersonalProfile_1.DataCategory; } });
-Object.defineProperty(exports, "PersonalProfileDataStore", { enumerable: true, get: function () { return PersonalProfile_1.PersonalProfileDataStore; } });
