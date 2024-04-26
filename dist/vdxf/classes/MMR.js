@@ -2,7 +2,7 @@
 // Licence MIT
 // Adapted to Verus Blake2b MMR. 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CMerkleMountainView = exports.CMMRProof = exports.CMMRBranch = exports.CMerkleMountainRange = exports.CMMRNode = void 0;
+exports.GetMMRProofIndex = exports.CMerkleMountainView = exports.CMMRProof = exports.CMMRBranch = exports.CMerkleMountainRange = exports.CMMRNode = exports.CLayer = void 0;
 var blake2b = require('blake2b');
 const bn_js_1 = require("bn.js");
 const varuint_1 = require("../../utils/varuint");
@@ -34,6 +34,7 @@ class CLayer {
         this.vSize = 0;
     }
 }
+exports.CLayer = CLayer;
 ;
 //template <typename NODE_TYPE, typename UNDERLYING>
 class COverlayNodeLayer {
@@ -210,7 +211,7 @@ class CMMRBranch {
         return blake2b(out.length, null, null, Buffer.from("VerusDefaultHash")).update(input).digest(out);
     }
     safeCheck(hash) {
-        let index = GetMMRProofIndex(this.nIndex, this.nSize, 0);
+        let index = (0, exports.GetMMRProofIndex)(this.nIndex, this.nSize, 0);
         let joined = Buffer.allocUnsafe(64);
         let hashInProgress = hash;
         for (let i = 0; i < this.branch.length; i++) {
@@ -567,3 +568,4 @@ const GetMMRProofIndex = (pos, mmvSize, extraHashes) => {
     }
     return index;
 };
+exports.GetMMRProofIndex = GetMMRProofIndex;

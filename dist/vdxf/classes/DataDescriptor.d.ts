@@ -125,7 +125,7 @@ export declare class VDXF_Data extends BufferDataVdxfObject {
     static CurrencyStartNotarizationKey(): VDXFKeyInterface;
     GetHash(): void;
 }
-export declare class CVDXFDataDescriptor extends BufferDataVdxfObject {
+export declare class VDXFDataDescriptor extends BufferDataVdxfObject {
     dataDescriptor: DataDescriptor;
     constructor(vdxfData: BufferDataVdxfObject);
     dataByteLength(): number;

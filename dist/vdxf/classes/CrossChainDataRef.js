@@ -109,8 +109,8 @@ class IdentityMultimapRef {
         byteLength += varint_1.default.encodingLength(this.flags);
         byteLength += 20; // idID uint160
         byteLength += 20; // key uint160
-        byteLength += 4; // heightStart uint32
-        byteLength += 4; // heightEnd uint32
+        byteLength += varint_1.default.encodingLength(this.heightStart); // heightStart uint32
+        byteLength += varint_1.default.encodingLength(this.heightEnd); // heightEnd uint32
         byteLength += 32; // dataHash uint25
         if (this.flags.and(IdentityMultimapRef.FLAG_HAS_DATAHASH).gt(new bn_js_1.BN(0))) {
             byteLength += 32;

@@ -801,7 +801,7 @@ export class VDXF_Data extends BufferDataVdxfObject {
   GetHash() { };
 };
 
-export class CVDXFDataDescriptor extends BufferDataVdxfObject {
+export class VDXFDataDescriptor extends BufferDataVdxfObject {
   dataDescriptor: DataDescriptor;
 
   constructor(vdxfData: BufferDataVdxfObject) {

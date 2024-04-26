@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VectorEncodeVDXFUni = exports.MMRDescriptor = exports.EHashTypes = exports.CVDXFDataDescriptor = exports.VDXF_Data = exports.DataDescriptor = void 0;
+exports.VectorEncodeVDXFUni = exports.MMRDescriptor = exports.EHashTypes = exports.VDXFDataDescriptor = exports.VDXF_Data = exports.DataDescriptor = void 0;
 const bn_js_1 = require("bn.js");
 const index_1 = require("../index");
 const varint_1 = require("../../utils/varint");
@@ -716,7 +716,7 @@ class VDXF_Data extends index_1.BufferDataVdxfObject {
 }
 exports.VDXF_Data = VDXF_Data;
 ;
-class CVDXFDataDescriptor extends index_1.BufferDataVdxfObject {
+class VDXFDataDescriptor extends index_1.BufferDataVdxfObject {
     constructor(vdxfData) {
         super(vdxfData.data, vdxfData.vdxfkey);
         this.version = vdxfData.version;
@@ -767,7 +767,7 @@ class CVDXFDataDescriptor extends index_1.BufferDataVdxfObject {
         return this.dataDescriptor.SetFlags();
     }
 }
-exports.CVDXFDataDescriptor = CVDXFDataDescriptor;
+exports.VDXFDataDescriptor = VDXFDataDescriptor;
 ;
 var EHashTypes;
 (function (EHashTypes) {

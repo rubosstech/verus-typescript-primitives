@@ -1,5 +1,6 @@
 /// <reference types="node" />
-declare class CLayer<NODE_TYPE> {
+import { BN } from 'bn.js';
+export declare class CLayer<NODE_TYPE> {
     private vSize;
     private nodes;
     constructor();
@@ -69,4 +70,4 @@ export declare class CMerkleMountainView {
     GetProof(retProof: CMMRProof, pos: number): boolean;
     GetProofBits(pos: number, mmvSize: number): void;
 }
-export {};
+export declare const GetMMRProofIndex: (pos: number, mmvSize: number, extraHashes: number) => InstanceType<typeof BN>;

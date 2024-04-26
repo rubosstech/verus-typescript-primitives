@@ -11,7 +11,7 @@ import bufferutils from '../../utils/bufferutils'
 const { BufferReader, BufferWriter } = bufferutils;
 const BRANCH_MMRBLAKE_NODE = 2
 
-class CLayer<NODE_TYPE>
+export class CLayer<NODE_TYPE>
 {
 
   private vSize: number;
@@ -614,7 +614,7 @@ export class CMerkleMountainView {
   };
 }
 
-const GetMMRProofIndex = (pos: number, mmvSize: number, extraHashes: number): InstanceType<typeof BN> => {
+export const GetMMRProofIndex = (pos: number, mmvSize: number, extraHashes: number): InstanceType<typeof BN> => {
   let index = new BN(0);
   let layerSizes = [];
   let merkleSizes = [];
