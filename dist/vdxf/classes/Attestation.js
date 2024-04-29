@@ -7,8 +7,9 @@ const vdxf_1 = require("../../constants/vdxf");
 const DataDescriptor_1 = require("./DataDescriptor");
 const __1 = require("../");
 const varuint_1 = require("../../utils/varuint");
+const index_1 = require("../index");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
-class Attestation extends DataDescriptor_1.VDXF_Data {
+class Attestation extends index_1.BufferDataVdxfObject {
     setAttestationViewRequestData(attestationId, accepted_attestors, attestation_keys, attestor_filters) {
         this.vdxfkey = __1.ATTESTATION_VIEW_REQUEST.vdxfid;
         let length = 20; // attestationId

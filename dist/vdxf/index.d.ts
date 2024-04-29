@@ -6,6 +6,7 @@ export * from './keys';
 export * from './scopes';
 export * from './keymap';
 export * from './identityDataKeys';
+export * from './vdxfDataKeys';
 export interface VDXFObjectInterface {
     vdxfkey: string;
     toString: () => string;

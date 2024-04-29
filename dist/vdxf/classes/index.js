@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCategory = exports.defaultPersonalProfileDataTemplate = exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.VerusPayInvoice = exports.VerusPayInvoiceDetails = exports.SignedSessionObjectData = exports.SignedSessionObject = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
+exports.SignatureData = exports.GetMMRProofIndex = exports.CMerkleMountainView = exports.CMMRProof = exports.CMMRBranch = exports.CMerkleMountainRange = exports.CMMRNode = exports.DataCategory = exports.defaultPersonalProfileDataTemplate = exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.VerusPayInvoice = exports.VerusPayInvoiceDetails = exports.SignedSessionObjectData = exports.SignedSessionObject = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
 var Challenge_1 = require("./Challenge");
 Object.defineProperty(exports, "LoginConsentChallenge", { enumerable: true, get: function () { return Challenge_1.Challenge; } });
 var Decision_1 = require("./Decision");
@@ -45,7 +45,12 @@ Object.defineProperty(exports, "Context", { enumerable: true, get: function () {
 var PersonalProfile_1 = require("./PersonalProfile");
 Object.defineProperty(exports, "defaultPersonalProfileDataTemplate", { enumerable: true, get: function () { return PersonalProfile_1.defaultPersonalProfileDataTemplate; } });
 Object.defineProperty(exports, "DataCategory", { enumerable: true, get: function () { return PersonalProfile_1.DataCategory; } });
-// export { CUTXORef, PBaaSEvidenceRef, IdentityMultimapRef, URLRef, CrossChainDataRef } from './CrossChainDataRef'
-// export { DataDescriptor, VDXF_Data, VDXFDataDescriptor, EHashTypes, MMRDescriptor, VectorEncodeVDXFUni } from './DataDescriptor'
-// export { CLayer, CMMRNode, CMerkleMountainRange, CMMRBranch, CMMRProof, CMerkleMountainView, GetMMRProofIndex} from './MMR'
-// export { SignatureData } from './SignatureData'
+var MMR_1 = require("./MMR");
+Object.defineProperty(exports, "CMMRNode", { enumerable: true, get: function () { return MMR_1.CMMRNode; } });
+Object.defineProperty(exports, "CMerkleMountainRange", { enumerable: true, get: function () { return MMR_1.CMerkleMountainRange; } });
+Object.defineProperty(exports, "CMMRBranch", { enumerable: true, get: function () { return MMR_1.CMMRBranch; } });
+Object.defineProperty(exports, "CMMRProof", { enumerable: true, get: function () { return MMR_1.CMMRProof; } });
+Object.defineProperty(exports, "CMerkleMountainView", { enumerable: true, get: function () { return MMR_1.CMerkleMountainView; } });
+Object.defineProperty(exports, "GetMMRProofIndex", { enumerable: true, get: function () { return MMR_1.GetMMRProofIndex; } });
+var SignatureData_1 = require("./SignatureData");
+Object.defineProperty(exports, "SignatureData", { enumerable: true, get: function () { return SignatureData_1.SignatureData; } });

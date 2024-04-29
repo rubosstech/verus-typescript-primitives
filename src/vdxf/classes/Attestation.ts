@@ -1,9 +1,10 @@
 import bufferutils from '../../utils/bufferutils'
 import { toBase58Check, fromBase58Check } from '../../utils/address';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
-import { DataDescriptor, VDXF_Data } from './DataDescriptor';
+import { DataDescriptor } from './DataDescriptor';
 import { ATTESTATION_VIEW_REQUEST, ATTESTATION_PROVISION_TYPE } from '../';
 import varuint from '../../utils/varuint';
+import { BufferDataVdxfObject } from '../index';
 const { BufferReader, BufferWriter } = bufferutils;
 
 export interface AttestationRequestInterface {
@@ -12,7 +13,7 @@ export interface AttestationRequestInterface {
   attestation_keys: Array<string>,
   attestor_filters?: Array<string>}
 
-export class Attestation extends VDXF_Data {
+export class Attestation extends BufferDataVdxfObject {
 
   setAttestationViewRequestData(attestationId: string, accepted_attestors: Array<string>, attestation_keys: Array<string>, attestor_filters: Array<string>) {
     

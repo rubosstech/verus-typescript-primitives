@@ -1,7 +1,7 @@
 
 import * as identitykeys from '../identityDataKeys';
 import * as keylist from '../keys';
-import { VDXF_Data } from './DataDescriptor';
+import * as VDXF_Data from '../vdxfDataKeys';
 
 export const friendlyName = (vdfxkey) => {
 

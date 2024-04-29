@@ -230,8 +230,7 @@ describe('Serializes and deserializes signature objects properly', () => {
       },
       challenge: {
         challenge_id: "iKNufKJdLX3Xg8qFru9AuLBvivAEJ88PW4",
-        requested_access: [new RequestedPermission("", IDENTITY_VIEW.vdxfid),
-          new RequestedPermission({accepted_attestors:["iC9x9VZ2XMop7spFzeXqSKX8WqmrG9cu41"], attestation_keys:["iSSxdyTcCp8VALGBGKy8R7ATYSRuK15NkL","i3jWsqLVnYyJu78E7mw6pbD3TazwZJpuk4","i9MRw6YUhXtP6DT8eufGnB5oRQ34TjDsdb","iJvFSXk2EDeEu9BkJQSwAVeiochF6AYpfF"]}, ATTESTATION_READ_REQUEST.vdxfid)],
+        requested_access: [new RequestedPermission("", IDENTITY_VIEW.vdxfid)],
         session_id: "iRQZGW36o3RcVR1xyVT1qWdAKdxp3wUyrh",
         redirect_uris: [
           new RedirectUri(
