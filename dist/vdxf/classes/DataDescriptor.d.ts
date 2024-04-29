@@ -54,7 +54,6 @@ export declare class DataDescriptor {
     IsValid(): boolean;
 }
 export declare class VDXF_Data extends BufferDataVdxfObject {
-    constructor(data: string, key: string);
     static DataByteKeyName(): string;
     static DataByteKey(): VDXFKeyInterface;
     static DataInt16KeyName(): string;
@@ -127,7 +126,8 @@ export declare class VDXF_Data extends BufferDataVdxfObject {
 }
 export declare class VDXFDataDescriptor extends BufferDataVdxfObject {
     dataDescriptor: DataDescriptor;
-    constructor(vdxfData: BufferDataVdxfObject);
+    constructor(dataDescriptor?: DataDescriptor, vdxfkey?: string, version?: BigNumber);
+    static fromDataVdfxObject(data: BufferDataVdxfObject): VDXFDataDescriptor;
     dataByteLength(): number;
     toDataBuffer(): Buffer;
     fromDataBuffer(buffer: Buffer, offset?: number): number;

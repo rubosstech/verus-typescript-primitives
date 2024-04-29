@@ -26,7 +26,3 @@ export { Attestation } from './Attestation';
 export { ProvisioningTxid } from './provisioning/ProvisioningResult';
 export { Context } from './Context';
 export { defaultPersonalProfileDataTemplate, DataCategory } from './PersonalProfile';
-export { CUTXORef, PBaaSEvidenceRef, IdentityMultimapRef, URLRef, CrossChainDataRef } from './CrossChainDataRef';
-export { DataDescriptor, VDXF_Data, VDXFDataDescriptor, EHashTypes, MMRDescriptor, VectorEncodeVDXFUni } from './DataDescriptor';
-export { CLayer, CMMRNode, CMerkleMountainRange, CMMRBranch, CMMRProof, CMerkleMountainView, GetMMRProofIndex } from './MMR';
-export { SignatureData } from './SignatureData';

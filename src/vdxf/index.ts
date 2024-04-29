@@ -284,9 +284,3 @@ export class VerusIDSignature extends VDXFObject {
     };
   }
 }
-
-export class PNGImageVdxfObject extends BufferDataVdxfObject {
-  constructor(data: string = "", vdxfkey: string = "") {
-    super(data, vdxfkey, "hex");
-  }
-}

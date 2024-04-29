@@ -374,7 +374,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
         const attestationsLength = reader.readCompactSize();
 
         for (let i = 0; i < attestationsLength; i++) {
-          const _att = new Attestation("","");
+          const _att = new Attestation();
           reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
           this.attestations.push(_att);
         }

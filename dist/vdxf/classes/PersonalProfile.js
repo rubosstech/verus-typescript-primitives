@@ -6,8 +6,8 @@ const __1 = require("..");
 const identitykeys = require("../identityDataKeys");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
 class DataCategory extends __1.VDXFObject {
-    constructor(vdxfid, data, category, details) {
-        super(vdxfid || "");
+    constructor(vdxfid = "", data, category, details) {
+        super(vdxfid);
         this.data = data || [];
         this.category = category || "";
         this.details = details || "";

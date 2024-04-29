@@ -85,7 +85,7 @@ class Decision extends __1.VDXFObject {
                 this.attestations = [];
                 const attestationsLength = reader.readCompactSize();
                 for (let i = 0; i < attestationsLength; i++) {
-                    const _att = new Attestation_1.Attestation("", "");
+                    const _att = new Attestation_1.Attestation();
                     reader.offset = _att.fromBuffer(reader.buffer, reader.offset);
                     this.attestations.push(_att);
                 }

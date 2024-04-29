@@ -229,9 +229,6 @@ DataDescriptor.FLAG_MASK = (DataDescriptor.FLAG_ENCRYPTED_DATA.add(DataDescripto
 ;
 // VDXF data that describes an encrypted chunk of data
 class VDXF_Data extends index_1.BufferDataVdxfObject {
-    constructor(data, key) {
-        super(data, key);
-    }
     static DataByteKeyName() {
         return "vrsc::data.type.byte";
     }
@@ -717,14 +714,20 @@ class VDXF_Data extends index_1.BufferDataVdxfObject {
 exports.VDXF_Data = VDXF_Data;
 ;
 class VDXFDataDescriptor extends index_1.BufferDataVdxfObject {
-    constructor(vdxfData) {
-        super(vdxfData.data, vdxfData.vdxfkey);
-        this.version = vdxfData.version;
-        if (this.data != null) {
-            this.dataDescriptor = new DataDescriptor();
-            this.dataDescriptor.fromBuffer(Buffer.from(this.data, 'hex'));
-            delete this.data;
+    constructor(dataDescriptor, vdxfkey = "", version = new bn_js_1.BN(1)) {
+        super("", vdxfkey);
+        this.version = version;
+        if (dataDescriptor) {
+            this.dataDescriptor = dataDescriptor;
         }
+    }
+    static fromDataVdfxObject(data) {
+        const retval = new VDXFDataDescriptor();
+        retval.version = data.version;
+        retval.data = data.data;
+        retval.fromBuffer(Buffer.from(retval.data, 'hex'));
+        delete retval.data;
+        return retval;
     }
     dataByteLength() {
         let length = 0;

@@ -297,10 +297,6 @@ export class DataDescriptor {
 
 // VDXF data that describes an encrypted chunk of data
 export class VDXF_Data extends BufferDataVdxfObject {
-  constructor(data: string, key: string) {
-    super(data, key);
-
-  }
 
   static DataByteKeyName(): string {
     return "vrsc::data.type.byte";
@@ -804,17 +800,24 @@ export class VDXF_Data extends BufferDataVdxfObject {
 export class VDXFDataDescriptor extends BufferDataVdxfObject {
   dataDescriptor: DataDescriptor;
 
-  constructor(vdxfData: BufferDataVdxfObject) {
-    super(vdxfData.data, vdxfData.vdxfkey);
-    this.version = vdxfData.version;
-    if (this.data != null) {
-
-      this.dataDescriptor = new DataDescriptor();
-
-      this.dataDescriptor.fromBuffer(Buffer.from(this.data, 'hex'));
-      delete this.data;
-
+  constructor( dataDescriptor?: DataDescriptor,
+  vdxfkey: string = "",
+  version: BigNumber = new BN(1)) {
+    super("", vdxfkey);
+    this.version = version;
+    if (dataDescriptor) {
+      this.dataDescriptor = dataDescriptor;
     }
+  }
+
+  static fromDataVdfxObject(data: BufferDataVdxfObject): VDXFDataDescriptor {
+
+    const retval = new VDXFDataDescriptor();
+    retval.version = data.version;
+    retval.data = data.data;
+    retval.fromBuffer(Buffer.from(retval.data, 'hex'));
+    delete retval.data;
+    return retval;
 
   }
   dataByteLength(): number {

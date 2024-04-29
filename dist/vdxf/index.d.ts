@@ -87,6 +87,3 @@ export declare class VerusIDSignature extends VDXFObject {
     static fromJson(data: VerusIDSignatureJson): VerusIDSignature;
     toJson(): VerusIDSignatureJson;
 }
-export declare class PNGImageVdxfObject extends BufferDataVdxfObject {
-    constructor(data?: string, vdxfkey?: string);
-}
