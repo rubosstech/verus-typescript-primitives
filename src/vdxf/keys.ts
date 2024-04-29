@@ -410,6 +410,25 @@ export const ATTESTATION_ID: VDXFKeyInterface = {
   }
 };
 
+export const ATTESTATION_NAME: VDXFKeyInterface = {
+  "vdxfid": "iEEjVkvM9Niz4u2WCr6QQzx1zpVSvDFub1",
+  "hash160result": "8a00bdd77505b345ed85d7292459b61457a10d76",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.name"
+  }
+};
+
+export const ATTESTATION_TYPE: VDXFKeyInterface = {
+  "vdxfid": "iAJUD5mgT6MHz8ymF49XUtBDRS7uvYqNWZ",
+  "indexid": "xF8aftCmJQZxcJro6jogTGhkT68vqfCDCm",
+  "hash160result": "e56544849c038b7cfadb0a1074ac51df9207e24a",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.type"
+  }
+};
+
 export const PROFILE_DATA_VIEW_REQUEST: VDXFKeyInterface = {
   "vdxfid": "iEocxePWah2zp5Hn4ujeoQpc4UVYeJeQ2g",
   "indexid": "xKdjRSpbS1FfSFAovbPomoM968WZVsmW1E",
