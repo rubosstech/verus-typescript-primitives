@@ -39,5 +39,3 @@ export {
 } from './provisioning/ProvisioningResult'
 export { Context } from './Context'
 export { defaultPersonalProfileDataTemplate, DataCategory } from './PersonalProfile'
-export { CMMRNode, CMerkleMountainRange, CMMRBranch, CMMRProof, CMerkleMountainView, GetMMRProofIndex} from './MMR'
-export { SignatureData } from './SignatureData'

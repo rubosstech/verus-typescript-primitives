@@ -6,7 +6,7 @@ import { BN } from 'bn.js';
 import { BigNumber } from '../../utils/types/BigNumber';
 import { I_ADDR_VERSION } from '../../constants/vdxf';
 import { SerializableEntity } from '../../utils/types/SerializableEntity';
-import { read } from 'fs';
+
 const { BufferReader, BufferWriter } = bufferutils
 
 export class CUTXORef implements SerializableEntity {

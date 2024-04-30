@@ -339,7 +339,7 @@ export class VDXFDataDescriptor extends BufferDataVdxfObject {
     this.data = reader.readVarSlice().toString('hex');
 
     this.dataDescriptor = new DataDescriptor();
-    this.dataDescriptor.fromBuffer(Buffer.from(this.data, 'hex'));
+    this.dataDescriptor.fromBuffer(Buffer.from(this.data, 'hex'), reader.offset);
     delete this.data;
 
     return reader.offset;
@@ -486,14 +486,14 @@ export class MMRDescriptor {
     this.objectHashType = reader.readVarInt().toNumber();
     this.mmrHashType = reader.readVarInt().toNumber();
     this.mmrRoot = new DataDescriptor();
-    this.mmrRoot.fromBuffer(reader.readVarSlice());
+    reader.offset = this.mmrRoot.fromBuffer(reader.readVarSlice(), reader.offset);
     this.mmrHashes = new DataDescriptor();
-    this.mmrHashes.fromBuffer(reader.readVarSlice());
+    reader.offset = this.mmrHashes.fromBuffer(reader.readVarSlice(), reader.offset);
     const dataDescriptorsLength = reader.readCompactSize();
     this.dataDescriptors = [];
     for (let i = 0; i < dataDescriptorsLength; i++) {
       const dataDescriptor = new DataDescriptor();
-      dataDescriptor.fromBuffer(reader.readVarSlice());
+      reader.offset = dataDescriptor.fromBuffer(reader.readVarSlice(), reader.offset);
       this.dataDescriptors.push(dataDescriptor);
     }
     return reader.offset;

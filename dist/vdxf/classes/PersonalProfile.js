@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultPersonalProfileDataTemplate = exports.DataCategory = void 0;
-const bufferutils_1 = require("../../utils/bufferutils");
 const __1 = require("..");
 const identitykeys = require("../identityDataKeys");
-const { BufferReader, BufferWriter } = bufferutils_1.default;
 class DataCategory extends __1.VDXFObject {
     constructor(vdxfid = "", data, category, details) {
         super(vdxfid);

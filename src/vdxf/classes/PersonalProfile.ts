@@ -1,12 +1,6 @@
-import varuint from '../../utils/varuint'
-import bufferutils from '../../utils/bufferutils'
-import { fromBase58Check, toBase58Check } from '../../utils/address';
-import { I_ADDR_VERSION, HASH160_BYTE_LENGTH } from '../../constants/vdxf';
 import { VDXFObject } from "..";
 import * as identitykeys from '../identityDataKeys';
-import { IdentityVdxfidMap, getIdentityDataType } from './IdentityData';
-import { DataDescriptor } from './DataDescriptor';
-const { BufferReader, BufferWriter } = bufferutils;
+
 
 export class DataCategory extends VDXFObject {
   data: Array<string>;
