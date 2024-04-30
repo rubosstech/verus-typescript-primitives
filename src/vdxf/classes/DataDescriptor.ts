@@ -486,14 +486,14 @@ export class MMRDescriptor {
     this.objectHashType = reader.readVarInt().toNumber();
     this.mmrHashType = reader.readVarInt().toNumber();
     this.mmrRoot = new DataDescriptor();
-    reader.offset = this.mmrRoot.fromBuffer(reader.readVarSlice(), reader.offset);
+    reader.offset = this.mmrRoot.fromBuffer(reader.buffer, reader.offset);
     this.mmrHashes = new DataDescriptor();
-    reader.offset = this.mmrHashes.fromBuffer(reader.readVarSlice(), reader.offset);
+    reader.offset = this.mmrHashes.fromBuffer(reader.buffer, reader.offset);
     const dataDescriptorsLength = reader.readCompactSize();
     this.dataDescriptors = [];
     for (let i = 0; i < dataDescriptorsLength; i++) {
       const dataDescriptor = new DataDescriptor();
-      reader.offset = dataDescriptor.fromBuffer(reader.readVarSlice(), reader.offset);
+      reader.offset = dataDescriptor.fromBuffer(reader.buffer, reader.offset);
       this.dataDescriptors.push(dataDescriptor);
     }
     return reader.offset;
