@@ -40,14 +40,14 @@ export class DataDescriptor {
               DataDescriptor.FLAG_MIME_TYPE_PRESENT));
 
   version: BigNumber;
-  flags: BigNumber;
+  flags: BigNumber;   // Flags indicating what items are present in the object
   objectdata: Buffer; // either direct data or serialized UTXORef +offset, length, and/or other type of info for different links
-  label: string;                  // label associated with this data
-  mimeType: string;               // optional mime type
-  salt: Buffer;    // encryption public key, data only present if encrypted or data referenced by unencrypted link is encrypted
-  epk: Buffer;    // encryption public key, data only present if encrypted or data referenced by unencrypted link is encrypted
-  ivk: Buffer;     // incoming viewing key, optional and contains data only if full viewing key is published at this encryption level
-  ssk: Buffer;    // specific symmetric key, optional and only to decrypt this linked sub-object
+  label: string;      // label associated with this data
+  mimeType: string;   // optional mime type
+  salt: Buffer;       // encryption public key, data only present if encrypted or data referenced by unencrypted link is encrypted
+  epk: Buffer;        // encryption public key, data only present if encrypted or data referenced by unencrypted link is encrypted
+  ivk: Buffer;        // incoming viewing key, optional and contains data only if full viewing key is published at this encryption level
+  ssk: Buffer;        // specific symmetric key, optional and only to decrypt this linked sub-object
 
   constructor(data?: {
     version?: BigNumber,
@@ -769,7 +769,7 @@ export const VectorEncodeVDXFUni = (obj): Buffer => {
     }
     else if (objTypeKey == VDXF_Data.SignatureDataKey().vdxfid) {
 
-      const sigData = new SignatureData(oneValValues[k]);
+      const sigData = SignatureData.fromJson(oneValValues[k]);
 
       let length = 20;
       length += varint.encodingLength(sigData.version);

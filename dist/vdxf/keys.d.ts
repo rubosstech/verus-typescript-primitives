@@ -50,6 +50,7 @@ export declare const SIGNED_SESSION_OBJECT: VDXFKeyInterface;
 export declare const CURRENCY_ADDRESS: VDXFKeyInterface;
 export declare const ATTESTATION_PROVISION_URL: VDXFKeyInterface;
 export declare const ATTESTATION_PROVISION_TYPE: VDXFKeyInterface;
+export declare const ATTESTATION_PROVISION_OBJECT: VDXFKeyInterface;
 export declare const ATTESTATION_VIEW_REQUEST: VDXFKeyInterface;
 export declare const ATTESTATION_VIEW_RESPONSE: VDXFKeyInterface;
 export declare const ATTESTATION_ID: VDXFKeyInterface;

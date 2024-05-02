@@ -383,6 +383,17 @@ export const ATTESTATION_PROVISION_TYPE: VDXFKeyInterface = {
   }
 };
 
+export const ATTESTATION_PROVISION_OBJECT: VDXFKeyInterface = {
+  "vdxfid": "iA4mSmR35HNwXogTtdGasrmxHzX9zFfDqM",
+  "indexid": "xEtsuZr7vbbc9yZVkJvjrFJVKeYArDTHtu",
+  "hash160result": "568af36801cfae2e1290ecef7a60c7ae0c984a48",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.provision.object"
+  }
+}
+
+
 export const ATTESTATION_VIEW_REQUEST: VDXFKeyInterface = {
   "vdxfid": "i5R9p3V1sxZ9p1NDV7nPkz1wvmQTUvuByY",
   "hash160result": "872923256c56f6bda8256c5bb6a4c98d85f44c15",

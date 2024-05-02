@@ -599,7 +599,7 @@ const VectorEncodeVDXFUni = (obj) => {
             ss = Buffer.concat([ss, writer.buffer]);
         }
         else if (objTypeKey == VDXF_Data.SignatureDataKey().vdxfid) {
-            const sigData = new SignatureData_1.SignatureData(oneValValues[k]);
+            const sigData = SignatureData_1.SignatureData.fromJson(oneValValues[k]);
             let length = 20;
             length += varint_1.default.encodingLength(sigData.version);
             length += varuint_1.default.encodingLength(sigData.getByteLength());
