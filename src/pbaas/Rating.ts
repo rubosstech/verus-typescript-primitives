@@ -8,7 +8,20 @@ import { I_ADDR_VERSION } from '../constants/vdxf';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 const { BufferReader, BufferWriter } = bufferutils
 
+
 export class Rating implements SerializableEntity {
+
+  static VERSION_INVALID = new BN(0, 10)
+  static VERSION_FIRST = new BN(1, 10)
+  static VERSION_LAST = new BN(1, 10)
+  static VERSION_CURRENT = new BN(1, 10)
+
+  static TRUST_UNKNOWN = new BN(0, 10)                  // unknown and can be included in exploration
+  static TRUST_BLOCKED = new BN(1, 10)                  // suspected or known to be untrustworthy and should not be interacted with
+  static TRUST_APPROVED = new BN(2, 10)                 // explicitly believed to be trustworthy enough to interact with
+  static TRUST_FIRST = new BN(0, 10)
+  static TRUST_LAST = new BN(2, 10)
+
   version: BigNumber;
   trustLevel: BigNumber;
   ratings: Map<string,Buffer>;
@@ -73,4 +86,18 @@ export class Rating implements SerializableEntity {
 
     return reader.offset;
   }
+
+  IsValid() {
+    return this.version.gte(Rating.VERSION_FIRST) && this.version.lte(Rating.VERSION_LAST) &&
+    this.trustLevel.gte(Rating.TRUST_FIRST) && this.trustLevel.lte(Rating.TRUST_LAST);
+  }
+  toJson() {
+    return {
+      version: this.version.toString(),
+      trustlevel: this.trustLevel.toString(),
+      ratings: this.ratings
+    }
+  }
+
+  //TODO: implment ratings values
 }

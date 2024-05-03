@@ -112,6 +112,35 @@ class SignatureData {
         this.signatureAsVch = reader.readVarSlice();
         return reader.offset;
     }
+    IsValid() {
+        return !!(this.version.gte(SignatureData.FIRST_VERSION) &&
+            this.version.lte(SignatureData.LAST_VERSION) &&
+            this.systemID);
+    }
+    toJson() {
+        const returnObj = { version: this.version.toString(),
+            systemid: this.systemID,
+            hashtype: this.hashType.toString() };
+        if (this.hashType == new bn_js_1.BN(DataDescriptor_1.EHashTypes.HASH_SHA256)) {
+            returnObj['signaturehash'] = this.signatureHash.reverse().toString('hex');
+        }
+        else {
+            returnObj['signaturehash'] = this.signatureHash.toString('hex');
+        }
+        returnObj['identityid'] = this.identityID;
+        returnObj['signaturetype'] = this.sigType.toString();
+        returnObj['signature'] = this.signatureAsVch.toString('base64');
+        if (this.vdxfKeys) {
+            returnObj['vdxfkeys'] = this.vdxfKeys;
+        }
+        if (this.vdxfKeyNames) {
+            returnObj['vdxfkeynames'] = this.vdxfKeyNames;
+        }
+        if (this.boundHashes) {
+            returnObj['boundhashes'] = this.boundHashes;
+        }
+        return returnObj;
+    }
 }
 exports.SignatureData = SignatureData;
 SignatureData.VERSION_INVALID = new bn_js_1.BN(0);

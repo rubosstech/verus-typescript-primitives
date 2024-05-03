@@ -51,6 +51,11 @@ export declare class DataDescriptor {
     CalcFlags(): BigNumber;
     SetFlags(): void;
     IsValid(): boolean;
+    toJson(): {
+        version: string;
+        flags: string;
+        objectdata: string;
+    };
 }
 export declare class VDXFDataDescriptor extends BufferDataVdxfObject {
     dataDescriptor: DataDescriptor;
@@ -102,5 +107,30 @@ export declare class MMRDescriptor {
     fromBuffer(buffer: Buffer, offset?: number): number;
     HasData(): boolean;
     IsValid(): boolean;
+    toJson(): {
+        version: string;
+        objecthashtype: EHashTypes;
+        mmrhashtype: EHashTypes;
+        mmrroot: {
+            version: string;
+            flags: string;
+            objectdata: string;
+        };
+        mmrhashes: {
+            version: string;
+            flags: string;
+            objectdata: string;
+        };
+        datadescriptors: {
+            version: string;
+            flags: string;
+            objectdata: string;
+        }[];
+    };
 }
 export declare const VectorEncodeVDXFUni: (obj: any) => Buffer;
+export declare const VDXFDataToUniValue: (buffer: Buffer, offset?: number, pSuccess?: boolean) => {
+    objectUni: any;
+    offset: number;
+};
+export declare const VDXFDataToUniValueArray: (buffer: Buffer, offset?: number) => Object;

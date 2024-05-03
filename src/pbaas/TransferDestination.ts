@@ -199,4 +199,50 @@ export class TransferDestination implements SerializableEntity {
       aux_dests: this.aux_dests.map(x => x.toJson())
     }
   }
+
+  IsValid(): boolean
+  {
+      // verify aux dests
+      let valid = (((this.type.and(FLAG_DEST_AUX).gt(new BN(0))) && this.aux_dests.length > 0) || (!(this.type.and(FLAG_DEST_AUX).gt(new BN(0))) && !(this.aux_dests.length > 0)));
+      if (valid && this.aux_dests)
+      {
+          for (let i = 0; i < this.aux_dests.length; i++)
+          {
+              if (!this.GetAuxDest(i).IsValid())
+              {
+                  valid = false;
+                  break;
+              }
+          }
+      }
+      return !!(valid &&
+             !this.typeNoFlags().eq(DEST_INVALID) &&
+             this.typeNoFlags().lte(LAST_VALID_TYPE_NO_FLAGS) &&
+             ((!(this.type.and(FLAG_DEST_GATEWAY)) && !this.gateway_id) || this.gateway_id));
+  }
+
+  GetAuxDest(destNum)
+  {
+    const retVal = this.aux_dests[destNum];
+    if (destNum >= 0 && destNum < this.aux_dests.length)
+    {
+        if (retVal.type.and(FLAG_DEST_AUX).gt(new BN(0)) || retVal.aux_dests.length > 0)
+        {
+            retVal.type = DEST_INVALID;
+        }
+        // no gateways or flags, only simple destinations work
+        switch (retVal.type)
+        {
+            case DEST_ID:
+            case DEST_PK:
+            case DEST_PKH:
+            case DEST_ETH:
+            case DEST_SH:
+                break;
+            default:
+                retVal.type = DEST_INVALID;
+        }
+    }
+    return retVal;
+}
 }

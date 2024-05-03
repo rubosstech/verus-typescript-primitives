@@ -23,4 +23,10 @@ export declare class SignatureData implements SerializableEntity {
     getByteLength(): number;
     toBuffer(): Buffer;
     fromBuffer(buffer: Buffer, offset?: number): number;
+    IsValid(): boolean;
+    toJson(): {
+        version: string;
+        systemid: string;
+        hashtype: string;
+    };
 }

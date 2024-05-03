@@ -51,5 +51,25 @@ class Rating {
         }
         return reader.offset;
     }
+    IsValid() {
+        return this.version.gte(Rating.VERSION_FIRST) && this.version.lte(Rating.VERSION_LAST) &&
+            this.trustLevel.gte(Rating.TRUST_FIRST) && this.trustLevel.lte(Rating.TRUST_LAST);
+    }
+    toJson() {
+        return {
+            version: this.version.toString(),
+            trustlevel: this.trustLevel.toString(),
+            ratings: this.ratings
+        };
+    }
 }
 exports.Rating = Rating;
+Rating.VERSION_INVALID = new bn_js_1.BN(0, 10);
+Rating.VERSION_FIRST = new bn_js_1.BN(1, 10);
+Rating.VERSION_LAST = new bn_js_1.BN(1, 10);
+Rating.VERSION_CURRENT = new bn_js_1.BN(1, 10);
+Rating.TRUST_UNKNOWN = new bn_js_1.BN(0, 10); // unknown and can be included in exploration
+Rating.TRUST_BLOCKED = new bn_js_1.BN(1, 10); // suspected or known to be untrustworthy and should not be interacted with
+Rating.TRUST_APPROVED = new bn_js_1.BN(2, 10); // explicitly believed to be trustworthy enough to interact with
+Rating.TRUST_FIRST = new bn_js_1.BN(0, 10);
+Rating.TRUST_LAST = new bn_js_1.BN(2, 10);
