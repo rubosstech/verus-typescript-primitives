@@ -48,8 +48,8 @@ class SignatureData {
         byteLength += varint_1.default.encodingLength(this.hashType);
         byteLength += varuint_1.default.encodingLength(this.signatureHash.length);
         byteLength += this.signatureHash.length;
-        byteLength += varint_1.default.encodingLength(this.sigType);
         byteLength += 20; // identityID uint160
+        byteLength += varint_1.default.encodingLength(this.sigType);
         byteLength += varuint_1.default.encodingLength(this.vdxfKeys.length);
         byteLength += this.vdxfKeys.length * 20;
         byteLength += varuint_1.default.encodingLength(this.vdxfKeyNames.length);
@@ -92,8 +92,8 @@ class SignatureData {
         this.systemID = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
         this.hashType = reader.readVarInt();
         this.signatureHash = reader.readVarSlice();
-        this.sigType = reader.readVarInt();
         this.identityID = (0, address_1.toBase58Check)(reader.readSlice(20), vdxf_1.I_ADDR_VERSION);
+        this.sigType = reader.readVarInt();
         const vdxfKeysLength = reader.readCompactSize();
         this.vdxfKeys = [];
         for (let i = 0; i < vdxfKeysLength; i++) {

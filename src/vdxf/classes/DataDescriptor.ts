@@ -825,7 +825,7 @@ export const VectorEncodeVDXFUni = (obj): Buffer => {
 }
 
 
-export const VDXFDataToUniValue = (buffer: Buffer, offset: number = 0, pSuccess: boolean = null) => {
+export const VDXFDataToUniValue = (buffer: Buffer, offset: number = 0, pSuccess = null) => {
     const reader = new BufferReader(buffer, offset);
     let objectUni: any;
     try
@@ -948,18 +948,18 @@ export const VDXFDataToUniValue = (buffer: Buffer, offset: number = 0, pSuccess:
         }
 
         // if we have an object that we recognized, encode it
-        if (!objectUni.isNull())
+        if (objectUni)
           {
               if (pSuccess != null)
               {
-                  pSuccess = true;
+                  pSuccess.value = true;
               }
           }
           else
           {
               if (pSuccess != null)
               {
-                  pSuccess = false;
+                  pSuccess.value = false;
               }
           }
       }
@@ -967,10 +967,10 @@ export const VDXFDataToUniValue = (buffer: Buffer, offset: number = 0, pSuccess:
       {
           if (pSuccess != null)
           {
-              pSuccess = false;
+              pSuccess.value = false;
           }
       }
-    return { objectUni, offset: reader.offset };
+    return { objectUni, offset: reader.offset, pSuccess };
 }
 
 export const VDXFDataToUniValueArray = (buffer: Buffer, offset: number = 0): Object => {
@@ -980,11 +980,11 @@ export const VDXFDataToUniValueArray = (buffer: Buffer, offset: number = 0): Obj
 
   while (bytesLeft > 20) // size of uint160
   {
-      let objOut = false;
+      let objOut = { value: false};
       const { objectUni, offset} = VDXFDataToUniValue(reader.buffer, reader.offset, objOut);
       reader.offset = offset;
       bytesLeft = buffer.length - reader.offset;
-      if (objOut)
+      if (objOut.value)
       {
           entryArr.push(objectUni);
       }

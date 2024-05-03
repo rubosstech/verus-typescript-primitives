@@ -129,8 +129,9 @@ export declare class MMRDescriptor {
     };
 }
 export declare const VectorEncodeVDXFUni: (obj: any) => Buffer;
-export declare const VDXFDataToUniValue: (buffer: Buffer, offset?: number, pSuccess?: boolean) => {
+export declare const VDXFDataToUniValue: (buffer: Buffer, offset?: number, pSuccess?: any) => {
     objectUni: any;
     offset: number;
+    pSuccess: any;
 };
 export declare const VDXFDataToUniValueArray: (buffer: Buffer, offset?: number) => Object;

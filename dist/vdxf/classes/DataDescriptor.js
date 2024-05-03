@@ -752,23 +752,23 @@ const VDXFDataToUniValue = (buffer, offset = 0, pSuccess = null) => {
             }
         }
         // if we have an object that we recognized, encode it
-        if (!objectUni.isNull()) {
+        if (objectUni) {
             if (pSuccess != null) {
-                pSuccess = true;
+                pSuccess.value = true;
             }
         }
         else {
             if (pSuccess != null) {
-                pSuccess = false;
+                pSuccess.value = false;
             }
         }
     }
     catch (e) {
         if (pSuccess != null) {
-            pSuccess = false;
+            pSuccess.value = false;
         }
     }
-    return { objectUni, offset: reader.offset };
+    return { objectUni, offset: reader.offset, pSuccess };
 };
 exports.VDXFDataToUniValue = VDXFDataToUniValue;
 const VDXFDataToUniValueArray = (buffer, offset = 0) => {
@@ -777,11 +777,11 @@ const VDXFDataToUniValueArray = (buffer, offset = 0) => {
     let bytesLeft = buffer.length;
     while (bytesLeft > 20) // size of uint160
      {
-        let objOut = false;
+        let objOut = { value: false };
         const { objectUni, offset } = (0, exports.VDXFDataToUniValue)(reader.buffer, reader.offset, objOut);
         reader.offset = offset;
         bytesLeft = buffer.length - reader.offset;
-        if (objOut) {
+        if (objOut.value) {
             entryArr.push(objectUni);
         }
         else {

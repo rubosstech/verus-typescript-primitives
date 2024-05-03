@@ -69,8 +69,8 @@ export class SignatureData implements SerializableEntity {
     byteLength += varint.encodingLength(this.hashType);
     byteLength += varuint.encodingLength(this.signatureHash.length);
     byteLength += this.signatureHash.length;
-    byteLength += varint.encodingLength(this.sigType);
     byteLength += 20; // identityID uint160
+    byteLength += varint.encodingLength(this.sigType);
     byteLength += varuint.encodingLength(this.vdxfKeys.length);
     byteLength += this.vdxfKeys.length * 20;
     byteLength += varuint.encodingLength(this.vdxfKeyNames.length);
@@ -123,8 +123,8 @@ export class SignatureData implements SerializableEntity {
     this.systemID = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
     this.hashType = reader.readVarInt();
     this.signatureHash = reader.readVarSlice();
-    this.sigType = reader.readVarInt();
     this.identityID = toBase58Check(reader.readSlice(20), I_ADDR_VERSION);
+    this.sigType = reader.readVarInt();
     const vdxfKeysLength = reader.readCompactSize();
     this.vdxfKeys = [];
 
