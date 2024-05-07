@@ -16,10 +16,10 @@ export const IDENTITY_VERSION_VAULT = new BN(2, 10);
 export const IDENTITY_VERSION_PBAAS = new BN(3, 10);
 export const IDENITTY_VERSION_INVALID = new BN(0, 10);
 
-export const IDENTITY_FLAG_REVOKED = new BN(8000, 16);          // set when this identity is revoked
-export const IDENTITY_FLAG_ACTIVECURRENCY = new BN(1, 16);      // flag that is set when this ID is being used as an active currency name
-export const IDENTITY_FLAG_LOCKED = new BN(2, 16);              // set when this identity is locked
-export const IDENTITY_FLAG_TOKENIZED_CONTROL = new BN(4, 16);   // set when revocation/recovery over this identity can be performed by anyone who controls its token
+export const IDENTITY_FLAG_REVOKED = new BN("8000", 16);          // set when this identity is revoked
+export const IDENTITY_FLAG_ACTIVECURRENCY = new BN("1", 16);      // flag that is set when this ID is being used as an active currency name
+export const IDENTITY_FLAG_LOCKED = new BN("2", 16);              // set when this identity is locked
+export const IDENTITY_FLAG_TOKENIZED_CONTROL = new BN("4", 16);   // set when revocation/recovery over this identity can be performed by anyone who controls its token
 export const IDENTITY_MAX_UNLOCK_DELAY = new BN(60).mul(new BN(24)).mul(new BN(22)).mul(new BN(365));        // 21+ year maximum unlock time for an ID w/1 minute blocks, not adjusted for avg blocktime in first PBaaS
 export const IDENTITY_MAX_NAME_LEN = new BN(64);
 
