@@ -318,6 +318,52 @@ export class Identity extends Principal implements SerializableEntity {
     return nameAndParentAddrToIAddr(this.name, this.parent.toAddress());
   }
 
+  isRevoked(): boolean {
+    return !!(this.flags.and(IDENTITY_FLAG_REVOKED).toNumber());
+  }
+
+  isLocked(): boolean {
+    return !!(this.flags.and(IDENTITY_FLAG_LOCKED).toNumber());
+  }
+
+  lock(unlockTime: BigNumber) {
+    let unlockAfter: BigNumber = unlockTime;
+
+    if (unlockTime.lte(new BN(0))) {
+      unlockAfter = new BN(1);
+    } else if (unlockTime.gt(IDENTITY_MAX_UNLOCK_DELAY)) {
+      unlockAfter = IDENTITY_MAX_UNLOCK_DELAY;
+    }
+
+    this.flags = this.flags.xor(IDENTITY_FLAG_LOCKED);
+    this.unlock_after = unlockAfter;
+  }
+
+  unlock(height: BigNumber = new BN(0), txExpiryHeight: BigNumber = new BN(0)): void {
+    if (this.isRevoked()) {
+      this.flags = this.flags.and(IDENTITY_FLAG_LOCKED.notn(16));
+      this.unlock_after = new BN(0);
+    } else if (this.isLocked()) {
+      this.flags = this.flags.and(IDENTITY_FLAG_LOCKED.notn(16));
+      this.unlock_after = this.unlock_after.add(txExpiryHeight);
+    } else if (height.gt(this.unlock_after)) {
+      this.unlock_after = new BN(0);
+    }
+
+    if (this.unlock_after.gt((txExpiryHeight.add(IDENTITY_MAX_UNLOCK_DELAY)))) {
+      this.unlock_after = txExpiryHeight.add(IDENTITY_MAX_UNLOCK_DELAY);
+    }
+  }
+
+  revoke() {
+    this.flags = this.flags.xor(IDENTITY_FLAG_REVOKED);
+    this.unlock();
+  }
+
+  unrevoke() {
+    this.flags = this.flags.and(IDENTITY_FLAG_REVOKED.notn(16));
+  }
+
   static fromJson(json: VerusCLIVerusIDJson): Identity {
     const contentmap = new Map<string, Buffer>();
 

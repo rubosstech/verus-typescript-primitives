@@ -207,6 +207,46 @@ class Identity extends Principal_1.Principal {
     getIdentityAddress() {
         return (0, address_1.nameAndParentAddrToIAddr)(this.name, this.parent.toAddress());
     }
+    isRevoked() {
+        return !!(this.flags.and(exports.IDENTITY_FLAG_REVOKED).toNumber());
+    }
+    isLocked() {
+        return !!(this.flags.and(exports.IDENTITY_FLAG_LOCKED).toNumber());
+    }
+    lock(unlockTime) {
+        let unlockAfter = unlockTime;
+        if (unlockTime.lte(new bn_js_1.BN(0))) {
+            unlockAfter = new bn_js_1.BN(1);
+        }
+        else if (unlockTime.gt(exports.IDENTITY_MAX_UNLOCK_DELAY)) {
+            unlockAfter = exports.IDENTITY_MAX_UNLOCK_DELAY;
+        }
+        this.flags = this.flags.xor(exports.IDENTITY_FLAG_LOCKED);
+        this.unlock_after = unlockAfter;
+    }
+    unlock(height = new bn_js_1.BN(0), txExpiryHeight = new bn_js_1.BN(0)) {
+        if (this.isRevoked()) {
+            this.flags = this.flags.and(exports.IDENTITY_FLAG_LOCKED.notn(16));
+            this.unlock_after = new bn_js_1.BN(0);
+        }
+        else if (this.isLocked()) {
+            this.flags = this.flags.and(exports.IDENTITY_FLAG_LOCKED.notn(16));
+            this.unlock_after = this.unlock_after.add(txExpiryHeight);
+        }
+        else if (height.gt(this.unlock_after)) {
+            this.unlock_after = new bn_js_1.BN(0);
+        }
+        if (this.unlock_after.gt((txExpiryHeight.add(exports.IDENTITY_MAX_UNLOCK_DELAY)))) {
+            this.unlock_after = txExpiryHeight.add(exports.IDENTITY_MAX_UNLOCK_DELAY);
+        }
+    }
+    revoke() {
+        this.flags = this.flags.xor(exports.IDENTITY_FLAG_REVOKED);
+        this.unlock();
+    }
+    unrevoke() {
+        this.flags = this.flags.and(exports.IDENTITY_FLAG_REVOKED.notn(16));
+    }
     static fromJson(json) {
         const contentmap = new Map();
         for (const key in json.contentmap) {

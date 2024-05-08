@@ -72,5 +72,11 @@ export declare class Identity extends Principal implements SerializableEntity {
     fromBuffer(buffer: Buffer, offset?: number, multimapKeylists?: Array<Array<string> | null>): number;
     toJson(): VerusCLIVerusIDJson;
     getIdentityAddress(): string;
+    isRevoked(): boolean;
+    isLocked(): boolean;
+    lock(unlockTime: BigNumber): void;
+    unlock(height?: BigNumber, txExpiryHeight?: BigNumber): void;
+    revoke(): void;
+    unrevoke(): void;
     static fromJson(json: VerusCLIVerusIDJson): Identity;
 }
