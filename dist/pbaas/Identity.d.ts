@@ -31,7 +31,7 @@ export declare type VerusCLIVerusIDJson = {
     privateaddress?: string;
     recoveryauthority: string;
     revocationauthority: string;
-    systemid: string;
+    systemid?: string;
     timelock: number;
     version: number;
 };
@@ -78,5 +78,6 @@ export declare class Identity extends Principal implements SerializableEntity {
     unlock(height?: BigNumber, txExpiryHeight?: BigNumber): void;
     revoke(): void;
     unrevoke(): void;
+    upgradeVersion(version?: BigNumber): void;
     static fromJson(json: VerusCLIVerusIDJson): Identity;
 }

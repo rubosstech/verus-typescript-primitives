@@ -221,4 +221,33 @@ describe('Serializes and deserializes identity properly', () => {
     expect(identity_frombuf.isLocked()).toBe(false);
     expect(identity_frombuf.isRevoked()).toBe(true);
   });
+
+  test('upgrade identity version', async () => {
+    const identityJson = {
+      "flags": 0,
+      "identityaddress": "iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j",
+      "minimumsignatures": 1,
+      "name": "Chris",
+      "parent": "iJhCezBExJHvtyH3fGhNnt2NhU4Ztkf2yq",
+      "primaryaddresses": [
+        "RKjVHqM4VF2pCfVcwGzKH7CxvfMUE4H6o8"
+      ],
+      "recoveryauthority": "iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j",
+      "revocationauthority": "iPsFBfFoCcxtuZNzE8yxPQhXVn4dmytf8j",
+      "timelock": 0,
+      "version": Identity.VERSION_VERUSID.toNumber(),
+      "privateaddress": "zs1wczplx4kegw32h8g0f7xwl57p5tvnprwdmnzmdnsw50chcl26f7tws92wk2ap03ykaq6jyyztfa"
+    };
+
+    const identity_frombuf = Identity.fromJson(identityJson);
+
+    expect(identity_frombuf.version.toNumber()).toEqual(Identity.VERSION_VERUSID.toNumber());
+    expect(identity_frombuf.system_id).toBe(undefined);
+
+    identity_frombuf.upgradeVersion(Identity.VERSION_PBAAS);
+
+    expect(identity_frombuf.system_id.toAddress()).toBe(identity_frombuf.parent.toAddress());
+    expect(() => identity_frombuf.upgradeVersion(Identity.VERSION_VERUSID)).toThrowError();
+    expect(() => identity_frombuf.upgradeVersion(new BN(10))).toThrowError();
+  });
 });

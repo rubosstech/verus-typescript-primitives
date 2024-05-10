@@ -247,6 +247,23 @@ class Identity extends Principal_1.Principal {
     unrevoke() {
         this.flags = this.flags.and(exports.IDENTITY_FLAG_REVOKED.notn(16));
     }
+    upgradeVersion(version = Identity.VERSION_CURRENT) {
+        if (version.eq(this.version))
+            return;
+        if (version.lt(this.version))
+            throw new Error("Cannot downgrade version");
+        if (version.lt(Identity.VERSION_PBAAS))
+            throw new Error("Cannot upgrade to a version less than PBAAS");
+        if (version.gt(Identity.VERSION_CURRENT))
+            throw new Error("Cannot upgrade to a version greater than the current known version");
+        if (this.version.lt(Identity.VERSION_VAULT)) {
+            this.system_id = this.parent ? this.parent : IdentityID_1.IdentityID.fromAddress(this.getIdentityAddress());
+            this.version = Identity.VERSION_VAULT;
+        }
+        if (this.version.lt(Identity.VERSION_PBAAS)) {
+            this.version = Identity.VERSION_PBAAS;
+        }
+    }
     static fromJson(json) {
         const contentmap = new Map();
         for (const key in json.contentmap) {
@@ -260,7 +277,7 @@ class Identity extends Principal_1.Principal {
             min_sigs: new bn_js_1.BN(json.minimumsignatures, 10),
             primary_addresses: json.primaryaddresses.map(x => KeyID_1.KeyID.fromAddress(x)),
             parent: IdentityID_1.IdentityID.fromAddress(json.parent),
-            system_id: IdentityID_1.IdentityID.fromAddress(json.systemid),
+            system_id: json.systemid ? IdentityID_1.IdentityID.fromAddress(json.systemid) : undefined,
             name: json.name,
             content_map: contentmap,
             content_multimap: ContentMultiMap_1.ContentMultiMap.fromJson(json.contentmultimap),
