@@ -9,6 +9,8 @@ const bn_js_1 = require("bn.js");
 const vdxf_1 = require("../../constants/vdxf");
 const DataDescriptor_1 = require("./DataDescriptor");
 const { BufferReader, BufferWriter } = bufferutils_1.default;
+const createHash = require("create-hash");
+const vdxf_2 = require("../../constants/vdxf");
 class SignatureData {
     constructor(data) {
         if (data) {
@@ -24,7 +26,8 @@ class SignatureData {
                 signatureData.systemID = data.systemid;
             if (data.hashtype)
                 signatureData.hashType = new bn_js_1.BN(data.hashtype);
-            if (signatureData.hashType == new bn_js_1.BN(DataDescriptor_1.EHashTypes.HASH_SHA256)) {
+            let hashType = this.getSignatureHashType(Buffer.from(data.signaturehash, 'hex'));
+            if (hashType == DataDescriptor_1.EHashTypes.HASH_SHA256) {
                 signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex').reverse();
             }
             else {
@@ -40,6 +43,14 @@ class SignatureData {
             signatureData.signatureAsVch = Buffer.from(data.signature, 'base64');
         }
         return signatureData;
+    }
+    static getSignatureHashType(buffer) {
+        var bufferReader = new bufferutils_1.default.BufferReader(buffer, 0);
+        let version = bufferReader.readUInt8();
+        if (version === 2)
+            return bufferReader.readUInt8();
+        else
+            return DataDescriptor_1.EHashTypes.HASH_SHA256;
     }
     getByteLength() {
         let byteLength = 0;
@@ -140,6 +151,31 @@ class SignatureData {
             returnObj['boundhashes'] = this.boundHashes;
         }
         return returnObj;
+    }
+    getIdentityHash(sigObject) {
+        var heightBuffer = Buffer.allocUnsafe(4);
+        heightBuffer.writeUInt32LE(sigObject.height);
+        if (sigObject.hashtype != Number(DataDescriptor_1.EHashTypes.HASH_SHA256)) {
+            throw new Error("Invalid signature type for identity hash");
+        }
+        if (sigObject.version == 1) {
+            return createHash("sha256")
+                .update(vdxf_2.VERUS_DATA_SIGNATURE_PREFIX)
+                .update((0, address_1.fromBase58Check)(this.systemID).hash)
+                .update(heightBuffer)
+                .update((0, address_1.fromBase58Check)(this.identityID).hash)
+                .update(this.signatureHash)
+                .digest();
+        }
+        else {
+            return createHash("sha256")
+                .update((0, address_1.fromBase58Check)(this.systemID).hash)
+                .update(heightBuffer)
+                .update((0, address_1.fromBase58Check)(this.identityID).hash)
+                .update(vdxf_2.VERUS_DATA_SIGNATURE_PREFIX)
+                .update(this.signatureHash)
+                .digest();
+        }
     }
 }
 exports.SignatureData = SignatureData;

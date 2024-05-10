@@ -8,6 +8,8 @@ import { I_ADDR_VERSION } from '../../constants/vdxf';
 import { SerializableEntity } from '../../utils/types/SerializableEntity';
 import { EHashTypes } from './DataDescriptor';
 const { BufferReader, BufferWriter } = bufferutils
+const createHash = require("create-hash");
+import { VERUS_DATA_SIGNATURE_PREFIX } from "../../constants/vdxf";
 
 export class SignatureData implements SerializableEntity {
   version: BigNumber;
@@ -43,7 +45,9 @@ export class SignatureData implements SerializableEntity {
       if (data.systemid) signatureData.systemID = data.systemid;
       if (data.hashtype) signatureData.hashType = new BN(data.hashtype);
 
-      if (signatureData.hashType == new BN(EHashTypes.HASH_SHA256)) {
+      let hashType = this.getSignatureHashType(Buffer.from(data.signaturehash, 'hex'));
+
+      if (hashType == EHashTypes.HASH_SHA256) {
         signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex').reverse();
       } else {
         signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex');
@@ -59,6 +63,16 @@ export class SignatureData implements SerializableEntity {
     }
 
     return signatureData;
+  }
+
+  static getSignatureHashType(buffer) {
+
+    var bufferReader = new bufferutils.BufferReader(buffer, 0);
+        let version = bufferReader.readUInt8();
+        if (version === 2)
+            return bufferReader.readUInt8();
+        else
+            return EHashTypes.HASH_SHA256;
   }
 
   getByteLength() {
@@ -186,5 +200,34 @@ export class SignatureData implements SerializableEntity {
     }
 
     return returnObj
+  }
+
+  getIdentityHash(sigObject:{version: number, hashtype: number, height: number}) {
+    var heightBuffer = Buffer.allocUnsafe(4)
+    heightBuffer.writeUInt32LE(sigObject.height);
+
+    if (sigObject.hashtype != Number(EHashTypes.HASH_SHA256)) {
+      throw new Error("Invalid signature type for identity hash");
+    }
+  
+    if (sigObject.version == 1) {
+      return createHash("sha256")
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(fromBase58Check(this.systemID).hash)
+        .update(heightBuffer)
+        .update(fromBase58Check(this.identityID).hash)
+        .update(this.signatureHash)
+        .digest();
+    } else {
+      return createHash("sha256")
+        .update(fromBase58Check(this.systemID).hash)
+        .update(heightBuffer)
+        .update(fromBase58Check(this.identityID).hash)
+        .update(VERUS_DATA_SIGNATURE_PREFIX)
+        .update(this.signatureHash)
+        .digest();
+    }
+
+
   }
 }

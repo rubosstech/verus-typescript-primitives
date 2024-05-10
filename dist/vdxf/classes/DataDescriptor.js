@@ -210,18 +210,29 @@ class DataDescriptor {
         this.flags = this.CalcFlags();
     }
     IsValid() {
-        return !!(this.version.gte(DataDescriptor.FIRST_VERSION) && this.version.lte(DataDescriptor.LAST_VERSION) && (this.flags.and(new bn_js_1.BN(~DataDescriptor.FLAG_MASK)).eq(new bn_js_1.BN(0))));
+        return !!(this.version.gte(DataDescriptor.FIRST_VERSION) && this.version.lte(DataDescriptor.LAST_VERSION) && this.flags.and(DataDescriptor.FLAG_MASK.notn(DataDescriptor.FLAG_MASK.bitLength())));
     }
     toJson() {
         const retval = {
             version: this.version.toString(),
-            flags: this.flags.toString(),
-            objectdata: this.objectdata.toString('hex')
+            flags: this.flags.toString()
         };
+        let isText = false;
+        if (this.mimeType) {
+            retval['mimetype'] = this.mimeType;
+            if (this.mimeType.startsWith("text/"))
+                isText = true;
+        }
+        let processedObject = (0, exports.VDXFDataToUniValueArray)(this.objectdata);
+        if (isText && typeof processedObject === 'string' || processedObject instanceof String) {
+            let objectDataUni = { message: Buffer.from(processedObject, 'hex').toString('utf-8') };
+            retval['objectdata'] = objectDataUni;
+        }
+        else {
+            retval['objectdata'] = processedObject;
+        }
         if (this.label)
             retval['label'] = this.label;
-        if (this.mimeType)
-            retval['mimetype'] = this.mimeType;
         if (this.salt)
             retval['salt'] = this.salt.toString('hex');
         if (this.epk)
@@ -786,13 +797,14 @@ const VDXFDataToUniValueArray = (buffer, offset = 0) => {
         }
         else {
             // add the remaining data as a hex string
-            entryArr.push(reader.readSlice(bytesLeft + 20));
+            reader.offset = reader.offset - 20;
+            entryArr.push(reader.readSlice(bytesLeft + 20).toString('hex'));
             bytesLeft = 0;
             break;
         }
     }
     if (bytesLeft && bytesLeft <= 20) {
-        entryArr.push(reader.readSlice(bytesLeft));
+        entryArr.push(reader.readSlice(bytesLeft).toString('hex'));
     }
     return entryArr.length == 0 ? null : (entryArr.length == 1 ? entryArr[0] : entryArr);
 };

@@ -290,19 +290,34 @@ export class DataDescriptor {
   }
 
   IsValid(): boolean {
-    return !!(this.version.gte(DataDescriptor.FIRST_VERSION) && this.version.lte(DataDescriptor.LAST_VERSION) && (this.flags.and(new BN(~DataDescriptor.FLAG_MASK)).eq(new BN(0))));
+    return !!(this.version.gte(DataDescriptor.FIRST_VERSION) && this.version.lte(DataDescriptor.LAST_VERSION) && this.flags.and(DataDescriptor.FLAG_MASK.notn(DataDescriptor.FLAG_MASK.bitLength())));
   }
 
   toJson() {
 
     const retval = {
       version: this.version.toString(),
-      flags: this.flags.toString(),
-      objectdata: this.objectdata.toString('hex')
+      flags: this.flags.toString()
     };
 
+    let isText = false;
+    if (this.mimeType) {
+      retval['mimetype'] = this.mimeType;
+      if(this.mimeType.startsWith("text/")) isText = true;
+    }
+    
+    let processedObject = VDXFDataToUniValueArray(this.objectdata)
+
+    if (isText && typeof processedObject === 'string' || processedObject instanceof String) {
+
+      let objectDataUni = {message: Buffer.from(processedObject, 'hex').toString('utf-8')};
+      retval['objectdata'] = objectDataUni;
+
+    } else {
+      retval['objectdata'] = processedObject;
+    }
+
     if (this.label) retval['label'] = this.label;
-    if (this.mimeType) retval['mimetype'] = this.mimeType;
     if (this.salt) retval['salt'] = this.salt.toString('hex');
     if (this.epk) retval['epk'] = this.epk.toString('hex');
     if (this.ivk) retval['ivk'] = this.ivk.toString('hex');
@@ -973,7 +988,7 @@ export const VDXFDataToUniValue = (buffer: Buffer, offset: number = 0, pSuccess 
     return { objectUni, offset: reader.offset, pSuccess };
 }
 
-export const VDXFDataToUniValueArray = (buffer: Buffer, offset: number = 0): Object => {
+export const VDXFDataToUniValueArray = (buffer: Buffer, offset: number = 0) => {
   let entryArr = [];
   const reader = new BufferReader(buffer, offset);
   let bytesLeft = buffer.length;
@@ -991,14 +1006,15 @@ export const VDXFDataToUniValueArray = (buffer: Buffer, offset: number = 0): Obj
       else
       {
           // add the remaining data as a hex string
-          entryArr.push(reader.readSlice(bytesLeft + 20));
+          reader.offset = reader.offset - 20;
+          entryArr.push(reader.readSlice(bytesLeft + 20).toString('hex'));
           bytesLeft = 0;
           break;
       }
   }
   if (bytesLeft && bytesLeft <= 20)
   {
-      entryArr.push(reader.readSlice(bytesLeft));
+      entryArr.push(reader.readSlice(bytesLeft).toString('hex'));
   }
   return entryArr.length == 0 ? null : (entryArr.length == 1 ? entryArr[0] : entryArr);
 

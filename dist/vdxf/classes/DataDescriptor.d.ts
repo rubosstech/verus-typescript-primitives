@@ -54,7 +54,6 @@ export declare class DataDescriptor {
     toJson(): {
         version: string;
         flags: string;
-        objectdata: string;
     };
 }
 export declare class VDXFDataDescriptor extends BufferDataVdxfObject {
@@ -114,17 +113,14 @@ export declare class MMRDescriptor {
         mmrroot: {
             version: string;
             flags: string;
-            objectdata: string;
         };
         mmrhashes: {
             version: string;
             flags: string;
-            objectdata: string;
         };
         datadescriptors: {
             version: string;
             flags: string;
-            objectdata: string;
         }[];
     };
 }
@@ -134,4 +130,4 @@ export declare const VDXFDataToUniValue: (buffer: Buffer, offset?: number, pSucc
     offset: number;
     pSuccess: any;
 };
-export declare const VDXFDataToUniValueArray: (buffer: Buffer, offset?: number) => Object;
+export declare const VDXFDataToUniValueArray: (buffer: Buffer, offset?: number) => any;

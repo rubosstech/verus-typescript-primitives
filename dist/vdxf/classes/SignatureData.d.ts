@@ -20,6 +20,7 @@ export declare class SignatureData implements SerializableEntity {
     static TYPE_VERUSID_DEFAULT: import("bn.js");
     constructor(data?: any);
     static fromJson(data: any): SignatureData;
+    static getSignatureHashType(buffer: any): number;
     getByteLength(): number;
     toBuffer(): Buffer;
     fromBuffer(buffer: Buffer, offset?: number): number;
@@ -29,4 +30,9 @@ export declare class SignatureData implements SerializableEntity {
         systemid: string;
         hashtype: string;
     };
+    getIdentityHash(sigObject: {
+        version: number;
+        hashtype: number;
+        height: number;
+    }): any;
 }
