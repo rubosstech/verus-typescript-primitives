@@ -422,48 +422,4 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
   }
 }
 
-export class RequestedPermission extends VDXFObject {
-  data: string;
-  encoding?: BufferEncoding;
-  constructor(data: string, vdxfkey: string = "") {
-    super(vdxfkey);
-    if (vdxfkey) this.addPrototypes(data);
-  }
-
- addPrototypes(data: string): void {
-    var classType;
-    switch (this.vdxfkey) {
-      case IDENTITY_AGREEMENT.vdxfid:
-        classType = BufferDataVdxfObject;
-        this.data = data;
-        this.encoding = "utf-8";
-        break;
-      case IDENTITY_VIEW.vdxfid:
-        classType = BufferDataVdxfObject;
-        this.data = data;
-        this.encoding = "utf-8";
-        break;
-      case PROFILE_DATA_VIEW_REQUEST.vdxfid:
-        classType = BufferDataVdxfObject;
-        this.data = data;
-        this.encoding = "utf-8";
-        break;
-      case LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY.vdxfid:
-        classType = BufferDataVdxfObject;
-        this.data = data;
-        this.encoding = "utf-8";
-        break;
-      default:
-        throw new Error("Invalid vdxfkey")
-    }
-    const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
-    prototypes.forEach(name => {
-      Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(classType.prototype, name));
-    });
-  }
-
-  fromDataBuffer(buffer: Buffer, offset?: number): number {
-    this.addPrototypes("");
-    return this.fromDataBuffer(buffer, offset)
-  }
-}
+export class RequestedPermission extends Utf8DataVdxfObject {}

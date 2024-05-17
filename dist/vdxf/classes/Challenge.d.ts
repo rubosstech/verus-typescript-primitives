@@ -76,10 +76,5 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
         skip: boolean;
     };
 }
-export declare class RequestedPermission extends VDXFObject {
-    data: string;
-    encoding?: BufferEncoding;
-    constructor(data: string, vdxfkey?: string);
-    addPrototypes(data: string): void;
-    fromDataBuffer(buffer: Buffer, offset?: number): number;
+export declare class RequestedPermission extends Utf8DataVdxfObject {
 }

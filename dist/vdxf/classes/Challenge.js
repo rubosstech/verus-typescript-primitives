@@ -9,7 +9,6 @@ const Hash160_1 = require("./Hash160");
 const Attestation_1 = require("./Attestation");
 const address_1 = require("../../utils/address");
 const vdxf_1 = require("../../constants/vdxf");
-const index_1 = require("../index");
 class RedirectUri extends __1.VDXFObject {
     constructor(uri = "", vdxfkey = "") {
         super(vdxfkey);
@@ -259,46 +258,6 @@ class Challenge extends __1.VDXFObject {
     }
 }
 exports.Challenge = Challenge;
-class RequestedPermission extends __1.VDXFObject {
-    constructor(data, vdxfkey = "") {
-        super(vdxfkey);
-        if (vdxfkey)
-            this.addPrototypes(data);
-    }
-    addPrototypes(data) {
-        var classType;
-        switch (this.vdxfkey) {
-            case __1.IDENTITY_AGREEMENT.vdxfid:
-                classType = index_1.BufferDataVdxfObject;
-                this.data = data;
-                this.encoding = "utf-8";
-                break;
-            case __1.IDENTITY_VIEW.vdxfid:
-                classType = index_1.BufferDataVdxfObject;
-                this.data = data;
-                this.encoding = "utf-8";
-                break;
-            case __1.PROFILE_DATA_VIEW_REQUEST.vdxfid:
-                classType = index_1.BufferDataVdxfObject;
-                this.data = data;
-                this.encoding = "utf-8";
-                break;
-            case __1.LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY.vdxfid:
-                classType = index_1.BufferDataVdxfObject;
-                this.data = data;
-                this.encoding = "utf-8";
-                break;
-            default:
-                throw new Error("Invalid vdxfkey");
-        }
-        const prototypes = ['dataByteLength', 'toDataBuffer', 'fromDataBuffer', 'toJson'];
-        prototypes.forEach(name => {
-            Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(classType.prototype, name));
-        });
-    }
-    fromDataBuffer(buffer, offset) {
-        this.addPrototypes("");
-        return this.fromDataBuffer(buffer, offset);
-    }
+class RequestedPermission extends __1.Utf8DataVdxfObject {
 }
 exports.RequestedPermission = RequestedPermission;

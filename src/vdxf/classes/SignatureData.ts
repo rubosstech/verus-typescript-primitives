@@ -45,7 +45,7 @@ export class SignatureData implements SerializableEntity {
       if (data.systemid) signatureData.systemID = data.systemid;
       if (data.hashtype) signatureData.hashType = new BN(data.hashtype);
 
-      let hashType = this.getSignatureHashType(Buffer.from(data.signaturehash, 'hex'));
+      let hashType = SignatureData.getSignatureHashType(Buffer.from(data.signaturehash, 'hex'));
 
       if (hashType == EHashTypes.HASH_SHA256) {
         signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex').reverse();

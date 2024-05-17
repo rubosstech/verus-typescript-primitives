@@ -26,7 +26,7 @@ class SignatureData {
                 signatureData.systemID = data.systemid;
             if (data.hashtype)
                 signatureData.hashType = new bn_js_1.BN(data.hashtype);
-            let hashType = this.getSignatureHashType(Buffer.from(data.signaturehash, 'hex'));
+            let hashType = SignatureData.getSignatureHashType(Buffer.from(data.signaturehash, 'hex'));
             if (hashType == DataDescriptor_1.EHashTypes.HASH_SHA256) {
                 signatureData.signatureHash = Buffer.from(data.signaturehash, 'hex').reverse();
             }
