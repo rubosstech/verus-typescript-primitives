@@ -440,6 +440,46 @@ export const ATTESTATION_TYPE: VDXFKeyInterface = {
   }
 };
 
+export const ATTESTATION_VIEW_REQUEST_KEY: VDXFKeyInterface = {
+  "vdxfid": "i8iRyLrnapw29BTaHYtu7C3wWPtbjKvEJp",
+  "indexid": "xDYYS9HsS99gmMLc9EZ45aaUY3ucaC7FDD",
+  "hash160result": "fa51ed48a3b250818d2fb1efcdf6275fd2e47939",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.view.request.key"
+  }
+};
+
+export const ATTESTATION_VIEW_REQUEST_NAME: VDXFKeyInterface = {
+  "vdxfid": "i6psJBVkM3yivumyxuhmAwmMYixiFRD9LT",
+  "indexid": "xBeykyvqCNCPZ5f1pbMv9LHtaNyjDs5X2m",
+  "hash160result": "8bb63c962ccec2eced99eb15f958b2d03247c124",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.view.request.name"
+  }
+};
+
+export const ATTESTATION_VIEW_REQUEST_ATTESTOR: VDXFKeyInterface = {
+  "vdxfid": "iHuiKHNSLJd6xeUCN8etjnTcGgzhDp9Zug",
+  "indexid": "xNjpn5oXBcqmapMEDpK3iAz9JM1i7g8cDX",
+  "hash160result": "1bdced61a4c500114659b9f15759eea89c3e559e",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.view.request.attestor"
+  }
+};
+
+export const ATTESTATION_VIEW_REQUEST_ID: VDXFKeyInterface = {
+  "vdxfid": "iSoJNm8wz9Jtv69YvReNyRSzBr8KJSXTym",
+  "indexid": "xXdQqZa2qTXZYG2an7JXwoyXDW9L9NjTYS",
+  "hash160result": "70cbf4f61e3d585bcaac692fa9443a9890e5d7ff",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::attestation.view.request.id"
+  }
+};
+
 export const PROFILE_DATA_VIEW_REQUEST: VDXFKeyInterface = {
   "vdxfid": "iEocxePWah2zp5Hn4ujeoQpc4UVYeJeQ2g",
   "indexid": "xKdjRSpbS1FfSFAovbPomoM968WZVsmW1E",
