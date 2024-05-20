@@ -197,7 +197,7 @@ describe('Create a personal info request', () => {
 
     const mmrdescriptorBuffer = SignatureData.fromJson(signaturedata);
     const mmrbuffer = mmrdescriptorBuffer.toBuffer().toString('hex');
-    expect(mmrbuffer).toStrictEqual("01a6ef9ea235635e328124ff3429db9f9e91b64e2d0120dfd3e3d82783360dfc675a09e6a226fd43119ef4e8d7cf553af96ea5883b51dab26820ee0c9b1276aac834cf457026a575dfce8401000000490205ce0a000001411f0a24ae90af6d838e9c60ea479b1cca8cdaae583c8d73c1f9f3eb8b48e626aa551c354c5607c8f79f34f544729e246ca0740c2b523e6267f03d1f7faa615f47f6");
+    expect(mmrbuffer).toStrictEqual("01a6ef9ea235635e328124ff3429db9f9e91b64e2d0120da513b88a56ef93a55cfd7e8f49e1143fd26a2e6095a67fc0d368327d8e3d3dfb26820ee0c9b1276aac834cf457026a575dfce8401000000490205ce0a000001411f0a24ae90af6d838e9c60ea479b1cca8cdaae583c8d73c1f9f3eb8b48e626aa551c354c5607c8f79f34f544729e246ca0740c2b523e6267f03d1f7faa615f47f6");
 
   });
 
