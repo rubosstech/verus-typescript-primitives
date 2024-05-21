@@ -14,10 +14,10 @@ const KeyID_1 = require("./KeyID");
 exports.IDENTITY_VERSION_VAULT = new bn_js_1.BN(2, 10);
 exports.IDENTITY_VERSION_PBAAS = new bn_js_1.BN(3, 10);
 exports.IDENITTY_VERSION_INVALID = new bn_js_1.BN(0, 10);
-exports.IDENTITY_FLAG_REVOKED = new bn_js_1.BN(8000, 16); // set when this identity is revoked
-exports.IDENTITY_FLAG_ACTIVECURRENCY = new bn_js_1.BN(1, 16); // flag that is set when this ID is being used as an active currency name
-exports.IDENTITY_FLAG_LOCKED = new bn_js_1.BN(2, 16); // set when this identity is locked
-exports.IDENTITY_FLAG_TOKENIZED_CONTROL = new bn_js_1.BN(4, 16); // set when revocation/recovery over this identity can be performed by anyone who controls its token
+exports.IDENTITY_FLAG_REVOKED = new bn_js_1.BN("8000", 16); // set when this identity is revoked
+exports.IDENTITY_FLAG_ACTIVECURRENCY = new bn_js_1.BN("1", 16); // flag that is set when this ID is being used as an active currency name
+exports.IDENTITY_FLAG_LOCKED = new bn_js_1.BN("2", 16); // set when this identity is locked
+exports.IDENTITY_FLAG_TOKENIZED_CONTROL = new bn_js_1.BN("4", 16); // set when revocation/recovery over this identity can be performed by anyone who controls its token
 exports.IDENTITY_MAX_UNLOCK_DELAY = new bn_js_1.BN(60).mul(new bn_js_1.BN(24)).mul(new bn_js_1.BN(22)).mul(new bn_js_1.BN(365)); // 21+ year maximum unlock time for an ID w/1 minute blocks, not adjusted for avg blocktime in first PBaaS
 exports.IDENTITY_MAX_NAME_LEN = new bn_js_1.BN(64);
 const { BufferReader, BufferWriter } = bufferutils_1.default;
@@ -172,72 +172,104 @@ class Identity extends Principal_1.Principal {
             this.system_id = _system;
             this.unlock_after = new bn_js_1.BN(reader.readUInt32(), 10);
         }
+        else {
+            this.system_id = _parent;
+            this.unlock_after = new bn_js_1.BN(0);
+        }
         return reader.offset;
     }
     toJson() {
         const contentmap = {};
         for (const [key, value] of this.content_map.entries()) {
-            contentmap[key] = value.toString('hex');
+            const valueCopy = Buffer.from(value);
+            contentmap[(0, address_1.fromBase58Check)(key).hash.reverse().toString('hex')] = valueCopy.reverse().toString('hex');
         }
-        const multimapJson = this.content_multimap.toJson();
-        const contentmultimap = {};
-        for (const key in multimapJson) {
-            const value = multimapJson[key];
-            const items = [];
-            if (Array.isArray(value)) {
-                for (const x of value) {
-                    if ((0, ContentMultiMap_1.isKvValueArrayItemVdxfUniValueJson)(x)) {
-                        const _x = Object.assign({}, x);
-                        for (const key of Object.keys(x)) {
-                            if (Buffer.isBuffer(x[key]))
-                                _x[key] = x[key].toString('hex');
-                            else
-                                _x[key] = x[key];
-                        }
-                        items.push(_x);
-                    }
-                    else
-                        items.push(x);
-                }
-            }
-            else if ((0, ContentMultiMap_1.isKvValueArrayItemVdxfUniValueJson)(value)) {
-                const _x = Object.assign({}, value);
-                for (const key of Object.keys(value)) {
-                    if (Buffer.isBuffer(value[key]))
-                        _x[key] = value[key].toString('hex');
-                    else
-                        _x[key] = value[key];
-                }
-                items.push(_x);
-            }
-            else if (typeof value === 'string') {
-                items.push(value);
-            }
-            else
-                throw new Error("Invalid multimap value");
-            contentmultimap[key] = items;
-        }
-        return {
+        const ret = {
             contentmap,
-            contentmultimap,
+            contentmultimap: this.content_multimap.toJson(),
             flags: this.flags.toNumber(),
             minimumsignatures: this.min_sigs.toNumber(),
             name: this.name,
             parent: this.parent.toAddress(),
             primaryaddresses: this.primary_addresses.map(x => x.toAddress()),
-            privateaddress: this.private_addresses[0].toAddressString(),
             recoveryauthority: this.recovery_authority.toAddress(),
             revocationauthority: this.revocation_authority.toAddress(),
             systemid: this.system_id.toAddress(),
             timelock: this.unlock_after.toNumber(),
             version: this.version.toNumber(),
-            identityaddress: (0, address_1.nameAndParentAddrToIAddr)(this.name, this.parent.toAddress())
+            identityaddress: this.getIdentityAddress()
         };
+        if (this.private_addresses != null && this.private_addresses.length > 0) {
+            ret.privateaddress = this.private_addresses[0].toAddressString();
+        }
+        return ret;
+    }
+    getIdentityAddress() {
+        return (0, address_1.nameAndParentAddrToIAddr)(this.name, this.parent.toAddress());
+    }
+    isRevoked() {
+        return !!(this.flags.and(exports.IDENTITY_FLAG_REVOKED).toNumber());
+    }
+    isLocked() {
+        return !!(this.flags.and(exports.IDENTITY_FLAG_LOCKED).toNumber());
+    }
+    lock(unlockTime) {
+        let unlockAfter = unlockTime;
+        if (unlockTime.lte(new bn_js_1.BN(0))) {
+            unlockAfter = new bn_js_1.BN(1);
+        }
+        else if (unlockTime.gt(exports.IDENTITY_MAX_UNLOCK_DELAY)) {
+            unlockAfter = exports.IDENTITY_MAX_UNLOCK_DELAY;
+        }
+        this.flags = this.flags.xor(exports.IDENTITY_FLAG_LOCKED);
+        this.unlock_after = unlockAfter;
+    }
+    unlock(height = new bn_js_1.BN(0), txExpiryHeight = new bn_js_1.BN(0)) {
+        if (this.isRevoked()) {
+            this.flags = this.flags.and(exports.IDENTITY_FLAG_LOCKED.notn(16));
+            this.unlock_after = new bn_js_1.BN(0);
+        }
+        else if (this.isLocked()) {
+            this.flags = this.flags.and(exports.IDENTITY_FLAG_LOCKED.notn(16));
+            this.unlock_after = this.unlock_after.add(txExpiryHeight);
+        }
+        else if (height.gt(this.unlock_after)) {
+            this.unlock_after = new bn_js_1.BN(0);
+        }
+        if (this.unlock_after.gt((txExpiryHeight.add(exports.IDENTITY_MAX_UNLOCK_DELAY)))) {
+            this.unlock_after = txExpiryHeight.add(exports.IDENTITY_MAX_UNLOCK_DELAY);
+        }
+    }
+    revoke() {
+        this.flags = this.flags.xor(exports.IDENTITY_FLAG_REVOKED);
+        this.unlock();
+    }
+    unrevoke() {
+        this.flags = this.flags.and(exports.IDENTITY_FLAG_REVOKED.notn(16));
+    }
+    upgradeVersion(version = Identity.VERSION_CURRENT) {
+        if (version.eq(this.version))
+            return;
+        if (version.lt(this.version))
+            throw new Error("Cannot downgrade version");
+        if (version.lt(Identity.VERSION_PBAAS))
+            throw new Error("Cannot upgrade to a version less than PBAAS");
+        if (version.gt(Identity.VERSION_CURRENT))
+            throw new Error("Cannot upgrade to a version greater than the current known version");
+        if (this.version.lt(Identity.VERSION_VAULT)) {
+            this.system_id = this.parent ? this.parent : IdentityID_1.IdentityID.fromAddress(this.getIdentityAddress());
+            this.version = Identity.VERSION_VAULT;
+        }
+        if (this.version.lt(Identity.VERSION_PBAAS)) {
+            this.version = Identity.VERSION_PBAAS;
+        }
     }
     static fromJson(json) {
         const contentmap = new Map();
         for (const key in json.contentmap) {
-            contentmap.set(key, Buffer.from(json.contentmap[key], 'hex'));
+            const reverseKey = Buffer.from(key, 'hex').reverse();
+            const iAddrKey = (0, address_1.toBase58Check)(reverseKey, vdxf_1.I_ADDR_VERSION);
+            contentmap.set(iAddrKey, Buffer.from(json.contentmap[key], 'hex').reverse());
         }
         return new Identity({
             version: new bn_js_1.BN(json.version, 10),
@@ -245,7 +277,7 @@ class Identity extends Principal_1.Principal {
             min_sigs: new bn_js_1.BN(json.minimumsignatures, 10),
             primary_addresses: json.primaryaddresses.map(x => KeyID_1.KeyID.fromAddress(x)),
             parent: IdentityID_1.IdentityID.fromAddress(json.parent),
-            system_id: IdentityID_1.IdentityID.fromAddress(json.systemid),
+            system_id: json.systemid ? IdentityID_1.IdentityID.fromAddress(json.systemid) : undefined,
             name: json.name,
             content_map: contentmap,
             content_multimap: ContentMultiMap_1.ContentMultiMap.fromJson(json.contentmultimap),

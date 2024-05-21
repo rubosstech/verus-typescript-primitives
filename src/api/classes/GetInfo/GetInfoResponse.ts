@@ -35,5 +35,7 @@ export class GetInfoResponse extends ApiResponse {
     decay: string;
     endsubsidy: string;
     veruspos: number;
+    chainid?: string;
+    notarychainid?: string;
   };
 }

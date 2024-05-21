@@ -6,6 +6,6 @@ export class GetAddressBalanceResponse extends ApiResponse {
     received: number;
     currencybalance: { [key: string]: number };
     currencyreceived: { [key: string]: number };
-    currencynames: { [key: string]: string };
+    currencynames?: { [key: string]: string };
   };
 }

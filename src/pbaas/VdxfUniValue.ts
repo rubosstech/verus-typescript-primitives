@@ -15,7 +15,7 @@ const { BufferWriter, BufferReader } = bufferutils
 
 // TODO: Add other type definitions
 export type VdxfUniType = string | Buffer;
-export type VdxfUniValueJson = { [key: string]: VdxfUniType };
+export type VdxfUniValueJson = { [key: string]: string };
 
 // This UniValue class was adapted from C++ code for encoding JSON objects into bytes. It is not serialization and
 // therefore doesn't have a fromBuffer function, as you can't reliably decode it, only encode.
@@ -98,7 +98,10 @@ export class VdxfUniValue implements SerializableEntity {
 
       if (dataTypeKey == DATA_TYPE_STRING.vdxfid) {
         reader.readVarInt();
-        this.values.set(dataTypeKey, reader.readVarSlice().toString('utf8'));
+
+        const slice = reader.readVarSlice();
+
+        this.values.set(dataTypeKey, slice.toString('utf8'));
       } else {
         throw new Error("Invalid or unrecognized vdxf key for object type")
       }
@@ -123,7 +126,7 @@ export class VdxfUniValue implements SerializableEntity {
     const ret = {};
 
     for (const key of this.values.keys()) {
-      ret[key] = this.values.get(key)
+      ret[key] = this.values.get(key) as string;
     }
 
     return ret;

@@ -7,8 +7,8 @@ import { I_ADDR_VERSION } from '../constants/vdxf';
 import { BN } from 'bn.js';
 import { IdentityID } from './IdentityID';
 import { SaplingPaymentAddress } from './SaplingPaymentAddress';
-import { ContentMultiMap, isKvValueArrayItemVdxfUniValueJson } from './ContentMultiMap';
-import { VdxfUniType } from './VdxfUniValue';
+import { ContentMultiMap, ContentMultiMapJson, isKvValueArrayItemVdxfUniValueJson } from './ContentMultiMap';
+import { VdxfUniType, VdxfUniValueJson } from './VdxfUniValue';
 import { SerializableEntity } from '../utils/types/SerializableEntity';
 import { KeyID } from './KeyID';
 
@@ -16,10 +16,10 @@ export const IDENTITY_VERSION_VAULT = new BN(2, 10);
 export const IDENTITY_VERSION_PBAAS = new BN(3, 10);
 export const IDENITTY_VERSION_INVALID = new BN(0, 10);
 
-export const IDENTITY_FLAG_REVOKED = new BN(8000, 16);          // set when this identity is revoked
-export const IDENTITY_FLAG_ACTIVECURRENCY = new BN(1, 16);      // flag that is set when this ID is being used as an active currency name
-export const IDENTITY_FLAG_LOCKED = new BN(2, 16);              // set when this identity is locked
-export const IDENTITY_FLAG_TOKENIZED_CONTROL = new BN(4, 16);   // set when revocation/recovery over this identity can be performed by anyone who controls its token
+export const IDENTITY_FLAG_REVOKED = new BN("8000", 16);          // set when this identity is revoked
+export const IDENTITY_FLAG_ACTIVECURRENCY = new BN("1", 16);      // flag that is set when this ID is being used as an active currency name
+export const IDENTITY_FLAG_LOCKED = new BN("2", 16);              // set when this identity is locked
+export const IDENTITY_FLAG_TOKENIZED_CONTROL = new BN("4", 16);   // set when revocation/recovery over this identity can be performed by anyone who controls its token
 export const IDENTITY_MAX_UNLOCK_DELAY = new BN(60).mul(new BN(24)).mul(new BN(22)).mul(new BN(365));        // 21+ year maximum unlock time for an ID w/1 minute blocks, not adjusted for avg blocktime in first PBaaS
 export const IDENTITY_MAX_NAME_LEN = new BN(64);
 
@@ -29,7 +29,7 @@ export type Hashes = Map<string, Buffer>;
 
 export type VerusCLIVerusIDJson = {
   contentmap?: { [key: string]: string },
-  contentmultimap?: { [key: string]: Array<{ [key: string]: string } | string> },
+  contentmultimap?: ContentMultiMapJson,
   flags: number,
   identityaddress: string,
   minimumsignatures: number,
@@ -39,7 +39,7 @@ export type VerusCLIVerusIDJson = {
   privateaddress?: string,
   recoveryauthority: string,
   revocationauthority: string,
-  systemid: string,
+  systemid?: string,
   timelock: number,
   version: number
 }
@@ -275,6 +275,9 @@ export class Identity extends Principal implements SerializableEntity {
       this.system_id = _system;
 
       this.unlock_after = new BN(reader.readUInt32(), 10);
+    } else {
+      this.system_id = _parent;
+      this.unlock_after = new BN(0);
     }
 
     return reader.offset;
@@ -283,61 +286,97 @@ export class Identity extends Principal implements SerializableEntity {
   toJson(): VerusCLIVerusIDJson {
     const contentmap = {};
 
-    for (const [key, value] of this.content_map.entries()) {
-      contentmap[key] = value.toString('hex');
+    for (const [key, value] of this.content_map.entries()) { 
+      const valueCopy = Buffer.from(value);
+      contentmap[fromBase58Check(key).hash.reverse().toString('hex')] = valueCopy.reverse().toString('hex');
     }
 
-    const multimapJson = this.content_multimap.toJson();
-    const contentmultimap: { [key: string]: Array<{ [key: string]: string } | string> } = {};
-
-    for (const key in multimapJson) {
-      const value = multimapJson[key];
-      const items: Array<{ [key: string]: string } | string> = [];
-
-      if (Array.isArray(value)) {
-        for (const x of value) {
-          if (isKvValueArrayItemVdxfUniValueJson(x)) {
-            const _x: { [key: string]: VdxfUniType } = { ...x }
-
-            for (const key of Object.keys(x)) {
-              if (Buffer.isBuffer(x[key])) _x[key] = x[key].toString('hex');
-              else _x[key] = x[key] as string;
-            }
-
-            items.push(_x as { [key: string]: string })
-          } else items.push(x);
-        }
-      } else if (isKvValueArrayItemVdxfUniValueJson(value)) {
-        const _x = { ...value }
-
-        for (const key of Object.keys(value)) {
-          if (Buffer.isBuffer(value[key])) _x[key] = value[key].toString('hex');
-          else _x[key] = value[key] as string;
-        }
-
-        items.push(_x as { [key: string]: string })
-      } else if (typeof value === 'string') {
-        items.push(value)
-      } else throw new Error("Invalid multimap value");
-
-      contentmultimap[key] = items;
-    }
-
-    return {
+    const ret: VerusCLIVerusIDJson = {
       contentmap,
-      contentmultimap,
+      contentmultimap: this.content_multimap.toJson(),
       flags: this.flags.toNumber(),
       minimumsignatures: this.min_sigs.toNumber(),
       name: this.name,
       parent: this.parent.toAddress(),
       primaryaddresses: this.primary_addresses.map(x => x.toAddress()),
-      privateaddress: this.private_addresses[0].toAddressString(),
       recoveryauthority: this.recovery_authority.toAddress(),
       revocationauthority: this.revocation_authority.toAddress(),
       systemid: this.system_id.toAddress(),
       timelock: this.unlock_after.toNumber(),
       version: this.version.toNumber(),
-      identityaddress: nameAndParentAddrToIAddr(this.name, this.parent.toAddress())
+      identityaddress: this.getIdentityAddress()
+    };
+
+    if (this.private_addresses != null && this.private_addresses.length > 0) {
+      ret.privateaddress = this.private_addresses[0].toAddressString();
+    }
+
+    return ret;
+  }
+
+  getIdentityAddress() {
+    return nameAndParentAddrToIAddr(this.name, this.parent.toAddress());
+  }
+
+  isRevoked(): boolean {
+    return !!(this.flags.and(IDENTITY_FLAG_REVOKED).toNumber());
+  }
+
+  isLocked(): boolean {
+    return !!(this.flags.and(IDENTITY_FLAG_LOCKED).toNumber());
+  }
+
+  lock(unlockTime: BigNumber) {
+    let unlockAfter: BigNumber = unlockTime;
+
+    if (unlockTime.lte(new BN(0))) {
+      unlockAfter = new BN(1);
+    } else if (unlockTime.gt(IDENTITY_MAX_UNLOCK_DELAY)) {
+      unlockAfter = IDENTITY_MAX_UNLOCK_DELAY;
+    }
+
+    this.flags = this.flags.xor(IDENTITY_FLAG_LOCKED);
+    this.unlock_after = unlockAfter;
+  }
+
+  unlock(height: BigNumber = new BN(0), txExpiryHeight: BigNumber = new BN(0)): void {
+    if (this.isRevoked()) {
+      this.flags = this.flags.and(IDENTITY_FLAG_LOCKED.notn(16));
+      this.unlock_after = new BN(0);
+    } else if (this.isLocked()) {
+      this.flags = this.flags.and(IDENTITY_FLAG_LOCKED.notn(16));
+      this.unlock_after = this.unlock_after.add(txExpiryHeight);
+    } else if (height.gt(this.unlock_after)) {
+      this.unlock_after = new BN(0);
+    }
+
+    if (this.unlock_after.gt((txExpiryHeight.add(IDENTITY_MAX_UNLOCK_DELAY)))) {
+      this.unlock_after = txExpiryHeight.add(IDENTITY_MAX_UNLOCK_DELAY);
+    }
+  }
+
+  revoke() {
+    this.flags = this.flags.xor(IDENTITY_FLAG_REVOKED);
+    this.unlock();
+  }
+
+  unrevoke() {
+    this.flags = this.flags.and(IDENTITY_FLAG_REVOKED.notn(16));
+  }
+
+  upgradeVersion(version: BigNumber = Identity.VERSION_CURRENT) {
+    if (version.eq(this.version)) return;
+    if (version.lt(this.version)) throw new Error("Cannot downgrade version");
+    if (version.lt(Identity.VERSION_PBAAS)) throw new Error("Cannot upgrade to a version less than PBAAS");
+    if (version.gt(Identity.VERSION_CURRENT)) throw new Error("Cannot upgrade to a version greater than the current known version");
+
+    if (this.version.lt(Identity.VERSION_VAULT)) {
+      this.system_id = this.parent ? this.parent : IdentityID.fromAddress(this.getIdentityAddress());
+      this.version = Identity.VERSION_VAULT;
+    }
+
+    if (this.version.lt(Identity.VERSION_PBAAS)) {
+      this.version = Identity.VERSION_PBAAS;
     }
   }
 
@@ -345,7 +384,10 @@ export class Identity extends Principal implements SerializableEntity {
     const contentmap = new Map<string, Buffer>();
 
     for (const key in json.contentmap) {
-      contentmap.set(key, Buffer.from(json.contentmap[key], 'hex'));
+      const reverseKey = Buffer.from(key, 'hex').reverse();
+      const iAddrKey = toBase58Check(reverseKey, I_ADDR_VERSION);
+      
+      contentmap.set(iAddrKey, Buffer.from(json.contentmap[key], 'hex').reverse());
     }
 
     return new Identity({
@@ -354,7 +396,7 @@ export class Identity extends Principal implements SerializableEntity {
       min_sigs: new BN(json.minimumsignatures, 10),
       primary_addresses: json.primaryaddresses.map(x => KeyID.fromAddress(x)),
       parent: IdentityID.fromAddress(json.parent),
-      system_id: IdentityID.fromAddress(json.systemid),
+      system_id: json.systemid ? IdentityID.fromAddress(json.systemid) : undefined,
       name: json.name,
       content_map: contentmap,
       content_multimap: ContentMultiMap.fromJson(json.contentmultimap),
