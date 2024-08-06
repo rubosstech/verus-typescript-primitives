@@ -25,4 +25,4 @@ export { RedirectUri, Subject, ProvisioningInfo, RequestedPermission, Audience, 
 export { Attestation } from './Attestation';
 export { ProvisioningTxid } from './provisioning/ProvisioningResult';
 export { Context } from './Context';
-export { defaultPersonalProfileDataTemplate, DataCategory } from './PersonalProfile';
+export { DataCategory } from './PersonalProfile';

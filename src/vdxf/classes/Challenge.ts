@@ -144,7 +144,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
     super(vdxfkey);
 
     this.challenge_id = challenge.challenge_id;
-    this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.data, x.vdxfkey)) : challenge.requested_access;
+    this.requested_access = challenge.requested_access ? challenge.requested_access.map((x) => new RequestedPermission(x.vdxfkey, x.data)) : challenge.requested_access;
     this.requested_access_audience = challenge.requested_access_audience;
     this.subject = challenge.subject
       ? challenge.subject.map((x) => new Subject(x.data, x.vdxfkey))
@@ -333,7 +333,7 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
           const _vdxfkey = toBase58Check(reader.buffer.slice(reader.offset,
             reader.offset + HASH160_BYTE_LENGTH),
             I_ADDR_VERSION);
-          const _perm = new RequestedPermission("", _vdxfkey);
+          const _perm = new RequestedPermission(_vdxfkey);
           reader.offset = _perm.fromBuffer(reader.buffer, reader.offset);
           this.requested_access.push(_perm);
         }
@@ -422,4 +422,8 @@ export class Challenge extends VDXFObject implements ChallengeInterface {
   }
 }
 
-export class RequestedPermission extends Utf8DataVdxfObject {}
+export class RequestedPermission extends Utf8DataVdxfObject {
+  constructor(vdxfkey: string = "", data: string = "") {
+    super(data, vdxfkey);
+  }
+}

@@ -9,4 +9,11 @@ export declare const IdentityVdxfidMap: {
         name: string;
         type: string;
     };
+    [x: number]: {
+        name: string;
+        type: keylist.VDXFKeyInterface;
+    } | {
+        name: string;
+        type: string;
+    };
 };

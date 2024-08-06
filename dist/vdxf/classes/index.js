@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCategory = exports.defaultPersonalProfileDataTemplate = exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.VerusPayInvoice = exports.VerusPayInvoiceDetails = exports.SignedSessionObjectData = exports.SignedSessionObject = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
+exports.DataCategory = exports.Context = exports.ProvisioningTxid = exports.Attestation = exports.AltAuthFactor = exports.Audience = exports.RequestedPermission = exports.ProvisioningInfo = exports.Subject = exports.RedirectUri = exports.Hash160 = exports.LoginConsentProvisioningResult = exports.LoginConsentProvisioningDecision = exports.LoginConsentProvisioningResponse = exports.LoginConsentProvisioningChallenge = exports.LoginConsentProvisioningRequest = exports.VerusPayInvoice = exports.VerusPayInvoiceDetails = exports.SignedSessionObjectData = exports.SignedSessionObject = exports.LoginConsentResponse = exports.LoginConsentRequest = exports.LoginConsentDecision = exports.LoginConsentChallenge = void 0;
 var Challenge_1 = require("./Challenge");
 Object.defineProperty(exports, "LoginConsentChallenge", { enumerable: true, get: function () { return Challenge_1.Challenge; } });
 var Decision_1 = require("./Decision");
@@ -43,5 +43,4 @@ Object.defineProperty(exports, "ProvisioningTxid", { enumerable: true, get: func
 var Context_1 = require("./Context");
 Object.defineProperty(exports, "Context", { enumerable: true, get: function () { return Context_1.Context; } });
 var PersonalProfile_1 = require("./PersonalProfile");
-Object.defineProperty(exports, "defaultPersonalProfileDataTemplate", { enumerable: true, get: function () { return PersonalProfile_1.defaultPersonalProfileDataTemplate; } });
 Object.defineProperty(exports, "DataCategory", { enumerable: true, get: function () { return PersonalProfile_1.DataCategory; } });
