@@ -162,6 +162,7 @@ export declare const IDENTITY_CONTACTDETAILS: VDXFKeyInterface;
 export declare const IDENTITY_LOCATION: VDXFKeyInterface;
 export declare const IDENTITY_BANKINGDETAILS: VDXFKeyInterface;
 export declare const IDENTITY_DOCUMENTS: VDXFKeyInterface;
+export declare const IDENTITY_BANKACCOUNT: VDXFKeyInterface;
 export declare const IDENTITY_BANKINGDETAILS_CURRENCY: VDXFKeyInterface;
 export declare const IDENTITY_BANKINGDETAILS_COUNTRY: VDXFKeyInterface;
 export declare const IDENTITY_BANKINGDETAILS_STREET1: VDXFKeyInterface;

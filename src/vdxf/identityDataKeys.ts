@@ -1630,6 +1630,16 @@ export const IDENTITY_DOCUMENTS: VDXFKeyInterface = {
     }
 }
 
+export const IDENTITY_BANKACCOUNT: VDXFKeyInterface = {
+    "vdxfid": "iN4AgB4KEN1C3TfZnYDFUhxn37PdcrZvxT",
+    "indexid": "xStH8yVQ5gDrfdYbeDsQT6VK4mQeYDjcFm",
+    "hash160result": "122bf0739d7d1def003656a63c443efb6c14cfcb",
+    "qualifiedname": {
+        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+        "name": "vrsc::identity.bankaccount"
+    }
+}
+
 export const IDENTITY_BANKINGDETAILS_CURRENCY: VDXFKeyInterface = {
     "vdxfid": "i5k8pb9FHf5VZJKki6him1WMBkpyhe56BY",
     "indexid": "xAaFHPaL8yJABUCnZnMsjQ2tDQqzfUkZRm",
