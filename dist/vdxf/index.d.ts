@@ -58,6 +58,17 @@ export declare class BufferDataVdxfObject extends VDXFObject {
         vdxfkey: string;
     };
 }
+export declare class VDXFData extends VDXFObject {
+    data: Buffer;
+    constructor(data?: Buffer, vdxfkey?: string);
+    dataByteLength(): number;
+    toDataBuffer(): Buffer;
+    fromDataBuffer(buffer: Buffer, offset?: number): number;
+    toJson(): {
+        data: Buffer;
+        vdxfkey: string;
+    };
+}
 export declare class Utf8DataVdxfObject extends BufferDataVdxfObject {
     constructor(data?: string, vdxfkey?: string);
 }

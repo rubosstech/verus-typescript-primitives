@@ -490,6 +490,16 @@ export const PROFILE_DATA_VIEW_REQUEST: VDXFKeyInterface = {
   }
 }
 
+export const IDENTITY_SIGNDATA_REQUEST: VDXFKeyInterface = {
+  "vdxfid": "i8pWCPRLoGD9MgL7HM13xo5Bhr9TsXjGxs",
+  "indexid": "xDecfBrReaRoyrD992fCwBbijWAUi4yjUN",
+  "hash160result": "0785689a95a2a08dd2e0efd60b71237e97ea9f3a",
+  "qualifiedname": {
+    "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
+    "name": "vrsc::identity.signdata.request"
+  }
+}
+
 // DATA TYPES
 export const DATA_TYPE_STRING: VDXFKeyInterface = 
   {

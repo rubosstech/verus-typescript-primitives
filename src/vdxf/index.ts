@@ -169,6 +169,42 @@ export class BufferDataVdxfObject extends VDXFObject {
   }
 }
 
+export class VDXFData extends VDXFObject {
+  data: Buffer
+  
+    constructor(
+      data: Buffer = Buffer.from(""),
+      vdxfkey: string = ""
+    ) {
+      super(vdxfkey);
+      this.data = data;
+    }
+  
+    dataByteLength(): number {
+      return this.data.length;
+    }
+  
+    toDataBuffer(): Buffer {
+      return this.data;
+    }
+
+    fromDataBuffer(buffer: Buffer, offset?: number): number {
+      const reader = new bufferutils.BufferReader(buffer, offset);
+  
+      this.data = reader.readVarSlice();
+  
+      return reader.offset;
+    }
+  
+    toJson() {
+      return {
+        data: this.data,
+        vdxfkey: this.vdxfkey,
+      };
+    }
+  
+  }
+
 export class Utf8DataVdxfObject extends BufferDataVdxfObject {
   constructor(data: string = "", vdxfkey: string = "") {
     super(data, vdxfkey, "utf-8");

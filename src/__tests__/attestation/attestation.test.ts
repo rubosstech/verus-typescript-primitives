@@ -38,9 +38,9 @@ describe('Serializes and deserializes attestation request', () => {
       challenge: {
         challenge_id: "iMqzCkWdebC19xbjkLfVdDkkGP9Ni1oxoN",
         requested_access: [
-          new RequestedPermission("", IDENTITY_VIEW.vdxfid),
-          new RequestedPermission("", PROFILE_DATA_VIEW_REQUEST.vdxfid),
-          new RequestedPermission("", LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY.vdxfid),
+          new RequestedPermission(IDENTITY_VIEW.vdxfid, ""),
+          new RequestedPermission(PROFILE_DATA_VIEW_REQUEST.vdxfid, ""),
+          new RequestedPermission(LOGIN_CONSENT_PERSONALINFO_WEBHOOK_VDXF_KEY.vdxfid, ""),
         ],
         redirect_uris: [],
         subject: [new Subject(
@@ -85,7 +85,7 @@ describe('Serializes and deserializes attestation request', () => {
       },
       challenge: {
         challenge_id: "iKNufKJdLX3Xg8qFru9AuLBvivAEJ88PW4",
-        requested_access: [new RequestedPermission("", IDENTITY_VIEW.vdxfid)],
+        requested_access: [new RequestedPermission(IDENTITY_VIEW.vdxfid, "")],
         session_id: "iRQZGW36o3RcVR1xyVT1qWdAKdxp3wUyrh",
         redirect_uris: [
           new RedirectUri(
@@ -115,7 +115,7 @@ describe('Serializes and deserializes attestation request', () => {
       },
       challenge: {
         challenge_id: "iKNufKJdLX3Xg8qFru9AuLBvivAEJ88PW4",
-        requested_access: [new RequestedPermission("", IDENTITY_VIEW.vdxfid)],
+        requested_access: [new RequestedPermission(IDENTITY_VIEW.vdxfid, "")],
         session_id: "iRQZGW36o3RcVR1xyVT1qWdAKdxp3wUyrh",
         redirect_uris: [
           new RedirectUri(

@@ -1,2534 +1,1653 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IDENTITYDATA_DRIVINGLICENCE_ADDRESS = exports.IDENTITYDATA_DRIVINGLICENCE_DATEOFBIRTH = exports.IDENTITYDATA_DRIVINGLICENCE_ISSUING_REGION = exports.IDENTITYDATA_DRIVINGLICENCE_ISSUING_COUNTRY_MATCHED = exports.IDENTITYDATA_DRIVINGLICENCE_EXPIRATIONDATE = exports.IDENTITYDATA_DRIVINGLICENCE_CATEGORY = exports.IDENTITYDATA_DRIVINGLICENCE_IDNUMBER = exports.IDENTITYDATA_DRIVINGLICENCE_FACE = exports.IDENTITYDATA_DRIVINGLICENCE_CROPPED_BACK = exports.IDENTITYDATA_DRIVINGLICENCE_CROPPED_FRONT = exports.IDENTITYDATA_DRIVINGLICENCE_ORIGINAL_BACK = exports.IDENTITYDATA_DRIVINGLICENCE_ORIGINAL_FRONT = exports.IDENTITYDATA_DRIVINGLICENCE = exports.IDENTITYDATA_APPROVALS_RISKCHECKOK = exports.IDENTITYDATA_APPROVALS_WATCHLIST_OK = exports.IDENTITYDATA_APPROVALS_SELFIECHECKED = exports.IDENTITYDATA_APPROVALS_DOCUMENTSVERIFIED = exports.IDENTITYDATA_APPROVALS_KYCCHECKED = exports.IDENTITYDATA_APPROVALS_VERIFIEDSMS = exports.IDENTITYDATA_APPROVALS_ACCEPTEDTOS = exports.IDENTITYDATA_STATUS = exports.IDENTITYDATA_IDNUMBER_TYPE = exports.IDENTITYDATA_IDNUMBER_VALUE = exports.IDENTITYDATA_HOMEADDRESS_COUNTRY = exports.IDENTITYDATA_HOMEADDRESS_POSTCODE = exports.IDENTITYDATA_HOMEADDRESS_REGION = exports.IDENTITYDATA_HOMEADDRESS_CITY = exports.IDENTITYDATA_HOMEADDRESS_STREET2 = exports.IDENTITYDATA_HOMEADDRESS_STREET1 = exports.IDENTITYDATA_HOMEADDRESS = exports.IDENTITYDATA_LASTNAME = exports.IDENTITYDATA_MIDDLENAME = exports.IDENTITYDATA_FIRSTNAME = exports.IDENTITYDATA_EMAIL = exports.IDENTITYDATA_IPADDRESS = exports.IDENTITYDATA_OVER25 = exports.IDENTITYDATA_OVER21 = exports.IDENTITYDATA_OVER18 = exports.IDENTITYDATA_DATEOFBIRTH = exports.IDENTITYDATA_PHONENUMBER = exports.IDENTITYDATA_TEMPLATEVERSION = exports.IDENTITYDATA_TEMPLATEID = exports.IDENTITYDATA_SHAREABLEURL = exports.IDENTITYDATA_PREVIOUSATTEMPTID = exports.IDENTITYDATA_COMPLETEDAT = exports.IDENTITYDATA_CREATEDAT = exports.IDENTITYDATA_USERID = exports.IDENTITYDATA_ID = exports.IDENTITYDATA_IDENTITY = exports.IDENTITYDATA_ATTESTOR = void 0;
-exports.IDENTITYDATA_IDCARD_ADDRESS_POSTCODE = exports.IDENTITYDATA_IDCARD_ADDRESS_REGION = exports.IDENTITYDATA_IDCARD_ADDRESS_CITY = exports.IDENTITYDATA_IDCARD_ADDRESS_STREET1 = exports.IDENTITYDATA_IDCARD_ADDRESS = exports.IDENTITYDATA_IDCARD_DATEOFBIRTH = exports.IDENTITYDATA_IDCARD_ISSUING_REGION = exports.IDENTITYDATA_IDCARD_ISSUING_COUNTRY_MATCHED = exports.IDENTITYDATA_IDCARD_EXPIRATIONDATE = exports.IDENTITYDATA_IDCARD_CATEGORY = exports.IDENTITYDATA_IDCARD_IDNUMBER = exports.IDENTITYDATA_IDCARD_FACE = exports.IDENTITYDATA_IDCARD_CROPPED_BACK = exports.IDENTITYDATA_IDCARD_CROPPED_FRONT = exports.IDENTITYDATA_IDCARD_ORIGINAL_BACK = exports.IDENTITYDATA_IDCARD_ORIGINAL_FRONT = exports.IDENTITYDATA_IDCARD = exports.IDENTITYDATA_EMAIL_DOMAIN_TOPLEVEL_SUSPICIOUS = exports.IDENTITYDATA_EMAIL_DOMAIN_DISPOSABLE = exports.IDENTITYDATA_EMAIL_DOMAIN_CUSTOM = exports.IDENTITYDATA_EMAIL_DOMAIN_FREEPROVIDER = exports.IDENTITYDATA_EMAIL_DOMAIN_REGISTEREDAT = exports.IDENTITYDATA_EMAIL_LASTBREACHEDAT = exports.IDENTITYDATA_EMAIL_FIRSTBREACHEDAT = exports.IDENTITYDATA_EMAIL_BREACHCOUNT = exports.IDENTITYDATA_EMAIL_ISDELIVERABLE = exports.IDENTITYDATA_RISKCHECK_BOTNOTDETECTED = exports.IDENTITYDATA_RISKCHECK_FRAUDRINGOK = exports.IDENTITYDATA_RISKCHECK_USERINTERACTIONS = exports.IDENTITYDATA_RISKCHECK_STATUS = exports.IDENTITYDATA_KYC_AREACODE_MATCHED = exports.IDENTITYDATA_KYC_PHONENUMBER_MATCHED = exports.IDENTITYDATA_KYC_IDNUMBER_MATCHED = exports.IDENTITYDATA_KYC_DATEOFBIRTH_MATCHED = exports.IDENTITYDATA_KYC_NAME_MATCHED = exports.IDENTITYDATA_KYC_TYPE = exports.IDENTITYDATA_KYC_ADDRESS_MATCHED = exports.IDENTITYDATA_KYC_SUCCESS = exports.IDENTITYDATA_SELFIECHECK_DRIVINGLICENCE_MATCH = exports.IDENTITYDATA_SELFIECHECK_VIDEO = exports.IDENTITYDATA_SELFIECHECK_IMAGE = exports.IDENTITYDATA_SELFIECHECK_SUCCESS = exports.IDENTITYDATA_DRIVINGLICENCE_DATEOFBIRTH_MATCHED = exports.IDENTITYDATA_DRIVINGLICENCE_NAME_MATCHED = exports.IDENTITYDATA_DRIVINGLICENCE_MATCHED = exports.IDENTITYDATA_DRIVINGLICENCE_COUNTRY = exports.IDENTITYDATA_DRIVINGLICENCE_POSTCODE = exports.IDENTITYDATA_DRIVINGLICENCE_REGION = exports.IDENTITYDATA_DRIVINGLICENCE_CITY = exports.IDENTITYDATA_DRIVINGLICENCE_STREET1 = void 0;
-exports.IDENTITYDATA_RESIDENTCARD_CROPPED_FRONT = exports.IDENTITYDATA_RESIDENTCARD_ORIGINAL_BACK = exports.IDENTITYDATA_RESIDENTCARD_ORIGINAL_FRONT = exports.IDENTITYDATA_RESIDENTCARD = exports.IDENTITYDATA_RESIDENCEPERMIT_DATEOFBIRTHMATCHED = exports.IDENTITYDATA_RESIDENCEPERMIT_NAME_MATCHED = exports.IDENTITYDATA_RESIDENCEPERMIT_DOCUMENTVERIFICATION_MATCHED = exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_COUNTRY = exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_POSTCODE = exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_REGION = exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_CITY = exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_STREET1 = exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS = exports.IDENTITYDATA_RESIDENCEPERMIT_DATEOFBIRTH = exports.IDENTITYDATA_RESIDENCEPERMIT_ISSUING_REGION = exports.IDENTITYDATA_RESIDENCEPERMIT_ISSUING_COUNTRY_MATCHED = exports.IDENTITYDATA_RESIDENCEPERMIT_EXPIRATIONDATE = exports.IDENTITYDATA_RESIDENCEPERMIT_CATEGORY = exports.IDENTITYDATA_RESIDENCEPERMIT_IDNUMBER = exports.IDENTITYDATA_RESIDENCEPERMIT_FACE = exports.IDENTITYDATA_RESIDENCEPERMIT_CROPPED_BACK = exports.IDENTITYDATA_RESIDENCEPERMIT_CROPPED_FRONT = exports.IDENTITYDATA_RESIDENCEPERMIT_ORIGINAL_BACK = exports.IDENTITYDATA_RESIDENCEPERMIT_ORIGINAL_FRONT = exports.IDENTITYDATA_RESIDENCEPERMIT = exports.IDENTITYDATA_PASSPORT_DATEOFBIRTHMATCHED = exports.IDENTITYDATA_PASSPORT_NAME_MATCHED = exports.IDENTITYDATA_PASSPORT_DOCUMENTVERIFICATION_MATCHED = exports.IDENTITYDATA_PASSPORT_ADDRESS_COUNTRY = exports.IDENTITYDATA_PASSPORT_ADDRESS_POSTCODE = exports.IDENTITYDATA_PASSPORT_ADDRESS_REGION = exports.IDENTITYDATA_PASSPORT_ADDRESS_CITY = exports.IDENTITYDATA_PASSPORT_ADDRESS_STREET1 = exports.IDENTITYDATA_PASSPORT_ADDRESS = exports.IDENTITYDATA_PASSPORT_DATEOFBIRTH = exports.IDENTITYDATA_PASSPORT_ISSUING_REGION = exports.IDENTITYDATA_PASSPORT_ISSUING_COUNTRY_MATCHED = exports.IDENTITYDATA_PASSPORT_EXPIRATIONDATE = exports.IDENTITYDATA_PASSPORT_CATEGORY = exports.IDENTITYDATA_PASSPORT_IDNUMBER = exports.IDENTITYDATA_PASSPORT_FACE = exports.IDENTITYDATA_PASSPORT_CROPPED_BACK = exports.IDENTITYDATA_PASSPORT_CROPPED_FRONT = exports.IDENTITYDATA_PASSPORT_ORIGINAL_BACK = exports.IDENTITYDATA_PASSPORT_ORIGINAL_FRONT = exports.IDENTITYDATA_PASSPORT = exports.IDENTITYDATA_IDCARD_DATEOFBIRTHMATCHED = exports.IDENTITYDATA_IDCARD_NAME_MATCHED = exports.IDENTITYDATA_IDCARD_DOCUMENTVERIFICATION_MATCHED = exports.IDENTITYDATA_IDCARD_ADDRESS_COUNTRY = void 0;
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_ADDRESS = exports.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTH = exports.IDENTITYDATA_DOCUMENTVERIFICATION_ISSUING_REGION = exports.IDENTITYDATA_DOCUMENTVERIFICATION_ISSUINGCOUNTRY = exports.IDENTITYDATA_DOCUMENTVERIFICATION_EXPIRATIONDATE = exports.IDENTITYDATA_DOCUMENTVERIFICATION_CATEGORY = exports.IDENTITYDATA_DOCUMENTVERIFICATION_IDNUMBER = exports.IDENTITYDATA_DOCUMENTVERIFICATION_FACE = exports.IDENTITYDATA_DOCUMENTVERIFICATION_CROPPEDBACK = exports.IDENTITYDATA_DOCUMENTVERIFICATION_CROPPEDFRONT = exports.IDENTITYDATA_DOCUMENTVERIFICATION_ORIGINALBACK = exports.IDENTITYDATA_DOCUMENTVERIFICATION_ORIGINALFRONT = exports.IDENTITYDATA_VISA_DATEOFBIRTHMATCHED = exports.IDENTITYDATA_VISA_NAME_MATCHED = exports.IDENTITYDATA_VISA_DOCUMENTVERIFICATION_MATCHED = exports.IDENTITYDATA_VISA_ADDRESS_COUNTRY = exports.IDENTITYDATA_VISA_ADDRESS_POSTCODE = exports.IDENTITYDATA_VISA_ADDRESS_REGION = exports.IDENTITYDATA_VISA_ADDRESS_CITY = exports.IDENTITYDATA_VISA_ADDRESS_STREET1 = exports.IDENTITYDATA_VISA_ADDRESS = exports.IDENTITYDATA_VISA_DATEOFBIRTH = exports.IDENTITYDATA_VISA_ISSUING_REGION = exports.IDENTITYDATA_VISA_ISSUING_COUNTRY_MATCHED = exports.IDENTITYDATA_VISA_EXPIRATIONDATE = exports.IDENTITYDATA_VISA_CATEGORY = exports.IDENTITYDATA_VISA_IDNUMBER = exports.IDENTITYDATA_VISA_FACE = exports.IDENTITYDATA_VISA_CROPPED_BACK = exports.IDENTITYDATA_VISA_CROPPED_FRONT = exports.IDENTITYDATA_VISA_ORIGINAL_BACK = exports.IDENTITYDATA_VISA_ORIGINAL_FRONT = exports.IDENTITYDATA_VISA = exports.IDENTITYDATA_RESIDENTCARD_DATEOFBIRTHMATCHED = exports.IDENTITYDATA_RESIDENTCARD_NAME_MATCHED = exports.IDENTITYDATA_RESIDENTCARD_DOCUMENTVERIFICATION_MATCHED = exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_COUNTRY = exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_POSTCODE = exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_REGION = exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_CITY = exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_STREET1 = exports.IDENTITYDATA_RESIDENTCARD_ADDRESS = exports.IDENTITYDATA_RESIDENTCARD_DATEOFBIRTH = exports.IDENTITYDATA_RESIDENTCARD_ISSUING_REGION = exports.IDENTITYDATA_RESIDENTCARD_ISSUING_COUNTRY_MATCHED = exports.IDENTITYDATA_RESIDENTCARD_EXPIRATIONDATE = exports.IDENTITYDATA_RESIDENTCARD_CATEGORY = exports.IDENTITYDATA_RESIDENTCARD_IDNUMBER = exports.IDENTITYDATA_RESIDENTCARD_FACE = exports.IDENTITYDATA_RESIDENTCARD_CROPPED_BACK = void 0;
-exports.BANK_ACCOUNT_TYPE = exports.BANK_ACCOUNT_NUMBER = exports.ACCOUNT_TYPE = exports.ACCOUNT_NUMBER = exports.BANK_ACCOUNT_PHONENUMBER = exports.BANK_ACCOUNT_LASTNAME = exports.BANK_ACCOUNT_FIRSTNAME = exports.BANK_ACCOUNT_TAXCOUNTRY = exports.BANK_ACCOUNT_TAXNUMBER = exports.BANK_ACCOUNT_POSTALCODE = exports.BANK_ACCOUNT_REGION = exports.BANK_ACCOUNT_CITY = exports.BANK_ACCOUNT_STREET2 = exports.BANK_ACCOUNT_STREET1 = exports.BANK_ACCOUNT_COUNTRY = exports.BANK_ACCOUNT_CURRENCY = exports.BANK_ACCOUNT = exports.FIAT_CURRENCEY = exports.PERSONAL_INFO_OBJECT = exports.IDENTITYDATA_DOCUMENTS_AND_IMAGES = exports.IDENTITYDATA_BANKING_INFORMATION = exports.IDENTITYDATA_LOCATIONS = exports.IDENTITYDATA_CONTACT = exports.IDENTITYDATA_PERSONAL_DETAILS = exports.IDENTITYDATA_NAME = exports.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED = exports.IDENTITYDATA_DOCUMENTVERIFICATION_NAME_MATCHED = exports.IDENTITYDATA_DOCUMENTVERIFICATION_MATCHED = exports.IDENTITYDATA_NATIONALITY = exports.IDENTITYDATA_ADDRESS_COUNTRY = exports.IDENTITYDATA_ADDRESS_POSTCODE = exports.IDENTITYDATA_ADDRESS_REGION = exports.IDENTITYDATA_ADDRESS_CITY = exports.IDENTITYDATA_ADDRESS_STREET2 = exports.IDENTITYDATA_ADDRESS_STREET1 = void 0;
-exports.IDENTITYDATA_ATTESTOR = {
-    "vdxfid": "iNe8VaRBRFDhb6xjZ7WHNWgfM73428GN8B",
-    "hash160result": "5e01d5d356d517df57ea0f391c86e11a84663bd2",
+exports.IDENTITY_DRIVINGLICENCE_FACE = exports.IDENTITY_DRIVINGLICENCE_CROPPEDBACK = exports.IDENTITY_DRIVINGLICENCE_CROPPEDFRONT = exports.IDENTITY_DRIVINGLICENCE_ORIGINALBACK = exports.IDENTITY_DRIVINGLICENCE_ORIGINALFRONT = exports.IDENTITY_DRIVINGLICENCE = exports.IDENTITY_VERIFICATION_APPROVALS_STATUS = exports.IDENTITY_VERIFICATION_APPROVALS_RISKCHECKOK = exports.IDENTITY_VERIFICATION_APPROVALS_WATCHLISTOK = exports.IDENTITY_VERIFICATION_APPROVALS_SELFIECHECKED = exports.IDENTITY_VERIFICATION_APPROVALS_DOCUMENTSVERIFIED = exports.IDENTITY_VERIFICATION_APPROVALS_KYCCHECKED = exports.IDENTITY_VERIFICATION_APPROVALS_VERIFIEDSMS = exports.IDENTITY_VERIFICATION_APPROVALS_ACCEPTEDTOS = exports.IDENTITY_VERIFICATION_APPROVALS = exports.IDENTITY_VERIFICATION_STATUS = exports.IDENTITY_IDNUMBER_TYPE = exports.IDENTITY_IDNUMBER_VALUE = exports.IDENTITY_HOMEADDRESS_COUNTRY = exports.IDENTITY_HOMEADDRESS_POSTCODE = exports.IDENTITY_HOMEADDRESS_REGION = exports.IDENTITY_HOMEADDRESS_CITY = exports.IDENTITY_HOMEADDRESS_STREET2 = exports.IDENTITY_HOMEADDRESS_STREET1 = exports.IDENTITY_HOMEADDRESS = exports.IDENTITY_WEIGHT = exports.IDENTITY_ETHNICITY = exports.IDENTITY_EYECOLOR = exports.IDENTITY_HEIGHT = exports.IDENTITY_GENDER = exports.IDENTITY_LASTNAME = exports.IDENTITY_MIDDLENAME = exports.IDENTITY_FIRSTNAME = exports.IDENTITY_NATIONALITY = exports.IDENTITY_EMAIL = exports.IDENTITY_ACCOUNT_REQUESTING_IPADDRESS = exports.IDENTITY_OVER25 = exports.IDENTITY_OVER21 = exports.IDENTITY_OVER18 = exports.IDENTITY_DATEOFBIRTH = exports.IDENTITY_PHONENUMBER = exports.IDENTITY_ACCOUNT_STATUS = exports.IDENTITY_ACCOUNT_TEMPLATEVERSION = exports.IDENTITY_ACCOUNT_TEMPLATEID = exports.IDENTITY_ACCOUNT_SHAREABLEURL = exports.IDENTITY_ACCOUNT_PREVIOUSATTEMPTID = exports.IDENTITY_ACCOUNT_COMPLETEDAT = exports.IDENTITY_ACCOUNT_CREATEDAT = exports.IDENTITY_ACCOUNT_USERID = exports.IDENTITY_ACCOUNT_ID = void 0;
+exports.IDENTITY_RESIDENCEPERMIT_ISSUINGREGION = exports.IDENTITY_RESIDENCEPERMIT_ISSUINGCOUNTRY = exports.IDENTITY_RESIDENCEPERMIT_EXPIRATIONDATE = exports.IDENTITY_RESIDENCEPERMIT_CATEGORY = exports.IDENTITY_RESIDENCEPERMIT_IDNUMBER = exports.IDENTITY_RESIDENCEPERMIT_FACE = exports.IDENTITY_RESIDENCEPERMIT_CROPPEDBACK = exports.IDENTITY_RESIDENCEPERMIT_CROPPEDFRONT = exports.IDENTITY_RESIDENCEPERMIT_ORIGINALBACK = exports.IDENTITY_RESIDENCEPERMIT_ORIGINALFRONT = exports.IDENTITY_RESIDENCEPERMIT = exports.IDENTITY_PASSPORT_ADDRESS_COUNTRY = exports.IDENTITY_PASSPORT_ADDRESS_POSTCODE = exports.IDENTITY_PASSPORT_ADDRESS_REGION = exports.IDENTITY_PASSPORT_ADDRESS_CITY = exports.IDENTITY_PASSPORT_ADDRESS_STREET1 = exports.IDENTITY_PASSPORT_DATEOFBIRTH = exports.IDENTITY_PASSPORT_ISSUINGREGION = exports.IDENTITY_PASSPORT_ISSUINGCOUNTRY = exports.IDENTITY_PASSPORT_EXPIRATIONDATE = exports.IDENTITY_PASSPORT_CATEGORY = exports.IDENTITY_PASSPORT_IDNUMBER = exports.IDENTITY_PASSPORT_FACE = exports.IDENTITY_PASSPORT_CROPPEDBACK = exports.IDENTITY_PASSPORT_CROPPEDFRONT = exports.IDENTITY_PASSPORT_ORIGINALBACK = exports.IDENTITY_PASSPORT_ORIGINALFRONT = exports.IDENTITY_PASSPORT = exports.IDENTITY_EMAIL_DOMAIN_TOPLEVEL_SUSPICIOUS = exports.IDENTITY_EMAIL_DOMAIN_DISPOSABLE = exports.IDENTITY_EMAIL_DOMAIN_CUSTOM = exports.IDENTITY_EMAIL_DOMAIN_FREEPROVIDER = exports.IDENTITY_EMAIL_DOMAIN_REGISTEREDAT = exports.IDENTITY_EMAIL_LASTBREACHEDAT = exports.IDENTITY_EMAIL_FIRSTBREACHEDAT = exports.IDENTITY_EMAIL_BREACHCOUNT = exports.IDENTITY_EMAIL_ISDELIVERABLE = exports.IDENTITY_SELFIECHECK_VIDEO = exports.IDENTITY_SELFIECHECK_IMAGE = exports.IDENTITY_DRIVINGLICENCE_ADDRESS_COUNTRY = exports.IDENTITY_DRIVINGLICENCE_ADDRESS_POSTCODE = exports.IDENTITY_DRIVINGLICENCE_ADDRESS_REGION = exports.IDENTITY_DRIVINGLICENCE_ADDRESS_CITY = exports.IDENTITY_DRIVINGLICENCE_ADDRESS_STREET1 = exports.IDENTITY_DRIVINGLICENCE_DATEOFBIRTH = exports.IDENTITY_DRIVINGLICENCE_ISSUINGREGION = exports.IDENTITY_DRIVINGLICENCE_ISSUINGCOUNTRY = exports.IDENTITY_DRIVINGLICENCE_EXPIRATIONDATE = exports.IDENTITY_DRIVINGLICENCE_CATEGORY = exports.IDENTITY_DRIVINGLICENCE_IDNUMBER = void 0;
+exports.IDENTITY_VISA_EXPIRATIONDATE = exports.IDENTITY_VISA_CATEGORY = exports.IDENTITY_VISA_IDNUMBER = exports.IDENTITY_VISA_FACE = exports.IDENTITY_VISA_CROPPEDBACK = exports.IDENTITY_VISA_CROPPEDFRONT = exports.IDENTITY_VISA_ORIGINALBACK = exports.IDENTITY_VISA_ORIGINALFRONT = exports.IDENTITY_VISA = exports.IDENTITY_IDCARD_ADDRESS_COUNTRY = exports.IDENTITY_IDCARD_ADDRESS_POSTCODE = exports.IDENTITY_IDCARD_ADDRESS_REGION = exports.IDENTITY_IDCARD_ADDRESS_CITY = exports.IDENTITY_IDCARD_ADDRESS_STREET1 = exports.IDENTITY_IDCARD_DATEOFBIRTH = exports.IDENTITY_IDCARD_ISSUINGREGION = exports.IDENTITY_IDCARD_ISSUINGCOUNTRY = exports.IDENTITY_IDCARD_EXPIRATIONDATE = exports.IDENTITY_IDCARD_CATEGORY = exports.IDENTITY_IDCARD_IDNUMBER = exports.IDENTITY_IDCARD_FACE = exports.IDENTITY_IDCARD_CROPPEDBACK = exports.IDENTITY_IDCARD_CROPPEDFRONT = exports.IDENTITY_IDCARD_ORIGINALBACK = exports.IDENTITY_IDCARD_ORIGINALFRONT = exports.IDENTITY_IDCARD = exports.IDENTITY_RESIDENTCARD_ADDRESS_COUNTRY = exports.IDENTITY_RESIDENTCARD_ADDRESS_POSTCODE = exports.IDENTITY_RESIDENTCARD_ADDRESS_REGION = exports.IDENTITY_RESIDENTCARD_ADDRESS_CITY = exports.IDENTITY_RESIDENTCARD_ADDRESS_STREET1 = exports.IDENTITY_RESIDENTCARD_DATEOFBIRTH = exports.IDENTITY_RESIDENTCARD_ISSUINGREGION = exports.IDENTITY_RESIDENTCARD_ISSUINGCOUNTRY = exports.IDENTITY_RESIDENTCARD_EXPIRATIONDATE = exports.IDENTITY_RESIDENTCARD_CATEGORY = exports.IDENTITY_RESIDENTCARD_IDNUMBER = exports.IDENTITY_RESIDENTCARD_FACE = exports.IDENTITY_RESIDENTCARD_CROPPEDBACK = exports.IDENTITY_RESIDENTCARD_CROPPEDFRONT = exports.IDENTITY_RESIDENTCARD_ORIGINALBACK = exports.IDENTITY_RESIDENTCARD_ORIGINALFRONT = exports.IDENTITY_RESIDENTCARD = exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_COUNTRY = exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_POSTCODE = exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_REGION = exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_CITY = exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_STREET1 = exports.IDENTITY_RESIDENCEPERMIT_ADDRESS = exports.IDENTITY_RESIDENCEPERMIT_DATEOFBIRTH = void 0;
+exports.IDENTITY_ATTESTATION_RECIPIENT = exports.IDENTITY_ATTESTOR = exports.IDENTITY_RESIDENCECARD = exports.IDENTITY_DOCUMENTS_PASSPORT = exports.IDENTITY_BANKINGDETAILS_SORTCODE = exports.IDENTITY_BANKINGDETAILS_TYPE = exports.IDENTITY_BANKINGDETAILS_NUMBER = exports.IDENTITY_BANKINGDETAILS_PHONENUMBER = exports.IDENTITY_BANKINGDETAILS_LASTNAME = exports.IDENTITY_BANKINGDETAILS_FIRSTNAME = exports.IDENTITY_BANKINGDETAILS_TAXCOUNTRY = exports.IDENTITY_BANKINGDETAILS_TAXNUMBER = exports.IDENTITY_BANKINGDETAILS_POSTALCODE = exports.IDENTITY_BANKINGDETAILS_REGION = exports.IDENTITY_BANKINGDETAILS_CITY = exports.IDENTITY_BANKINGDETAILS_STREET2 = exports.IDENTITY_BANKINGDETAILS_STREET1 = exports.IDENTITY_BANKINGDETAILS_COUNTRY = exports.IDENTITY_BANKINGDETAILS_CURRENCY = exports.IDENTITY_BANKACCOUNT = exports.IDENTITY_DOCUMENTS = exports.IDENTITY_BANKINGDETAILS = exports.IDENTITY_LOCATION = exports.IDENTITY_CONTACTDETAILS = exports.IDENTITY_PERSONALDETAILS = exports.IDENTITY_VISA_ADDRESS_COUNTRY = exports.IDENTITY_VISA_ADDRESS_POSTCODE = exports.IDENTITY_VISA_ADDRESS_REGION = exports.IDENTITY_VISA_ADDRESS_CITY = exports.IDENTITY_VISA_ADDRESS_STREET1 = exports.IDENTITY_VISA_DATEOFBIRTH = exports.IDENTITY_VISA_ISSUINGREGION = exports.IDENTITY_VISA_ISSUINGCOUNTRY = void 0;
+exports.IDENTITY_ACCOUNT_ID = {
+    "vdxfid": "i5Xgd7Aqds922eE8FDBUsKHSgiig39AnfS",
+    "indexid": "xAMo5ubvVBMgep7A6tqdqhoyiNjgq3j1ci",
+    "hash160result": "4c5e79bf46593fe959cb1918422eaa8fc82b8916",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.attestor"
+        "name": "vrsc::identity.account.id"
     }
 };
-exports.IDENTITYDATA_IDENTITY = {
-    "vdxfid": "iFa41TpKfvbjaEnP78BNpSA9KYNgED58ms",
-    "hash160result": "63730181dc037834a7b2b9e7fed49863ca1cad84",
+exports.IDENTITY_ACCOUNT_USERID = {
+    "vdxfid": "iNKVUvr5GzdCHgybMauK11DdZZUyWE3pe3",
+    "indexid": "xT9bwjHA8JqrurrdDGZTyPkAbDVzR53C2o",
+    "hash160result": "93b62bfd8c861ac7a5aa3d3d9f618ccd8c04b5ce",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.identity"
+        "name": "vrsc::identity.account.userid"
     }
 };
-exports.IDENTITYDATA_ID = {
-    "vdxfid": "i3uDEe15gH8AN88WjGGwF7gv6jVwJa1Wt5",
-    "indexid": "x8jKhSSAXbLpzJ1Yaww6DWDT8PWxAzngtM",
-    "hash160result": "17bc967bf757bc093ba3fc1dd9298abb7235ab04",
+exports.IDENTITY_ACCOUNT_CREATEDAT = {
+    "vdxfid": "i42uTbJmVBcPacY3Ak1g95LBg5rBBntQby",
+    "indexid": "x8s1vPjrLVq4CnR52Rfq7TrihjsBzxAEic",
+    "hash160result": "c40b12b14582c976e67a2e5992b0fdf67fb21f06",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.id"
+        "name": "vrsc::identity.account.createdat"
     }
 };
-exports.IDENTITYDATA_USERID = {
-    "vdxfid": "iMxzsbP4iptfkxQD4CaYwYNqSRSqw1eqJp",
-    "indexid": "xSo7LPp9a97LP8HEutEhuvuNU5Trrjc77z",
-    "hash160result": "b6e3f22d3a87fbdffe53d16e1eab779b16d1d4ca",
+exports.IDENTITY_ACCOUNT_COMPLETEDAT = {
+    "vdxfid": "iRJTZj7osY5EYA7pd7K3UcJVAApkvodDjZ",
+    "indexid": "xW8a2XYtirHuAKzrUnyCSzq2BpqmpCnnHQ",
+    "hash160result": "c568b6e1f734f5dc9b754e5932ebdb63f2606bef",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.userid"
+        "name": "vrsc::identity.account.completedat"
     }
 };
-exports.IDENTITYDATA_CREATEDAT = {
-    "vdxfid": "iNxvB8LET1HNQ2aWqS8RoVj8fcPr1UdcSA",
-    "indexid": "xTo2dvmKJKW32CTYh7namtFfhGQrrbP3Rv",
-    "hash160result": "dabed2d7a3d4cacbc482ce046dd1be8b6605c9d5",
+exports.IDENTITY_ACCOUNT_PREVIOUSATTEMPTID = {
+    "vdxfid": "iGU6RCWyjU1sscCPLN77XhTESJ21JCTNxF",
+    "indexid": "xMJCszx4anEYVn5RC3mGW5ymTx32EBfaqs",
+    "hash160result": "50c2b12bb483802d14beae3c6b7454c6ecc0848e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.createdat"
+        "name": "vrsc::identity.account.previousattemptid"
     }
 };
-exports.IDENTITYDATA_COMPLETEDAT = {
-    "vdxfid": "iFtW78dkwZtb4Q9EhBEm4xYMYFxYEvP39D",
-    "indexid": "xLicZw4qnt7Fga2GYrtv3M4tZuyZ5zz9CJ",
-    "hash160result": "12903d8d58b28acf0dfefd6598b2ed6394622a88",
+exports.IDENTITY_ACCOUNT_SHAREABLEURL = {
+    "vdxfid": "i92YkV3FVGZfp5Ep3j1sfQUgqUS37M9v82",
+    "indexid": "xDrfDHULLanLSF7quQg2do1Ds8T3yGCRw3",
+    "hash160result": "52e9f990e5e89cc1088acd29a2fda0ef140ae73c",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.completedat"
+        "name": "vrsc::identity.account.shareableurl"
     }
 };
-exports.IDENTITYDATA_PREVIOUSATTEMPTID = {
-    "vdxfid": "iNVKxjLQJmxyFsPZGufmkb9rh8FoBrcS37",
-    "indexid": "xTKSRXmVA6Bdt3Gb8bKviygPinGp7XuZqr",
-    "hash160result": "f2154430bfab9e858dbd05f48e379f77dd3a91d0",
+exports.IDENTITY_ACCOUNT_TEMPLATEID = {
+    "vdxfid": "iL5diuVsHAG5DLVeyc8XYdEXR6fFro5G7s",
+    "indexid": "xQukBhvx8UUjqWNgqHngX1m4SkgGhnybh1",
+    "hash160result": "37ef653fe6685fca132d77834384702f6cd225b6",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.previousattemptid"
+        "name": "vrsc::identity.account.templateid"
     }
 };
-exports.IDENTITYDATA_SHAREABLEURL = {
-    "vdxfid": "i9nYbM8arP15YrJYqSLbxgi7iJgYbzPwXR",
-    "indexid": "xEcf49ZfhhDkB2Bah7zkw5EejxhZYZ83om",
-    "hash160result": "8a81df9444dcd55bf80dfff5e07b4a1fd0353945",
+exports.IDENTITY_ACCOUNT_TEMPLATEVERSION = {
+    "vdxfid": "i7eBZNzKrgFov6c2Sx2QecyEmPq2Mc4BGe",
+    "indexid": "xCUJ2BRQhzUUYGV4JdgZd1Vmo3r39BsUym",
+    "hash160result": "e6e490ce8bfde333ab0374880ea0efbb9c12b42d",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.shareableurl"
+        "name": "vrsc::identity.account.templateversion"
     }
 };
-exports.IDENTITYDATA_TEMPLATEID = {
-    "vdxfid": "i5j8xXGKYLBAENLD5CBosWtmB2LnWrxobF",
-    "indexid": "xAZFRKhQPePprYDEvsqxquRJCgMoTQzGzL",
-    "hash160result": "aefdfe818fd9323496ad29101b9b40e3d0bab318",
+exports.IDENTITY_ACCOUNT_STATUS = {
+    "vdxfid": "iJf3EbihEtdEpJjbQ6PgUaL3GxDgZRzSWk",
+    "indexid": "xPV9hQ9n6CquSUcdFn3qSxraJcEhVfWa72",
+    "hash160result": "d6fc5578c2fbed3251f3aa250c73b58386ec86a6",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.templateid"
+        "name": "vrsc::identity.account.status"
     }
 };
-exports.IDENTITYDATA_TEMPLATEVERSION = {
-    "vdxfid": "iQTADnLBxVAxxxAidEUgK8DVeuaaY7w78n",
-    "indexid": "xVHGgamGooPdb83kUv8qHWk2gZbbW3CZYi",
-    "hash160result": "1b1a410a4258fe91ee0e40904538d649c58418e6",
+exports.IDENTITY_PHONENUMBER = {
+    "vdxfid": "iAQY8o4HwupzcJAw9aBtFwgrvWZGQStkge",
+    "indexid": "xFEebbVNoE3fEU3y1Fr3ELDPxAaHE7V2kN",
+    "hash160result": "32bc2c7919f626c39679630ee4d6d6d07bcd074c",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.templateversion"
+        "name": "vrsc::identity.phonenumber"
     }
 };
-exports.IDENTITYDATA_PHONENUMBER = {
-    "vdxfid": "i9ZQ5degEh3wQg5vNm8Tod88bcJBrLs5p3",
-    "indexid": "xEPWYS5m61Gc2qxxESncn1efdGKChdypms",
-    "hash160result": "c58e0231ddcd85747709016800cc6e796cb2bc42",
+exports.IDENTITY_DATEOFBIRTH = {
+    "vdxfid": "iSZsa7C4esogN3W6fBngUHR6GvSmt7We4j",
+    "indexid": "xXPz2ud9WC2LzDP8WsSqSfwdJaTnqpHdND",
+    "hash160result": "ab74371e952a27f615b079d3c084b38b98c84dfd",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.phonenumber"
+        "name": "vrsc::identity.dateofbirth"
     }
 };
-exports.IDENTITYDATA_DATEOFBIRTH = {
-    "vdxfid": "iPzSt64gwsqmxcz3Ht7zhMngLC6no6S74K",
-    "indexid": "xUpZLtVmoC4Sans59Zn9fkKDMr7oe7NpkD",
-    "hash160result": "057c9866c848002e1fac1c419a300369f2310be1",
+exports.IDENTITY_OVER18 = {
+    "vdxfid": "iHPD8vB7jhtbuqPkUqzheqcZdfAfHUFVzM",
+    "indexid": "xNDKbicCb27GY1GnLXerdE96fKBg9tLUDT",
+    "hash160result": "28139ce1eae370e76f749066f778466597689098",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.dateofbirth"
+        "name": "vrsc::identity.over18"
     }
 };
-exports.IDENTITYDATA_OVER18 = {
-    "vdxfid": "iF8QUrVj4LCSKdF5KFG6axidrUg8RiV65A",
-    "indexid": "xKxWwevoueR6wo87AvvFZMFAt8h9EHjvu5",
-    "hash160result": "70a65a9b459169a05b34f101ff0631cf0763d37f",
+exports.IDENTITY_OVER21 = {
+    "vdxfid": "iAXYYrZaipc4DAmAKXUFYZxavsf6uBJqaj",
+    "indexid": "xFMf1ezfa8piqLeCBD8QWxV7xXg7mxMc1Z",
+    "hash160result": "7a1fee70ace1c048c0a93c120a8a4c5f890f5b4d",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.over18"
+        "name": "vrsc::identity.over21"
     }
 };
-exports.IDENTITYDATA_OVER21 = {
-    "vdxfid": "i6E3RQUUX3jt8CkizuLX6ihZHTegCmmbj4",
-    "indexid": "xB49tCuZNMxYkNdkrazg57E6K7fh65oniA",
-    "hash160result": "6238fac23c82ebadd8f79306558cb8ddc62b2b1e",
+exports.IDENTITY_OVER25 = {
+    "vdxfid": "iDuForPTZFeFBAgDX1HyrP3d6of7wzrRaS",
+    "indexid": "xJjNGepYQZruoLZFNgx8pmaA8Tg8qSfnzM",
+    "hash160result": "2a1e6fa6913ea3659dcaf1c5bc20a96e399d5e72",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.over21"
+        "name": "vrsc::identity.over25"
     }
 };
-exports.IDENTITYDATA_OVER25 = {
-    "vdxfid": "iHqnuVSGJAjF4SXqurNB2h3sY7q5raxhDr",
-    "indexid": "xNfuNHsM9UwugcQsmY2L15aQZmr6n3MA8x",
-    "hash160result": "88c15026283fb46b5a6b3de4f4b5a33a7f69979d",
+exports.IDENTITY_ACCOUNT_REQUESTING_IPADDRESS = {
+    "vdxfid": "i4uE1EvnDbq9WGhF5UbBr6fbxNLsgk1eZ3",
+    "indexid": "x9jLU3Ms4v3p8SaGwAFLpVC8z2MtYJTVwp",
+    "hash160result": "05a3aa58192812972a2c4e4184af7bb5fbf9a30f",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.over25"
+        "name": "vrsc::identity.account.requesting.ipaddress"
     }
 };
-exports.IDENTITYDATA_IPADDRESS = {
-    "vdxfid": "i6HsaWESEEpa1RGPeuksdCQWZ8Svvq7w4e",
-    "indexid": "xB7z3JfX5Z3Edb9RWbR2baw3anTwtiKSmr",
-    "hash160result": "4fceb989885b50eb19d713f76fe53b62449ee41e",
+exports.IDENTITY_EMAIL = {
+    "vdxfid": "iJ4pq4DCymfbu8SAuXyNhasLeSHFNKPr23",
+    "indexid": "xNtwHreHq5tGXJKCmDdXfyPsg6JGHUY6X1",
+    "hash160result": "15a8095b6298bbff5147060d9a6363a9df6c0ea0",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.ipaddress"
+        "name": "vrsc::identity.email"
     }
 };
-exports.IDENTITYDATA_EMAIL = {
-    "vdxfid": "i8nmFBXnQNFK6HmNM1XHr6xLECPEry44Xr",
-    "indexid": "xDcshyxsFgTyiTeQChBSpVUsFrQFg1ph6J",
-    "hash160result": "31b2f16b20e9fdc1e11f37d07ba97f5463a54b3a",
+exports.IDENTITY_NATIONALITY = {
+    "vdxfid": "iEUYNTkw6kFhZWto7vyTpQqtdRL7eoKZY2",
+    "indexid": "xKJeqGC1x4UNBgmpycdcnoNRf5M8btexbt",
+    "hash160result": "db935713b90281d6aefe5e7b33e5b660962aaa78",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email"
+        "name": "vrsc::identity.nationality"
     }
 };
-exports.IDENTITYDATA_FIRSTNAME = {
-    "vdxfid": "i4GqsotHGa4czCdtg2d8FVHKfJFzVyBPrM",
-    "indexid": "x96xLcKN7tHHcNWvXiHHDsorgxH1REYzrR",
-    "hash160result": "31e7d78d45dd436cd977ac0f9ed03094bd87c208",
+exports.IDENTITY_FIRSTNAME = {
+    "vdxfid": "iLB8SG7ErJtTYcG1f4w9RLuMJPpAsjFkiL",
+    "indexid": "xR1Eu4YKhd78An93WkbJPjRtL3qBprmMno",
+    "hash160result": "0bab76359b70b37c858399c2a3776939c5de2fb7",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.firstname"
+        "name": "vrsc::identity.firstname"
     }
 };
-exports.IDENTITYDATA_MIDDLENAME = {
-    "vdxfid": "iB8d3HBPEr3tsxsNoCGxDwfr9teVwugeyK",
-    "indexid": "xFxjW5cU6AGZW8kQesw7CLCPBYfWtK6d9G",
-    "hash160result": "2044d9008acd28b1795ff04788289d24135efd53",
+exports.IDENTITY_MIDDLENAME = {
+    "vdxfid": "iHG6ALRUPyRcgJMsPqBmvUCZxe4PrMfgej",
+    "indexid": "xN6Cd8rZFHeHJUEuFWqvtrj6zJ5QjX94j5",
+    "hash160result": "b98bd82034ec86ae5538313c9f5501c086ac3797",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.middlename"
+        "name": "vrsc::identity.middlename"
     }
 };
-exports.IDENTITYDATA_LASTNAME = {
-    "vdxfid": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z",
-    "indexid": "xNohveoFs4k6UukEjzBn54SiMcfqhV66Vg",
-    "hash160result": "3c3fb99f2b33f5c20c890f36fa8cc1ff3d30119f",
+exports.IDENTITY_LASTNAME = {
+    "vdxfid": "iKRmfy4xgjWQyPdXYie6dJezRXF4aKdbHB",
+    "indexid": "xQFt8mW3Y3j5bZWZQQJFbhBXTBG5S4vdaZ",
+    "hash160result": "6b597e0c05d1430566b7b17a59da683fb4a6fcae",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.lastname"
+        "name": "vrsc::identity.lastname"
     }
 };
-exports.IDENTITYDATA_HOMEADDRESS = {
-    "vdxfid": "i6AtrvvqMkzVPQqtEmzn1EbjkzF3CbaM9L",
-    "indexid": "xB11KjMvD5DA1aiv6Tevyd8GneG45Q5BLp",
-    "hash160result": "f83d7549817e9eda543bf587689c06e814c7921d",
+exports.IDENTITY_GENDER = {
+    "vdxfid": "iShgSBdiYDQnVwgNcDnSbNYHGU6CTwBDb1",
+    "indexid": "xXXntz4oPXdT87ZQTuSbZm4pJ87DGEgHpG",
+    "hash160result": "3baee594e927d47b641c7cf3927ab3229dd0c7fe",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.homeaddress"
+        "name": "vrsc::identity.gender"
     }
 };
-exports.IDENTITYDATA_HOMEADDRESS_STREET1 = {
-    "vdxfid": "iL29rGaWXcww4fwe8Us1kg7Y16XUDgaWFC",
-    "indexid": "xQrGK51bNwAbgqpfzAXAj4e52kYV4o2k7S",
-    "hash160result": "b898ec5f2c3633b099b4f8332b987d938c4e7db5",
+exports.IDENTITY_HEIGHT = {
+    "vdxfid": "iLmLmsFMTUm4dd2iMuMe4xaMC8VSZN9soP",
+    "indexid": "xRbTEfgSJnyjFnukDb1o3M6tDnWTSUiii7",
+    "hash160result": "e80652253fa52b95cd9ea5ff43d51642ea4fa8bd",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.homeaddress"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+        "name": "vrsc::identity.height"
     }
 };
-exports.IDENTITYDATA_HOMEADDRESS_STREET2 = {
-    "vdxfid": "iPfVvVxRkpE8WXKAeCYGTxsdpLa1Eh1KzD",
-    "indexid": "xUVcPJPWc8So8hCCVtCRSMQAqzb25YSnPA",
-    "hash160result": "8c2235594883052b88799461f306c084b0d475dd",
+exports.IDENTITY_EYECOLOR = {
+    "vdxfid": "iRo2XT8tcMtLTpuPJ6V5WxbnVWa2CrcdsJ",
+    "indexid": "xWd8zFZyTg715znR9n9EVM8KXAb328xGbZ",
+    "hash160result": "c60fdfcc04173f273aa92a3b1844964b368ad2f4",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.homeaddress"
-    },
-    "bounddata": {
-        "vdxfkey": "i3h8D5kGtn6DCVCwPFvbypbFCqfzAhXiD2"
+        "name": "vrsc::identity.eyecolor"
     }
 };
-exports.IDENTITYDATA_HOMEADDRESS_CITY = {
-    "vdxfid": "iFRUFNWPsrDNNLfCWhAqFoUamhwryjx27c",
-    "indexid": "xLFaiAwUjAS2zWYENNpzEC17oMxspXLHnY",
-    "hash160result": "ea4cad23a3b421b827747769be86b29d699a0d83",
+exports.IDENTITY_ETHNICITY = {
+    "vdxfid": "i9jHPJokwnLoCQ83P6jqezCcEZUD1g34B9",
+    "indexid": "xEZPr7Eqo6ZTpa15EnPzdNj9GDVDsfToki",
+    "hash160result": "0476d568a9cf949bc8b6d84dc73e38cf85449b44",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.homeaddress"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+        "name": "vrsc::identity.ethnicity"
     }
 };
-exports.IDENTITYDATA_HOMEADDRESS_REGION = {
-    "vdxfid": "iRmhi8Z6STjtt4nE1MWJCgYGrKBGT1dWaB",
-    "indexid": "xWbpAvzBHmxZWEfFs3ATB54osyCHLkZ74h",
-    "hash160result": "b94c5f0aba29341980e1711c4e6f4ac6cf6a92f4",
+exports.IDENTITY_WEIGHT = {
+    "vdxfid": "iMzGK44r6SNkzi3N3AmcZBtuysPvgYiRiT",
+    "indexid": "xSpNmrVvwkbRcsvPtrRmXaRT1XQwXFe2Ut",
+    "hash160result": "8abe0e94cb1ff345f1351720acc8eefed91e12cb",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.homeaddress"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
+        "name": "vrsc::identity.weight"
     }
 };
-exports.IDENTITYDATA_HOMEADDRESS_POSTCODE = {
-    "vdxfid": "i8XMZQ3NGhEvtRA9e68tShsRgABHdrJYkV",
-    "indexid": "xDMU2CUT81TbWb3BVmo3R6PxhpCJZUQwNj",
-    "hash160result": "a94d72335f27128bf57a31ac38c6e0e374a26137",
+exports.IDENTITY_HOMEADDRESS = {
+    "vdxfid": "i9A1fD5sVwFFXzEmCJWSRDqN94PXp9oNaS",
+    "indexid": "xDz881WxMFTvAA7o3zAbPcMuAiQYiT4Vnc",
+    "hash160result": "072a3abed3a353e001288074d9426285e569503e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.homeaddress"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
+        "name": "vrsc::identity.homeaddress"
     }
 };
-exports.IDENTITYDATA_HOMEADDRESS_COUNTRY = {
-    "vdxfid": "iAaJZj9yTRxT1WrYu42YWCeTAuCkeWJnip",
-    "indexid": "xFQR2Xb4JkB7dgjakjghUbAzCZDmbcGPTX",
-    "hash160result": "15f33d581893957024d128d7fa060ec86fa2e04d",
+exports.IDENTITY_HOMEADDRESS_STREET1 = {
+    "vdxfid": "i5BJAwQbrP4Bht8gUpoqSrovuBwfRc6jiv",
+    "indexid": "xA1QdjqghhGrL41iLWTzRFLTvqxgNsVzXY",
+    "hash160result": "ff22b196e64c9388daab76a57bcaea50491cae12",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.homeaddress"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
+        "name": "vrsc::identity.homeaddress.street1"
     }
 };
-exports.IDENTITYDATA_IDNUMBER_VALUE = {
-    "vdxfid": "i79FRsacpZYQ9yVFYUK5x6eeUeS1EGNprE",
-    "indexid": "xByMtg1hfsm4n9NHQ9yEvVBBWJT24wRXnq",
-    "hash160result": "e9b3c40de3185cb462bf8c76f75ba10da53d3b28",
+exports.IDENTITY_HOMEADDRESS_STREET2 = {
+    "vdxfid": "iMx71C14hrBoWD3yyhYChmhJEw4Kqw1zj4",
+    "indexid": "xSnDTzS9ZAQU8Nw1qPCMgADqGb5Lgqb4zw",
+    "hash160result": "efdda473a6a9e98cd91b02d36bfeb5dec784a9ca",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idnumber.value"
+        "name": "vrsc::identity.homeaddress.street2"
     }
 };
-exports.IDENTITYDATA_IDNUMBER_TYPE = {
-    "vdxfid": "iHmUB12ZvCagSnp8RYifzEiVzu6q4EXSx6",
-    "indexid": "xNbadoTemWoM4xhAHENpxdF32Z7r2EHU4B",
-    "hash160result": "db12844ffbf6244f5506938229916f986f1cc69c",
+exports.IDENTITY_HOMEADDRESS_CITY = {
+    "vdxfid": "i75ZpW5T6wgQEMVxyvqHT9ZaV4fjsQ7kws",
+    "indexid": "xBugHJWXxFu4rXNzqcVSRY67WigkoCUEUQ",
+    "hash160result": "fcae40d5d327f13dc0e0c1e80f3db212a4ed8827",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idnumber.type"
+        "name": "vrsc::identity.homeaddress.city"
     }
 };
-exports.IDENTITYDATA_STATUS = {
-    "vdxfid": "iGDz9GLxDULfhzPJs2hU7MuHoyEzHUr1oA",
-    "indexid": "xM46c4n34nZLLAGLiiMd5kRpqdG17kNgXH",
-    "hash160result": "424d072b54b489c27a36a8a10ce7d0b738b1d98b",
+exports.IDENTITY_HOMEADDRESS_REGION = {
+    "vdxfid": "iRkYck3JowdFWmrM6VUAS8Wtpmxds2fLXS",
+    "indexid": "xWaf5YUPfFqv8wjNxB8KQX3RrRyenbioh5",
+    "hash160result": "fa06b90a547658a3efc3cd1797d6b3cd30695af4",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.status"
+        "name": "vrsc::identity.homeaddress.region"
     }
 };
-exports.IDENTITYDATA_APPROVALS_ACCEPTEDTOS = {
-    "vdxfid": "iAaWyLM18QHXa4WFSoYXNrbWP4DG3fGUqu",
-    "indexid": "xFQdS8n5yiWCCEPHJVCgMF83QiEGuAX7Lu",
-    "hash160result": "7c0f3d2f6ec35b7702f6e3b394a06877cafdea4d",
+exports.IDENTITY_HOMEADDRESS_POSTCODE = {
+    "vdxfid": "iAL2FRG8PVi18fN8MatjXhV1YkuZr7PM4T",
+    "indexid": "xFA8iDhDEovfkqFADGYtW61YaQvahtrhJA",
+    "hash160result": "b4f4c3a08fdcf32209482fa3d8c7b01201312d4b",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.approvals.acceptedtos"
+        "name": "vrsc::identity.homeaddress.postcode"
     }
 };
-exports.IDENTITYDATA_APPROVALS_VERIFIEDSMS = {
-    "vdxfid": "iCjR6fQST9YLLn72B96aHgSjF54v6UXqSf",
-    "indexid": "xHZXZTqXJTkzxwz42pkjG4yGGj5vvcnSQq",
-    "hash160result": "26bf160fb405c0fad15a9b5c2f602dbd61158a65",
+exports.IDENTITY_HOMEADDRESS_COUNTRY = {
+    "vdxfid": "iABYGvas6uUDk9ejCkfCVLvE9PPJXgyCKX",
+    "indexid": "xF1ejj1wxDgtNKXm4SKMTjSmB3QKL8LhQG",
+    "hash160result": "bafb2cb6d5cc86478622feb8a00097d71d839249",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.approvals.verifiedsms"
+        "name": "vrsc::identity.homeaddress.country"
     }
 };
-exports.IDENTITYDATA_APPROVALS_KYCCHECKED = {
-    "vdxfid": "iH9AxMi9qB1RFkZ3HQW11c2xcntwQ21j3M",
-    "indexid": "xMyHRA9EgVE5svS596A9yzZVeSuxBAkxdv",
-    "hash160result": "22d9177c4b16c2316d85f84a1594903f7bc3e895",
+exports.IDENTITY_IDNUMBER_VALUE = {
+    "vdxfid": "iQrnvbCNWMaG6PjTmeXzrcuAXKsMzmNJWA",
+    "indexid": "xVguPPdTMfnviZcVdLC9q1RhYytNuZ3ToS",
+    "hash160result": "72cf52b2f6b4f68173c933fb046e892870b990ea",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.approvals.kycchecked"
+        "name": "vrsc::identity.idnumber.value"
     }
 };
-exports.IDENTITYDATA_APPROVALS_DOCUMENTSVERIFIED = {
-    "vdxfid": "iAC86tdUvqwcSwUowKZGG4WPxTzNSwuHCo",
-    "indexid": "xF2EZh4ZnAAH57Mqo1DRET2vz81PNz5i7r",
-    "hash160result": "c183cce3b8a5360b52a6237a15c43f96e1bfae49",
+exports.IDENTITY_IDNUMBER_TYPE = {
+    "vdxfid": "iSSZX5yUdQh7zLf1gUewH5rVfbXtSq2c4s",
+    "indexid": "xXGfytQZUiuncWY3YAK6FUP2hFYuQ4yYwW",
+    "hash160result": "2807f356d687b4c6208ce0379b31043c7fcdebfb",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.approvals.documentsverified"
+        "name": "vrsc::identity.idnumber.type"
     }
 };
-exports.IDENTITYDATA_APPROVALS_SELFIECHECKED = {
-    "vdxfid": "iFYWGcgSm4jGnDTfNnuk9TzcQmkWAdxpwe",
-    "indexid": "xLNcjR7XcNwwQPLhEUZu7rX9SRmX1dHrha",
-    "hash160result": "28e13d3434ffeb8045e813da5df34b06cc336284",
+exports.IDENTITY_VERIFICATION_STATUS = {
+    "vdxfid": "i8MhqW3ejupmV1M5UyhyhG13dkS8A7g7zg",
+    "indexid": "xDBpJJUjbE3S7BE7LfN8feXafQT92YQZPm",
+    "hash160result": "47f2864de74ffe01ccb7eeabf0f2d848e3668e35",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.approvals.selfiechecked"
+        "name": "vrsc::identity.verification.status"
     }
 };
-exports.IDENTITYDATA_APPROVALS_WATCHLIST_OK = {
-    "vdxfid": "iFtRaMKJGyaqgpiH4ZXeGZMMR47C1u34Jt",
-    "indexid": "xLiY39kP8HoWJzbJvFBoEwstSi8CsZK8Jz",
-    "hash160result": "d29c35a645ac1c92fa0506482c37370c609a2688",
+exports.IDENTITY_VERIFICATION_APPROVALS = {
+    "vdxfid": "iBMkZtqC9yqVrFL4GfYtXckFpYAhRkE2mj",
+    "indexid": "xGBs2hGH1J4AURD68MD3W1GnrCBiJ3nRgG",
+    "hash160result": "a98801de1ba5ff5e571dbdde50519483140f7956",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.approvals.watchlist.ok"
+        "name": "vrsc::identity.verification.approvals"
     }
 };
-exports.IDENTITYDATA_APPROVALS_RISKCHECKOK = {
-    "vdxfid": "i4pkwqbNCZj3ZrukRooKDAidLJ2SJt57Tf",
-    "indexid": "x9esQe2T3swiC2nnHVTUBZFAMx3TBR2Ew1",
-    "hash160result": "4650258cd77d7928a47ee880075592d8a7b9cb0e",
+exports.IDENTITY_VERIFICATION_APPROVALS_ACCEPTEDTOS = {
+    "vdxfid": "iH32QkXBKyWEJD6kh9HJ4KMfeiWfPWoHEh",
+    "indexid": "xMs8sYxGBHitvNynYpwT2htCgNXgHt6VAW",
+    "hash160result": "bbe4c09ae069561d3c14b04e3b7b96c98622bf94",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.approvals.riskcheckok"
+        "name": "vrsc::identity.verification.approvals.acceptedtos"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE = {
-    "vdxfid": "iQe74mwXJTFv1Bg8MRg7zqBMFUsD6jhTxz",
-    "indexid": "xVUDXaNc9mUadMZAD7LGyDhtH8tDzeHFrT",
-    "hash160result": "72eaff870cdd9c650afcfed1e379330fd7752ae8",
+exports.IDENTITY_VERIFICATION_APPROVALS_VERIFIEDSMS = {
+    "vdxfid": "iPgyMDFQ9QMNrqc3ckEBEubDNwLnvubUdW",
+    "indexid": "xUX5p1gUzia3V1V5URtLDJ7kQbMosPsVj8",
+    "hash160result": "72853b66aa158531e1f15b9ff075199a1224bddd",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
+        "name": "vrsc::identity.verification.approvals.verifiedsms"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_ORIGINAL_FRONT = {
-    "vdxfid": "iSBvWubN2yGHsdj6dGL3vMDjZMU6XSWxyG",
-    "indexid": "xX22yi2StHUxVoc8UwzCtjkGb1V7R95hsy",
-    "hash160result": "2720c73719ffc070c103fa30689283fc331727f9",
+exports.IDENTITY_VERIFICATION_APPROVALS_KYCCHECKED = {
+    "vdxfid": "iRnbiA4dAPbeuB6KQN2donBHP9mKUHHFZf",
+    "indexid": "xWciAxVi1hpKXLyMG3gnnAhpQonLQapWPv",
+    "hash160result": "c6114ffec250b746bde117903b930d9a34d3bdf4",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iBrpt78Mdrqcc1RHwPWKYBALbNTC4cwdJQ"
+        "name": "vrsc::identity.verification.approvals.kycchecked"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_ORIGINAL_BACK = {
-    "vdxfid": "iH81F6cj2Kjf2JzRxXAnc9oMQdGQqdQMzD",
-    "indexid": "xMx7hu3osdxKeUsTpCpwaYKtSHHRowL8Sr",
-    "hash160result": "e146bb291bd348f94e84910e13c00310b13db095",
+exports.IDENTITY_VERIFICATION_APPROVALS_DOCUMENTSVERIFIED = {
+    "vdxfid": "iBjML9DHV67MBQyMEHVTSoJPhU8DNeWRTE",
+    "indexid": "xGZTnweNLQL1oarP5y9cRBpvj89EGt5VSm",
+    "hash160result": "0a93883010769ff783be5ced074ecfa50dd08e5a",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iNRCZp7JBDHbpKQ2Vhc6TK97hUSRPG4jaX"
+        "name": "vrsc::identity.verification.approvals.documentsverified"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_CROPPED_FRONT = {
-    "vdxfid": "i87ecHwJRUhAA2WaW9FtVotnEWx3BAt7Y8",
-    "indexid": "xCwm56NPGnupnCPcMpv3UCRKGAy43NWsQw",
-    "hash160result": "78d9f3f3ccdbf650adb03eb0482273cf51e2e532",
+exports.IDENTITY_VERIFICATION_APPROVALS_SELFIECHECKED = {
+    "vdxfid": "iKgeFKoy6WMx9MoEjig5vHoXbyxVFBPWDN",
+    "indexid": "xQWki8F3wpacmXgGbQLEtgL4ddyWC8UZLv",
+    "hash160result": "6a044306ef77ce9896ffcd26ee40174651b1ccb1",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iK822dFQwW2Y5tdpSpxQtHQemf47HoFxqs"
+        "name": "vrsc::identity.verification.approvals.selfiechecked"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_CROPPED_BACK = {
-    "vdxfid": "iAPcY54xD3v1WC7zQatbbQnqJe4A6KUaex",
-    "indexid": "xFDizsW34N8g8N12GGYkZoKNLJ5AzeGTf7",
-    "hash160result": "b45cb25e26d152c9221f9719d696c18d8c0fdb4b",
+exports.IDENTITY_VERIFICATION_APPROVALS_WATCHLISTOK = {
+    "vdxfid": "iFDB1qKYSrWMRaMCWX6hNGE8HVXB1cNtJu",
+    "indexid": "xL3HUdkdJAj23kEENCkrLekfK9YBymnLrX",
+    "hash160result": "e691a2d2af30df6ee21f0eb805a98e11d539ba80",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iCvxKVHbnbwHGZDTaGofeyyJLjsGBSZr7A"
+        "name": "vrsc::identity.verification.approvals.watchlistok"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_FACE = {
-    "vdxfid": "i9fwBhdsQduiAWhG99wxXwnCRmRXJrbcG4",
-    "indexid": "xEW3eW4xFx8NngaHzqc7WLJjTRSYDHiUc7",
-    "hash160result": "834ec04a48c045a0814985a32f02d3125728f943",
+exports.IDENTITY_VERIFICATION_APPROVALS_RISKCHECKOK = {
+    "vdxfid": "i9dva492S7vQphjLiK2UaS7JikZKs5TQsB",
+    "indexid": "xEU32ra7HS95SscNZzgdYpdqkQaLjnzcyC",
+    "hash160result": "6ffdbee07124450d29698724573bd6ab07d09743",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iPrxPJC6NbzWnkNyLSvwa8AVrwJWBUV9mM"
+        "name": "vrsc::identity.verification.approvals.riskcheckok"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_IDNUMBER = {
-    "vdxfid": "i5JGvSuGVEb9xgNb9ezTTJ8zucrp75Ac98",
-    "indexid": "xA8PPFLMLYoparFd1LecRgfXwGsq32EUV4",
-    "hash160result": "26fae70b9b3ea6cb14ca10c9620dc04899faff13",
+exports.IDENTITY_VERIFICATION_APPROVALS_STATUS = {
+    "vdxfid": "iKhGUcTH4ZQ7uiy933m8f1GbwSLcwJW8ev",
+    "indexid": "xQXNwQtMuscnXtrAtjRHdPo8y6MdomjAXM",
+    "hash160result": "00612f17d9cedc346fcd139c0c5b56e666efeab1",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iJdUp47SVEzGEHCvoRyix2xufRsAeWSyxa"
+        "name": "vrsc::identity.verification.approvals.status"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_CATEGORY = {
-    "vdxfid": "i5xXPRL3h45Zf2jErvDwD18DeDzGFRaACg",
-    "indexid": "xAndrDm8YNJEHCcGibt6BPekft1H9NjSHE",
-    "hash160result": "5d77333ae97ba2324126925bc54e06513adc3b1b",
+exports.IDENTITY_DRIVINGLICENCE = {
+    "vdxfid": "iMYQw33ryywcNyQDjFjiVvFm2kAwG85poV",
+    "indexid": "xSNXPqUwqJAH19HFawPsUJnJ4QBxCATPNx",
+    "hash160result": "e2857ddcc4f3301c354a00d1376558a75e802ec6",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "i9MqRfXPAiYwv9q4iSjTtXquNCCZ1GgECn"
+        "name": "vrsc::identity.drivinglicence"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_EXPIRATIONDATE = {
-    "vdxfid": "iPUSmAtyyTsYNiDppDK8c4rkUjXyiDTm5D",
-    "indexid": "xUJZDyL4pn6Czt6rftyHaTPHWPYzXZS1No",
-    "hash160result": "6e6e96148a0314aaeecdfaed9a474150e09d5edb",
+exports.IDENTITY_DRIVINGLICENCE_ORIGINALFRONT = {
+    "vdxfid": "i3fq6ET2dL8CxC3BJzdYTpUsjEsQaKP7bX",
+    "indexid": "x8VwZ2t7UeLsaMvDAgHhSD1QkttRPYndPW",
+    "hash160result": "26bab54e1f760b1abb888229a38a5179cc502302",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iNgDKviLAeeV65eBztuduckUMDE2erB7jj"
+        "name": "vrsc::identity.drivinglicence.originalfront"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_ISSUING_COUNTRY_MATCHED = {
-    "vdxfid": "iGvEHvVEiQJzUQXacJsPAt5oE5ufWpA5rB",
-    "indexid": "xMkLkivKZiXf6aQcTzXY9GcLFjvgMyaUmx",
-    "hash160result": "e4fb439a302b423d65dbccee97fdbd6757247693",
+exports.IDENTITY_DRIVINGLICENCE_ORIGINALBACK = {
+    "vdxfid": "i7LTNZvJmm5LjAwMWuryb52yKt7txaV5FW",
+    "indexid": "xCAZqNMPd5J1MLpPNbX8ZTZWMY8unxdAfs",
+    "hash160result": "c7b3e9a70908fafc8de3e81f6ac2e0c131c9592a",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iFgXmTd9Wi2sqZyPqaoejdHG2sMaJWLrEX"
+        "name": "vrsc::identity.drivinglicence.originalback"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_ISSUING_REGION = {
-    "vdxfid": "iJL72hPk4rFyEmBfdsHJGBUyKMJRrqcR9t",
-    "indexid": "xPADVVppvAUdrw4hVYwTEa1WM1KSjZsjUc",
-    "hash160result": "76a99a38988e107e418f24f32d1080f93930f2a2",
+exports.IDENTITY_DRIVINGLICENCE_CROPPEDFRONT = {
+    "vdxfid": "i8KsL3JJgbJyuqEyEbu5KZkDBFvHscLoM6",
+    "indexid": "xD9ynqjPXuXeY1816HZEHxGkCuwJoHBx54",
+    "hash160result": "7b28226a4f3eaae379cddbc84d037cfe587e3535",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iByfEUF2bHSmBbiDoBu42a4HKTKbDvPGbL"
+        "name": "vrsc::identity.drivinglicence.croppedfront"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_DATEOFBIRTH = {
-    "vdxfid": "iC88nTf9EzCKt2CnkudSRcu7yxNiA16c9G",
-    "indexid": "xGxFFG6E6JQzWC5pcbHbQ1Rf1cPj1kEyFH",
-    "hash160result": "f55e5a3f98219f06eb0b4b31a935ff1721e8dd5e",
+exports.IDENTITY_DRIVINGLICENCE_CROPPEDBACK = {
+    "vdxfid": "iRwumhx12vtT8CkspBLmKQY8WZywurxVXo",
+    "indexid": "xWn2EWP5tF77kNdufrzvHo4fYDzxhjXyZz",
+    "hash160result": "0b6edf21bfe119173b3fffab6118d79a39a580f6",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iQhjETQvSkadciDPy69QZNy3hSczWQ4iu4"
+        "name": "vrsc::identity.drivinglicence.croppedback"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_ADDRESS = {
-    "vdxfid": "iK8RX6S9uzcnUoVPeLigNt4Cu156zEpodu",
-    "indexid": "xPxXytsEmJqT6yNRW2NqMGajvf67xnbJFY",
-    "hash160result": "7fcee36de098accefe0f473da0b06914c9c1b4ab",
+exports.IDENTITY_DRIVINGLICENCE_FACE = {
+    "vdxfid": "i5i7U4EAbgPzhCRebtbmoZt6pTyqGqP8jj",
+    "indexid": "xAYDvrfFSzcfKNJgTaFvmxQdr7zr6oGgFh",
+    "hash160result": "1f47647bf3e71f0c1c2638c99e6a42e6bf118218",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iGebr2v1TgkWvsyLjs1dQ5SqffqKL8rNm3"
+        "name": "vrsc::identity.drivinglicence.face"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_STREET1 = {
-    "vdxfid": "iGNX6JaTu92GhPNBpbQkZ9Koro2W35GLjm",
-    "indexid": "xMCdZ71YkTEwKZFDgH4uXXrLtT3WwU1hvB",
-    "hash160result": "3e225a69f52b9bab5fee67ed7ed5d6c7d6da768d",
+exports.IDENTITY_DRIVINGLICENCE_IDNUMBER = {
+    "vdxfid": "iBCA8b4zS5ygVgTFqxabke7BBFs92dhcXQ",
+    "indexid": "xG2GbPW5HQCM7rLHheEkj2diCut9vgFhM2",
+    "hash160result": "fcf0571278bd1afce6d93f0a99f41437bb91a854",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+        "name": "vrsc::identity.drivinglicence.idnumber"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_CITY = {
-    "vdxfid": "i7eLwQmDNfc64xc4Qm7AnSsaa1BwCdhTSK",
-    "indexid": "xCUTQDCJDypkh8V6GSmKkqQ7bfCx41No4i",
-    "hash160result": "d69209a7ac10320134b836872b7cd7ad10e7bb2d",
+exports.IDENTITY_DRIVINGLICENCE_CATEGORY = {
+    "vdxfid": "i5Cm95DZa6FPP66bA6aFfoYL2jaojetHMp",
+    "indexid": "xA2sbseeRQU41Fyd1nEQeC4s4Pbpf63xB4",
+    "hash160result": "3b91fccdf59d99b21e442441b89abb31bf09f512",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+        "name": "vrsc::identity.drivinglicence.category"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_REGION = {
-    "vdxfid": "iKtdJHgdvUJ4vxSxr86cNcaj8Zq4KCZJJh",
-    "indexid": "xQijm67imnWjZ8KzhokmM17GADr5GSTj4A",
-    "hash160result": "f88b44fa9b07a70cd77a9831e89e80505fe410b4",
+exports.IDENTITY_DRIVINGLICENCE_EXPIRATIONDATE = {
+    "vdxfid": "iJvGpPoP1uUkUqn9bAchLyfaGWyy8JGQoX",
+    "indexid": "xPkPHCETsDhR71fBSrGrKNC7JAzz17RsLk",
+    "hash160result": "96aee63b3c6094a4d9edbc04b63a8e45688068a9",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
+        "name": "vrsc::identity.drivinglicence.expirationdate"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_POSTCODE = {
-    "vdxfid": "i3oy6rsBBWtJ11ZNHvyFPHERK9BGQtQod1",
-    "indexid": "x8e5ZfJG2q6xdBSQ9cdQMfkxLoCHEubx1i",
-    "hash160result": "9d7bfbe011ca5889ed8e47a1b2a0320c9654ad03",
+exports.IDENTITY_DRIVINGLICENCE_ISSUINGCOUNTRY = {
+    "vdxfid": "iBsNEqysX64cQAjiRHHL1msd7LxroGM6Mb",
+    "indexid": "xGhUheQxNQHH2LckGxwUzAQA8zysfnKDSU",
+    "hash160result": "f2f24dd2383538493d21ff0aca77c7cd1fe6125c",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
+        "name": "vrsc::identity.drivinglicence.issuingcountry"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_COUNTRY = {
-    "vdxfid": "iMZemCqP6BFZzxTA9AG34ghv4HaiFiS6E6",
-    "indexid": "xSPmE1GTwVUEd8LBzqvC35ET5wbj7m7HY8",
-    "hash160result": "546fdf34874119f799b1f8b0014a6cd467766ac6",
+exports.IDENTITY_DRIVINGLICENCE_ISSUINGREGION = {
+    "vdxfid": "i6gZSDYpK9inexaeFQDSk9GuAmew1ymMFo",
+    "indexid": "xBWfu1yuATwTH8Tg75sbiXoSCRfwsxQzeR",
+    "hash160result": "67f4fd5c49250912aecf1eb8ab17f29d590a2f23",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
+        "name": "vrsc::identity.drivinglicence.issuingregion"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_MATCHED = {
-    "vdxfid": "i5bAVLDcVEzbs6Awo2REXhHTjx34u9bEGC",
-    "indexid": "xARGx8ehLZDGVG3yei5PW5ozmc45h9ZyZa",
-    "hash160result": "d85c4cc4be13249bec299fde232bbcf323ae3117",
+exports.IDENTITY_DRIVINGLICENCE_DATEOFBIRTH = {
+    "vdxfid": "iChWUsL1NQwDqcwXbFGxHiCegfquGPyadv",
+    "indexid": "xHXcwfm6Dj9tTnpZSvw7G6jBiKrvBUhwaw",
+    "hash160result": "3c7bd13bcdb54368e7590a9f2da5b201b7be2d65",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk"
+        "name": "vrsc::identity.drivinglicence.dateofbirth"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_NAME_MATCHED = {
-    "vdxfid": "i97PqFTkPLKX4R22g27qk7TFdYbLk55fVf",
-    "indexid": "xDwWJ3tqEeYBgau4XhmziVynfCcMdnsQJP",
-    "hash160result": "f64f980f5bcde38d71bf6dfdde151c4ecaacd13d",
+exports.IDENTITY_DRIVINGLICENCE_ADDRESS_STREET1 = {
+    "vdxfid": "i9xaEvSQ537wuYgcVPRgG3zop9bVzeDTBw",
+    "indexid": "xEnghisUvMLcXiZeM55qESXLqocWsv6zmJ",
+    "hash160result": "48dd1caf84c1a49209ca44064846dc4ad0be1e47",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iKCFQYZudPChh6jypSpcgENoQb5WeX5wHv"
+        "name": "vrsc::identity.drivinglicence.address.street1"
     }
 };
-exports.IDENTITYDATA_DRIVINGLICENCE_DATEOFBIRTH_MATCHED = {
-    "vdxfid": "iCkJW6AjbtNLTjf4boPPHXpiujRZa9KSeP",
-    "indexid": "xHaQxtbpTCb15uY6TV3YFvMFwPSaWD2Xv2",
-    "hash160result": "3261fc33de15f3cedc3a4a4f8c3638144cfeb465",
+exports.IDENTITY_DRIVINGLICENCE_ADDRESS_CITY = {
+    "vdxfid": "i6XMEh3jrxzdyoVYoNWhRSncR9oWSnmikd",
+    "indexid": "xBMThVUpiHDJbyNaf4ArPqK9SopXGndEyv",
+    "hash160result": "c1f3612774870d1f12320bff317e7790211d7121",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.drivinglicence"
-    },
-    "bounddata": {
-        "vdxfkey": "iMUfUShqVwWrGSx6HvZcDJwHywiLW5Zusb"
+        "name": "vrsc::identity.drivinglicence.address.city"
     }
 };
-exports.IDENTITYDATA_SELFIECHECK_SUCCESS = {
-    "vdxfid": "i6cbKQVGd1upW3uCQAhvUf7PzFgcoFyH3S",
-    "indexid": "xBShnCvMUL8V8DnEFrN5T3dw1uhdgNupLp",
-    "hash160result": "c0b5f21d131d3a18be6c3a1b5442197cb4f26e22",
+exports.IDENTITY_DRIVINGLICENCE_ADDRESS_REGION = {
+    "vdxfid": "i7sPBSqerD23RAqfN167aYePjfC8LL34UA",
+    "indexid": "xChVeFGjhXEi3LihDgkGYwAvmKD9CsNunu",
+    "hash160result": "991d24c053cb59a816e161fe3af2f40a7f2e3330",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.selfiecheck.success"
+        "name": "vrsc::identity.drivinglicence.address.region"
     }
 };
-exports.IDENTITYDATA_SELFIECHECK_IMAGE = {
-    "vdxfid": "i9oYuguYwqLhXN1y4afj6vYjaWmzuWtuZU",
-    "indexid": "xEdfNVLdo9ZN9XtzvGKt5K5GcAo1jKrFH7",
-    "hash160result": "dacb095d88ab704ac181d701a7fcdf20e0e36945",
+exports.IDENTITY_DRIVINGLICENCE_ADDRESS_POSTCODE = {
+    "vdxfid": "i9eHAmpeA3tmpsVeG5EkHuVfALFrmpzLqM",
+    "indexid": "xEUPdaFj1N7ST3Ng7ktuGJ2CBzGsZbja5V",
+    "hash160result": "f5905bbdf2eb60b24ccf6851716cc0efe801a943",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.selfiecheck.image"
+        "name": "vrsc::identity.drivinglicence.address.postcode"
     }
 };
-exports.IDENTITYDATA_SELFIECHECK_VIDEO = {
-    "vdxfid": "iGQGK7d1Wdfq9ERxmNXD5fjH7v5SUHxZ9K",
-    "indexid": "xMENmv46MwtVmQJzd4BN44Fp9a6TKf2CyG",
-    "hash160result": "5a4b0ee7c8e2f91d641d3e18b35343ee8a59cb8d",
+exports.IDENTITY_DRIVINGLICENCE_ADDRESS_COUNTRY = {
+    "vdxfid": "i3xAMYBKLVdK89kuheXhTjuJTAxozmypj3",
+    "indexid": "x8nGpLcQBoqykKdwZLBrS8RqUpypqVUEV5",
+    "hash160result": "459844e00df4387514f31f182a88f7e13b0d3a05",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.selfiecheck.video"
+        "name": "vrsc::identity.drivinglicence.address.country"
     }
 };
-exports.IDENTITYDATA_SELFIECHECK_DRIVINGLICENCE_MATCH = {
-    "vdxfid": "iLGaXTpb8baibivmJL2yVvX259ir3tewjx",
-    "indexid": "xR6gzGFfyuoPDtooA1h8UK3Z6ojrxc8Jyf",
-    "hash160result": "19b7f38204fa54f56f62b7b67275ff4c84ba37b8",
+exports.IDENTITY_SELFIECHECK_IMAGE = {
+    "vdxfid": "iC22PxGqY7Mx3YT9kNrW1d11JNyGL56N8e",
+    "indexid": "xGr8rkhvPRacfiLBc4Wez1XYL2zHDDbJgD",
+    "hash160result": "c52d0023cce8c847a5097b6898f867651914b65d",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.selfiecheck.drivinglicence.match"
+        "name": "vrsc::identity.selfiecheck.image"
     }
 };
-exports.IDENTITYDATA_KYC_SUCCESS = {
-    "vdxfid": "iJbbE37yKagBMCvoYPMnkKd3P6eTTGv1Qd",
-    "indexid": "xPRhgqZ4AttqyNoqQ51wii9aQkfUKWhnpJ",
-    "hash160result": "1a1bebe6bade7b23cb555a5d1c65f5d2d8f6dfa5",
+exports.IDENTITY_SELFIECHECK_VIDEO = {
+    "vdxfid": "iLfnRYzcdQXR6am8rZk7xNtTUbLZo5NLG6",
+    "indexid": "xRVttMRhUik5ikeAiFQGvmQzWFMajwrVzX",
+    "hash160result": "ac0674f6d656d434e0b5b310daaaed554c3a9bbc",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.success"
+        "name": "vrsc::identity.selfiecheck.video"
     }
 };
-exports.IDENTITYDATA_KYC_ADDRESS_MATCHED = {
-    "vdxfid": "iP8T2Li3giM7MCJRMw65tajQ2ydx4kW7m6",
-    "indexid": "xTxZV998Y2ZmyNBTDckEryFw4dexvb7HLT",
-    "hash160result": "0f7b56de7b92854cffb85f278ca8f7b70a8496d7",
+exports.IDENTITY_EMAIL_ISDELIVERABLE = {
+    "vdxfid": "iN5Tdse8NSwuW6A4ZavHbHoDyD8aVjn1Ky",
+    "indexid": "xSua6g5DDmAa8G36RGaSZgKkzs9bSnFbCX",
+    "hash160result": "8194ee01a0bc66dca2af9ba7c3bba4a24da70dcc",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.address.matched"
+        "name": "vrsc::identity.email.isdeliverable"
     }
 };
-exports.IDENTITYDATA_KYC_TYPE = {
-    "vdxfid": "iN4C7XtyceBJrNcqAs3dZ3T2DA4vycpUYM",
-    "indexid": "xStJaLL4TxPyUYVs2YhnXRyZEp5wrpthtP",
-    "hash160result": "79da13c496750b37d4804e85094e5d0b8f47d0cb",
+exports.IDENTITY_EMAIL_BREACHCOUNT = {
+    "vdxfid": "iDy1YKGhzVjAiMiuAvFDqxQbmLRhLEjwPo",
+    "indexid": "xJo817hnqowqLXbw2buNpLw8nzSiAygHhx",
+    "hash160result": "8144d2d8cafd733bb03847166be8493d275e1473",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.type"
+        "name": "vrsc::identity.email.breachcount"
     }
 };
-exports.IDENTITYDATA_KYC_NAME_MATCHED = {
-    "vdxfid": "i69dDR9m6JB8bYvT1PbfsVEKiWPZYNgD1E",
-    "indexid": "xAyjgDaqwcPoDioUs5FpqskrkAQaRi64Pv",
-    "hash160result": "bf852464c1379ab65e5bb2646bbbb19ee84c551d",
+exports.IDENTITY_EMAIL_FIRSTBREACHEDAT = {
+    "vdxfid": "i3eSGR4wrLk5djHsnT18dDHrJBFSBBxVST",
+    "indexid": "x8UYjDW2hexkFuAue8fHbbpPKqGT4mjAzH",
+    "hash160result": "df796054181f57d3b61d655d604d42d6c6d8df01",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.name.matched"
+        "name": "vrsc::identity.email.firstbreachedat"
     }
 };
-exports.IDENTITYDATA_KYC_DATEOFBIRTH_MATCHED = {
-    "vdxfid": "iHfdYydzo83X6Y6y66N4n8UvcFTLQSmj9Y",
-    "indexid": "xNVk1n55eSGBihyzwn2DkX1TduUMHqN49h",
-    "hash160result": "f26bc9aa3851d21c679d521f60722045c571ab9b",
+exports.IDENTITY_EMAIL_LASTBREACHEDAT = {
+    "vdxfid": "iCuZWBzmxCoFcRFjXYFgC6g4jT7kzxvhew",
+    "indexid": "xHjfxzRroX1vEb8mPDuqAVCbm78ms8Hkhd",
+    "hash160result": "d1b421db4c835cfa67b491342c31f89283427567",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.dateofbirth.matched"
+        "name": "vrsc::identity.email.lastbreachedat"
     }
 };
-exports.IDENTITYDATA_KYC_IDNUMBER_MATCHED = {
-    "vdxfid": "iJQ5KQrVCkHAKRfmBRa6TuMxW8ZfHKuiMS",
-    "indexid": "xPEBnDHa44VpwbYo37EFSHtVXnag7ePNwv",
-    "hash160result": "94abb5b38f44545c981134f44db4d6395c6cb2a3",
+exports.IDENTITY_EMAIL_DOMAIN_REGISTEREDAT = {
+    "vdxfid": "iGxV4SBRZMk5qWrQEKgUS4RoqzpDmyBEpC",
+    "indexid": "xMnbXEcWQfxkTgjS61LdQSxLseqEcTADNA",
+    "hash160result": "e195ef220f8e71bfa7bef160291ecaa0164de393",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.idnumber.matched"
+        "name": "vrsc::identity.email.domain.registeredat"
     }
 };
-exports.IDENTITYDATA_KYC_PHONENUMBER_MATCHED = {
-    "vdxfid": "iBFp1jupLByoSLJaZWz2gg3v2GipUFoADv",
-    "indexid": "xG5vUYLuBWCU4WBcRCeBf4aT3vjqNDUWJY",
-    "hash160result": "7c59b8b820c001d0b361ca67a99c45677c705955",
+exports.IDENTITY_EMAIL_DOMAIN_FREEPROVIDER = {
+    "vdxfid": "iLUfvKcg92CYo3BvCuRf5o844d44kGLhJL",
+    "indexid": "xRJnP83kzLRDRD4x4b5p4Beb6H55fetTy7",
+    "hash160result": "0b0f213c88a1b0df6cd01721955b1d0c103981ba",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.phonenumber.matched"
+        "name": "vrsc::identity.email.domain.freeprovider"
     }
 };
-exports.IDENTITYDATA_KYC_AREACODE_MATCHED = {
-    "vdxfid": "i7GX7K3sGs227Vf4NEJe3QKxruuUyqFFzp",
-    "indexid": "xC6da7Ux8BEgjfY6Duxo1nrVtZvVsySF4F",
-    "hash160result": "4ae70956a849099e8fd2bf0a9b5daa8fd43d9b29",
+exports.IDENTITY_EMAIL_DOMAIN_CUSTOM = {
+    "vdxfid": "i4FSBFpQ6Ccjiy2g61GrxhBppv1jDDh6on",
+    "indexid": "x95Ye4FUwWqQM8uhwgw1w5iMra2k7F1Lfz",
+    "hash160result": "bea1175185aeaf256aa7f04795b2c8d0c8547e08",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.kyc.areacode.matched"
+        "name": "vrsc::identity.email.domain.custom"
     }
 };
-exports.IDENTITYDATA_RISKCHECK_STATUS = {
-    "vdxfid": "i3b3wvsNm5JaMUoV21Y7maVx85BJ2B8xTF",
-    "indexid": "x8RAQjJTcPXEyegWshCGjy2V9jCJtGhaAq",
-    "hash160result": "1de1fb500f5c4594a322e249949bc289d9f73b01",
+exports.IDENTITY_EMAIL_DOMAIN_DISPOSABLE = {
+    "vdxfid": "i52PJxRyjKAEkmQFd2oGYgZV3pcsQUcD1T",
+    "indexid": "x9rVmks4adNuNwHHUiTRX5625UdtJPBQ1w",
+    "hash160result": "3adf98cb5cc90a074a52a651c50f67f5f0a7fe10",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.riskcheck.status"
+        "name": "vrsc::identity.email.domain.disposable"
     }
 };
-exports.IDENTITYDATA_RISKCHECK_USERINTERACTIONS = {
-    "vdxfid": "iEGi5rmUzAmnfutUCPp2dS34rSEk1DrevE",
-    "indexid": "xK6pYfCZqUzTJ5mW45UBbpZbt6FkuN8K7e",
-    "hash160result": "b0fef6f09eb8a36672e8b15313574b298f486d76",
+exports.IDENTITY_EMAIL_DOMAIN_TOPLEVEL_SUSPICIOUS = {
+    "vdxfid": "iCtAZWinafiyf4tmvPxFkKNn5KxayXTPSV",
+    "indexid": "xHiH2K9sRyweHEmon5cQihuK6yybre797b",
+    "hash160result": "85477eb8148562614c396ca64fc7563637b13167",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.riskcheck.userinteractions"
+        "name": "vrsc::identity.email.domain.toplevel.suspicious"
     }
 };
-exports.IDENTITYDATA_RISKCHECK_FRAUDRINGOK = {
-    "vdxfid": "i8MQDH1wrdWCf5rTRznhC5ijRy188i1kYU",
-    "indexid": "xDBWg5T2hwisHFjVHgSrAUFGTd291gaveW",
-    "hash160result": "7754803c155ad687f4376285828dcda68db07f35",
+exports.IDENTITY_PASSPORT = {
+    "vdxfid": "iKgbqmZ4Ks9SPNQGj5PZ5TgXomYG4CtaXv",
+    "indexid": "xQWiJZz9BBN71YHJam3i3rD4qRZH1sbLHD",
+    "hash160result": "775f52820102c994e30a29b1828b064421afcab1",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.riskcheck.fraudringok"
+        "name": "vrsc::identity.passport"
     }
 };
-exports.IDENTITYDATA_RISKCHECK_BOTNOTDETECTED = {
-    "vdxfid": "iSLcYw9ZcKnYJJTYvJYfk3jo3rjFHHPV7h",
-    "indexid": "xXAj1jaeTe1CvULamzCpiSGL5WkG8ZjCka",
-    "hash160result": "48835abfcd59557f6325f32773bbaf667bd6cbfa",
+exports.IDENTITY_PASSPORT_ORIGINALFRONT = {
+    "vdxfid": "iCwT1mHdci9wooC6Q8mtx8QssXzwiL4hxp",
+    "indexid": "xHmZUZiiU2NcRy58FpS3vWwQuC1xdM48mW",
+    "hash160result": "25023e23a25ba4daa7ac0a9c96180f5e90acd067",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.riskcheck.botnotdetected"
+        "name": "vrsc::identity.passport.originalfront"
     }
 };
-exports.IDENTITYDATA_EMAIL_ISDELIVERABLE = {
-    "vdxfid": "i8P6w5ypyh7byWTYAdTY3vHezomSBSznWB",
-    "indexid": "xDDDPtQuq1LGbgLa2K7h2JpC2TnT48N3FF",
-    "hash160result": "6b6d001cedc2852156e286c8d63ce4bf0119d235",
+exports.IDENTITY_PASSPORT_ORIGINALBACK = {
+    "vdxfid": "iDXKJaroNRKr9GZfLFvH7LttJQaXqGoSrc",
+    "indexid": "xJMRmPHtDjYWmSShBwaS5jRRL4bYmTdC9J",
+    "hash160result": "21734b0f37ec51dd77bdab8c10065cf67b61386e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.isdeliverable"
+        "name": "vrsc::identity.passport.originalback"
     }
 };
-exports.IDENTITYDATA_EMAIL_BREACHCOUNT = {
-    "vdxfid": "iBhchzsBh8zKXhCAquQ5mWPdFAM6mkGvix",
-    "indexid": "xGXjAoJGYTCz9s5Chb4EjtvAGpN7gnJjc6",
-    "hash160result": "ea91d5cb1ff8532c4e9c847228859e4014d13a5a",
+exports.IDENTITY_PASSPORT_CROPPEDFRONT = {
+    "vdxfid": "i4cr6CxCYDHUDjc6UoMsDVAZoNep6Meuyi",
+    "indexid": "x9SxZ1PHPXW8quV8LV22Bsh6q2fpxtJ6Zd",
+    "hash160result": "274c241806d31576a57a074cc2f6b4c624078b0c",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.breachcount"
+        "name": "vrsc::identity.passport.croppedfront"
     }
 };
-exports.IDENTITYDATA_EMAIL_FIRSTBREACHEDAT = {
-    "vdxfid": "iKwvVd8mHF7phMqPJVQ32bHpYT7hFG14D8",
-    "indexid": "xQn2xRZr8ZLVKXiRAB4BzypMa78i5iPxyd",
-    "hash160result": "597919a7c88a513db2c9223f6948ca4f767eb0b4",
+exports.IDENTITY_PASSPORT_CROPPEDBACK = {
+    "vdxfid": "i6wA2ttX7vcxBXmrdmGEa44NZEFBZWoRYa",
+    "indexid": "xBmGVhKbyEqcohetVSvPYSauatGCUYDMs2",
+    "hash160result": "f56f1db46ddebc99f3c8954fc8bf1d26a9bef125",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.firstbreachedat"
+        "name": "vrsc::identity.passport.croppedback"
     }
 };
-exports.IDENTITYDATA_EMAIL_LASTBREACHEDAT = {
-    "vdxfid": "iNUujoAd6CCR9X4kBQZaV6o9mt3MDqsfHs",
-    "indexid": "xTK2CbbhwWR5mgwn36DjTVKgoY4N7JGP5y",
-    "hash160result": "ebbc28818ea68e09defb0b67c0a5882e75027dd0",
+exports.IDENTITY_PASSPORT_FACE = {
+    "vdxfid": "iLCbvnyU4V3XeMz18CXAG5MCtjb2FjpcZX",
+    "indexid": "xR2iPbQYuoGCGXs2ytBKETsjvPc35DNZDm",
+    "hash160result": "26f7dc9d524f84a21c8a9e3f2dc5149f3a3c77b7",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.lastbreachedat"
+        "name": "vrsc::identity.passport.face"
     }
 };
-exports.IDENTITYDATA_EMAIL_DOMAIN_REGISTEREDAT = {
-    "vdxfid": "i8jTA9VrLRrAmTNwCnQJg93ivmVN5GWcVX",
-    "indexid": "xDZZcwvwBk4qPdFy4U4TeXaFxRWNxA1Bqd",
-    "hash160result": "d8d1e9bd02ff4c40c805099613567531d04cab39",
+exports.IDENTITY_PASSPORT_IDNUMBER = {
+    "vdxfid": "iDYih1jmCA1oexyxZ1PQFL5ewyciqoQ2rw",
+    "indexid": "xJNq9pAr3UEUH8rzQh3ZDicByddjgKM4vN",
+    "hash160result": "c8a25af227fc07e260119b370da0eae2a9517c6e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.domain.registeredat"
+        "name": "vrsc::identity.passport.idnumber"
     }
 };
-exports.IDENTITYDATA_EMAIL_DOMAIN_FREEPROVIDER = {
-    "vdxfid": "i8XPHcH1caNn6kQVxFERZG33ATxHfawrSB",
-    "indexid": "xDMVkQi6TtbSivHXovtaXeZaC7yJSskirY",
-    "hash160result": "a2c3c98d38df08384ed3d863895fd6c1ad136337",
+exports.IDENTITY_PASSPORT_CATEGORY = {
+    "vdxfid": "iMtpUJYWZmnnSJyJcshHRdWJZMhZVZZifT",
+    "indexid": "xSivw6ybR61T4UrLUZMSQ22qb1iaQux7BU",
+    "hash160result": "84a9f125285d7e93a1e676ed48e3fbe459780aca",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.domain.freeprovider"
+        "name": "vrsc::identity.passport.category"
     }
 };
-exports.IDENTITYDATA_EMAIL_DOMAIN_CUSTOM = {
-    "vdxfid": "iE7HSAqMXwxtM6XxUDRLMBUUcWniEh9hRk",
-    "indexid": "xJwPtyGSPGBYyGQzKu5VKa11eAojBypGax",
-    "hash160result": "48b3f1d4988af1dd73b8ccf1e5b547a891f6a474",
+exports.IDENTITY_PASSPORT_EXPIRATIONDATE = {
+    "vdxfid": "i98TaZ3wTh3qRw2ufeunVY2MD5eKwoamGE",
+    "indexid": "xDxa3MV2K1GW46uwXLZwTvYtEjfLspcYEK",
+    "hash160result": "07727b480c654d59cb611ed01715e254eb37053e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.domain.custom"
+        "name": "vrsc::identity.passport.expirationdate"
     }
 };
-exports.IDENTITYDATA_EMAIL_DOMAIN_DISPOSABLE = {
-    "vdxfid": "iBteZWnaYtBLRxQyNutN7eatZZ4ZpCAoin",
-    "indexid": "xGim2KDfQCQ148J1EbYX637RbD5aehG6fm",
-    "hash160result": "8bb328cc7630490b07742507e6cdb77290f0505c",
+exports.IDENTITY_PASSPORT_ISSUINGCOUNTRY = {
+    "vdxfid": "iRHGM2GEYeRUuHKSG1wENVA16bdyVRxchn",
+    "indexid": "xW7NophKPxe9XTCU7hbPLsgY8FezLKmJHi",
+    "hash160result": "4798dee337b16fc22d26748fb0803738f99831ef",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.domain.disposable"
+        "name": "vrsc::identity.passport.issuingcountry"
     }
 };
-exports.IDENTITYDATA_EMAIL_DOMAIN_TOPLEVEL_SUSPICIOUS = {
-    "vdxfid": "iHbaMpJAjVPgroTQYm6xwTqmVUnv4qh5mw",
-    "indexid": "xNRgpcjFaocMUyLSQSm7urNJX8ovwS8zbS",
-    "hash160result": "c95978851fbb34305351b4c465d7bdf59b1de79a",
+exports.IDENTITY_PASSPORT_ISSUINGREGION = {
+    "vdxfid": "i6Ay9VdcZjGrJur5SNyhBDZWzxGmo7qUmW",
+    "indexid": "xB15cJ4hR3VWw5j7J4dr9c642cHnbq2nm9",
+    "hash160result": "f3d9b605096f4c816de7d72c597fee07e75a961d",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.email.domain.toplevel.suspicious"
+        "name": "vrsc::identity.passport.issuingregion"
     }
 };
-exports.IDENTITYDATA_IDCARD = {
-    "vdxfid": "iJLpqieejHL8YncTbnhAW7cUTaMsfHdSGL",
-    "indexid": "xPAwJX5jabYoAxVVTUMKUW91VENtUTZwau",
-    "hash160result": "49b9d595086e85ce8fd4159995bbe350181715a3",
+exports.IDENTITY_PASSPORT_DATEOFBIRTH = {
+    "vdxfid": "iAjG8DwYfKxt9affJy6CUBDDFK5jaeHRLJ",
+    "indexid": "xFZNb2NdWeBYmkYhAekMSZjkGy6kWqAqyd",
+    "hash160result": "73eb23619d178f495a24b41aaf6aac107357924f",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
+        "name": "vrsc::identity.passport.dateofbirth"
     }
 };
-exports.IDENTITYDATA_IDCARD_ORIGINAL_FRONT = {
-    "vdxfid": "iB7XpaW684q2BYjnqveLSKhSG9zwudnS6o",
-    "indexid": "xFweHNwAyP3goicphcJVQiDyHp1xo2uuYa",
-    "hash160result": "29f714a5b08b68b9046525c6c005a00a4d98c853",
+exports.IDENTITY_PASSPORT_ADDRESS_STREET1 = {
+    "vdxfid": "i7HPJNB16V5pws8xSq4a8pHF29Mcg6sUyy",
+    "indexid": "xC7VmAc5woJVa31zJWij7Con3oNdXuBysY",
+    "hash160result": "c28625c4dfc12d3cdd85f8c7272e87a57523c529",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iBrpt78Mdrqcc1RHwPWKYBALbNTC4cwdJQ"
+        "name": "vrsc::identity.passport.address.street1"
     }
 };
-exports.IDENTITYDATA_IDCARD_ORIGINAL_BACK = {
-    "vdxfid": "iH9K2ZhRcyJWbByyUyWsXh544SVhUSrVFt",
-    "indexid": "xMyRVN8WUHXBDMs1LfB2W5bb66WiNi4FtU",
-    "hash160result": "24585446879161aed3198273e81ea9a69080ef95",
+exports.IDENTITY_PASSPORT_ADDRESS_CITY = {
+    "vdxfid": "iFSLsk21VvWSWLg9a4XFTB3kEN8bLnTB7c",
+    "indexid": "xLGTLYT6MEj78WZBRkBQRZaHG29cBfjnYu",
+    "hash160result": "c06884e75232e86de75c6ccbd5605a3352dd3783",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iNRCZp7JBDHbpKQ2Vhc6TK97hUSRPG4jaX"
+        "name": "vrsc::identity.passport.address.city"
     }
 };
-exports.IDENTITYDATA_IDCARD_CROPPED_FRONT = {
-    "vdxfid": "iR8r1t4mYfk8xqZmaNDra6TQrUsZjbGiKS",
-    "indexid": "xVxxUgVrPyxob1SoS3t1YUywt8tahdr3L4",
-    "hash160result": "2bc1abbdc2c25032842bc2354e857939cef599ed",
+exports.IDENTITY_PASSPORT_ADDRESS_REGION = {
+    "vdxfid": "iFNoUQhExFEYTgrqgy7x22Q6URM7ek9L3J",
+    "indexid": "xLCuwD8KoZTD5rjsYen6zQvdW5N8Z4oGqf",
+    "hash160result": "7b7baa6d0d788f434536aa472c57d9de40678c82",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iK822dFQwW2Y5tdpSpxQtHQemf47HoFxqs"
+        "name": "vrsc::identity.passport.address.region"
     }
 };
-exports.IDENTITYDATA_IDCARD_CROPPED_BACK = {
-    "vdxfid": "iSM5GLZ1FvzGDNX62vgUgRQC43iaeKxoHK",
-    "indexid": "xXBBj8z67FCvqYQ7tcLdeovj5hjbbVdh5q",
-    "hash160result": "56fb7c2a25fc9646e588273ad379ad202e23e2fa",
+exports.IDENTITY_PASSPORT_ADDRESS_POSTCODE = {
+    "vdxfid": "iS4SakGdB4ek1Q1QAitXUwFEk1RVyi3rLY",
+    "indexid": "xWtZ3Yhi2NsQdZtS2QYgTKmmmfSWrxdFKY",
+    "hash160result": "4457551bc48db37393f5ec3ec3d0cf6766dcbcf7",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iCvxKVHbnbwHGZDTaGofeyyJLjsGBSZr7A"
+        "name": "vrsc::identity.passport.address.postcode"
     }
 };
-exports.IDENTITYDATA_IDCARD_FACE = {
-    "vdxfid": "i51M1ZmuPqEZDcC5KJbz6F9XYVacoyBE2X",
-    "indexid": "x9qTUNCzF9TDqn57AzG94dg4a9bdgabnve",
-    "hash160result": "77d6aa5baa62d04f8cb7d8fe899bcdebfb51cc10",
+exports.IDENTITY_PASSPORT_ADDRESS_COUNTRY = {
+    "vdxfid": "iB9w9GgcJdGTt3ZuM2pm5qpDBA3UaJdcvj",
+    "indexid": "xFz3c57h9wV8WDSwCiUv4ELkCp4VNyPHLr",
+    "hash160result": "dd93bcbecc805e5b1606efafa1ecab6b33e53c54",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iPrxPJC6NbzWnkNyLSvwa8AVrwJWBUV9mM"
+        "name": "vrsc::identity.passport.address.country"
     }
 };
-exports.IDENTITYDATA_IDCARD_IDNUMBER = {
-    "vdxfid": "i5bnW5iRQbCtg21NLNybykc6ArhxUwSnVh",
-    "indexid": "xARtxt9WFuRZJBtQC4dkx98dCWiyQpWVav",
-    "hash160result": "d525af458c62617e95f5fa1b70b6e36e08be4f17",
+exports.IDENTITY_RESIDENCEPERMIT = {
+    "vdxfid": "i8WZetqKFn98rHRZGvAvPuzPyrJeyUMjfb",
+    "indexid": "xDLg7hGQ76MoUTJb8bq5NJWw1WKftQg9VL",
+    "hash160result": "712ef00d9937eb4ade0fd3e627c2df1d99503b37",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iJdUp47SVEzGEHCvoRyix2xufRsAeWSyxa"
+        "name": "vrsc::identity.residencepermit"
     }
 };
-exports.IDENTITYDATA_IDCARD_CATEGORY = {
-    "vdxfid": "iESZ7w2LiZbcxEEWaD4BgVr4VKYkMn1dqk",
-    "indexid": "xKGfajTRZspHaQ7YRtiLetNbWyZmEdZbq1",
-    "hash160result": "36204ef98b988fa4ddad9a94d09bae40c7f54978",
+exports.IDENTITY_RESIDENCEPERMIT_ORIGINALFRONT = {
+    "vdxfid": "iC5NrmPgKckxBjKv7v9HjUMytm4jRtEBgZ",
+    "indexid": "xGuVKZpmAvycouCwyboShrtWvR5kNYzWoH",
+    "hash160result": "639ed2ef9da2f5e75fe63e1ccf83d1b54e68585e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "i9MqRfXPAiYwv9q4iSjTtXquNCCZ1GgECn"
+        "name": "vrsc::identity.residencepermit.originalfront"
     }
 };
-exports.IDENTITYDATA_IDCARD_EXPIRATIONDATE = {
-    "vdxfid": "i8BCBwaioR3PSSgjRcWGx9RfFUCbVXNYxe",
-    "indexid": "xD1Jek1oejG44cZmHJARvXxCH8DcSWVK4B",
-    "hash160result": "e2187beb59c4815c0b4926bfa14e5d48657e9133",
+exports.IDENTITY_RESIDENCEPERMIT_ORIGINALBACK = {
+    "vdxfid": "iLTPvrZi8HNALuVmYeAWnSnLdZ5GsAAUcx",
+    "indexid": "xRHWPeznybapy5NoQKpfkqJsfD6HmQW5eW",
+    "hash160result": "94d200a22dbdfa7ba47d1970c21eacb65f7543ba",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iNgDKviLAeeV65eBztuduckUMDE2erB7jj"
+        "name": "vrsc::identity.residencepermit.originalback"
     }
 };
-exports.IDENTITYDATA_IDCARD_ISSUING_COUNTRY_MATCHED = {
-    "vdxfid": "i6ubxHFxwzxQU1zmBvLW1oYj6iozy3znSU",
-    "indexid": "xBjiR5h3oKB56Bso3bzezC5G8Nq1rhjRiV",
-    "hash160result": "96eb5b9e8921784e76c96e272b20f009d68ca625",
+exports.IDENTITY_RESIDENCEPERMIT_CROPPEDFRONT = {
+    "vdxfid": "i6T3rairykWA5vVEtQqptjp5RBRhTCmsBS",
+    "indexid": "xBHAKP9wq4ipi6NGk6Vys8LcSqSiKAMKZU",
+    "hash160result": "14136815f288a4b6426c7f4ab6b28221dcf0a020",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iFgXmTd9Wi2sqZyPqaoejdHG2sMaJWLrEX"
+        "name": "vrsc::identity.residencepermit.croppedfront"
     }
 };
-exports.IDENTITYDATA_IDCARD_ISSUING_REGION = {
-    "vdxfid": "i4AFd1rzyfsmgTLgyn472E3gc2VBaw4uFK",
-    "indexid": "x8zN5pJ5pz6SJdDiqTiFzcaDdgWCSVW9s9",
-    "hash160result": "5d8fc30a870e94f5274d09d6c16e5d8795708307",
+exports.IDENTITY_RESIDENCEPERMIT_CROPPEDBACK = {
+    "vdxfid": "iHssgpjB2gsusjjLH36N3KqUQqz7JPXumA",
+    "indexid": "xNhz9dAFt16aVucN8ikX1iN1SW18D7SNDP",
+    "hash160result": "ce3cae77f2010009817f1e01de52ce8a493cfc9d",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iByfEUF2bHSmBbiDoBu42a4HKTKbDvPGbL"
+        "name": "vrsc::identity.residencepermit.croppedback"
     }
 };
-exports.IDENTITYDATA_IDCARD_DATEOFBIRTH = {
-    "vdxfid": "i48Nsi8VjHvSdW9MCB59vVF8AeoCSALbW6",
-    "indexid": "x8xVLWZaac97Fg2P3rjJtsmfCJpDMvuw4c",
-    "hash160result": "99acfcbf72a37bcfa3ccf9f3d8a60f60a3a92807",
+exports.IDENTITY_RESIDENCEPERMIT_FACE = {
+    "vdxfid": "iNVvVYKcKuredXKvctn5uQxp3kNXoJrwNb",
+    "indexid": "xTL2xLkhBE5KFhCxUaSEsoVM5QPYfELeHf",
+    "hash160result": "4dd17db50d569a63cc892d78850ac9de1d0eaed0",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iQhjETQvSkadciDPy69QZNy3hSczWQ4iu4"
+        "name": "vrsc::identity.residencepermit.face"
     }
 };
-exports.IDENTITYDATA_IDCARD_ADDRESS = {
-    "vdxfid": "iHQjj4N8axeE24n8RctE8cQtSUdSoTFBMv",
-    "indexid": "xNErBroDSGrteEfAHJYP6zwRU8eTdJWVVZ",
-    "hash160result": "744a4f4b004c403c1d671053d717a36ecf5bda98",
+exports.IDENTITY_RESIDENCEPERMIT_IDNUMBER = {
+    "vdxfid": "iMxygBvDFftAnmUCjVLh21etV5v4wt9zdk",
+    "indexid": "xSo68zMJ6z6qQwMEbAzqzQBRWjw5u6Tm63",
+    "hash160result": "ab544471e583d6a11245bb971e3ee1ef5ed1d3ca",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iGebr2v1TgkWvsyLjs1dQ5SqffqKL8rNm3"
+        "name": "vrsc::identity.residencepermit.idnumber"
     }
 };
-exports.IDENTITYDATA_IDCARD_ADDRESS_STREET1 = {
-    "vdxfid": "iKTakiCWF81oLmpY9nQD9pgQttsKyYBEYz",
-    "indexid": "xQHhDWdb6SETxwha1U4N8DCwvYtLoHXM2c",
-    "hash160result": "c284feffa60f1978b8f8551cbd6724ca795e54af",
+exports.IDENTITY_RESIDENCEPERMIT_CATEGORY = {
+    "vdxfid": "iGbMb21an69VE6iTH2iRtRFKCEUZPJHTwU",
+    "indexid": "xMRU3pSfdQN9rGbV8iNaromrDtVaCufAXu",
+    "hash160result": "ae9031bab1ee600e10aa16ec1d4c13def953e48f",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+        "name": "vrsc::identity.residencepermit.category"
     }
 };
-exports.IDENTITYDATA_IDCARD_ADDRESS_CITY = {
-    "vdxfid": "iEwv5MTy2Dg5atRBc8bSTjMLDHsMLQzVDU",
-    "indexid": "xKn2Y9u3sXtkD4JDTpFbS7ssEwtNDGiHDg",
-    "hash160result": "bee2235466779e3ea61b5531b3aa396a0984d77d",
+exports.IDENTITY_RESIDENCEPERMIT_EXPIRATIONDATE = {
+    "vdxfid": "iJ48ALemxyMV6DYzeuRMe8Fn78iMZdjSXZ",
+    "indexid": "xNtEd95rpHa9iPS2Wb5WcWnK8njNXD9HEH",
+    "hash160result": "d3083b08621d6ff5dc3f7f9cace34f944d7aec9f",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+        "name": "vrsc::identity.residencepermit.expirationdate"
     }
 };
-exports.IDENTITYDATA_IDCARD_ADDRESS_REGION = {
-    "vdxfid": "i97JbWvVd6qSRXh8eqjZKG95dj2NeigvWF",
-    "indexid": "xDwR4KMaUR473haAWXPiHefcfP3PYf7uVw",
-    "hash160result": "4a74b6e17bea7b240dc8acd7f7e4a82fb34dcd3d",
+exports.IDENTITY_RESIDENCEPERMIT_ISSUINGCOUNTRY = {
+    "vdxfid": "i7UhTp4gruQwtkC1bi4RxE4wUAsro6n9Ym",
+    "indexid": "xCJovcVmiDdcWv53TPiavcbUVptsgMKzdL",
+    "hash160result": "75e37dc8957c8c6765c60962804d446b2de0e82b",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
+        "name": "vrsc::identity.residencepermit.issuingcountry"
     }
 };
-exports.IDENTITYDATA_IDCARD_ADDRESS_POSTCODE = {
-    "vdxfid": "iLhtE8EXXJ6ATCZ7xJzbvyJKRTYXUX4A7i",
-    "indexid": "xRXzgvfcNcJq5NS9ozekuMprT7ZYKa7cdy",
-    "hash160result": "556f2f620f185c90906aac53e60810665be700bd",
+exports.IDENTITY_RESIDENCEPERMIT_ISSUINGREGION = {
+    "vdxfid": "iERBNWk2tyaGJ2w8P1kM88Mdj5WA9qFzbv",
+    "indexid": "xKFHqKB7kHnvvCpAEhQW6WtAkjXAymjqXM",
+    "hash160result": "788165581de37b5473c2f127d387f3d7a8630778",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
+        "name": "vrsc::identity.residencepermit.issuingregion"
     }
 };
-exports.IDENTITYDATA_IDCARD_ADDRESS_COUNTRY = {
-    "vdxfid": "iNxc7w91fgHgvRoNsifWYxHMFSJcrCuGss",
-    "indexid": "xTniaja6WzWMYbgQjQKfXLotH6Kdg4E8gT",
-    "hash160result": "0cab0e442caf58e660f32d2d36f8e64b12f3b9d5",
+exports.IDENTITY_RESIDENCEPERMIT_DATEOFBIRTH = {
+    "vdxfid": "iM62dN7LSHWDuetPi6qAewG6bzYwFrcqBN",
+    "indexid": "xRv96AYRHbitXpmRZnVKdKnddeZxAivvFE",
+    "hash160result": "e2533190e4822ab51c5b2029039fbb0d431131c1",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
+        "name": "vrsc::identity.residencepermit.dateofbirth"
     }
 };
-exports.IDENTITYDATA_IDCARD_DOCUMENTVERIFICATION_MATCHED = {
-    "vdxfid": "iMHhAMLCDnisJVbZpTzwdAjwQQobVtkP3e",
-    "indexid": "xS7od9mH56wXvfUbg9f6bZGUS4pcQztAYY",
-    "hash160result": "361025b8f50593f08f332b0cd227ade34dcf65c3",
+exports.IDENTITY_RESIDENCEPERMIT_ADDRESS = {
+    "vdxfid": "iCA8P2rVs5DjtzQpXEnPJcG4KBs79C9EpL",
+    "indexid": "xGzEqqHaiPSQXAHrNvSYGznbLqt83gLGV5",
+    "hash160result": "2c7264a72e1d7937da951620039e48a0c8663e5f",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk"
+        "name": "vrsc::identity.residencepermit.address"
     }
 };
-exports.IDENTITYDATA_IDCARD_NAME_MATCHED = {
-    "vdxfid": "i3duYwSwdrLztnP43wuwiTfH9G5adxpZJm",
-    "indexid": "x8U21jt2VAZfWxG5uda6grBpAv6bc21iUD",
-    "hash160result": "11c10b7a91af6a813b1cc0f2945a63bf0435c601",
+exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_STREET1 = {
+    "vdxfid": "iMuY2CbmQpCFzodGBtqxogmTb5dYfNbCJa",
+    "indexid": "xSjeV12rG8QvcyWJ3aW7n5HzcjeZaxtGwr",
+    "hash160result": "444cbb0dc6f471ecb2261dc7d6731cd97e272dca",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iKCFQYZudPChh6jypSpcgENoQb5WeX5wHv"
+        "name": "vrsc::identity.residencepermit.address.street1"
     }
 };
-exports.IDENTITYDATA_IDCARD_DATEOFBIRTHMATCHED = {
-    "vdxfid": "iPFTbFBXsM4df4BkNoMfFoHynxzKKkUqJv",
-    "indexid": "xU5a43ccifHJHE4nEV1pEBpWpd1LCCSSq8",
-    "hash160result": "ba6a81f6ea53e339ff4d8e2aa5c1d660aee6e9d8",
+exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_CITY = {
+    "vdxfid": "iRckJ1VkfYazfVHWJuA9iXTth83ZYp8znz",
+    "indexid": "xWSrkovqWrofHfAYAapJguzRin4aPEqHJK",
+    "hash160result": "73e22f5d24515103052ab165736a0198a7d4e0f2",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.idcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iMUfUShqVwWrGSx6HvZcDJwHywiLW5Zusb"
+        "name": "vrsc::identity.residencepermit.address.city"
     }
 };
-exports.IDENTITYDATA_PASSPORT = {
-    "vdxfid": "i8oiYgB9L9WJWGJgpcrm68mvoq4KoTASNL",
-    "indexid": "xDdq1UcEBTiy8SBigJWv4XJTqV5LiS8drz",
-    "hash160result": "a7e8f210eb00dcc94038864f8c59b8403ccf793a",
+exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_REGION = {
+    "vdxfid": "iBpH337NTJSLjSxbBWuu2wBLu12k4JVGk4",
+    "indexid": "xGePVqYTJcf1Mcqd3Ca41Khsvf3kyxtNXH",
+    "hash160result": "2f7b3040cf60259ee4bf6dfc93a4de42ab4e7d5b",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
+        "name": "vrsc::identity.residencepermit.address.region"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ORIGINAL_FRONT = {
-    "vdxfid": "iQhPuQoj5PDXpF5XsA26PhnvbvBVHUCgtM",
-    "indexid": "xVXWNDEovhSCSQxZiqgFN6KTdaCWDq4RVw",
-    "hash160result": "942c2ac1a23d27ab82ea20072a31a3aba9c3c9e8",
+exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_POSTCODE = {
+    "vdxfid": "iGKi47jtg6CumKYSUBj57drgLNGzhJY3Gj",
+    "indexid": "xM9pWvAyXQRaPVRUKsPE62PDN2J1Zp4d6b",
+    "hash160result": "db85ea63848a6ad2c3a0e82bb29e215c00c2ee8c",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iBrpt78Mdrqcc1RHwPWKYBALbNTC4cwdJQ"
+        "name": "vrsc::identity.residencepermit.address.postcode"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ORIGINAL_BACK = {
-    "vdxfid": "iHZRBTVpGXBpq1D3JQvB37HwwC81UVaEBt",
-    "indexid": "xNPXeFvu7qQVTB65A6aL1VpUxr92J21Y2e",
-    "hash160result": "0b0574e283da6e3dd272ca2f7088634d309f7e9a",
+exports.IDENTITY_RESIDENCEPERMIT_ADDRESS_COUNTRY = {
+    "vdxfid": "i8KD9CUn7Su4YT44WhbD8HYA1K425cFCqM",
+    "indexid": "xD9Kbzurxm7jAcw6NPFN6g4h2y531jRanx",
+    "hash160result": "75970ae74cd40419dc78ecef7be22c5ee09d1535",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iNRCZp7JBDHbpKQ2Vhc6TK97hUSRPG4jaX"
+        "name": "vrsc::identity.residencepermit.address.country"
     }
 };
-exports.IDENTITYDATA_PASSPORT_CROPPED_FRONT = {
-    "vdxfid": "iGsEp6i4xXh4gNizJgWEoiCwZxzPsuPvnJ",
-    "indexid": "xMhMGu99oqujJYc2ANAPn6jUbd1Qimj8Dp",
-    "hash160result": "c26f63c41583bbf9fb1fb6eb714c87c71054e592",
+exports.IDENTITY_RESIDENTCARD = {
+    "vdxfid": "iKkJFFtbxRMJutjoruW47Mc1sCfdGYQrC9",
+    "indexid": "xQaQi4KgojZyY4cqibAD5k8Ytrge9jwt3u",
+    "hash160result": "2b737a5733b91d305dcf07d9e75797740da97db2",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iK822dFQwW2Y5tdpSpxQtHQemf47HoFxqs"
+        "name": "vrsc::identity.residentcard"
     }
 };
-exports.IDENTITYDATA_PASSPORT_CROPPED_BACK = {
-    "vdxfid": "iHfLky17R6QTL1tkhN4YzjigfaNKFMXJwg",
-    "indexid": "xNVTDmSCGQd7xBmnZ3ihy8FDhEPLApagju",
-    "hash160result": "b49b18cb2d18cabafd16b138f6de43b1136d9d9b",
+exports.IDENTITY_RESIDENTCARD_ORIGINALFRONT = {
+    "vdxfid": "iNMJhZ3wie5U2SRF7WSFTpjJo6B6RSTR4t",
+    "indexid": "xTBRAMV2ZxJ8ecJGyC6QSDFqpkC7KTFMbW",
+    "hash160result": "e440d2d8bab46633691a12e7bed0ea785bd90ccf",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iCvxKVHbnbwHGZDTaGofeyyJLjsGBSZr7A"
+        "name": "vrsc::identity.residentcard.originalfront"
     }
 };
-exports.IDENTITYDATA_PASSPORT_FACE = {
-    "vdxfid": "iGvZEAbQPV74x8zimmH857Eyug1YYG6da8",
-    "indexid": "xMkfgy2VEoKjaJskdSwH3VmWwL2ZPGWyYL",
-    "hash160result": "c1b64e1b1d902fce4bca08951958ae30c3f28593",
+exports.IDENTITY_RESIDENTCARD_ORIGINALBACK = {
+    "vdxfid": "i4pAk8J5ec2wn55VattFRr7PyN4J2L13HJ",
+    "indexid": "x9eHCvjAVvFcQExXSaYQQEdw125Jz84d8u",
+    "hash160result": "9fa70ca8b49eab8c3e704f78f0e0ae1bc52caf0e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iPrxPJC6NbzWnkNyLSvwa8AVrwJWBUV9mM"
+        "name": "vrsc::identity.residentcard.originalback"
     }
 };
-exports.IDENTITYDATA_PASSPORT_IDNUMBER = {
-    "vdxfid": "iRYCG1nfoPiuZFKqbsugCgi317aY2ErtkM",
-    "indexid": "xWNJipDkehwaBRCsTZZqB5Ea2mbYowicUR",
-    "hash160result": "abd6da27bddaf9e92e6872589a8cb1ae056d04f2",
+exports.IDENTITY_RESIDENTCARD_CROPPEDFRONT = {
+    "vdxfid": "iLnx7NDcAWtb9uWicdgSaiwco56TywMh5w",
+    "indexid": "xRd4aAeh1q7Fn5PkUKLbZ7U9pj7UvU8v2V",
+    "hash160result": "fa7347c3517552a028890dacaf889a6ead39f6bd",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iJdUp47SVEzGEHCvoRyix2xufRsAeWSyxa"
+        "name": "vrsc::identity.residentcard.croppedfront"
     }
 };
-exports.IDENTITYDATA_PASSPORT_CATEGORY = {
-    "vdxfid": "iPinz8N4RxboKaHvTr4FcJXe9DLojw3bXH",
-    "indexid": "xUYuSvo9HGpTwkAxKXiQah4BAsMpZeqQLH",
-    "hash160result": "748058a57c693f07b6b69b53a9509086615215de",
+exports.IDENTITY_RESIDENTCARD_CROPPEDBACK = {
+    "vdxfid": "i8WjL22L4UeaCDKZuj8R4Uub6zurTPdaLv",
+    "indexid": "xDLqnpTQunsEpPCbmQna2sS88evsLJL51v",
+    "hash160result": "b5134fe72682aa4f0dc645ceb73421dc07644337",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "i9MqRfXPAiYwv9q4iSjTtXquNCCZ1GgECn"
+        "name": "vrsc::identity.residentcard.croppedback"
     }
 };
-exports.IDENTITYDATA_PASSPORT_EXPIRATIONDATE = {
-    "vdxfid": "iBXSY6Ra3o5jK9QZdnrdttsrnFE6y3H8o9",
-    "indexid": "xGMYztreu7JPwKHbVUWnsHQPouF7mXgFAg",
-    "hash160result": "5cd8ab62f4b455d520e951243a6e6ac2be2a4e58",
+exports.IDENTITY_RESIDENTCARD_FACE = {
+    "vdxfid": "i6dGShbLY2ppZnXSyfvdtdGFkCxBQd2r9Y",
+    "indexid": "xBTNuW2RPM3VBxQUqMans1nnmryCFH4rRD",
+    "hash160result": "25a41b37f64414a2477c5c0d1a139d64ce9b8f22",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iNgDKviLAeeV65eBztuduckUMDE2erB7jj"
+        "name": "vrsc::identity.residentcard.face"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ISSUING_COUNTRY_MATCHED = {
-    "vdxfid": "iLjpTPmDufuH38s9XwatiLA8Wk67a2thc8",
-    "indexid": "xRZvvCCJkz7wfJkBPdF3gigfYQ78WXNncA",
-    "hash160result": "d53e23bd3ca7de97d1ed41b501d9a1f06b965ebd",
+exports.IDENTITY_RESIDENTCARD_IDNUMBER = {
+    "vdxfid": "iKFkbwDcQRXjapZcZAXsaMXjgER9CZbwZx",
+    "indexid": "xQ5s4jehFjkQCzSeQrC2Yk4GhtSA2GbM4B",
+    "hash160result": "e30d9a01765325e02ca22f60335d4bdb499917ad",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iFgXmTd9Wi2sqZyPqaoejdHG2sMaJWLrEX"
+        "name": "vrsc::identity.residentcard.idnumber"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ISSUING_REGION = {
-    "vdxfid": "i87HPTEfVQ9HKF8zrNppBEBF8wur6BAGBf",
-    "indexid": "xCwPrFfkLiMwwR22i4Uy9chnAbvrufhBnx",
-    "hash160result": "3f8308ca4fe693714fdab6fb3871698a5a2bd432",
+exports.IDENTITY_RESIDENTCARD_CATEGORY = {
+    "vdxfid": "i46Fgc8ev9zAkjikjHWreqSXkMRpFr5Lsi",
+    "indexid": "x8vN9QZjmUCqNubnayB1dDy4n1SqAqg4vn",
+    "hash160result": "c0039a4929d081eec1d1f5ca3040e19bded3c106",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iByfEUF2bHSmBbiDoBu42a4HKTKbDvPGbL"
+        "name": "vrsc::identity.residentcard.category"
     }
 };
-exports.IDENTITYDATA_PASSPORT_DATEOFBIRTH = {
-    "vdxfid": "iRe6ZecbVBajvySLEiFxAgMtgZwxBiZY78",
-    "indexid": "xWUD2T3gLVoQZ9KN6Pv794tRiDxy6henbx",
-    "hash160result": "27a8f2f7695013eef34f4bb36cb9a8eeb92a22f3",
+exports.IDENTITY_RESIDENTCARD_EXPIRATIONDATE = {
+    "vdxfid": "iBA1oFvDABKqbu9i61AEGy1m5fFHdCWkpy",
+    "indexid": "xFz8G4MJ1VYWE52jwgpPFMYJ7KGJUd6Y4b",
+    "hash160result": "0866dd99514f509c9ad4584b3f570515f4c74054",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iQhjETQvSkadciDPy69QZNy3hSczWQ4iu4"
+        "name": "vrsc::identity.residentcard.expirationdate"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ADDRESS = {
-    "vdxfid": "iCMcVHrazgA1N2WpXUmffifER2AhUzD6re",
-    "indexid": "xHBix6HfqzNfzCPrPARpe7BmSgBiQSui11",
-    "hash160result": "e6bb757f72e329878ff5e7e8409ee9a0bc706a61",
+exports.IDENTITY_RESIDENTCARD_ISSUINGCOUNTRY = {
+    "vdxfid": "iHBgD199BSEQWREtiW8dP259DX4qg6KjkM",
+    "indexid": "xN1nfoaE2kT58b7vaBnnMQbgFB5rWuKCtd",
+    "hash160result": "ef88ffb14a8b66dacc690351fa9c3d35a8036296",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iGebr2v1TgkWvsyLjs1dQ5SqffqKL8rNm3"
+        "name": "vrsc::identity.residentcard.issuingcountry"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ADDRESS_STREET1 = {
-    "vdxfid": "i79XJcQgvEz247HHaKWxTiyxVVnDboWYqv",
-    "indexid": "xBydmQqmmZCggHAKS1B7S7WVX9oEThCnwK",
-    "hash160result": "c9f030a041e6460517ff39854d3625f70e7e4828",
+exports.IDENTITY_RESIDENTCARD_ISSUINGREGION = {
+    "vdxfid": "i6jygVNjzZUFEXVgtzWxXpBYf5rwjXF92J",
+    "indexid": "xBa69HopqsgurhNikgB7WCi5gjsxbi12z3",
+    "hash160result": "dc31e031328cfe3697527e046a52cc372687d423",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+        "name": "vrsc::identity.residentcard.issuingregion"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ADDRESS_CITY = {
-    "vdxfid": "iBM6AvLwRcHKHMwDjPmVts1VxKQYHAmFHA",
-    "indexid": "xGBCdin2GvVyuXpFb5ResFY2yyRZDWy6sS",
-    "hash160result": "78068da24f1196cf7bcb7e45d3f2bd90e8015956",
+exports.IDENTITY_RESIDENTCARD_DATEOFBIRTH = {
+    "vdxfid": "iQfYTwmTxXzxxyFh6XbY2PQVLVwswRoJL1",
+    "indexid": "xVVevkCYorDdb98ixDFgzmw2N9xtnBn6M2",
+    "hash160result": "73e0e5f4af76255bc2a3583ad9a7b1d0241470e8",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+        "name": "vrsc::identity.residentcard.dateofbirth"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ADDRESS_REGION = {
-    "vdxfid": "iKBAveavEwQG28SE4eRUGY5ZqaSLNrCnM1",
-    "indexid": "xQ1HPT216FcveJKFvL5dEvc6sETMKCokvR",
-    "hash160result": "14ad7b91cee4646af2d5625fa0d5eeea8ed239ac",
+exports.IDENTITY_RESIDENTCARD_ADDRESS_STREET1 = {
+    "vdxfid": "iJ67qMPN6tyrLXBhbJpKKBZYpkcBzZD8S4",
+    "indexid": "xNvEJ9pSxDCWxh4jSzUUHa65rQdCviMqur",
+    "hash160result": "8540d9cb71ca32f4c03caf26a4cffa4d51094da0",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
+        "name": "vrsc::identity.residentcard.address.street1"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ADDRESS_POSTCODE = {
-    "vdxfid": "iDZEoefPi6Q6WjWseS5LMYwk4PXVzU8Yfd",
-    "indexid": "xJPMGT6UZQcm8uPuW7jVKwUH63YWskMh6F",
-    "hash160result": "16150338c79c92a5469e14079ef0eb9d0e75956e",
+exports.IDENTITY_RESIDENTCARD_ADDRESS_CITY = {
+    "vdxfid": "iLCQ2n5tKHzKcVBv8of1eYmdWEdEY5vTUN",
+    "indexid": "xR2WVaWyAcCzEf4wzVKAcwJAXteFUoFSux",
+    "hash160result": "7990100969a22f4b4ba35613b3994219e74d6db7",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
+        "name": "vrsc::identity.residentcard.address.city"
     }
 };
-exports.IDENTITYDATA_PASSPORT_ADDRESS_COUNTRY = {
-    "vdxfid": "iNAWV5t3VpZc9mGxRxqHo8qBo5mRDmYNzh",
-    "indexid": "xSzcwtK8M8nGmw9zHeVSmXMipjnS4TfbaT",
-    "hash160result": "64016ff1aa45d5a017a351c87751052b721c02cd",
+exports.IDENTITY_RESIDENTCARD_ADDRESS_REGION = {
+    "vdxfid": "iPWcAQ6zbC9rKaaWAgrpoHmKs5G5SQCprF",
+    "indexid": "xULidCY5SWNWwkTY2NWymgHrtjH6QfP6JL",
+    "hash160result": "ff3f1523bfb1fe501ef10f0036c9f059b64bc7db",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
+        "name": "vrsc::identity.residentcard.address.region"
     }
 };
-exports.IDENTITYDATA_PASSPORT_DOCUMENTVERIFICATION_MATCHED = {
-    "vdxfid": "iRstHEJfNZfPvmcDUGMyqD6fLvfKvv9ZNr",
-    "indexid": "xWhzk2jkDst4YwVFKx28obdCNagLpBSeTi",
-    "hash160result": "ea0746c22573d01b7aa023e40381f655a9bcbdf5",
+exports.IDENTITY_RESIDENTCARD_ADDRESS_POSTCODE = {
+    "vdxfid": "iG1QGYyp4SkiP7b9ngPwkTGC3DxVG3hB16",
+    "indexid": "xLqWjMQtukyP1HUBeN46iqnj4syW4eat4U",
+    "hash160result": "f345aa72196b006e2200bd08ed0ea165806c7889",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk"
+        "name": "vrsc::identity.residentcard.address.postcode"
     }
 };
-exports.IDENTITYDATA_PASSPORT_NAME_MATCHED = {
-    "vdxfid": "iNQ1CWDT7So5agryapjXpo2nhxto4w6yM8",
-    "indexid": "xTE7fJeXxm1kCrk1SWPgoBZKjcuoypYrZa",
-    "hash160result": "5e8b3b606e58d88fb46e055728ff0a8eeb7c8fcf",
+exports.IDENTITY_RESIDENTCARD_ADDRESS_COUNTRY = {
+    "vdxfid": "i4wzngZfZb2QBnjr2TjtoMoMF9roSqQkho",
+    "indexid": "x9n7FUzkQuF4oxcst9Q3mkKtGospNqDjEQ",
+    "hash160result": "dd2a94da0a94115ed04de616b7d0ea1b19312a10",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iKCFQYZudPChh6jypSpcgENoQb5WeX5wHv"
+        "name": "vrsc::identity.residentcard.address.country"
     }
 };
-exports.IDENTITYDATA_PASSPORT_DATEOFBIRTHMATCHED = {
-    "vdxfid": "iHExwXrJTrVLTS5okNNtp9BMRoTbwBNBQu",
-    "indexid": "xN55QLHPKAi15bxqc433nXhtTTUcpv6xtK",
-    "hash160result": "3f79d48090f69366e7e78b5765b14565fb3a0197",
+exports.IDENTITY_IDCARD = {
+    "vdxfid": "iK7FrcxNvsej84qZjYR73iGgEV96sGKwTU",
+    "indexid": "xPwNKRPTnBsPkEibbE5G26oDG9A7j4JSm7",
+    "hash160result": "4f2b2c852e4cfa5a640988af78c4d02243467cab",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.passport"
-    },
-    "bounddata": {
-        "vdxfkey": "iMUfUShqVwWrGSx6HvZcDJwHywiLW5Zusb"
+        "name": "vrsc::identity.idcard"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT = {
-    "vdxfid": "iJzdKZ1ppXjnrbasWGH24nWtNchKTFE6oM",
-    "indexid": "xPpjnMSufqxTUmTuMwwB3B3RQGiLRSe3a7",
-    "hash160result": "eb1a88f1148f3f3798bd9f08a5b88a50bf473baa",
+exports.IDENTITY_IDCARD_ORIGINALFRONT = {
+    "vdxfid": "iCnLNq42DxhuK84Nes4UGjFFUuNsGGpuBZ",
+    "indexid": "xHcSqdV75GvZwHwQWYidF7mnWZPtATN7Ky",
+    "hash160result": "9f5f63641e6e935628d7602e92814311ea631766",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
+        "name": "vrsc::identity.idcard.originalfront"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ORIGINAL_FRONT = {
-    "vdxfid": "iCAHvT9dB52QoCHuHYuYJ2BBkytUndvMVj",
-    "indexid": "xGzQPFai2PF5RNAw9EZhGQhinduVgDqt5Q",
-    "hash160result": "e191b50000a4d871b4a310f3360dd8cad35d465f",
+exports.IDENTITY_IDCARD_ORIGINALBACK = {
+    "vdxfid": "iJyfvwrUeTRiGxiYw6oJZ3uALsuBt7QTyy",
+    "indexid": "xPonPkHZVmeNu8bannTTXSRhNXvCpAD3MB",
+    "hash160result": "df3a44e11ad54673eff910c1320d9f50100b0daa",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iBrpt78Mdrqcc1RHwPWKYBALbNTC4cwdJQ"
+        "name": "vrsc::identity.idcard.originalback"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ORIGINAL_BACK = {
-    "vdxfid": "iE6M2Mibzrrneg3cZFbNrXHf9D9FMgBqx9",
-    "indexid": "xJvTVA9grB5TGqveQwFXpupCAsAGBbcCJR",
-    "hash160result": "9233dcff0e38f245836911eef94c4bb7238b7774",
+exports.IDENTITY_IDCARD_CROPPEDFRONT = {
+    "vdxfid": "iFDp8jWwybweGStGQnYxwhbi8eiucZ29sr",
+    "indexid": "xL3vbXx2pvAJtcmJGUD7v68FAJjvZmrsga",
+    "hash160result": "b10845ae9b29f3ed25f33f091398fd0a1536d980",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iNRCZp7JBDHbpKQ2Vhc6TK97hUSRPG4jaX"
+        "name": "vrsc::identity.idcard.croppedfront"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_CROPPED_FRONT = {
-    "vdxfid": "i91nujduYeu8scMbSkJj1iZuH5VSh3Z5rW",
-    "indexid": "xDquNY4zPy7oVnEdJRxsz76SJjWTcVNPwS",
-    "hash160result": "28ec50fb17556fceea921d0a90d822987471c23c",
+exports.IDENTITY_IDCARD_CROPPEDBACK = {
+    "vdxfid": "i8GpXrygUPpQYVwcoZ7JVRB1xB46xZsMuG",
+    "indexid": "xD6vzfQmKi35AfpefEmTTohYyq57sdLVxr",
+    "hash160result": "84c05d2d84ab69db2834df22602f34445ae9a134",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iK822dFQwW2Y5tdpSpxQtHQemf47HoFxqs"
+        "name": "vrsc::identity.idcard.croppedback"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_CROPPED_BACK = {
-    "vdxfid": "iLpNisoTSTZ8LLHtkPJ9HSxVu84QW1a98Z",
-    "indexid": "xReVBgEYHmmnxWAvc4xJFqV2vn5RR6aiTG",
-    "hash160result": "03f3ca2aa3bcdbc2c7b60d18913ae869c02f3bbe",
+exports.IDENTITY_IDCARD_FACE = {
+    "vdxfid": "i8sfiwALhk4FtSaWSnBWYwKnWN3G7m3jyU",
+    "indexid": "xDhnBjbRZ4GvWcTYJTqfXKrKY24GxBC5cg",
+    "hash160result": "4afc5fda25a15a4627b8426f40594ff2e11d393b",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iCvxKVHbnbwHGZDTaGofeyyJLjsGBSZr7A"
+        "name": "vrsc::identity.idcard.face"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_FACE = {
-    "vdxfid": "iG9jwZT4PBKWSbm7o5zCWNKZkACyGCCZY3",
-    "indexid": "xLyrQMt9EVYB4me9emeMUkr6mpDz9wW5M5",
-    "hash160result": "75cd40bd50a7df36d91334c5e7087f9b602c0c8b",
+exports.IDENTITY_IDCARD_IDNUMBER = {
+    "vdxfid": "iBEJB1xD1mpR4kYQbYieW3hNFpe5QmQ6qA",
+    "indexid": "xG4QdpPHs635gvRSTENoUSDuHUf6JB2izs",
+    "hash160result": "0af18c033e6ad395bdfb5fbdbf5144d63c1d1055",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iPrxPJC6NbzWnkNyLSvwa8AVrwJWBUV9mM"
+        "name": "vrsc::identity.idcard.idnumber"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_IDNUMBER = {
-    "vdxfid": "iFSUa91mA9uok8XL71HNkK5m8xvBKEiMBn",
-    "indexid": "xLGb2wSr1U8UNJQMxgwXihcJAcwCCmAsFQ",
-    "hash160result": "3463196fb71b581b22c2355dca63d8ce0b4a3e83",
+exports.IDENTITY_IDCARD_CATEGORY = {
+    "vdxfid": "i4HCpvV1NJd4Ka8atCtDkXs4XLAkrmtKib",
+    "indexid": "x97KHiv6Dcqiwk1cjtYNivPbYzBmg48ama",
+    "hash160result": "68b49fa5bf2ed00672c881c15167fee2c304d408",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iJdUp47SVEzGEHCvoRyix2xufRsAeWSyxa"
+        "name": "vrsc::identity.idcard.category"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_CATEGORY = {
-    "vdxfid": "iJ7wb2r93YaLrXkLdKWgAs5nmowgE7Feth",
-    "indexid": "xNx43qHDtro1UhdNV1Aq9FcKoTxh6YYiWp",
-    "hash160result": "5eb69e44059f8c65fdc0f132bffe26ba8c50a5a0",
+exports.IDENTITY_IDCARD_EXPIRATIONDATE = {
+    "vdxfid": "iNTbsfTmeAm7KUFehtCq3RH1JgbUdTJwCt",
+    "indexid": "xTHiLTtrVUymwe8gZZrz1ooYLLcVZC5A4n",
+    "hash160result": "f4b807e32848d5a40815e2aa19cb219c64ae3dd0",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "i9MqRfXPAiYwv9q4iSjTtXquNCCZ1GgECn"
+        "name": "vrsc::identity.idcard.expirationdate"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_EXPIRATIONDATE = {
-    "vdxfid": "iFTmB8nRz1e1LWy6VZy69z13JJDqSjGYzu",
-    "indexid": "xLHsdwDWqKrfxgr8MFdF8NXaKxErHmHoJn",
-    "hash160result": "4c0ea69b915ce91fecf6f82b5993835ea4907c83",
+exports.IDENTITY_IDCARD_ISSUINGCOUNTRY = {
+    "vdxfid": "iJ5qVRWTHerkVreE9UrSfKyphD3XB9s8FA",
+    "indexid": "xNuwxDwY8y5R82XG1AWbdiWMis4Y3BXDg7",
+    "hash160result": "2cc5492966de5135e638de253b497cccb8643fa0",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iNgDKviLAeeV65eBztuduckUMDE2erB7jj"
+        "name": "vrsc::identity.idcard.issuingcountry"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ISSUING_COUNTRY_MATCHED = {
-    "vdxfid": "iDycAmsF8RoSfDCqt8GKwfLdajJEejPYBF",
-    "indexid": "xJoidaJKyk27HP5sjovUv3sAcPKFUR4Skz",
-    "hash160result": "198ee70ddf1dae654a868ee39d83015a37463173",
+exports.IDENTITY_IDCARD_ISSUINGREGION = {
+    "vdxfid": "i8dHTbZ62Bth8NwkxasnKFpvX4EZYuBun4",
+    "indexid": "xDTPvPzAsW7MkYpnpGXwHeMTYiFaMyp6FD",
+    "hash160result": "f42f7b71bb43c590b9063755754bf2d534b58038",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iFgXmTd9Wi2sqZyPqaoejdHG2sMaJWLrEX"
+        "name": "vrsc::identity.idcard.issuingregion"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ISSUING_REGION = {
-    "vdxfid": "iLZnhoDnggyo9LGiyS8xvEovkSn1yRuRjz",
-    "indexid": "xRPuAbesY1CTmW9kq7o7tdLTn6o2m96TLY",
-    "hash160result": "f969f7afa0599e431674b2e76bc4ee5f3cf778bb",
+exports.IDENTITY_IDCARD_DATEOFBIRTH = {
+    "vdxfid": "iGcwhC6znG63pb6jqsRnrtDjXV4aXXsub2",
+    "indexid": "xMT49zY5daJiSkymhZ5wqGkGZ95bMGYJ9r",
+    "hash160result": "4d0c72c3369a0ac64711e58ae1b10785f1363190",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iByfEUF2bHSmBbiDoBu42a4HKTKbDvPGbL"
+        "name": "vrsc::identity.idcard.dateofbirth"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_DATEOFBIRTH = {
-    "vdxfid": "iMPmaDAiNuaqfSNV9SbCuaYG2TCvPNU495",
-    "indexid": "xSDt31boEDoWHcFX18FMsy4o47DwGgmFbq",
-    "hash160result": "93ab89f3abe5db79de5fb960f9362b02ecfc8bc4",
+exports.IDENTITY_IDCARD_ADDRESS_STREET1 = {
+    "vdxfid": "i6jMXjNE9qioZ2dFricFnEBEQEWK5Kg3PS",
+    "indexid": "xBZTzXoK19wUBCWHiQGQkchmRtXKugcKWw",
+    "hash160result": "2cee0d13a2fdeaac83d052ad27610da8bf59b623",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iQhjETQvSkadciDPy69QZNy3hSczWQ4iu4"
+        "name": "vrsc::identity.idcard.address.street1"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS = {
-    "vdxfid": "i5pghYvnurAvtbyT69Lt1wBk9NTQNYfWt5",
-    "indexid": "xAeoAMMsmAPbWmrUwq12zKiHB2URHSXqA1",
-    "hash160result": "43aa306c8ff55fc646a7a1bb0e0171576c4ec019",
+exports.IDENTITY_IDCARD_ADDRESS_CITY = {
+    "vdxfid": "i3viAeqayk3KDk5tQpYcz6gFs1ayW5vBma",
+    "indexid": "x8kpdTGfq4FyquxvGWCmxVCntfbzM8iAVb",
+    "hash160result": "a10bfcd1cfd12d466a276339072d2f2a7ec6f304",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iGebr2v1TgkWvsyLjs1dQ5SqffqKL8rNm3"
+        "name": "vrsc::identity.idcard.address.city"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_STREET1 = {
-    "vdxfid": "iC3BuU53cL5hXRnnezmmToKvUZxyQb1AUs",
-    "indexid": "xGsJNGW8TeJN9bfpWgRvSBrTWDyzMRUX1Q",
-    "hash160result": "64d4d3dd9f6acbd72f13a717572302109c6eee5d",
+exports.IDENTITY_IDCARD_ADDRESS_REGION = {
+    "vdxfid": "iEHvf3XCFacMihTQPVXxNeo6hBCqggDFie",
+    "indexid": "xK837qxH6tq2LsLSFBC7M3KdiqDrYBNMK7",
+    "hash160result": "55af249b3ceb591709c693017e5b7b1cb131a876",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+        "name": "vrsc::identity.idcard.address.region"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_CITY = {
-    "vdxfid": "iHv1BkzjJgJcwsBHJCeGTgcUHmoCmGE5py",
-    "indexid": "xNk7eZRp9zXHa34K9tJRS591KRpDa69BBJ",
-    "hash160result": "6d9fbcb4cd86e46dfbf806c13f951108c253639e",
+exports.IDENTITY_IDCARD_ADDRESS_POSTCODE = {
+    "vdxfid": "i3yAnt6zdceYxbCBnLwxn2tNdM4BnPkzhT",
+    "indexid": "x8oHFgY5UvsDam5De2c7kRQuf15ChzdWFA",
+    "hash160result": "acd086baf0863cff86fc56ec0fbb16dd18d56a05",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+        "name": "vrsc::identity.idcard.address.postcode"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_REGION = {
-    "vdxfid": "iKEHZjtgcCRd67iRsA93J7yphxvRUYdZig",
-    "indexid": "xQ4Q2YKmTWeHiHbTiqoCGWWMjcwSPM6wn6",
-    "hash160result": "6c5f8b7989f6210f50d9d270c170cae9dd9cd0ac",
+exports.IDENTITY_IDCARD_ADDRESS_COUNTRY = {
+    "vdxfid": "iA6KVD2C4QJAyKfCS3XfQV8AxmpR9R3XG5",
+    "indexid": "xEvRx1TGuiWqbVYEHjBpNsehzRqS2fp4qg",
+    "hash160result": "bab14b514d91d7daa39175c90e29a956dec19548",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
+        "name": "vrsc::identity.idcard.address.country"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_POSTCODE = {
-    "vdxfid": "i7niNaE598TEVhfaf78do5rhKX6gXgdqAC",
-    "indexid": "xCcpqNf9zSfu7sYcWnnnmUPEMB7hMATGYv",
-    "hash160result": "ca2d0134ac28a0f46363ea91b036fc78531f512f",
+exports.IDENTITY_VISA = {
+    "vdxfid": "iDCwZf84AhbJkm4zKZP7Le8h8ukJS9FySA",
+    "indexid": "xJ342TZ921oyNvx2BF3GK2fEAZmKGeUQUd",
+    "hash160result": "57faa6b546ac92c71022178b8c5e9fbae9bebe6a",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
+        "name": "vrsc::identity.visa"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_ADDRESS_COUNTRY = {
-    "vdxfid": "i7sePTAMwZ5hVQvdgjfWr9mCg4G8YDvwcx",
-    "indexid": "xChkrFbSnsJN7aofYRKfpYHjhiH9PqemVR",
-    "hash160result": "2ffeb2e22fb423ede8ad0127d39be36133e03f30",
+exports.IDENTITY_VISA_ORIGINALFRONT = {
+    "vdxfid": "iGAgzyLDVs5vYFLRgXVnkQpDRKy9Zh1TiV",
+    "indexid": "xLzoTmmJMBJbARDTYD9wioLkSyzARsVQWr",
+    "hash160result": "755da3361216260b786ba78fbe68800557223a8b",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
+        "name": "vrsc::identity.visa.originalfront"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_DOCUMENTVERIFICATION_MATCHED = {
-    "vdxfid": "iGRk3K3N3Nr4gvVWL2aKdzfjP54ZNvpVaT",
-    "indexid": "xMFrW7USth4jK6NYBiEUcPCGQj5aM9U9ed",
-    "hash160result": "316ae15a805987678066399eb21d162759e9128e",
+exports.IDENTITY_VISA_ORIGINALBACK = {
+    "vdxfid": "i3becgcmf85RiY2PAxsp3fbuGKG8Qc73t1",
+    "indexid": "x8Rm5V3rWSJ6LhuR2eXy248SHyH9Jjue4S",
+    "hash160result": "e71909c77e2e0361764d22b81f4f53085fe85801",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk"
+        "name": "vrsc::identity.visa.originalback"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_NAME_MATCHED = {
-    "vdxfid": "iPJhtbfg9yL4ydMLXfgb1XUqm4zvtcS3c7",
-    "indexid": "xU8pMQ6m1HYjboENPMLjyv1Nnj1wmqZv7q",
-    "hash160result": "52e2b8b282867a147bd6ce097359606cd91587d9",
+exports.IDENTITY_VISA_CROPPEDFRONT = {
+    "vdxfid": "iAapfFQMAQy7USdjRwqzAZ2nWhRMSiQMmV",
+    "indexid": "xFQw83qS1jBn6cWmHdW98wZKYMSNHsb2wy",
+    "hash160result": "56ed30f8daf83e3b09eee57517be45b6b8c1f94d",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iKCFQYZudPChh6jypSpcgENoQb5WeX5wHv"
+        "name": "vrsc::identity.visa.croppedfront"
     }
 };
-exports.IDENTITYDATA_RESIDENCEPERMIT_DATEOFBIRTHMATCHED = {
-    "vdxfid": "iBZWkQDNUV46RpDHi3CMn78ENBcQj4RVUp",
-    "indexid": "xGPdDCeTKoGm3z6KZirWkVemPqdRgTRtbw",
-    "hash160result": "197dbc7ddf5795a60bb0bf037c8b846cda83b258",
+exports.IDENTITY_VISA_CROPPEDBACK = {
+    "vdxfid": "i3quMdmv3vAQDBA6nzM8fTiFtqJrw7tcnf",
+    "indexid": "x8g1pSCzuEP4qM38eg1HdrEnvVKsoXBZ7R",
+    "hash160result": "1d8106821498549cebc0af6f8d120b9933090b04",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residencepermit"
-    },
-    "bounddata": {
-        "vdxfkey": "iMUfUShqVwWrGSx6HvZcDJwHywiLW5Zusb"
+        "name": "vrsc::identity.visa.croppedback"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD = {
-    "vdxfid": "iRZk3qsYq1ac6H53v3cSWhqx8VqUoMxpuK",
-    "indexid": "xWPrWeJdgKoGiSx5mjGbV6NVA9rVgyJnaL",
-    "hash160result": "b804f8f1b6006c80b18d5cda0fbcc39900614ff2",
+exports.IDENTITY_VISA_FACE = {
+    "vdxfid": "iAqxnB58655ZcRLAUm2Utib2rguRXT9wZM",
+    "indexid": "xFg5EyWCwPJEEbDCLSgds77ZtLvSRpw2k9",
+    "hash160result": "59564e826c8342a2b721708f6a83c9761dc6d650",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
+        "name": "vrsc::identity.visa.face"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ORIGINAL_FRONT = {
-    "vdxfid": "iHqGf5Yq5MTjS3vJS4GmfPkU2unJVFMLXs",
-    "indexid": "xNfP7syuvfgQ4DoLHjvvdnH14ZoKPe8ZfA",
-    "hash160result": "3ee1ac34db24100dbcd7ab1d0c110fc674297e9d",
+exports.IDENTITY_VISA_IDNUMBER = {
+    "vdxfid": "iQ5LfUtuggDyqbePUB9iWLgxYj7tvDm2VE",
+    "indexid": "xUuT8HKzXzSeTmXRKrosUjDVaP8upm7rqg",
+    "hash160result": "77ae761bf6bf7922ff8e47b53bd88107be15f8e1",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iBrpt78Mdrqcc1RHwPWKYBALbNTC4cwdJQ"
+        "name": "vrsc::identity.visa.idnumber"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ORIGINAL_BACK = {
-    "vdxfid": "iQAb2ZQ7Z5tZXiiASNpuXYWGGA9ZNTho6m",
-    "indexid": "xUzhVMqCQQ7E9tbCJ4V4Vw2oHpAaA2pxef",
-    "hash160result": "cf0888932dddd9da9a7e8008dc7e3dfe9a27f6e2",
+exports.IDENTITY_VISA_CATEGORY = {
+    "vdxfid": "iH4nhrNsZKK6bEkgLDu17fBPR5dnVgitiQ",
+    "indexid": "xMtuAeoxQdXmDQdiBuZA63hvSjeoT3wsnv",
+    "hash160result": "8052162609b4da20bb5932ead5b6deedbb861495",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iNRCZp7JBDHbpKQ2Vhc6TK97hUSRPG4jaX"
+        "name": "vrsc::identity.visa.category"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_CROPPED_FRONT = {
-    "vdxfid": "iCAq6xmjVDq3an2yRkws3xmLfXmDfm6TK5",
-    "indexid": "xGzwZmCpLY3iCwv1HSc22MHshBnEaVnkU7",
-    "hash160result": "6e067b98f82fc5d158a11c57e86fd5583165605f",
+exports.IDENTITY_VISA_EXPIRATIONDATE = {
+    "vdxfid": "iNW2k7p7hVK2GCc7m1k4mihqh8jd94Dmnh",
+    "indexid": "xTL9CvFCYoXgtNV9chQDk7ENinkdzPUodD",
+    "hash160result": "5eaa0aef6ed6d27ee4909bc6ce8619c60346b3d0",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iK822dFQwW2Y5tdpSpxQtHQemf47HoFxqs"
+        "name": "vrsc::identity.visa.expirationdate"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_CROPPED_BACK = {
-    "vdxfid": "i5DMa83PXnoc3VaaDBvwUPqtXQS3VkJM65",
-    "indexid": "xA3U2vUUP72GffTc4sb6SnNRZ4T4Qptiiu",
-    "hash160result": "79ad91be4e21e9065c557d16d530bd53c5c71113",
+exports.IDENTITY_VISA_ISSUINGCOUNTRY = {
+    "vdxfid": "i5vDfPKMfCRPXVRhfumjWPEvBFhNMVjtGK",
+    "indexid": "xAkL8BkSWWe49fJjXbRtUmmTCuiPJGBZ2c",
+    "hash160result": "ebf49255193b4ffbb3a0487106a4df98833bcc1a",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iCvxKVHbnbwHGZDTaGofeyyJLjsGBSZr7A"
+        "name": "vrsc::identity.visa.issuingcountry"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_FACE = {
-    "vdxfid": "iMkREmUUamd78MP7GeP1wtFteRGoWEAgFj",
-    "indexid": "xSaXhZuZS5qmkXG98L3AvGnRg5HpLnMLTA",
-    "hash160result": "a8daf37e1cd1ccc4edbf4f0ee3b193f588bf73c8",
+exports.IDENTITY_VISA_ISSUINGREGION = {
+    "vdxfid": "iPRc9Ns6LadQNYU7DqSNyx7LW8W9dPKDjC",
+    "indexid": "xUFicBJBBtr4ziM95X6XxLdsXnXAYQ1XFN",
+    "hash160result": "a1217c6e44b1f47faf9d59378206009d8433d5da",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iPrxPJC6NbzWnkNyLSvwa8AVrwJWBUV9mM"
+        "name": "vrsc::identity.visa.issuingregion"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_IDNUMBER = {
-    "vdxfid": "iGYqQVqehuhYb95knMeydLdtoEzGAFJU9e",
-    "indexid": "xMNwsJGjZDvDDJxne3K8bjARpu1H4ShUgH",
-    "hash160result": "c9b041ee41a77909c6aee95418d9e5244d4d6a8f",
+exports.IDENTITY_VISA_DATEOFBIRTH = {
+    "vdxfid": "i55bTsxLkCTmE6VvppvG8doYnmxuHhec65",
+    "indexid": "x9uhvgPRbWgRrGNxgWaR72L5pRyvA4vVWm",
+    "hash160result": "ed824bbfd195e63d6d5151a07eda49eba60c9a11",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iJdUp47SVEzGEHCvoRyix2xufRsAeWSyxa"
+        "name": "vrsc::identity.visa.dateofbirth"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_CATEGORY = {
-    "vdxfid": "iMxE22zmptXB8ShHsSypWSqXLmEficJVug",
-    "indexid": "xSnLUqRrgCjqkcaKj8dyUqN4NRFgaJT7cn",
-    "hash160result": "5b6369f617841495baaeb8b396b6bf87c75fafca",
+exports.IDENTITY_VISA_ADDRESS_STREET1 = {
+    "vdxfid": "iMzWxFVzJHbQm5YWv9c1eujvrUrPHAGVAc",
+    "indexid": "xSpdR3w59bp5PFRYmqGAdJGTt8sQ8o4mpu",
+    "hash160result": "05992eb838a4f562b6b7e0ff84bb05cdac571ecb",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "i9MqRfXPAiYwv9q4iSjTtXquNCCZ1GgECn"
+        "name": "vrsc::identity.visa.address.street1"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_EXPIRATIONDATE = {
-    "vdxfid": "iFeEkx5dNqs9RmYnyBNnMJpigdVo75MA3Q",
-    "indexid": "xLUMDkWiEA5p3wRpps2wKhMFiHWp59WJtb",
-    "hash160result": "53ab24af7c986998582d42d98d4e7b4ef1bf7785",
+exports.IDENTITY_VISA_ADDRESS_CITY = {
+    "vdxfid": "i8YXgZ7doRhidT5phX6qyRnttV6hZiyWTm",
+    "indexid": "xDNe9MYiejvPFcxrZCkzwpKRv97iS3TQjA",
+    "hash160result": "04959daab853c797bbbcb9c5ead7376e4a809a37",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iNgDKviLAeeV65eBztuduckUMDE2erB7jj"
+        "name": "vrsc::identity.visa.address.city"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ISSUING_COUNTRY_MATCHED = {
-    "vdxfid": "iHHLQuEx2sQ5FHm8cHs2eW5YFKBu42QyT4",
-    "indexid": "xN7Sshg2tBcjsTeATyXBctc5GyCuutBKAi",
-    "hash160result": "c233566af8cb4d2bec45de1b6314a8c373fc7397",
+exports.IDENTITY_VISA_ADDRESS_REGION = {
+    "vdxfid": "i6YkTDEi1M1mzuTyzww8hNoksJFpev17Fu",
+    "indexid": "xBNrv1fnrfESd5M1rdbHfmLHtxGqUoeALR",
+    "hash160result": "3a47a53e8717444b5d31e8618049daa8cde8b421",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iFgXmTd9Wi2sqZyPqaoejdHG2sMaJWLrEX"
+        "name": "vrsc::identity.visa.address.region"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ISSUING_REGION = {
-    "vdxfid": "iQSeWkZJbBknqaAvrVk8UpzXcbDcD3JwZK",
-    "indexid": "xVGkyYzPSVyTTk3xiBQHTDX4eFEd6nwER3",
-    "hash160result": "f46eda08f73c5415674385dafb8f913a5ab8ffe5",
+exports.IDENTITY_VISA_ADDRESS_POSTCODE = {
+    "vdxfid": "iBJDLHSLB4cHvaeXazFp25Be3V9yRWmcoK",
+    "indexid": "xG8Ko5sR2NpxYkXZSfuxzTiB59AzMUATiw",
+    "hash160result": "dd0d87e3163157402aa16d2017a3ea06d6bccd55",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iByfEUF2bHSmBbiDoBu42a4HKTKbDvPGbL"
+        "name": "vrsc::identity.visa.address.postcode"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_DATEOFBIRTH = {
-    "vdxfid": "iL3JyAfGXCDqotYbGTsC6Et9pe4x9zqKft",
-    "indexid": "xQsRRy6MNWSWS4Rd89XM4dQgrJ5y4pBTXB",
-    "hash160result": "ebc0dd42cc2bbf62c504fb64e7b6d29ebb55b5b5",
+exports.IDENTITY_VISA_ADDRESS_COUNTRY = {
+    "vdxfid": "iQ9Z1PZMMp49rtDuGQSjfEZn3xACfxLAYa",
+    "indexid": "xUyfUBzSD8GpV46w866tdd6K5cBDbMPuNo",
+    "hash160result": "c45655a6924c0b377e9182869dc780df690dc4e2",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iQhjETQvSkadciDPy69QZNy3hSczWQ4iu4"
+        "name": "vrsc::identity.visa.address.country"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ADDRESS = {
-    "vdxfid": "iBU6zckdwpwkR9BbFPVKNEf5X7b8TWERYR",
-    "indexid": "xGJDTRBio9AR3K4d759ULdBcYmc9QPsq2R",
-    "hash160result": "921d0bf97b612e9de3294054e4a25e4c0c9bac57",
+exports.IDENTITY_PERSONALDETAILS = {
+    "vdxfid": "i8SSgM1z7XVoCtoP9CCsMms3zCndaNjtCe",
+    "indexid": "xDGZ99T4xqiTq4gQzss2LAPb1roeUyLwkU",
+    "hash160result": "a8fbe89451c1d0a77b336ccf6b0fb7601dd47336",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iGebr2v1TgkWvsyLjs1dQ5SqffqKL8rNm3"
+        "name": "vrsc::identity.personaldetails"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_STREET1 = {
-    "vdxfid": "i47Wp3Wt9Bib7KB6oSxm8QtQxmAqwxZV18",
-    "indexid": "x8wdGqwxzVwFjV48f8cv6oQwzRBrs4rtgB",
-    "hash160result": "4f18b96b75ce0af53a288a0e382c54df3adffe06",
+exports.IDENTITY_CONTACTDETAILS = {
+    "vdxfid": "iRLT8V9NN178CvZQusJSHuyuFC2fD2QmE3",
+    "indexid": "xWAZbHaTDKKnq6SSmYxbGJWSGr3g1GRDYH",
+    "hash160result": "b9185ad980909708754a484bf11edc9febd8cbef",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+        "name": "vrsc::identity.contactdetails"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_CITY = {
-    "vdxfid": "iRNzrpZ74Wm6wMMFh5VeUzR2NBfa9R3UTo",
-    "indexid": "xWD7KczBupymZXEHYm9oTNwZPqgb5cJGDD",
-    "hash160result": "149842d5588eaf9a77f40e4b63520c09832a47f0",
+exports.IDENTITY_LOCATION = {
+    "vdxfid": "iGmiLZ7J6GjxjZ4rkSMsDzyyvWtmMBjnbo",
+    "indexid": "xMbpoMYNwaxdMiwtc822CPWWxAunLDE1BS",
+    "hash160result": "15ea60d9ddde976095b0c79ceecef7b034cfd991",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+        "name": "vrsc::identity.location"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_REGION = {
-    "vdxfid": "iHAW2LhviXqcVdMsPTcap9khj6rfrfBKRu",
-    "indexid": "xMzcV991Zr4H7oEuF9GjnYHEkksgoPXYFo",
-    "hash160result": "c7cd6053d9cd2a7e4482f46366202e87e7182996",
+exports.IDENTITY_BANKINGDETAILS = {
+    "vdxfid": "i8DUrZJJRjNQMJNeJ3Ti6pbpKPJ55LECyJ",
+    "indexid": "xD3bKMjPH3b4yUFg9j7s5D8MM3K612HEir",
+    "hash160result": "a7e5de6ac208f110d0509cffeb916b8dd03c0034",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
+        "name": "vrsc::identity.bankingdetails"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_POSTCODE = {
-    "vdxfid": "i9R5Y1NexqRDP3ztWox1qCPVEVZvbAS7Yx",
-    "indexid": "xEFBzoojp9dt1DsvNVcAoav2G9awPo2kkY",
-    "hash160result": "2ccf68aa3d77e0d0a30ef4bdae990b6a72e32941",
+exports.IDENTITY_DOCUMENTS = {
+    "vdxfid": "iCm3ERZoUw2ze1P11QyRUtvhKYovCWFXbT",
+    "indexid": "xHb9hDztLFFfGBG2s6daTHTEMCpw3tcbVJ",
+    "hash160result": "ee9f8d5ba7366983cf9b9d3e5e8ac50898a9d865",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
+        "name": "vrsc::identity.documents"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_ADDRESS_COUNTRY = {
-    "vdxfid": "iAZGARqg4GFG8SdjuKe9Zkf9SNqS2fqqop",
-    "indexid": "xFPNdEGkuaTvkcWmm1JJY9BgU2rSwXWCNA",
-    "hash160result": "21c3b6b680c00fc148910e6684737549b636ae4d",
+exports.IDENTITY_BANKACCOUNT = {
+    "vdxfid": "iN4AgB4KEN1C3TfZnYDFUhxn37PdcrZvxT",
+    "indexid": "xStH8yVQ5gDrfdYbeDsQT6VK4mQeYDjcFm",
+    "hash160result": "122bf0739d7d1def003656a63c443efb6c14cfcb",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
+        "name": "vrsc::identity.bankaccount"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_DOCUMENTVERIFICATION_MATCHED = {
-    "vdxfid": "iQvbQZ6EQmkESfrgtXhCJ8Vszu1oC9f5rt",
-    "indexid": "xVkhsMXKG5xu4qjikDMMGX2R2Z2p3yR8MD",
-    "hash160result": "817d1a8d17b92516bccc8e026fbf4d8e09c648eb",
+exports.IDENTITY_BANKINGDETAILS_CURRENCY = {
+    "vdxfid": "i5k8pb9FHf5VZJKki6him1WMBkpyhe56BY",
+    "indexid": "xAaFHPaL8yJABUCnZnMsjQ2tDQqzfUkZRm",
+    "hash160result": "cc655f9f104ad6c25cc65407121fa7ac1208e418",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk"
+        "name": "vrsc::identity.bankingdetails.currency"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_NAME_MATCHED = {
-    "vdxfid": "iNdqmEoGr2zr9eDPmPS99nHJQcK8c61SWR",
-    "indexid": "xTTxE3EMhMDWmp6Rd56J8AoqSGL9Yay9KW",
-    "hash160result": "13cc257f9ae7a639ce00b049198336b15a6f2dd2",
+exports.IDENTITY_BANKINGDETAILS_COUNTRY = {
+    "vdxfid": "iHYqZF4Asa4erZR9kJ5G5nWRNGWdiS8vBh",
+    "indexid": "xNNx23VFitHKUjJBbyjR4B2xPvXebL5g4h",
+    "hash160result": "cf7870c11608bf6e58890fbfc18ffe0db98d629a",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iKCFQYZudPChh6jypSpcgENoQb5WeX5wHv"
+        "name": "vrsc::identity.bankingdetails.country"
     }
 };
-exports.IDENTITYDATA_RESIDENTCARD_DATEOFBIRTHMATCHED = {
-    "vdxfid": "iL3YRkmngkLVsPa1xwAdWcb5NEjiZdCLbB",
-    "indexid": "xQsetZCsY4ZAVZT3pcpnV17cPtkjSpUs5B",
-    "hash160result": "800f1e6739db010a4edc9ed45e4d2422c591c0b5",
+exports.IDENTITY_BANKINGDETAILS_STREET1 = {
+    "vdxfid": "iRhANjQk2G3aFXiaGtG68kZjdYr2iVXQJJ",
+    "indexid": "xWXGqXqpsaGEshbc8ZvF796GfCs3bDhrgC",
+    "hash160result": "bd420c73e6bba2e48542cddf188c23b8c098b6f3",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.residentcard"
-    },
-    "bounddata": {
-        "vdxfkey": "iMUfUShqVwWrGSx6HvZcDJwHywiLW5Zusb"
+        "name": "vrsc::identity.bankingdetails.street1"
     }
 };
-exports.IDENTITYDATA_VISA = {
-    "vdxfid": "iATKs43yLjHHyCcLmVtZt2gGZF5PaTvxfy",
-    "indexid": "xFHSKrV4C3VxbNVNdBYirRCoau6QSwcyaF",
-    "hash160result": "f3240ba891b8ed340bc5f8ca9f7c6e3391ce8e4c",
+exports.IDENTITY_BANKINGDETAILS_STREET2 = {
+    "vdxfid": "iFWtcLUKAECLrREJr6mxtHM9xPUocxmTSY",
+    "indexid": "xLM158uQ1YR1Ub7LhnS7rfsgz3VpTpBcCu",
+    "hash160result": "7f1a53da2e265bab3230d9eec1ed0f36d7041484",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
+        "name": "vrsc::identity.bankingdetails.street2"
     }
 };
-exports.IDENTITYDATA_VISA_ORIGINAL_FRONT = {
-    "vdxfid": "iSQ98EpyqS26vDxLz2sPkSLfHitiSE5W66",
-    "indexid": "xXEFb3G4gkEmYPqNqiXYipsCKNujJTbHCP",
-    "hash160result": "f7bb12de360a562c66b20e49714fdf7c979b76fb",
+exports.IDENTITY_BANKINGDETAILS_CITY = {
+    "vdxfid": "iQxBEB8sXNez25HJCzvnTWtWqXUkEVAuo8",
+    "indexid": "xVnHgyZxNgseeFAL4gawRuR3sBVm7nyQqt",
+    "hash160result": "5878bb5b9371344acb1b679316e0e087046c95eb",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iBrpt78Mdrqcc1RHwPWKYBALbNTC4cwdJQ"
+        "name": "vrsc::identity.bankingdetails.city"
     }
 };
-exports.IDENTITYDATA_VISA_ORIGINAL_BACK = {
-    "vdxfid": "iP7hjj56oH2Xozpw6sPAx4tmXzdCqCGc8P",
-    "indexid": "xTwpCXWBebFCSAhxxZ3KvTRJZeeDgSAny1",
-    "hash160result": "d52e97ed89ccb3d384cee2509a0bf1aacf6172d7",
+exports.IDENTITY_BANKINGDETAILS_REGION = {
+    "vdxfid": "i4HJ5yrzBFEwjiYgzptMcrBsCeBjPYQJFX",
+    "indexid": "x97QYnJ52ZTcMtRirWYWbEiQEJCkKnxArM",
+    "hash160result": "7bf3a5ee05846c54bd19032e6ee9069cbc68d808",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iNRCZp7JBDHbpKQ2Vhc6TK97hUSRPG4jaX"
+        "name": "vrsc::identity.bankingdetails.region"
     }
 };
-exports.IDENTITYDATA_VISA_CROPPED_FRONT = {
-    "vdxfid": "i5GYu5sBm2sJh1trhe7ry2J3h5vq5jtBi5",
-    "indexid": "xA6fMtJGcM5yKBmtZKn1wQpaijwquAGHpb",
-    "hash160result": "9f1a97f4206a3d10c987d982c6093c31c67bac13",
+exports.IDENTITY_BANKINGDETAILS_POSTALCODE = {
+    "vdxfid": "iFVaE922Bzrro6rb87d9En2t2AAGx7EivG",
+    "indexid": "xLKggwT73K5XRGjcyoHJDAZR3pBHqz4Utt",
+    "hash160result": "ebd93a0f4fb8db6fb0cb8d397c45b41a0142d483",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iK822dFQwW2Y5tdpSpxQtHQemf47HoFxqs"
+        "name": "vrsc::identity.bankingdetails.postalcode"
     }
 };
-exports.IDENTITYDATA_VISA_CROPPED_BACK = {
-    "vdxfid": "iQRrKSZCi8oURCVTPdvFcNXARXq8BUmEPQ",
-    "indexid": "xVFxnEzHZT293NNVFKaQam3hTBr9B2SPr8",
-    "hash160result": "91705b953ea6a6824096763e55bd7ff89128d9e5",
+exports.IDENTITY_BANKINGDETAILS_TAXNUMBER = {
+    "vdxfid": "i6Gbi3EkYrbREumkLmHUedbzrisXkRzwKY",
+    "indexid": "xB6iAqfqQAp5s5enCSwdd28XtNtYcHgrDb",
+    "hash160result": "bcc691f5d53f99e196b291ea2a00a9805ff4a61e",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iCvxKVHbnbwHGZDTaGofeyyJLjsGBSZr7A"
+        "name": "vrsc::identity.bankingdetails.taxnumber"
     }
 };
-exports.IDENTITYDATA_VISA_FACE = {
-    "vdxfid": "i5HD9vjKw9soTjAC4GwfKnEvEFVMuRU1Tt",
-    "indexid": "xA7KcjAQnU6U5u3DuxbpJAmTFuWNhv9uYv",
-    "hash160result": "9b92d6ae6541357cea0bb018f616586dfc6acc13",
+exports.IDENTITY_BANKINGDETAILS_TAXCOUNTRY = {
+    "vdxfid": "iMJzAfPjqvWJdYyoWTX79cSjd51HbVc7wC",
+    "indexid": "xS96dTpphEiyFirqN9BG7zyGej2JTACDB1",
+    "hash160result": "e19f920e684c7d906dd8c85d72a5d5f0cd6ba4c3",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iPrxPJC6NbzWnkNyLSvwa8AVrwJWBUV9mM"
+        "name": "vrsc::identity.bankingdetails.taxcountry"
     }
 };
-exports.IDENTITYDATA_VISA_IDNUMBER = {
-    "vdxfid": "i7m6YfgMd7iELn25uZ36oA9sScTHdwHe1Z",
-    "indexid": "xCbD1U7SURvtxwu7mEhFmYgQUGUJaGUuzV",
-    "hash160result": "54d2d2bdfe71c96efe3d5630159f55c0e6cc022f",
+exports.IDENTITY_BANKINGDETAILS_FIRSTNAME = {
+    "vdxfid": "iGAomW7jtsy7zRaoMFU48KvrHahHwdjzi7",
+    "indexid": "xLzvEJYpkCBncbTqCw8D6iTPKEiJpW3beK",
+    "hash160result": "d33bd09ba3184bf0e3fa00ad62e92a7a99c83f8b",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iJdUp47SVEzGEHCvoRyix2xufRsAeWSyxa"
+        "name": "vrsc::identity.bankingdetails.firstname"
     }
 };
-exports.IDENTITYDATA_VISA_CATEGORY = {
-    "vdxfid": "i5ADnmaWGg9VJhYueJwd5kFmSgxuhLxHrQ",
-    "indexid": "x9zLFa1b7zN9vsRwVzbn48nJULyvfSeNuC",
-    "hash160result": "c1a982a1a03c643bdace28189b80be6353097a12",
+exports.IDENTITY_BANKINGDETAILS_LASTNAME = {
+    "vdxfid": "iMrvbLJnZawGsdFshtrHM3QKa4pDPbRk3L",
+    "indexid": "xSh348jsQu9wVo8uZaWSKRvrbiqED1eny3",
+    "hash160result": "4a0d68f2cafc3cbe827a91fd5038c65878bfaec9",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "i9MqRfXPAiYwv9q4iSjTtXquNCCZ1GgECn"
+        "name": "vrsc::identity.bankingdetails.lastname"
     }
 };
-exports.IDENTITYDATA_VISA_EXPIRATIONDATE = {
-    "vdxfid": "iAdCPpmiY4W1Mkb7vQNTiR38HFBMuwMcEe",
-    "indexid": "xFTJrdCoPNifyvU9n62cgoZfJuCNkyMTYH",
-    "hash160result": "a14a1b7acddd65bc3b403b8d080a982738bb6c4e",
+exports.IDENTITY_BANKINGDETAILS_PHONENUMBER = {
+    "vdxfid": "i9jKPi8ubg5fx3BBmZdiyobJxNgzcmV9et",
+    "indexid": "xEZRrWZzSzJLaD4DdFHsxC7qz2i1YejHqk",
+    "hash160result": "b092c8f73031298d26b919f4b398fa9b66f19c44",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iNgDKviLAeeV65eBztuduckUMDE2erB7jj"
+        "name": "vrsc::identity.bankingdetails.phonenumber"
     }
 };
-exports.IDENTITYDATA_VISA_ISSUING_COUNTRY_MATCHED = {
-    "vdxfid": "iRRYUVK9WZodGM15oJCrZgdXV6PaLZoxFC",
-    "indexid": "xWFewHkEMt2HtWt7eys1Y5A4WkQbHjGMmc",
-    "hash160result": "22ddef78469b09e9352e948b16fec0978a63c2f0",
+exports.IDENTITY_BANKINGDETAILS_NUMBER = {
+    "vdxfid": "iKGaF7fZ6yAvwJyxcmpuas2Hn9PZPF99yf",
+    "indexid": "xQ6ghv6dxHPbZUrzUTV4ZFYpooQaFZG1aa",
+    "hash160result": "fcceea7c24223218bc9313e8176daea6155e3fad",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iFgXmTd9Wi2sqZyPqaoejdHG2sMaJWLrEX"
+        "name": "vrsc::identity.bankingdetails.number"
     }
 };
-exports.IDENTITYDATA_VISA_ISSUING_REGION = {
-    "vdxfid": "iE5fNZUT4G8ZnR1BbJTNCgc54FUFwqeUcp",
-    "indexid": "xJumqMuXuaMEQatDSz7XB58c5uVGrJL3e3",
-    "hash160result": "d7dd15c309c0ae09f5a7293b4b0cf15ca7715674",
+exports.IDENTITY_BANKINGDETAILS_TYPE = {
+    "vdxfid": "iNkzXo7BBcUvCBH8somKyFtAFsR3mmmYuG",
+    "indexid": "xTb6zbYG2vhapMAAjVRUweQhHXS4csH9eB",
+    "hash160result": "26dcd354b4b2bd8b939af29fc5ea57a082aa87d3",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iByfEUF2bHSmBbiDoBu42a4HKTKbDvPGbL"
+        "name": "vrsc::identity.bankingdetails.type"
     }
 };
-exports.IDENTITYDATA_VISA_DATEOFBIRTH = {
-    "vdxfid": "iF8CRZfCthVVm2VoxyfjMcmXw5x2EReAMv",
-    "indexid": "xKxJtN6Hk1iAPCNqpfKtL1J4xjy396V6v7",
-    "hash160result": "908c870f1f57ea5cd8aae089feb5f4f98752c97f",
+exports.IDENTITY_BANKINGDETAILS_SORTCODE = {
+    "vdxfid": "i8v2y1beTivG8Nyi6Td3VFTc2ExFQJT8pC",
+    "indexid": "xDk9Rp2jK38vkYrjx9HCTdz93tyGLCaa3E",
+    "hash160result": "27df54160c8a8a962dd455004c8afac060aeab3b",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iQhjETQvSkadciDPy69QZNy3hSczWQ4iu4"
+        "name": "vrsc::identity.bankingdetails.sortcode"
     }
 };
-exports.IDENTITYDATA_VISA_ADDRESS = {
-    "vdxfid": "i53bAJPm5Dvbhovj671RVzkZq9Lej8M8iw",
-    "indexid": "x9shd6pqvY9GKyokwnfaUPH6roMfesuo4U",
-    "hash160result": "b3f7110b2359782dc7df5a12c740a275e9f63811",
+exports.IDENTITY_DOCUMENTS_PASSPORT = {
+    "vdxfid": "iJHkDyp8dPnNdrh7P9fzow4gTshpbznkSK",
+    "indexid": "xP7rgnFDUi13G2a9EqL9nKbDVXiqVHVtyg",
+    "hash160result": "456f1956c77f7ff59d98dd57030d7ed22afd7fa2",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iGebr2v1TgkWvsyLjs1dQ5SqffqKL8rNm3"
+        "name": "vrsc::identity.documents.passport"
     }
 };
-exports.IDENTITYDATA_VISA_ADDRESS_STREET1 = {
-    "vdxfid": "iGpueUZCzRG6YVL5xZVV56sjpK39wXm3T6",
-    "indexid": "xMf27GzHqjUmAfD7pF9e3VQGqy4Ao4VwBi",
-    "hash160result": "e32af4b6f696c06f289e9d19674a31ad5f7f7492",
+exports.IDENTITY_RESIDENCECARD = {
+    "vdxfid": "iQerHJHjqVT32hU1ZUyVYKQEkavs4xFtHo",
+    "indexid": "xVUxk6ipgofhesM3RAdeWhvmnEwsywApa2",
+    "hash160result": "0b2227f2bb574fe3cbcc683eecfc4d3bff884ee8",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
+        "name": "vrsc::identity.residencecard"
     }
 };
-exports.IDENTITYDATA_VISA_ADDRESS_CITY = {
-    "vdxfid": "iNRkLpudpDSAZtoyxSLAV6qp143Vny58dF",
-    "indexid": "xTFrodLifXeqC4h1p7zKTVNM2i4WdCQiTz",
-    "hash160result": "7a9966496c47f9b145e785c9fd76fbc515ebe3cf",
+exports.IDENTITY_ATTESTOR = {
+    "vdxfid": "iFNc5DG22Btm69wBDDXatvSPLxzJq53QBa",
+    "indexid": "xLCiY1h6sW7RiKpD4uBjsJxvNd1Kiej8tW",
+    "hash160result": "e5d18dab811f87643c1e7a63627172331be38282",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
+        "name": "vrsc::identity.attestor"
     }
 };
-exports.IDENTITYDATA_VISA_ADDRESS_REGION = {
-    "vdxfid": "iR5syE1ENGxcDwcUXrvDnYT8jfXTF9RWLU",
-    "indexid": "xVuzS2SKDbBGr7VWPYaNkvyfmKYU7gkeus",
-    "hash160result": "1646f77db041fe2fd10d01a7afffc9cdf4570aed",
+exports.IDENTITY_ATTESTATION_RECIPIENT = {
+    "vdxfid": "iAkd3VBhYQ3MK6PUCtfhXrLVNbqSghxxpn",
+    "indexid": "xFajWHcnPiG1wGGW4aKrWEs2QFrTbwP7wd",
+    "hash160result": "71b7cbbfc8be868f6d9f6c481c420b002438d44f",
     "qualifiedname": {
         "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
-    }
-};
-exports.IDENTITYDATA_VISA_ADDRESS_POSTCODE = {
-    "vdxfid": "i4MPAfFeCJGDuXgKsyDLRJgcam4ukpEo28",
-    "indexid": "x9BVdTgj3cUtXhZMjesVPhD9cR5vg2V94k",
-    "hash160result": "ceab8e1f6f76178916d73d6671e8767269509e09",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
-    }
-};
-exports.IDENTITYDATA_VISA_ADDRESS_COUNTRY = {
-    "vdxfid": "iPnjFJpqiiBQ7D6797hNoVmbNJMydCZdgj",
-    "indexid": "xUcqi7Fva2Q4jNy8zoMXmtJ8PxNzWUqNgK",
-    "hash160result": "1e10864c861d5eda424d0e6ecf1ae20977ddd3de",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
-    }
-};
-exports.IDENTITYDATA_VISA_DOCUMENTVERIFICATION_MATCHED = {
-    "vdxfid": "iKiQKkypr3B5NEHvPBg2sNEHeZcrZy3dL1",
-    "indexid": "xQYWnZQuhMPjzQAxEsLBqkkpgDdsNiGwfo",
-    "hash160result": "b36c238b24223f6a4652f6301bf5dfa5dae621b2",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk"
-    }
-};
-exports.IDENTITYDATA_VISA_NAME_MATCHED = {
-    "vdxfid": "iKDJ8c248aZMWkKSFuVypNt4GVrZ91oArN",
-    "indexid": "xQ3QbQT8ytn28vCU7bA8nmQbJ9sa3AvkmG",
-    "hash160result": "96b725305bec875c2f0fb3028def34a277aba0ac",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iKCFQYZudPChh6jypSpcgENoQb5WeX5wHv"
-    }
-};
-exports.IDENTITYDATA_VISA_DATEOFBIRTHMATCHED = {
-    "vdxfid": "i9o1iuJJTwfTCuJzCT6yw1X41SbEwJk1DC",
-    "indexid": "xEd8BhjPKFt7q5C248m8uQ3b36cFn4BGH7",
-    "hash160result": "e6f5f12e63f6b86c4dc1f4185ed6c89d7edb4f45",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.visa"
-    },
-    "bounddata": {
-        "vdxfkey": "iMUfUShqVwWrGSx6HvZcDJwHywiLW5Zusb"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_ORIGINALFRONT = {
-    "vdxfid": "iBrpt78Mdrqcc1RHwPWKYBALbNTC4cwdJQ",
-    "indexid": "xGgwLuZSVB4HEBJKo5AUWZgsd2UCxbFCCA",
-    "hash160result": "734505c8a36a53d58aedfc18f8f0c9e312b9f85b",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.originalfront"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_ORIGINALBACK = {
-    "vdxfid": "iNRCZp7JBDHbpKQ2Vhc6TK97hUSRPG4jaX",
-    "indexid": "xTFK2cYP2XWGSVH4MPGFRhfej8TSGxUzFR",
-    "hash160result": "fc576cd9799270c2e432da7b5481254c9864c9cf",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.originalback"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_CROPPEDFRONT = {
-    "vdxfid": "iK822dFQwW2Y5tdpSpxQtHQemf47HoFxqs",
-    "indexid": "xPx8VRgVnpFCi4WrJWcZrfwBoK58CsfaGo",
-    "hash160result": "6b2cc84a0df71c4b1920d5332ecde7cdd625a1ab",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.croppedfront"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_CROPPEDBACK = {
-    "vdxfid": "iCvxKVHbnbwHGZDTaGofeyyJLjsGBSZr7A",
-    "indexid": "xHm4nHigdv9wtj6VRxTpdNVqNPtH2yr1Kb",
-    "hash160result": "edcfcebea370f151dc72c13a34b972dd9fb8b867",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.croppedback"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_FACE = {
-    "vdxfid": "iPrxPJC6NbzWnkNyLSvwa8AVrwJWBUV9mM",
-    "indexid": "xUh4r6dBDvDBQvG1C8b6YWh2tbKX74nCWP",
-    "hash160result": "d65b41ab8d8c667a46921b860342f471eb7ea0df",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.face"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_IDNUMBER = {
-    "vdxfid": "iJdUp47SVEzGEHCvoRyix2xufRsAeWSyxa",
-    "indexid": "xPTbGrYXLZCvrT5xf7dsvRVSh5tBU3pzip",
-    "hash160result": "34ad72308593579994ebe622e284a67044713ba6",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.idnumber"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_CATEGORY = {
-    "vdxfid": "i9MqRfXPAiYwv9q4iSjTtXquNCCZ1GgECn",
-    "indexid": "xEBwtTxU22mcYKi6a8PcrvNSPrDZtQ5nSL",
-    "hash160result": "6d03e9b13582f7069c52d73f7f55881dd9dc8c40",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.category"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_EXPIRATIONDATE = {
-    "vdxfid": "iNgDKviLAeeV65eBztuduckUMDE2erB7jj",
-    "indexid": "xTWKnj9R1xs9iFXDraZnt1H1NsF3UEb4Kf",
-    "hash160result": "6ecad210f102677f2d2d75a0929fb3676c44a0d2",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.expirationdate"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_ISSUINGCOUNTRY = {
-    "vdxfid": "iFgXmTd9Wi2sqZyPqaoejdHG2sMaJWLrEX",
-    "indexid": "xLWeEG4EN2FYTjrRhGToi1oo4XNbE2QwRu",
-    "hash160result": "c0e0b8f43025cc9574486117135e4c8fa8c7e685",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.issuingcountry"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_ISSUING_REGION = {
-    "vdxfid": "iByfEUF2bHSmBbiDoBu42a4HKTKbDvPGbL",
-    "indexid": "xGomhGg7SbfRombFesZCzxapM7Lc5aQFa4",
-    "hash160result": "1ff5e3f915ccb6616cbc04e0b51961f98694435d",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.issuingregion"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTH = {
-    "vdxfid": "iQhjETQvSkadciDPy69QZNy3hSczWQ4iu4",
-    "indexid": "xVXqhFr1J4oJEt6RpmoZXmVaj6e1NWsjoF",
-    "hash160result": "38b824222653effa835ea81b8bf2397b18e6d9e8",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.dateofbirth"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_ADDRESS = {
-    "vdxfid": "iGebr2v1TgkWvsyLjs1dQ5SqffqKL8rNm3",
-    "indexid": "xMUiJqM6JzyBZ3rNbYfnNTyNhKrLEbbAy6",
-    "hash160result": "c1e17b8a68c7238fc479638a4ea90a09887a8190",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.address"
-    }
-};
-exports.IDENTITYDATA_ADDRESS_STREET1 = {
-    "vdxfid": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj",
-    "indexid": "xNUFncPpokjWp66awDFYo1m4UPLA8ubaiB",
-    "hash160result": "b66f8fe85cc09f7df77e3a0af34bb10b3a77639b",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.address.street1"
-    }
-};
-exports.IDENTITYDATA_ADDRESS_STREET2 = {
-    "vdxfid": "i3h8D5kGtn6DCVCwPFvbypbFCqfzAhXiD2",
-    "indexid": "x8XEftBMk6Jspf5yEwakxD7nEVh12MU6qD",
-    "hash160result": "c156ac2c6f101631e348f95b6fca8ad063056202",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.address.street2"
-    }
-};
-exports.IDENTITYDATA_ADDRESS_CITY = {
-    "vdxfid": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD",
-    "indexid": "xM76PTRnxBRkvg1i4D1PKocd4n3RqY3CFe",
-    "hash160result": "b03fee48a0694abcf0e26aeee63386a538c26a8c",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.address.city"
-    }
-};
-exports.IDENTITYDATA_ADDRESS_REGION = {
-    "vdxfid": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x",
-    "indexid": "xCkRVkwGGxUE335WrtVKzFEV4EZ3XYsk9g",
-    "hash160result": "b838dcdca8dd93524a9bbeb4a551d41be3f7c030",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.address.region"
-    }
-};
-exports.IDENTITYDATA_ADDRESS_POSTCODE = {
-    "vdxfid": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC",
-    "indexid": "xVQLwJNgMdU7oRYzDBi9Qj5sPwC4vbkTUi",
-    "hash160result": "2ee05285375ce5e909eb31e5c08d042231fb6ee7",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.address.postcode"
-    }
-};
-exports.IDENTITYDATA_ADDRESS_COUNTRY = {
-    "vdxfid": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK",
-    "indexid": "xTi8RLedRrhDrkgbcdyrpPZmtNvpSJTWGw",
-    "hash160result": "fafe1c0c79889407ed4172586eb02bf3c6c4dbd4",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.address.country"
-    }
-};
-exports.IDENTITYDATA_NATIONALITY = {
-    "vdxfid": "iDKfQZ4c568VzuikNenCNKffhx3f5pMNvi",
-    "indexid": "xJ9msMVgvQMAd5bnELSMLiCCjc4g2ZP2rB",
-    "hash160result": "a44ddb762301e0b405741f9b50dae55a9a2b046c",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.nationality"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_MATCHED = {
-    "vdxfid": "iJTvN7XURWKFabj9tzvRJxmctcAMk3D9Hk",
-    "indexid": "xPJ2puxZGpXvCmcBkgaaHMJ9vGBNfo83vX",
-    "hash160result": "5dfba519a35dbb63e0a12e071b47b4b2f99c6ca4",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.matched"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_NAME_MATCHED = {
-    "vdxfid": "iKCFQYZudPChh6jypSpcgENoQb5WeX5wHv",
-    "indexid": "xQ2MsLzzUhRNKGd1g8UmecuLSF6XcYynDa",
-    "hash160result": "0d02d8dce6be6e0b4c87efdac286f3739efa6dac",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.name.matched"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTVERIFICATION_DATEOFBIRTHMATCHED = {
-    "vdxfid": "iMUfUShqVwWrGSx6HvZcDJwHywiLW5Zusb",
-    "indexid": "xSJmwF8vMFjWtcq89cDmBhTq1bjMRkFKEg",
-    "hash160result": "3467c9e6461d44959372367130363b01ebf978c5",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documentverification.dateofbirthmatched"
-    }
-};
-exports.IDENTITYDATA_NAME = {
-    "vdxfid": "iNtCaMhqbpwGubHkaepi9mhVFg8jPj2Sk4",
-    "indexid": "xTiK3A8vT99wXmAnSLUs8AE2HL9kKfRmzC",
-    "hash160result": "272c6f542e769f1006ee6db29be51ddbbaa1e4d4",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.name"
-    }
-};
-exports.IDENTITYDATA_PERSONAL_DETAILS = {
-    "vdxfid": "iDeQpqFQNNxQaTGDJd762poXE9eCBNEELD",
-    "indexid": "xJUXHdgVDhB5Cd9FAJmF1DL4FofD5W44Wa",
-    "hash160result": "78d7089e964a3f6e6ae0233346554555d3e68f6f",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.personaldetails"
-    }
-};
-exports.IDENTITYDATA_CONTACT = {
-    "vdxfid": "iPHGUT7FpBbUjBKoPiuwTCzVFtcbQfkrs4",
-    "indexid": "xU7NwFYLfVp9MMCqFQa6RbX2HYdcGVBu6v",
-    "hash160result": "cef7d037aa9c9342008cc13ea0173610f17341d9",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.contactdetails"
-    }
-};
-exports.IDENTITYDATA_LOCATIONS = {
-    "vdxfid": "iREAoeQFDuJA751i86EBWmDthRuZoGEKBi",
-    "indexid": "xW4HGSqL5DWpjEtjymtLV9kRj5vaeyFTX7",
-    "hash160result": "e89b7bc01f7fececa737c5451a6889006bb99bee",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.locationdetails"
-    }
-};
-exports.IDENTITYDATA_BANKING_INFORMATION = {
-    "vdxfid": "iJPS5WjFmKhjJjNxA2m2CJUus8swyBSTWy",
-    "indexid": "xPDYYKALcdvPvuFz1iRBAh1StntxrcEUeM",
-    "hash160result": "1a79f042ce08168d0dcaf4b1062eb1e3525693a3",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankingdetails"
-    }
-};
-exports.IDENTITYDATA_DOCUMENTS_AND_IMAGES = {
-    "vdxfid": "iDqUNrjpcHvenVoJUzkWxeo93txZJLRMsY",
-    "indexid": "xJfaqfAuTc9KQfgLLgQfw3Kg5Yya97dwwF",
-    "hash160result": "b93a86e345efacfa4cdd5ab1a07f41da4371a771",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.documents"
-    }
-};
-exports.PERSONAL_INFO_OBJECT = {
-    "vdxfid": "i6BFmbneE8TJHego8AkeX1iYMbQ4KXHLr9",
-    "indexid": "xB1NEQDj5SfxupZpyrQoVQF5PFR5Foqja6",
-    "hash160result": "50b7fa643e4b024ffbcaabd40403d22e1a3ba41d",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.personalinfo"
-    }
-};
-exports.FIAT_CURRENCEY = {
-    "vdxfid": "i8sgE4s24ZZE9ts4MiYbWpng419T8a5yfW",
-    "indexid": "xDhngsJ6usmtn4k6DQCkVDKD5fATwqdYBr",
-    "hash160result": "f24235e62affcb4c57faecc6d0e3b3893889393b",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.fiatcurrency"
-    }
-};
-exports.BANK_ACCOUNT = {
-    "vdxfid": "i7QCof7PM8unmLKefzRKokd6oHtkRN5NK4",
-    "indexid": "xCEKGTYUCT8TPWCgXg5Un99dpwumKZ9uek",
-    "hash160result": "c34f89a8cd8b6a32848632597ea0bd111c4a0f2b",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    }
-};
-exports.BANK_ACCOUNT_CURRENCY = {
-    "vdxfid": "iJdQpLtdyAgiRfoJstY8utsY5wEQZdM91y",
-    "indexid": "xPTXH9KipUuP3qgLjaCHtHQ57bFRREieor",
-    "hash160result": "2d60e910979af52ce62167b5ec5224858a1b38a6",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "i8sgE4s24ZZE9ts4MiYbWpng419T8a5yfW"
-    }
-};
-exports.BANK_ACCOUNT_COUNTRY = {
-    "vdxfid": "iLcX5aezEdeeX63ZAk1fzh1qBVc5gr3hyT",
-    "indexid": "xRSdYP655wsK9Fvb2Rfpy5YND9d6Z9EL9o",
-    "hash160result": "0939ad4a2dcb7c1030a2f4efd046a818c92bfdbb",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "iNt1xYDYaYUZEaoZkxKhr13EriuoWiwcxK"
-    }
-};
-exports.BANK_ACCOUNT_STREET1 = {
-    "vdxfid": "iDzy4tzp8CQqG4fh4qwyhjeM1EDgZvauwy",
-    "indexid": "xJq5XhRtyWdVtEYivXc8g8At2tEhSpargH",
-    "hash160result": "93a2d4461521cffba345fe384c86561fb5227373",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "iHe9KoxjxSWrBvDZ5XbPpdEXSjK9DoWALj"
-    }
-};
-exports.BANK_ACCOUNT_STREET2 = {
-    "vdxfid": "iMf5baQkrp6EuacyScGu3vQ7EHt4vSiUsz",
-    "indexid": "xSVC4Nqqi8JuXkW1JHw42JveFwu5qj1Gkv",
-    "hash160result": "d3da8b39e046268d93d25d6b9f780950d04571c7",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "i3h8D5kGtn6DCVCwPFvbypbFCqfzAhXiD2"
-    }
-};
-exports.BANK_ACCOUNT_CITY = {
-    "vdxfid": "iBgQ4ev7sBd1FodofzgyfEriHWQw6phnwm",
-    "indexid": "xGWWXTMCiVqfsyWqXgM8ddPFKARx1ok9eq",
-    "hash160result": "aad5a1798ce03abfbe5166989f9bade19fd8ff59",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "iGGyvezi6sD6JW8gCXMEMR66382QvEPXHD"
-    }
-};
-exports.BANK_ACCOUNT_REGION = {
-    "vdxfid": "iE2HNu3NkhUpFanwjq7z3K14pSKCVh2Yku",
-    "indexid": "xJrPqhUTc1hUskfybWn91hXbr6LDLwguv5",
-    "hash160result": "f8b4b7681f399f4ce6f77b16a3034cd014d6b273",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "i7vK2xWBReFZQsCV1CqB1rhx2aY2eGyo9x"
-    }
-};
-exports.BANK_ACCOUNT_POSTALCODE = {
-    "vdxfid": "iEnvTt4zt1iXttDpDCcqvfNYhbReBSeGoa",
-    "indexid": "xKd2vgW5jKwCX46r4tGzu3u5jFSf33Qv7t",
-    "hash160result": "23439436b34068051f5dfdaf133ae7ada918247c",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "iQaEUVwbWKFTBFfxMW3zSLZLNHB43r15qC"
-    }
-};
-exports.BANK_ACCOUNT_TAXNUMBER = {
-    "vdxfid": "iLZMhFEyg2BysiG8eQabdeGYLpNRzWUvVG",
-    "indexid": "xRPUA3g4XLQeVt9AW6Ekc2o5NUPSxw2wvq",
-    "hash160result": "fa32239bcdc55780096b55ce3e7ae9ddc01664bb",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.taxnumber"
-    }
-};
-exports.BANK_ACCOUNT_TAXCOUNTRY = {
-    "vdxfid": "iNfhYoUGzruHxihV5dYSYnsruD4STZaKvF",
-    "indexid": "xTVp1buMrB7xataWwKCbXBQPvs5TN85VEX",
-    "hash160result": "c0728dd8a0644b69a990c7cddc133a8aeb6887d2",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.taxcountry"
-    }
-};
-exports.BANK_ACCOUNT_FIRSTNAME = {
-    "vdxfid": "iLaKzdEJgoztyM5f9YnLoGBPQYpq3d6FxF",
-    "indexid": "xRQSTRfPY8DZbWxh1ESVmehvSCqqw8EGSr",
-    "hash160result": "25041a54186ca5d8c277e7a1a498c33fe01593bb",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "i4GqsotHGa4czCdtg2d8FVHKfJFzVyBPrM"
-    }
-};
-exports.BANK_ACCOUNT_LASTNAME = {
-    "vdxfid": "iR2fNBYnQDAgfU2BxvC7c4CJQPRY7LXAzm",
-    "indexid": "xVrmpyysFXPMHduDpbrGaSiqS3SYznwXmR",
-    "hash160result": "c4b8f6772ae63a6265c814ebf1637f6902936eec",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "iHybTrNB1kXRrjsCtJXd6fvBKxepqMpS5Z"
-    }
-};
-exports.BANK_ACCOUNT_PHONENUMBER = {
-    "vdxfid": "iNNkwqvht83J1HZyopGaqVXKMAzTQkj9zM",
-    "indexid": "xTCsQeMnjSFxdTT1fVvjot3rNq1UHrb19r",
-    "hash160result": "95d0bc46ca38214dcca8220507da3295a52c53cf",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "i9ZQ5degEh3wQg5vNm8Tod88bcJBrLs5p3"
-    }
-};
-exports.ACCOUNT_NUMBER = {
-    "vdxfid": "iS6TbNSaquK5uDZemFF9DLP6K6ZciN6TBd",
-    "indexid": "xWva4AsfhDXkXPSgcvuJBiudLkadg3ZHt5",
-    "hash160result": "8b15e73e57238a3dc6bcb31b368328495e891ef8",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.accountnumber"
-    }
-};
-exports.ACCOUNT_TYPE = {
-    "vdxfid": "iNdRtUasuiojMC2sw35Nbs4W6hq7o8bWqY",
-    "indexid": "xTTYMH1xm32PyMuunijXaFb38Mr8ipmsky",
-    "hash160result": "b1d14abf13ce26753676953ec88c00ad448119d2",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.accounttype"
-    }
-};
-exports.BANK_ACCOUNT_NUMBER = {
-    "vdxfid": "i64P8QWcucELMgrq1uxY7uKCq3eymRcwaQ",
-    "indexid": "xAtVbCwhkvSzyrjrsbch6Hqjrhfzdz82YM",
-    "hash160result": "240b1dd30e88528bc9307d3158ccb5fb3d76571c",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "iS6TbNSaquK5uDZemFF9DLP6K6ZciN6TBd"
-    }
-};
-exports.BANK_ACCOUNT_TYPE = {
-    "vdxfid": "iLMsPy8GhsGSNDzXDpZ8SEcymJfgGrLUVj",
-    "indexid": "xRByrmZMZBV6zPsZ5WDHQd9Wnxgh8bD1RJ",
-    "hash160result": "faf99925bc81dc052b9deb8c3321965633e437b9",
-    "qualifiedname": {
-        "namespace": "i5w5MuNik5NtLcYmNzcvaoixooEebB6MGV",
-        "name": "vrsc::identitydata.bankaccount"
-    },
-    "bounddata": {
-        "vdxfkey": "iNdRtUasuiojMC2sw35Nbs4W6hq7o8bWqY"
+        "name": "vrsc::identity.attestation.recipient"
     }
 };

@@ -77,4 +77,5 @@ export declare class Challenge extends VDXFObject implements ChallengeInterface 
     };
 }
 export declare class RequestedPermission extends Utf8DataVdxfObject {
+    constructor(vdxfkey?: string, data?: string);
 }

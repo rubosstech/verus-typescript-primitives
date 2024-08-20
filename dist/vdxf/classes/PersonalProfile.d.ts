@@ -5,4 +5,3 @@ export declare class DataCategory extends VDXFObject {
     details: string;
     constructor(vdxfid?: string, data?: Array<string>, category?: string, details?: string);
 }
-export declare const defaultPersonalProfileDataTemplate: DataCategory[];

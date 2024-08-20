@@ -422,7 +422,6 @@ export enum EHashTypes {
   HASH_LASTTYPE = 5
 };
 
-
 export class MMRDescriptor {
   static VERSION_INVALID = new BN(0);
   static FIRST_VERSION = new BN(1);
