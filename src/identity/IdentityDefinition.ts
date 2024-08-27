@@ -1,5 +1,5 @@
-type ContentMultiMapPrimitive = number | string;
-type ContentMultiMapValue = { [key: string]: ContentMultiMapPrimitive | ContentMultiMapValue };
+type IdentityDefinitionContentMultiMapPrimitive = number | string;
+type IdentityDefinitionContentMultiMapValue = { [key: string]: IdentityDefinitionContentMultiMapPrimitive | IdentityDefinitionContentMultiMapValue };
 
 export interface IdentityDefinition {
   version?: number;
@@ -11,7 +11,7 @@ export interface IdentityDefinition {
   parent: string;
   systemid?: string;
   contentmap?: { [key: string]: string };
-  contentmultimap?: ContentMultiMapValue | Array<ContentMultiMapValue>;
+  contentmultimap?: IdentityDefinitionContentMultiMapValue | Array<IdentityDefinitionContentMultiMapValue>;
   revocationauthority?: string;
   recoveryauthority?: string;
   timelock?: number;

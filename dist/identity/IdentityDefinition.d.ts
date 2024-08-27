@@ -1,6 +1,6 @@
-declare type ContentMultiMapPrimitive = number | string;
-declare type ContentMultiMapValue = {
-    [key: string]: ContentMultiMapPrimitive | ContentMultiMapValue;
+declare type IdentityDefinitionContentMultiMapPrimitive = number | string;
+declare type IdentityDefinitionContentMultiMapValue = {
+    [key: string]: IdentityDefinitionContentMultiMapPrimitive | IdentityDefinitionContentMultiMapValue;
 };
 export interface IdentityDefinition {
     version?: number;
@@ -14,7 +14,7 @@ export interface IdentityDefinition {
     contentmap?: {
         [key: string]: string;
     };
-    contentmultimap?: ContentMultiMapValue | Array<ContentMultiMapValue>;
+    contentmultimap?: IdentityDefinitionContentMultiMapValue | Array<IdentityDefinitionContentMultiMapValue>;
     revocationauthority?: string;
     recoveryauthority?: string;
     timelock?: number;
