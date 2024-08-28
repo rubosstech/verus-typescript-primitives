@@ -1,5 +1,5 @@
-declare type IdentityDefinitionContentMultiMapPrimitive = number | string;
-declare type IdentityDefinitionContentMultiMapValue = {
+export declare type IdentityDefinitionContentMultiMapPrimitive = number | string;
+export declare type IdentityDefinitionContentMultiMapValue = {
     [key: string]: IdentityDefinitionContentMultiMapPrimitive | IdentityDefinitionContentMultiMapValue;
 };
 export interface IdentityDefinition {
@@ -19,4 +19,3 @@ export interface IdentityDefinition {
     recoveryauthority?: string;
     timelock?: number;
 }
-export {};
